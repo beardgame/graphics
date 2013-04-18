@@ -1,0 +1,142 @@
+﻿using System;
+using System.Drawing;
+using OpenTK;
+using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL;
+
+namespace AWGraphics
+{
+    public class Texture : IDisposable
+    {
+        public int Handle { get; private set; }
+
+        public int Height { get; private set; }
+        public int Width { get; private set; }
+
+        public Texture()
+        {
+            int tex;
+            GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
+
+            GL.GenTextures(1, out tex);
+
+            this.Handle = tex;
+        }
+
+        public Texture(int width, int height)
+        {
+            int tex;
+            GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
+
+            GL.GenTextures(1, out tex);
+            GL.BindTexture(TextureTarget.Texture2D, tex);
+
+            // create empty texture
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, width, height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
+
+
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapLinear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
+
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+
+            this.Handle = tex;
+            this.Width = width;
+            this.Height = height;
+
+        }
+
+        public Texture(string path)
+        {
+            this.Handle = -1;
+            if (System.IO.File.Exists(path))
+            {
+                Bitmap bitmap = new Bitmap(path);
+
+                int tex;
+                GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
+
+                GL.GenTextures(1, out tex);
+                GL.BindTexture(TextureTarget.Texture2D, tex);
+
+                System.Drawing.Imaging.BitmapData data = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height),
+                    System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+                GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, data.Width, data.Height, 0,
+                    OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
+                bitmap.UnlockBits(data);
+
+                GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
+
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapLinear);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
+
+
+
+                this.Handle = tex;
+                this.Width = bitmap.Width;
+                this.Height = bitmap.Height;
+
+
+                GL.BindTexture(TextureTarget.Texture2D, 0);
+
+                //Console.WriteLine("texture loaded");
+            }
+            else
+            {
+                Console.WriteLine("texture not found (" + path + ")");
+            }
+
+        }
+
+        public void Resize(int width, int height, PixelInternalFormat internalFormat = PixelInternalFormat.Rgba)
+        {
+            GL.BindTexture(TextureTarget.Texture2D, this.Handle);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, internalFormat, width, height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+            this.Width = width;
+            this.Height = height;
+        }
+
+        public void SetParameters(TextureMinFilter minFilter, TextureMagFilter magFilter, TextureWrapMode wrapS, TextureWrapMode wrapT)
+        {
+            GL.BindTexture(TextureTarget.Texture2D, this.Handle);
+
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)minFilter);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)magFilter);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)wrapS);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)wrapT);
+
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+        }
+
+        public UVRectangle GrabUV(Vector2 position, Vector2 size)
+        {
+            return this.GrabUV(position.X, position.Y, size.X, size.Y);
+        }
+
+        public UVRectangle GrabUV(float x, float y, float w, float h)
+        {
+            return new UVRectangle(
+                (float)x / this.Width,
+                (float)(x + w) / this.Width,
+                (float)y / this.Height,
+                (float)(y + h) / this.Height
+                );
+        }
+
+        static public implicit operator int(Texture texture)
+        {
+            return texture.Handle;
+        }
+
+        public void Dispose()
+        {
+            GL.DeleteTexture(this);
+        }
+    }
+}
