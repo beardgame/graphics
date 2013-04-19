@@ -3,3 +3,4 @@
 *.csproj.user
 obj/
 bin/
+libs/
