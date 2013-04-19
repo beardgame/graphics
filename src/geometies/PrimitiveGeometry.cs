@@ -41,12 +41,12 @@ namespace AWGraphics
 
         public void DrawRectangle(float x, float y, float z, float w, float h)
         {
-            ((QuadSurface<PrimitiveVertexData>)this.Surface).AddQuad(
+             this.Surface.AddVertices(new PrimitiveVertexData[] {
                 new PrimitiveVertexData(x,      y,      z, this.Color),
                 new PrimitiveVertexData(x + w,  y,      z, this.Color),
                 new PrimitiveVertexData(x + w,  y + h,  z, this.Color),
                 new PrimitiveVertexData(x,      y + h,  z, this.Color)
-                );
+                });
         }
 
         #endregion
@@ -288,12 +288,12 @@ namespace AWGraphics
             float ilxy = this.LineWidth / (float)Math.Sqrt(vx * vx + vy * vy);
             float nx = vy * ilxy;
             float ny = vx * ilxy;
-            ((QuadSurface<PrimitiveVertexData>)this.Surface).AddQuad(
+            this.Surface.AddVertices(new PrimitiveVertexData[] { 
                 new PrimitiveVertexData(x1 + nx, y1 + ny, z1, this.Color),
                 new PrimitiveVertexData(x1 - nx, y1 - ny, z1, this.Color),
                 new PrimitiveVertexData(x2 - nx, y2 - ny, z2, this.Color),
                 new PrimitiveVertexData(x2 + nx, y2 + ny, z2, this.Color)
-                );
+                });
         }
 
         #endregion
