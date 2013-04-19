@@ -47,6 +47,42 @@ namespace AWGraphics
             return w;
         }
 
+
+        #region DrawString
+
+        #region 2D Overloads
+
+        public void DrawString(Vector2 position, string text)
+        {
+            this.DrawString(new Vector3(position.X, position.Y, 0), text);
+        }
+
+        public void DrawString(Vector2 position, string text, float alignX, float alignY)
+        {
+            this.DrawString(new Vector3(position.X, position.Y, 0), text, alignX, alignY);
+        }
+
+        public void DrawString(Vector2 position, string text, float alignX)
+        {
+            this.DrawString(new Vector3(position.X, position.Y, 0), text, alignX);
+        }
+
+        #endregion
+
+        public void DrawString(Vector3 position, string text, float alignX, float alignY)
+        {
+            if (alignY != 0)
+                position.Y -= this.Height * this.SymbolSize.Y * alignY;
+            this.DrawString(position, text, alignX);
+        }
+
+        public void DrawString(Vector3 position, string text, float alignX)
+        {
+            if (alignX != 0)
+                position.X -= this.StringWidth(text) * alignX;
+            this.DrawString(position, text);
+        }
+
         public void DrawString(Vector3 position, string text)
         {
             int l = text.Length;
@@ -97,6 +133,8 @@ namespace AWGraphics
 
             this.Surface.AddVertices(vertices);
         }
+
+        #endregion
 
     }
 }
