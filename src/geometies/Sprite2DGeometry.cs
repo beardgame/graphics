@@ -38,25 +38,50 @@ namespace AWGraphics
 
         public void DrawSprite(Vector2 position)
         {
-            this.DrawSprite(new Vector3(position.X, position.Y, 0));
+            this.DrawSprite(new Vector3(position.X, position.Y, 0), 0, 1);
         }
 
-        public void DrawSprite(Vector2 position, float z)
+        public void DrawSprite(Vector2 position, float angle)
         {
-            this.DrawSprite(new Vector3(position.X, position.Y, z));
+            this.DrawSprite(new Vector3(position.X, position.Y, 0), angle, 1);
+        }
+
+        public void DrawSprite(Vector2 position, float angle, float scale)
+        {
+            this.DrawSprite(new Vector3(position.X, position.Y, 0), angle, scale);
         }
 
         public void DrawSprite(Vector3 position)
         {
-            float top = position.Y - this.expandY;
-            float bottom = position.Y + this.expandY;
-            float left = position.X - this.expandX;
-            float right = position.X + this.expandX;
+            this.DrawSprite(position, 0, 1);
+        }
+
+        public void DrawSprite(Vector3 position, float angle)
+        {
+            this.DrawSprite(position, angle, 1);
+        }
+
+        public void DrawSprite(Vector3 position, float angle, float scale)
+        {
+            float x = this.expandX * scale;
+            float y = this.expandY * scale;
+            Vector2 topLeft = new Vector2(-x, -y);
+            Vector2 topRight = new Vector2(x, -y);
+            Vector2 bottomLeft = new Vector2(-x, y);
+            Vector2 bottomRight = new Vector2(x, y);
+            if (angle != 0)
+            {
+                Matrix2 rotation = Matrix2.CreateRotation(angle);
+                topLeft = rotation * topLeft;
+                topRight = rotation * topRight;
+                bottomLeft = rotation * bottomLeft;
+                bottomRight = rotation * bottomRight;
+            }
             this.Surface.AddVertices(new UVColorVertexData[] {
-                new UVColorVertexData(left, top, position.Z, this.UV.TopLeft, this.Color),
-                new UVColorVertexData(right, top, position.Z, this.UV.TopRight, this.Color),
-                new UVColorVertexData(right, bottom, position.Z, this.UV.BottomRight, this.Color),
-                new UVColorVertexData(left, bottom, position.Z, this.UV.BottomLeft, this.Color)
+                new UVColorVertexData(position.X + topLeft.X, position.Y + topLeft.Y, position.Z, this.UV.TopLeft, this.Color),
+                new UVColorVertexData(position.X + topRight.X, position.Y + topRight.Y, position.Z, this.UV.TopRight, this.Color),
+                new UVColorVertexData(position.X + bottomRight.X, position.Y + bottomRight.Y, position.Z, this.UV.BottomRight, this.Color),
+                new UVColorVertexData(position.X + bottomLeft.X, position.Y + bottomLeft.Y, position.Z, this.UV.BottomLeft, this.Color),
                 });
         }
 
