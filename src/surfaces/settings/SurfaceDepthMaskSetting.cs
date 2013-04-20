@@ -14,7 +14,7 @@ namespace AWGraphics
         /// <summary>Default 'Dont Mask' masking setting</summary>
         public static readonly SurfaceDepthMaskSetting DontMask = new SurfaceDepthMaskSetting(false);
 
-        protected SurfaceDepthMaskSetting(bool maskDepth = false)
+        private SurfaceDepthMaskSetting(bool maskDepth = false)
             : base(true)
         {
             this.maskDepth = maskDepth;

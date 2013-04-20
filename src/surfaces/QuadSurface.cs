@@ -5,7 +5,7 @@ using OpenTK.Graphics.OpenGL;
 namespace AWGraphics
 {
     /// <summary>
-    /// Specialises <see cref="VertexSurface" /> to use <see cref="BeginMode.Quads" /> and adds method to add quads.
+    /// Specialises <see cref="VertexSurface{VertexData}" /> to use <see cref="BeginMode.Quads" /> and adds method to add quads.
     /// </summary>
     /// <typeparam name="VertexData">The <see cref="IVertexData"/> to use.</typeparam>
     public class QuadSurface<VertexData> : VertexSurface<VertexData>

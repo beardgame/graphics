@@ -7,7 +7,9 @@ namespace AWGraphics
     /// <summary>
     /// A struct representing a 32bit argb colour
     /// </summary>
-    /// <remarks>The actual order of the components in the struct is RGBA(one byte each), to conform to how shader languages order colour components.</remarks>
+    /// <remarks>
+    /// The actual order of the components in the struct is RGBA(one byte each), to conform to how shader languages order colour components.
+    /// </remarks>
     public struct Color
     {
 
@@ -445,6 +447,12 @@ namespace AWGraphics
 
         #region Methods
 
+        /// <summary>
+        /// Returns a hexadecimal <see cref="System.String" /> that represents this color.
+        /// </summary>
+        /// <returns>
+        /// A hexadecimal <see cref="System.String" /> that represents this color.
+        /// </returns>
         public override string ToString()
         {
             return "#" + this.ARGB.ToString("X8");
@@ -455,6 +463,11 @@ namespace AWGraphics
 
         #region Operators
 
+        /// <summary>
+        /// Casts the color to equivalent <see cref="System.Drawing.Color"/>
+        /// </summary>
+        /// <param name="color">The color.</param>
+        /// <returns><see cref="System.Drawing.Color"/></returns>
         static public implicit operator System.Drawing.Color(Color color)
         {
             return System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);

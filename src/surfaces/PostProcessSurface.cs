@@ -5,7 +5,7 @@ using OpenTK.Graphics.OpenGL;
 namespace AWGraphics
 {
     /// <summary>
-    /// Extends <see cref="StaticVertexSurface" /> with automatically adding vertices needed for post processing.
+    /// Extends <see cref="StaticVertexSurface{Vertexdata}" /> with automatically adding vertices needed for post processing.
     /// </summary>
     public class PostProcessSurface : StaticVertexSurface<PostProcessVertexData>
     {

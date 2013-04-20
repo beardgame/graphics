@@ -8,6 +8,9 @@ namespace AWGraphics
     /// </summary>
     abstract public class Surface
     {
+        /// <summary>
+        /// The shader program used to draw this surface
+        /// </summary>
         protected ShaderProgram program;
 
         private readonly List<SurfaceSetting> settingsSet = new List<SurfaceSetting>();

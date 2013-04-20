@@ -5,7 +5,7 @@ namespace AWGraphics
 {
 
     /// <summary>
-    /// Extends <see cref="StaticVertexSurface" /> with the ability to add vertices at will.
+    /// Extends <see cref="StaticVertexSurface{Vertexdata}" /> with the ability to add vertices at will.
     /// </summary>
     /// <typeparam name="VertexData">The <see cref="IVertexData" /> used.</typeparam>
     public class VertexSurface<VertexData> : StaticVertexSurface<VertexData> where VertexData : struct, IVertexData

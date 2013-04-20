@@ -24,7 +24,7 @@ namespace AWGraphics
         /// Initializes a new instance of the <see cref="SurfaceSetting"/> class.
         /// </summary>
         /// <param name="needsUnsetting">if set to <c>true</c> makes the setting unset itself after the draw call.</param>
-        /// <remarks>Make sure to set <see cref="needsUnsetting"/> to true, if this setting needs to be unset after the draw call.</remarks>
+        /// <remarks>Make sure to set needsUnsetting to true, if this setting needs to be unset after the draw call.</remarks>
         protected SurfaceSetting(bool needsUnsetting)
         {
             this.NeedsUnsetting = needsUnsetting;
@@ -37,7 +37,7 @@ namespace AWGraphics
         public abstract void Set(ShaderProgram program);
 
         /// <summary>
-        /// Unsets the setting for a shader program. Is called after the draw call, if <see cref="needsUnsetting"/> was set to true in constructor.
+        /// Unsets the setting for a shader program. Is called after the draw call, if needsUnsetting was set to true in constructor.
         /// </summary>
         /// <param name="program">The program.</param>
         public virtual void UnSet(ShaderProgram program) { }

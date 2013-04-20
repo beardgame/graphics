@@ -65,7 +65,7 @@ namespace AWGraphics
         /// <summary>
         /// Handles setting up (new) shader program with this surface.
         /// Calls <see cref="initBuffers"/> on first call to initialise the vertex buffer.
-        /// Calls <see cref="serVertexAttributes"/>.
+        /// Calls <see cref="setVertexAttributes"/>.
         /// </summary>
         protected override void onNewShaderProgram()
         {
@@ -94,7 +94,7 @@ namespace AWGraphics
         }
 
         /// <summary>
-        /// Sets the vertex attributes of <see cref="VertexData"/> for the current program using a OpenGL vertex array object.
+        /// Sets the vertex attributes of the used <see cref="IVertexData"/> for the current program using a OpenGL vertex array object.
         /// </summary>
         protected void setVertexAttributes()
         {
