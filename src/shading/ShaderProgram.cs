@@ -5,19 +5,37 @@ using OpenTK.Graphics.OpenGL;
 
 namespace AWGraphics
 {
+    /// <summary>
+    /// This class represents a GLSL shader program.
+    /// </summary>
     public class ShaderProgram
     {
         VertexShader vertexShader;
         FragmentShader fragmentShader;
 
+        /// <summary>
+        /// The GLSL shader program handle
+        /// </summary>
         public readonly int Handle;
 
         Dictionary<string, int> attributeLocations = new Dictionary<string, int>();
         Dictionary<string, int> uniformLocations = new Dictionary<string, int>();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShaderProgram"/> class.
+        /// </summary>
+        /// <param name="vertexShaderPath">The file to load the vertex shader from.</param>
+        /// <param name="fragmentShaderPath">The file to load the fragment shader from.</param>
+        /// <exception cref="System.ApplicationException">Throws an exception if OpenGL reports an error when linking the linking the shaders to the program.</exception>
         public ShaderProgram(string vertexShaderPath, string fragmentShaderPath)
             : this(new VertexShader(vertexShaderPath), new FragmentShader(fragmentShaderPath)) { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShaderProgram"/> class.
+        /// </summary>
+        /// <param name="vs">The vertex shader.</param>
+        /// <param name="fs">The fragment shader.</param>
+        /// <exception cref="System.ApplicationException">Throws an exception if OpenGL reports an error when linking the linking the shaders to the program.</exception>
         public ShaderProgram(VertexShader vs, FragmentShader fs)
         {
             this.vertexShader = vs;
@@ -42,12 +60,21 @@ namespace AWGraphics
 
         }
 
+        /// <summary>
+        /// Sets the vertex attributes.
+        /// </summary>
+        /// <param name="vertexAttributes">The vertex attributes to set.</param>
         public void SetVertexAttributes(VertexAttribute[] vertexAttributes)
         {
             for (int i = 0; i < vertexAttributes.Length; i++)
                 vertexAttributes[i].setAttribute(this);
         }
 
+        /// <summary>
+        /// Gets an attribute's location.
+        /// </summary>
+        /// <param name="name">The name of the attribute.</param>
+        /// <returns>The attribute's location, or -1 if not found.</returns>
         public int GetAttributeLocation(string name)
         {
             int i;
@@ -59,6 +86,11 @@ namespace AWGraphics
             return i;
         }
 
+        /// <summary>
+        /// Gets a uniform's location.
+        /// </summary>
+        /// <param name="name">The name of the uniform.</param>
+        /// <returns>The uniform's location, or -1 if not found.</returns>
         public int GetUniformLocation(string name)
         {
             int i;
@@ -71,6 +103,11 @@ namespace AWGraphics
         }
 
 
+        /// <summary>
+        /// Casts the shader program object to its GLSL program object handle, for easy use with OpenGL functions.
+        /// </summary>
+        /// <param name="program">The program.</param>
+        /// <returns>GLSL program object handle.</returns>
         static public implicit operator int(ShaderProgram program)
         {
             return program.Handle;
