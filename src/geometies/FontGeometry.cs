@@ -4,31 +4,65 @@ using OpenTK.Graphics.OpenGL;
 
 namespace AWGraphics
 {
+    /// <summary>
+    /// Geometry that draws ASCII strings
+    /// </summary>
     public class FontGeometry : Geometry<UVColorVertexData>
     {
+        /// <summary>
+        /// The color to draw width
+        /// </summary>
         public Color Color = Color.White;
 
+        /// <summary>
+        /// The UV origin in the font texture
+        /// </summary>
         public Vector2 UVOffset = Vector2.Zero;
+        /// <summary>
+        /// The size of a character in UV coordinates
+        /// </summary>
         public Vector2 UVSymbolSize = new Vector2(1 / 16f, 1 / 16f);
 
+        /// <summary>
+        /// The dimensions of a symbol
+        /// </summary>
         public Vector2 SymbolSize = new Vector2(1, 1);
 
+        /// <summary>
+        /// The font height to draw width
+        /// </summary>
         public float Height = 1;
 
         private FontSetting setting;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FontGeometry"/> class.
+        /// </summary>
+        /// <param name="surface">The surface to use for drawing</param>
         public FontGeometry(QuadSurface<UVColorVertexData> surface)
             : base(surface)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FontGeometry"/> class.
+        /// </summary>
+        /// <param name="surface">The surface to use for drawing</param>
+        /// <param name="setting">The <see cref="FontSetting"/> used</param>
         public FontGeometry(QuadSurface<UVColorVertexData> surface, FontSetting setting)
             : base(surface)
         {
             this.setting = setting;
         }
 
-        public float StringWidth(string s, bool accountForFontHeight = true, bool accoutForSymbolWidth = true)
+        /// <summary>
+        /// Calculates the width of a string
+        /// </summary>
+        /// <param name="s">The string</param>
+        /// <param name="accountForFontHeight">if set to <c>true</c> multiplies result with the set font height</param>
+        /// <param name="accountForSymbolWidth">if set to <c>true</c> multiplies result with the default symbol width</param>
+        /// <returns>Width of the string</returns>
+        public float StringWidth(string s, bool accountForFontHeight = true, bool accountForSymbolWidth = true)
         {
             float w;
             int l = s.Length;
@@ -42,7 +76,7 @@ namespace AWGraphics
             }
             if (accountForFontHeight)
                 w *= this.Height;
-            if (accoutForSymbolWidth)
+            if (accountForSymbolWidth)
                 w *= this.SymbolSize.X;
             return w;
         }
@@ -52,16 +86,34 @@ namespace AWGraphics
 
         #region 2D Overloads
 
+        /// <summary>
+        /// Draws a string.
+        /// </summary>
+        /// <param name="position">The position to draw at.</param>
+        /// <param name="text">The string to draw.</param>
         public void DrawString(Vector2 position, string text)
         {
             this.DrawString(new Vector3(position.X, position.Y, 0), text);
         }
 
+        /// <summary>
+        /// Draws a string.
+        /// </summary>
+        /// <param name="position">The position to draw at.</param>
+        /// <param name="text">The string to draw.</param>
+        /// <param name="alignX">The horizontal alignment. 0 for left align, 1 for right align, other values(including values outside [0, 1]) are linearly interpolated.</param>
+        /// <param name="alignY">The vertical alignment. 0 for top align, 1 for bottom align, other values(including values outside [0, 1]) are linearly interpolated.</param>
         public void DrawString(Vector2 position, string text, float alignX, float alignY)
         {
             this.DrawString(new Vector3(position.X, position.Y, 0), text, alignX, alignY);
         }
 
+        /// <summary>
+        /// Draws a string.
+        /// </summary>
+        /// <param name="position">The position to draw at.</param>
+        /// <param name="text">The string to draw.</param>
+        /// <param name="alignX">The horizontal alignment. 0 for left align, 1 for right align, other values(including values outside [0, 1]) are linearly interpolated.</param>
         public void DrawString(Vector2 position, string text, float alignX)
         {
             this.DrawString(new Vector3(position.X, position.Y, 0), text, alignX);
@@ -69,6 +121,13 @@ namespace AWGraphics
 
         #endregion
 
+        /// <summary>
+        /// Draws a string.
+        /// </summary>
+        /// <param name="position">The position to draw at.</param>
+        /// <param name="text">The string to draw.</param>
+        /// <param name="alignX">The horizontal alignment. 0 for left align, 1 for right align, other values(including values outside [0, 1]) are linearly interpolated.</param>
+        /// <param name="alignY">The vertical alignment. 0 for top align, 1 for bottom align, other values(including values outside [0, 1]) are linearly interpolated.</param>
         public void DrawString(Vector3 position, string text, float alignX, float alignY)
         {
             if (alignY != 0)
@@ -76,6 +135,12 @@ namespace AWGraphics
             this.DrawString(position, text, alignX);
         }
 
+        /// <summary>
+        /// Draws a string.
+        /// </summary>
+        /// <param name="position">The position to draw at.</param>
+        /// <param name="text">The string to draw.</param>
+        /// <param name="alignX">The horizontal alignment. 0 for left align, 1 for right align, other values(including values outside [0, 1]) are linearly interpolated.</param>
         public void DrawString(Vector3 position, string text, float alignX)
         {
             if (alignX != 0)
@@ -83,6 +148,11 @@ namespace AWGraphics
             this.DrawString(position, text);
         }
 
+        /// <summary>
+        /// Draws a string.
+        /// </summary>
+        /// <param name="position">The position to draw at.</param>
+        /// <param name="text">The string to draw.</param>
         public void DrawString(Vector3 position, string text)
         {
             int l = text.Length;
