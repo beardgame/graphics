@@ -6,13 +6,28 @@ using OpenTK.Graphics.OpenGL;
 
 namespace AWGraphics
 {
+    /// <summary>
+    /// This class represents an OpenGL texture.
+    /// </summary>
     public class Texture : IDisposable
     {
+        /// <summary>
+        /// Handle of te OpenGL texture.
+        /// </summary>
         public int Handle { get; private set; }
 
+        /// <summary>
+        /// Height of the texture.
+        /// </summary>
         public int Height { get; private set; }
+        /// <summary>
+        /// Width of the texture.
+        /// </summary>
         public int Width { get; private set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Texture"/> class.
+        /// </summary>
         public Texture()
         {
             int tex;
@@ -23,6 +38,11 @@ namespace AWGraphics
             this.Handle = tex;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Texture"/> class.
+        /// </summary>
+        /// <param name="width">The texture's width.</param>
+        /// <param name="height">The texture's height.</param>
         public Texture(int width, int height)
         {
             int tex;
@@ -48,6 +68,10 @@ namespace AWGraphics
 
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Texture"/> class.
+        /// </summary>
+        /// <param name="path">The image file to load.</param>
         public Texture(string path)
         {
             this.Handle = -1;
@@ -93,6 +117,12 @@ namespace AWGraphics
 
         }
 
+        /// <summary>
+        /// Resizes the texture.
+        /// </summary>
+        /// <param name="width">The new width.</param>
+        /// <param name="height">The new height.</param>
+        /// <param name="internalFormat">The new <see cref="PixelInternalFormat"/>.</param>
         public void Resize(int width, int height, PixelInternalFormat internalFormat = PixelInternalFormat.Rgba)
         {
             GL.BindTexture(TextureTarget.Texture2D, this.Handle);
@@ -102,6 +132,13 @@ namespace AWGraphics
             this.Height = height;
         }
 
+        /// <summary>
+        /// Sets the texture filtering parameters.
+        /// </summary>
+        /// <param name="minFilter">The <see cref="TextureMinFilter"/>.</param>
+        /// <param name="magFilter">The <see cref="TextureMagFilter"/>.</param>
+        /// <param name="wrapS">The horizontal <see cref="TextureWrapMode"/>.</param>
+        /// <param name="wrapT">The vertical <see cref="TextureWrapMode"/>.</param>
         public void SetParameters(TextureMinFilter minFilter, TextureMagFilter magFilter, TextureWrapMode wrapS, TextureWrapMode wrapT)
         {
             GL.BindTexture(TextureTarget.Texture2D, this.Handle);
@@ -114,11 +151,25 @@ namespace AWGraphics
             GL.BindTexture(TextureTarget.Texture2D, 0);
         }
 
+        /// <summary>
+        /// Grabs a <see cref="UVRectangle"/> from the texture, given pixel coordinates.
+        /// </summary>
+        /// <param name="position">The starting corner of the rectangle, in pixels.</param>
+        /// <param name="size">The size of the rectangle in pixels.</param>
+        /// <returns></returns>
         public UVRectangle GrabUV(Vector2 position, Vector2 size)
         {
             return this.GrabUV(position.X, position.Y, size.X, size.Y);
         }
 
+        /// <summary>
+        /// Grabs a <see cref="UVRectangle"/> from the texture, given pixel coordinates.
+        /// </summary>
+        /// <param name="x">The x coordinate of the rectangle's corner.</param>
+        /// <param name="y">The y coordinate of the rectangle's corner.</param>
+        /// <param name="w">The width of the rectangle.</param>
+        /// <param name="h">The height of the rectangle.</param>
+        /// <returns></returns>
         public UVRectangle GrabUV(float x, float y, float w, float h)
         {
             return new UVRectangle(
@@ -129,11 +180,17 @@ namespace AWGraphics
                 );
         }
 
+        /// <summary>
+        /// Casts the Texture to its OpenGL handle, for easy use with OpenGL functions.
+        /// </summary>
         static public implicit operator int(Texture texture)
         {
             return texture.Handle;
         }
 
+        /// <summary>
+        /// Deletes the OpenGL texture.
+        /// </summary>
         public void Dispose()
         {
             GL.DeleteTexture(this);
