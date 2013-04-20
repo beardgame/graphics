@@ -4,31 +4,69 @@ using OpenTK.Graphics.OpenGL;
 
 namespace AWGraphics
 {
-    public class StaticVertexSurface<VertexData> : Surface where VertexData : struct, IVertexData
+    /// <summary>
+    /// This class represents a vertex buffer object that can be rendered with a specified <see cref="BeginMode"/>.
+    /// </summary>
+    /// <typeparam name="VertexData">The <see cref="IVertexData"/> used for the vertex buffer object</typeparam>
+    public abstract class StaticVertexSurface<VertexData> : Surface where VertexData : struct, IVertexData
     {
+        /// <summary>
+        /// The array of vertices
+        /// </summary>
         protected VertexData[] vertices = new VertexData[1];
 
+        /// <summary>
+        /// The number of vertices in <see cref="vertices"/>. Can be less than vertices.Length, but not more.
+        /// </summary>
         protected ushort vertexCount;
 
         private bool buffersGenerated = false;
+
+        /// <summary>
+        /// The OpenGL vertex buffer object handle
+        /// </summary>
         protected int vertexBuffer;
 
         private bool vertexArrayGenerated = false;
+
+        /// <summary>
+        /// The OpenGL vertex array object handle
+        /// </summary>
         protected int vertexArray;
 
+        /// <summary>
+        /// This size of a vertex in bytes.
+        /// </summary>
         protected int vertexSize { private set; get; }
 
         private BeginMode beginMode;
 
+        /// <summary>
+        /// Wether the vertex buffer object is assumed to be static.
+        /// Static buffers will be uploaded to the GPU only once, non-static buffers will be uploaded every draw call.
+        /// </summary>
         protected bool isStatic = true;
+
+        /// <summary>
+        /// Wether the static vertex buffer was already uploaded to the GPU.
+        /// </summary>
         protected bool staticBufferUploaded = false;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StaticVertexSurface{VertexData}"/> class.
+        /// </summary>
+        /// <param name="primitiveType">Type of the primitives to draw</param>
         public StaticVertexSurface(BeginMode primitiveType = BeginMode.Triangles)
         {
             this.beginMode = primitiveType;
             this.vertexSize = vertices[0].Size();
         }
 
+        /// <summary>
+        /// Handles setting up (new) shader program with this surface.
+        /// Calls <see cref="initBuffers"/> on first call to initialise the vertex buffer.
+        /// Calls <see cref="serVertexAttributes"/>.
+        /// </summary>
         protected override void onNewShaderProgram()
         {
             if (!buffersGenerated)
@@ -42,6 +80,10 @@ namespace AWGraphics
             this.setVertexAttributes();
         }
 
+        /// <summary>
+        /// (Re)initialises buffers.
+        /// </summary>
+        /// <param name="buffers">Buffers to (re)initialise</param>
         protected void initBuffers(ref int[] buffers)
         {
             if (this.buffersGenerated)
@@ -51,6 +93,9 @@ namespace AWGraphics
             this.buffersGenerated = true;
         }
 
+        /// <summary>
+        /// Sets the vertex attributes of <see cref="VertexData"/> for the current program using a OpenGL vertex array object.
+        /// </summary>
         protected void setVertexAttributes()
         {
             if (this.vertexArrayGenerated)
@@ -69,6 +114,10 @@ namespace AWGraphics
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
         }
 
+        /// <summary>
+        /// Renderes the vertex buffer.
+        /// Does so by binding it and the vertex array object, uploading the vertices to the GPU (if first call or is not static), drawing with specified <see cref="BeginMode"/> and unbinding buffers afterwards.
+        /// </summary>
         override protected void render()
         {
             if (this.vertexCount == 0)

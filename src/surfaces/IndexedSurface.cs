@@ -3,6 +3,9 @@ using OpenTK.Graphics.OpenGL;
 
 namespace AWGraphics
 {
+    /// <summary>
+    /// This class represents an indexed vertex buffer object. It is not up to date and cannot be used at this point.
+    /// </summary>
     public class IndexedSurface<VertexData> : VertexSurface<VertexData>
         where VertexData : struct, IVertexData
     {

@@ -4,16 +4,30 @@ using OpenTK.Graphics.OpenGL;
 namespace AWGraphics
 {
 
+    /// <summary>
+    /// Extends <see cref="StaticVertexSurface" /> with the ability to add vertices at will.
+    /// </summary>
+    /// <typeparam name="VertexData">The <see cref="IVertexData" /> used.</typeparam>
     public class VertexSurface<VertexData> : StaticVertexSurface<VertexData> where VertexData : struct, IVertexData
     {
+        /// <summary>
+        /// Wether to clear vertex buffer after drawing.
+        /// </summary>
         public bool ClearOnRender = true;
 
+        /// <summary>
+        /// Set to true to not upload vertices to the GPU with every draw call.
+        /// </summary>
         public bool IsStatic
         {
             get { return this.isStatic; }
             set { this.isStatic = value; }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="VertexSurface{VertexData}"/> class.
+        /// </summary>
+        /// <param name="primitiveType">Type of the primitives to draw.</param>
         public VertexSurface(BeginMode primitiveType = BeginMode.Triangles)
             : base(primitiveType)
         {
@@ -21,6 +35,11 @@ namespace AWGraphics
             this.vertices = new VertexData[4];
         }
 
+        /// <summary>
+        /// Adds a vertex.
+        /// </summary>
+        /// <param name="vertex">The vertex.</param>
+        /// <returns>Index of the vertex in vertex buffer.</returns>
         public ushort AddVertex(VertexData vertex)
         {
             if (this.vertices.Length == this.vertexCount)
@@ -31,6 +50,11 @@ namespace AWGraphics
             return this.vertexCount++;
         }
 
+        /// <summary>
+        /// Adds vertices.
+        /// </summary>
+        /// <param name="vertices">The vertices.</param>
+        /// <returns>Index of first new vertex in vertex buffer.</returns>
         public ushort AddVertices(VertexData[] vertices)
         {
             ushort ret = this.vertexCount;
@@ -41,6 +65,9 @@ namespace AWGraphics
             return ret;
         }
 
+        /// <summary>
+        /// Renders the vertex buffer and clears it afterwards, if <see cref="ClearOnRender"/> is set to true.
+        /// </summary>
         protected override void render()
         {
             base.render();
@@ -48,9 +75,20 @@ namespace AWGraphics
                 this.Clear();
         }
 
+        /// <summary>
+        /// Clears the vertex buffer.
+        /// </summary>
         public virtual void Clear()
         {
             this.vertexCount = 0;
+            this.staticBufferUploaded = false;
+        }
+
+        /// <summary>
+        /// Forces vertex buffer upload next draw call, even if <see cref="IsStatic"/> is set to true.
+        /// </summary>
+        public virtual void ForceBufferUpload()
+        {
             this.staticBufferUploaded = false;
         }
     }
