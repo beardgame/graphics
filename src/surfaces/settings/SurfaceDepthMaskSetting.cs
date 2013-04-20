@@ -4,37 +4,35 @@ using OpenTK.Graphics.OpenGL;
 
 namespace AWGraphics
 {
+    /// <summary>
+    /// This immutable class represents a depth mask surface setting.
+    /// </summary>
     public class SurfaceDepthMaskSetting : SurfaceSetting
     {
-        virtual public bool MaskDepth { get { return this.maskDepth; } set { this.maskDepth = value; } }
-
         private bool maskDepth;
 
-        private class StaticSurfaceDepthMaskSetting : SurfaceDepthMaskSetting
-        {
-            public StaticSurfaceDepthMaskSetting(bool maskDepth)
-                : base(maskDepth) { }
+        /// <summary>Default 'Dont Mask' masking setting</summary>
+        public static readonly SurfaceDepthMaskSetting DontMask = new SurfaceDepthMaskSetting(false);
 
-            public override bool MaskDepth
-            {
-                get { return base.MaskDepth; }
-                set { return; }
-            }
-        }
-
-        public static readonly SurfaceDepthMaskSetting DontMask = new StaticSurfaceDepthMaskSetting(false);
-
-        public SurfaceDepthMaskSetting(bool maskDepth = false)
+        protected SurfaceDepthMaskSetting(bool maskDepth = false)
             : base(true)
         {
-            this.MaskDepth = maskDepth;
+            this.maskDepth = maskDepth;
         }
 
+        /// <summary>
+        /// Sets the depth masking setting for a shader program. Is called before the draw call.
+        /// </summary>
+        /// <param name="program">The program.</param>
         public override void Set(ShaderProgram program)
         {
-            GL.DepthMask(this.MaskDepth);
+            GL.DepthMask(this.maskDepth);
         }
 
+        /// <summary>
+        /// Sets depth masking to default(enabled) after draw call.
+        /// </summary>
+        /// <param name="program">The program.</param>
         public override void UnSet(ShaderProgram program)
         {
             GL.DepthMask(true);

@@ -5,66 +5,34 @@ using OpenTK.Graphics.OpenGL;
 
 namespace AWGraphics
 {
-    public enum SurfaceBlendMode
-    {
-        Alpha,
-        Add,
-        Substract,
-        Multiply,
-        Min,
-        Max
-    }
-
+    /// <summary>
+    /// This immutable class represents a blend function surface setting.
+    /// </summary>
     public class SurfaceBlendSetting : SurfaceSetting
     {
         private BlendingFactorSrc srcBlend;
         private BlendingFactorDest destBlend;
         private BlendEquationMode equation;
 
-        static private Dictionary<SurfaceBlendMode, Tuple<BlendingFactorSrc, BlendingFactorDest, BlendEquationMode>> blendModes =
-            new Dictionary<SurfaceBlendMode, Tuple<BlendingFactorSrc, BlendingFactorDest, BlendEquationMode>>()
-            {
-                {SurfaceBlendMode.Alpha, new Tuple<BlendingFactorSrc, BlendingFactorDest, BlendEquationMode>(
-                    BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha, BlendEquationMode.FuncAdd)},
+        /// <summary>Default 'Alpha' blend function</summary>
+        public static readonly SurfaceBlendSetting Alpha = new SurfaceBlendSetting(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha, BlendEquationMode.FuncAdd);
+        /// <summary>Default 'Add' blend function</summary>
+        public static readonly SurfaceBlendSetting Add = new SurfaceBlendSetting(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.One, BlendEquationMode.FuncAdd);
+        /// <summary>Default 'Substract' blend function</summary>
+        public static readonly SurfaceBlendSetting Substract = new SurfaceBlendSetting(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.One, BlendEquationMode.FuncReverseSubtract);
+        /// <summary>Default 'Multiply' blend function</summary>
+        public static readonly SurfaceBlendSetting Multiply = new SurfaceBlendSetting(BlendingFactorSrc.Zero, BlendingFactorDest.SrcColor, BlendEquationMode.FuncAdd);
+        /// <summary>Default 'Minimum' blend function</summary>
+        public static readonly SurfaceBlendSetting Min = new SurfaceBlendSetting(BlendingFactorSrc.One, BlendingFactorDest.One, BlendEquationMode.Min);
+        /// <summary>Default 'Maximum' blend function</summary>
+        public static readonly SurfaceBlendSetting Max = new SurfaceBlendSetting(BlendingFactorSrc.One, BlendingFactorDest.One, BlendEquationMode.Max);
 
-                {SurfaceBlendMode.Add, new Tuple<BlendingFactorSrc, BlendingFactorDest, BlendEquationMode>(
-                    BlendingFactorSrc.SrcAlpha, BlendingFactorDest.One, BlendEquationMode.FuncAdd)},
-
-                {SurfaceBlendMode.Substract, new Tuple<BlendingFactorSrc, BlendingFactorDest, BlendEquationMode>(
-                    BlendingFactorSrc.SrcAlpha, BlendingFactorDest.One, BlendEquationMode.FuncReverseSubtract)},
-
-                {SurfaceBlendMode.Multiply, new Tuple<BlendingFactorSrc, BlendingFactorDest, BlendEquationMode>(
-                    BlendingFactorSrc.Zero, BlendingFactorDest.SrcColor, BlendEquationMode.FuncAdd)},
-
-                {SurfaceBlendMode.Min, new Tuple<BlendingFactorSrc, BlendingFactorDest, BlendEquationMode>(
-                    BlendingFactorSrc.One, BlendingFactorDest.One, BlendEquationMode.Min)},
-
-                {SurfaceBlendMode.Max, new Tuple<BlendingFactorSrc, BlendingFactorDest, BlendEquationMode>(
-                    BlendingFactorSrc.One, BlendingFactorDest.One, BlendEquationMode.Max)}
-            };
-
-
-        private class StaticSurfaceBlendSetting : SurfaceBlendSetting
-        {
-            public StaticSurfaceBlendSetting(SurfaceBlendMode mode)
-                : base(mode) { }
-
-            public override SurfaceBlendMode BlendMode { set { return; } }
-        }
-
-        public static readonly SurfaceBlendSetting Alpha = new StaticSurfaceBlendSetting(SurfaceBlendMode.Alpha);
-        public static readonly SurfaceBlendSetting Add = new StaticSurfaceBlendSetting(SurfaceBlendMode.Add);
-        public static readonly SurfaceBlendSetting Substract = new StaticSurfaceBlendSetting(SurfaceBlendMode.Substract);
-        public static readonly SurfaceBlendSetting Multiply = new StaticSurfaceBlendSetting(SurfaceBlendMode.Multiply);
-        public static readonly SurfaceBlendSetting Min = new StaticSurfaceBlendSetting(SurfaceBlendMode.Min);
-        public static readonly SurfaceBlendSetting Max = new StaticSurfaceBlendSetting(SurfaceBlendMode.Max);
-
-        public SurfaceBlendSetting(SurfaceBlendMode mode)
-            : base(true)
-        {
-            this.setBlendMode(mode);
-        }
-
+        /// <summary>
+        /// Initializes a new custom instance of the <see cref="SurfaceBlendSetting"/> class.
+        /// </summary>
+        /// <param name="src">The <see cref="BlendingFactorSrc"/>.</param>
+        /// <param name="dest">The <see cref="BlendingFactorDest"/>.</param>
+        /// <param name="equation">The <see cref="BlendEquationMode"/>.</param>
         public SurfaceBlendSetting(BlendingFactorSrc src, BlendingFactorDest dest, BlendEquationMode equation)
             : base(true)
         {
@@ -73,23 +41,10 @@ namespace AWGraphics
             this.equation = equation;
         }
 
-        private void setBlendMode(SurfaceBlendMode mode)
-        {
-            Tuple<BlendingFactorSrc, BlendingFactorDest, BlendEquationMode> blendModes = SurfaceBlendSetting.blendModes[mode];
-            this.srcBlend = blendModes.Item1;
-            this.destBlend = blendModes.Item2;
-            this.equation = blendModes.Item3;
-        }
-
-        virtual public SurfaceBlendMode BlendMode
-        {
-            set
-            {
-                this.setBlendMode(value);
-            }
-        }
-
-
+        /// <summary>
+        /// Enables blending and sets the blend function for a shader program. Is called before the draw call.
+        /// </summary>
+        /// <param name="program">The program.</param>
         public override void Set(ShaderProgram program)
         {
             GL.Enable(EnableCap.Blend);
@@ -97,6 +52,10 @@ namespace AWGraphics
             GL.BlendEquation(this.equation);
         }
 
+        /// <summary>
+        /// Disables blending after draw call.
+        /// </summary>
+        /// <param name="program">The program.</param>
         public override void UnSet(ShaderProgram program)
         {
             GL.Disable(EnableCap.Blend);
