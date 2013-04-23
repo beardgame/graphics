@@ -144,5 +144,22 @@ namespace AWGraphics
             GL.BindVertexArray(0);
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
         }
+
+        /// <summary>
+        /// Clears the vertex buffer.
+        /// </summary>
+        public virtual void Clear()
+        {
+            this.vertexCount = 0;
+            this.staticBufferUploaded = false;
+        }
+
+        /// <summary>
+        /// Forces vertex buffer upload next draw call, even if <see cref="IsStatic"/> is set to true.
+        /// </summary>
+        public virtual void ForceBufferUpload()
+        {
+            this.staticBufferUploaded = false;
+        }
     }
 }

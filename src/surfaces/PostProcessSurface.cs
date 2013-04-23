@@ -15,14 +15,14 @@ namespace AWGraphics
         public PostProcessSurface()
             : base(BeginMode.Quads)
         {
-            initVertices();
+            this.initVertices();
         }
 
         private void initVertices()
         {
             this.vertices = new PostProcessVertexData[4];
             this.vertexCount = 4;
-            SetRectangle(-1, -1, 1, 1);
+            this.SetRectangle(-1, -1, 1, 1);
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace AWGraphics
             this.vertices[1] = new PostProcessVertexData(toX, fromY);
             this.vertices[2] = new PostProcessVertexData(toX, toY);
             this.vertices[3] = new PostProcessVertexData(fromX, toY);
-
+            this.ForceBufferUpload();
         }
     }
 }
