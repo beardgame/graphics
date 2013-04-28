@@ -39,6 +39,11 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\geometries\FontGeometry.cs" />
+    <Compile Include="src\geometries\Geometry.cs" />
+    <Compile Include="src\geometries\PrimitiveGeometry.cs" />
+    <Compile Include="src\geometries\Sprite2DGeometry.cs" />
+    <Compile Include="src\geometries\Sprite3DGeometry.cs" />
     <Compile Include="src\surfaces\PostProcessSurface.cs" />
     <Compile Include="src\surfaces\settings\Vector4Uniform.cs" />
     <Compile Include="src\surfaces\settings\Vector3Uniform.cs" />
@@ -47,9 +52,6 @@
     <Compile Include="src\surfaces\StaticVertexSurface.cs" />
     <Compile Include="src\utilities\Color.cs" />
     <Compile Include="src\utilities\FontSetting.cs" />
-    <Compile Include="src\geometies\FontGeometry.cs" />
-    <Compile Include="src\geometies\Sprite2DGeometry.cs" />
-    <Compile Include="src\geometies\Sprite3DGeometry.cs" />
     <Compile Include="src\surfaces\settings\SurfaceBlendSetting.cs" />
     <Compile Include="src\surfaces\settings\SurfaceDepthMaskSetting.cs" />
     <Compile Include="src\surfaces\settings\SurfaceSetting.cs" />
@@ -57,11 +59,9 @@
     <Compile Include="src\surfaces\settings\TextureUniform.cs" />
     <Compile Include="src\utilities\RenderTarget.cs" />
     <Compile Include="src\utilities\Texture.cs" />
-    <Compile Include="src\geometies\Geometry.cs" />
     <Compile Include="src\shading\FragmentShader.cs" />
     <Compile Include="src\shading\VertexAttribute.cs" />
     <Compile Include="src\surfaces\IndexedSurface.cs" />
-    <Compile Include="src\geometies\PrimitiveGeometry.cs" />
     <Compile Include="src\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\shading\Shader.cs" />
@@ -73,11 +73,11 @@
     <Compile Include="src\utilities\UpdateEventArgs.cs" />
     <Compile Include="src\shading\VertexShader.cs" />
     <Compile Include="src\utilities\UVRectangle.cs" />
-    <Compile Include="src\VertexData\IVertexData.cs" />
-    <Compile Include="src\VertexData\PostProcessVertexData.cs" />
-    <Compile Include="src\VertexData\PrimitiveVertexData.cs" />
-    <Compile Include="src\VertexData\SimpleSpriteVertexData.cs" />
-    <Compile Include="src\VertexData\UVColorVertexData.cs" />
+    <Compile Include="src\vertexdata\IVertexData.cs" />
+    <Compile Include="src\vertexdata\PostProcessVertexData.cs" />
+    <Compile Include="src\vertexdata\PrimitiveVertexData.cs" />
+    <Compile Include="src\vertexdata\SimpleSpriteVertexData.cs" />
+    <Compile Include="src\vertexdata\UVColorVertexData.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="data\shaders\simple_sprite_fs.glsl">
