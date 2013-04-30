@@ -8,8 +8,14 @@ namespace AWGraphics
     /// </summary>
     public struct PrimitiveVertexData : IVertexData
     {
-        readonly Vector3 position; // 12 bytes
-        readonly Color color; // 4 bytes
+        /// <summary>
+        /// Position of the vertex.
+        /// </summary>
+        public Vector3 Position; // 12 bytes
+        /// <summary>
+        /// Color of the vertex.
+        /// </summary>
+        public Color Color; // 4 bytes
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PrimitiveVertexData"/> struct.
@@ -20,10 +26,10 @@ namespace AWGraphics
         /// <param name="color">The color.</param>
         public PrimitiveVertexData(float x, float y, float z, Color color)
         {
-            this.position.X = x;
-            this.position.Y = y;
-            this.position.Z = z;
-            this.color = color;
+            this.Position.X = x;
+            this.Position.Y = y;
+            this.Position.Z = z;
+            this.Color = color;
         }
 
         /// <summary>
@@ -33,8 +39,8 @@ namespace AWGraphics
         /// <param name="color">The color.</param>
         public PrimitiveVertexData(Vector3 position, Color color)
         {
-            this.position = position;
-            this.color = color;
+            this.Position = position;
+            this.Color = color;
         }
 
         static private VertexAttribute[] vertexAttributes;
@@ -79,7 +85,7 @@ namespace AWGraphics
         /// </returns>
         public override string ToString()
         {
-            return this.position.ToString() + ",\t" + this.color.ToString();
+            return this.Position.ToString() + ",\t" + this.Color.ToString();
         }
     }
 }

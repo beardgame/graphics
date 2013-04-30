@@ -5,7 +5,7 @@ using OpenTK.Graphics.OpenGL;
 namespace AWGraphics
 {
     /// <summary>
-    /// This class represents a GLSL Matrix3 uniform.
+    /// This class represents a GLSL Matrix4 uniform.
     /// </summary>
     public class Matrix4Uniform : SurfaceSetting
     {
