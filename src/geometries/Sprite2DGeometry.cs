@@ -53,7 +53,7 @@ namespace AWGraphics
         {
         }
 
-        #region DrawSprite
+        #region DrawSprite /// @name DrawSprite
 
         /// <summary>
         /// Draws a sprite.
@@ -136,7 +136,7 @@ namespace AWGraphics
 
         #endregion
 
-        #region DrawRectangle
+        #region DrawRectangle /// @name DrawRectangle
 
         /// <summary>
         /// Draws a uv mapped(textured) rectangle.
@@ -218,7 +218,7 @@ namespace AWGraphics
 
         #endregion
 
-        #region DrawLine
+        #region DrawLine /// @name DrawLine
 
         /// <summary>
         /// Draws a uv mapped(textured) line between two points.

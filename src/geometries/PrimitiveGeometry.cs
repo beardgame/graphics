@@ -31,7 +31,7 @@ namespace AWGraphics
 
         }
 
-        #region DrawRectangle
+        #region DrawRectangle /// @name DrawRectangle
 
         /// <summary>
         /// Draws a rectangle.
@@ -85,8 +85,7 @@ namespace AWGraphics
 
         #endregion
 
-
-        #region DrawCircle
+        #region DrawCircle /// @name DrawCircle
 
         /// <summary>
         /// Draws a circle
@@ -141,7 +140,7 @@ namespace AWGraphics
 
         #endregion
 
-        #region DrawOval
+        #region DrawOval /// @name DrawOval
 
         /// <summary>
         /// Draws an oval.
@@ -339,8 +338,7 @@ namespace AWGraphics
 
         #endregion
 
-
-        #region DrawLine
+        #region DrawLine /// @name DrawLine
 
         /// <summary>
         /// Draws a line between two points width the set <see cref="LineWidth"/>.

@@ -82,7 +82,7 @@ namespace AWGraphics
         }
 
 
-        #region DrawString
+        #region DrawString /// @name DrawString
 
         #region 2D Overloads
 
