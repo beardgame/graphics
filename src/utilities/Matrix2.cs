@@ -60,7 +60,7 @@ namespace AWGraphics
         /// <summary>
         /// Inverse of the matrix.
         /// </summary>
-        /// <exception cref="System.DivideByZeroException">Throws an exception of matrix is not invertible(determinant = 0).</exception>
+        /// <exception cref="System.DivideByZeroException">Throws an exception if matrix is not invertible(determinant = 0).</exception>
         public Matrix2 Inverse
         {
             get
