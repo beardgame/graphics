@@ -2,7 +2,7 @@
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
-namespace AWGraphics
+namespace amulware.Graphics
 {
     /// <summary>
     /// This immutable class represents a depth mask surface setting.

@@ -2,7 +2,7 @@
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
-namespace AWGraphics
+namespace amulware.Graphics
 {
     /// <summary>
     /// This class represents a vertex buffer object that can be rendered with a specified <see cref="BeginMode"/>.

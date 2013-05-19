@@ -2,7 +2,7 @@
 using OpenTK.Graphics.OpenGL;
 using System;
 
-namespace AWGraphics
+namespace amulware.Graphics
 {
     /// <summary>
     /// Geometry that draws textured quads or sprites in two dimensional space

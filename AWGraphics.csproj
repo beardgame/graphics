@@ -8,7 +8,7 @@
     <ProjectGuid>{81A3445F-4BA2-4B0F-B2FD-8A5318A50748}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AWGraphics</RootNamespace>
+    <RootNamespace>amulware.Graphics</RootNamespace>
     <AssemblyName>AWGraphics</AssemblyName>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

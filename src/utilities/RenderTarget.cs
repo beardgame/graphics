@@ -2,7 +2,7 @@
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
-namespace AWGraphics
+namespace amulware.Graphics
 {
     /// <summary>
     /// This class represents an OpenGL framebuffer object that can be rendered to.

@@ -1,7 +1,7 @@
 ﻿using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
-namespace AWGraphics
+namespace amulware.Graphics
 {
     /// <summary>
     /// Geometry for drawing camera space aligned sprites in three dimensional space.

@@ -2,7 +2,7 @@
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
-namespace AWGraphics
+namespace amulware.Graphics
 {
     /// <summary>
     /// Abstract base class for all geometries.

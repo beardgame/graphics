@@ -2,7 +2,7 @@
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
-namespace AWGraphics
+namespace amulware.Graphics
 {
     /// <summary>
     /// Geometry that draws ASCII strings
@@ -10,7 +10,7 @@ namespace AWGraphics
     public class FontGeometry : Geometry<UVColorVertexData>
     {
         /// <summary>
-        /// The color to draw width
+        /// The color to draw with
         /// </summary>
         public Color Color = Color.White;
 
@@ -29,7 +29,7 @@ namespace AWGraphics
         public Vector2 SymbolSize = new Vector2(1, 1);
 
         /// <summary>
-        /// The font height to draw width
+        /// The font height to draw with
         /// </summary>
         public float Height = 1;
 

@@ -8,7 +8,7 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using OpenTK.Platform;
 
-namespace AWGraphics
+namespace amulware.Graphics
 {
     public class Program : NativeWindow, IGameWindow, IDisposable
     {

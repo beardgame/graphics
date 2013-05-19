@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AWGraphics
+namespace amulware.Graphics
 {
     /// <summary>
     /// This class is a time keeping device used to facilitate properly timed main loop updates.

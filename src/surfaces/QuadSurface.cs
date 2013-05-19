@@ -2,7 +2,7 @@
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
-namespace AWGraphics
+namespace amulware.Graphics
 {
     /// <summary>
     /// Specialises <see cref="VertexSurface{VertexData}" /> to use <see cref="BeginMode.Quads" /> and adds method to add quads.

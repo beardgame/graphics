@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using OpenTK.Graphics.OpenGL;
 
-namespace AWGraphics
+namespace amulware.Graphics
 {
     /// <summary>
     /// Base class for all surfaces. A Surface is an abstract object that can render itself to the screen using a shader program and can have a number of settings to modify its behaviour.
