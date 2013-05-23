@@ -84,8 +84,6 @@ namespace amulware.Graphics
 
         #region DrawString /// @name DrawString
 
-        #region 2D Overloads
-
         /// <summary>
         /// Draws a string.
         /// </summary>
@@ -98,8 +96,6 @@ namespace amulware.Graphics
             this.DrawString(new Vector3(position.X, position.Y, 0), text, alignX, alignY);
         }
 
-        #endregion
-
         /// <summary>
         /// Draws a string.
         /// </summary>
@@ -110,7 +106,7 @@ namespace amulware.Graphics
         public void DrawString(Vector3 position, string text, float alignX = 0, float alignY = 0)
         {
             if (alignY != 0)
-                position.Y -= this.Height * this.SymbolSize.Y * alignY;
+                position.Y -= this.Height * alignY;
             if (alignX != 0)
                 position.X -= this.StringWidth(text) * alignX;
             this.DrawString(position, text, alignX);
@@ -118,6 +114,41 @@ namespace amulware.Graphics
 
         #endregion
 
+
+        #region DrawMultiLineString /// @name DrawMultiLineString
+
+        /// <summary>
+        /// Draws a string, split into multiple lines by the \n character.
+        /// </summary>
+        /// <param name="position">The position to draw the first line at.</param>
+        /// <param name="text">The string to draw.</param>
+        /// <param name="alignX">The horizontal alignment. 0 for left align, 1 for right align, other values(including values outside [0, 1]) are linearly interpolated.</param>
+        /// <param name="alignY">The vertical alignment. 0 for top align, 1 for bottom align, other values(including values outside [0, 1]) are linearly interpolated.</param>
+        public void DrawMultiLineString(Vector2 position, string text, float alignX = 0, float alignY = 0)
+        {
+            this.DrawMultiLineString(new Vector3(position.X, position.Y, 0), text, alignX, alignY);
+        }
+
+        /// <summary>
+        /// Draws a string, split into multiple lines by the \n character.
+        /// </summary>
+        /// <param name="position">The position to draw the first line at.</param>
+        /// <param name="text">The string to draw.</param>
+        /// <param name="alignX">The horizontal alignment for each line. 0 for left align, 1 for right align, other values(including values outside [0, 1]) are linearly interpolated.</param>
+        /// <param name="alignY">The vertical alignment of the entire text. 0 for top align, 1 for bottom align, other values(including values outside [0, 1]) are linearly interpolated.</param>
+        public void DrawMultiLineString(Vector3 position, string text, float alignX = 0, float alignY = 0)
+        {
+            string[] lines = text.Split('\n');
+            int l = lines.Length;
+            position.Y -= this.Height * l * alignY;
+            for (int i = 0; i < l; i++)
+            {
+                position.Y += this.Height;
+                this.DrawString(position, lines[i], alignX);
+            }
+        }
+
+        #endregion
 
 
         #region Actual string drawing
