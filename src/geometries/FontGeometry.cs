@@ -91,32 +91,11 @@ namespace amulware.Graphics
         /// </summary>
         /// <param name="position">The position to draw at.</param>
         /// <param name="text">The string to draw.</param>
-        public void DrawString(Vector2 position, string text)
-        {
-            this.DrawString(new Vector3(position.X, position.Y, 0), text);
-        }
-
-        /// <summary>
-        /// Draws a string.
-        /// </summary>
-        /// <param name="position">The position to draw at.</param>
-        /// <param name="text">The string to draw.</param>
         /// <param name="alignX">The horizontal alignment. 0 for left align, 1 for right align, other values(including values outside [0, 1]) are linearly interpolated.</param>
         /// <param name="alignY">The vertical alignment. 0 for top align, 1 for bottom align, other values(including values outside [0, 1]) are linearly interpolated.</param>
-        public void DrawString(Vector2 position, string text, float alignX, float alignY)
+        public void DrawString(Vector2 position, string text, float alignX = 0, float alignY = 0)
         {
             this.DrawString(new Vector3(position.X, position.Y, 0), text, alignX, alignY);
-        }
-
-        /// <summary>
-        /// Draws a string.
-        /// </summary>
-        /// <param name="position">The position to draw at.</param>
-        /// <param name="text">The string to draw.</param>
-        /// <param name="alignX">The horizontal alignment. 0 for left align, 1 for right align, other values(including values outside [0, 1]) are linearly interpolated.</param>
-        public void DrawString(Vector2 position, string text, float alignX)
-        {
-            this.DrawString(new Vector3(position.X, position.Y, 0), text, alignX);
         }
 
         #endregion
@@ -128,32 +107,27 @@ namespace amulware.Graphics
         /// <param name="text">The string to draw.</param>
         /// <param name="alignX">The horizontal alignment. 0 for left align, 1 for right align, other values(including values outside [0, 1]) are linearly interpolated.</param>
         /// <param name="alignY">The vertical alignment. 0 for top align, 1 for bottom align, other values(including values outside [0, 1]) are linearly interpolated.</param>
-        public void DrawString(Vector3 position, string text, float alignX, float alignY)
+        public void DrawString(Vector3 position, string text, float alignX = 0, float alignY = 0)
         {
             if (alignY != 0)
                 position.Y -= this.Height * this.SymbolSize.Y * alignY;
+            if (alignX != 0)
+                position.X -= this.StringWidth(text) * alignX;
             this.DrawString(position, text, alignX);
         }
 
-        /// <summary>
-        /// Draws a string.
-        /// </summary>
-        /// <param name="position">The position to draw at.</param>
-        /// <param name="text">The string to draw.</param>
-        /// <param name="alignX">The horizontal alignment. 0 for left align, 1 for right align, other values(including values outside [0, 1]) are linearly interpolated.</param>
-        public void DrawString(Vector3 position, string text, float alignX)
-        {
-            if (alignX != 0)
-                position.X -= this.StringWidth(text) * alignX;
-            this.DrawString(position, text);
-        }
+        #endregion
+
+
+
+        #region Actual string drawing
 
         /// <summary>
         /// Draws a string.
         /// </summary>
         /// <param name="position">The position to draw at.</param>
         /// <param name="text">The string to draw.</param>
-        public void DrawString(Vector3 position, string text)
+        public void drawString(Vector3 position, string text)
         {
             int l = text.Length;
             UVColorVertexData[] vertices = new UVColorVertexData[l * 4];
