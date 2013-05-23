@@ -371,51 +371,51 @@ namespace amulware.Graphics
         public static Color FromHSVA(float h, float s, float v, byte a = 1)
         {
             float chroma = v * s;
-	        h /= MathHelper.PiOver3;
-	        float x = chroma * (1 - Math.Abs((h % 2) - 1));
-	        float m = v - chroma;
-	        float r, g, b;
-	        if(h > 6 || h < 0)
+            h /= MathHelper.PiOver3;
+            float x = chroma * (1 - Math.Abs((h % 2) - 1));
+            float m = v - chroma;
+            float r, g, b;
+            if(h > 6 || h < 0)
             {
-		        r = 0;
-		        g = 0;
-		        b = 0;
+                r = 0;
+                g = 0;
+                b = 0;
             }
-	        else if(h < 1)
+            else if(h < 1)
             {
-		        r = chroma;
-		        g = x;
-		        b = 0;
+                r = chroma;
+                g = x;
+                b = 0;
             }
-	        else if(h < 2)
+            else if(h < 2)
             {
-		        r = x;
-		        g = chroma;
-		        b = 0;
+                r = x;
+                g = chroma;
+                b = 0;
             }
-	        else if(h < 3)
+            else if(h < 3)
             {
-		        r = 0;
-		        g = chroma;
-		        b = x;
+                r = 0;
+                g = chroma;
+                b = x;
             }
-	        else if(h < 4)
+            else if(h < 4)
             {
-		        r = 0;
-		        g = x;
-		        b = chroma;
+                r = 0;
+                g = x;
+                b = chroma;
             }
-	        else if(h < 5)
+            else if(h < 5)
             {
-		        r = x;
-		        g = 0;
-		        b = chroma;
+                r = x;
+                g = 0;
+                b = chroma;
             }
-	        else
+            else
             {
-		        r = chroma;
-		        g = 0;
-		        b = x;
+                r = chroma;
+                g = 0;
+                b = x;
             }
             return new Color((byte)((r + m) * 255), (byte)((g + m) * 255), (byte)((b + m) * 255), a);
         }
