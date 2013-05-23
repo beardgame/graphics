@@ -109,7 +109,7 @@ namespace amulware.Graphics
                 position.Y -= this.Height * alignY;
             if (alignX != 0)
                 position.X -= this.StringWidth(text) * alignX;
-            this.DrawString(position, text, alignX);
+            this.drawStringReal(position, text);
         }
 
         #endregion
@@ -158,7 +158,7 @@ namespace amulware.Graphics
         /// </summary>
         /// <param name="position">The position to draw at.</param>
         /// <param name="text">The string to draw.</param>
-        public void drawString(Vector3 position, string text)
+        public void drawStringReal(Vector3 position, string text)
         {
             int l = text.Length;
             UVColorVertexData[] vertices = new UVColorVertexData[l * 4];
