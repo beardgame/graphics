@@ -243,7 +243,7 @@ namespace amulware.Graphics
                     frames_last_second = frames_this_second;
                     frames_this_second = 0;
                     next_fps_mark = timeAfterFrame + 1000;
-                    this.Title = this.frames_last_second.ToString();
+                    //this.Title = this.frames_last_second.ToString();
                 }
                 int updateTime = timeAfterFrame - currentTime;
                 int waitTime = this.update_time_interval - updateTime;

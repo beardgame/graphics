@@ -420,6 +420,28 @@ namespace amulware.Graphics
             return new Color((byte)((r + m) * 255), (byte)((g + m) * 255), (byte)((b + m) * 255), a);
         }
 
+        /// <summary>
+        /// Linearly interpolates between two colours and returns the result
+        /// </summary>
+        /// <param name="color1">The first colour</param>
+        /// <param name="color2">The second colour</param>
+        /// <param name="p">Interpolation parameter, is clamped to [0, 1]</param>
+        /// <returns>The interpolated colour</returns>
+        public static Color Lerp(Color color1, Color color2, float p)
+        {
+            if (p < 0)
+                p = 0;
+            else if (p > 1)
+                p = 1;
+            float q = 1 - p;
+            return new Color(
+                (byte)(color1.R * q + color2.R * p),
+                (byte)(color1.G * q + color2.G * p),
+                (byte)(color1.B * q + color2.B * p),
+                (byte)(color1.A * q + color2.A * p)
+                );
+        }
+
         #endregion
 
         #region Properties
