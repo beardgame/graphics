@@ -50,7 +50,7 @@ namespace amulware.Graphics.Serialization.JsonNet
                         letterWidths = serializer.Deserialize<float[]>(reader);
                         break;
                     default:
-                        // should not happen
+                        throw new InvalidDataException(String.Format("Unknown property while desirialising font: {0}", propertyName));
                         break;
                 }
 

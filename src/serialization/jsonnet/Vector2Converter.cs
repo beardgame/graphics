@@ -28,7 +28,7 @@ namespace amulware.Graphics.Serialization.JsonNet
                         return new Vector2(x, y);
                 }
             }
-            throw new InvalidDataException("A Vector2 must be an array of two numbers");
+            throw new InvalidDataException("A Vector2 must be an array of two numbers.");
         }
 
         /// <summary>
