@@ -31,6 +31,9 @@
     <DocumentationFile>bin\Release\AWGraphics.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>libs\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="OpenTK, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <HintPath>libs\OpenTK.dll</HintPath>
     </Reference>
@@ -44,6 +47,8 @@
     <Compile Include="src\geometries\PrimitiveGeometry.cs" />
     <Compile Include="src\geometries\Sprite2DGeometry.cs" />
     <Compile Include="src\geometries\Sprite3DGeometry.cs" />
+    <Compile Include="src\serialization\jsonnet\FontConverter.cs" />
+    <Compile Include="src\serialization\jsonnet\JsonConverterBase.cs" />
     <Compile Include="src\surfaces\PostProcessSurface.cs" />
     <Compile Include="src\surfaces\settings\Vector4Uniform.cs" />
     <Compile Include="src\surfaces\settings\Vector3Uniform.cs" />
@@ -51,6 +56,7 @@
     <Compile Include="src\surfaces\settings\Vector2Uniform.cs" />
     <Compile Include="src\surfaces\StaticVertexSurface.cs" />
     <Compile Include="src\utilities\Color.cs" />
+    <Compile Include="src\utilities\Font.cs" />
     <Compile Include="src\utilities\FontSetting.cs" />
     <Compile Include="src\surfaces\settings\SurfaceBlendSetting.cs" />
     <Compile Include="src\surfaces\settings\SurfaceDepthMaskSetting.cs" />
@@ -116,6 +122,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
