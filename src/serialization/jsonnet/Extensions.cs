@@ -11,6 +11,9 @@ namespace amulware.Graphics.Serialization.JsonNet
     /// </summary>
     public static class Extensions
     {
+        /// <summary>
+        /// Configures Json.NET with all converters required to serialize or deserialze Graphics related data types
+        /// </summary>
         public static JsonSerializerSettings ConfigureForGraphics(this JsonSerializerSettings settings)
         {
             settings.Converters.Add(Converters.Vector2Converter);
@@ -18,6 +21,18 @@ namespace amulware.Graphics.Serialization.JsonNet
 
             // return to allow for chaining
             return settings;
+        }
+
+        /// <summary>
+        /// Configures Json.NET with all converters required to serialize or deserialze Graphics related data types
+        /// </summary>
+        public static JsonSerializer ConfigureForGraphics(this JsonSerializer serializer)
+        {
+            serializer.Converters.Add(Converters.Vector2Converter);
+            serializer.Converters.Add(Converters.FontConverter);
+
+            // return to allow for chaining
+            return serializer;
         }
     }
 }
