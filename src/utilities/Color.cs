@@ -368,7 +368,7 @@ namespace amulware.Graphics
         /// <param name="v">value of the colour (0-1)</param>
         /// <param name="a">alpha of the colour</param>
         /// <returns>the constructed colour</returns>
-        public static Color FromHSVA(float h, float s, float v, byte a = 1)
+        public static Color FromHSVA(float h, float s, float v, byte a = 255)
         {
             float chroma = v * s;
             h /= MathHelper.PiOver3;
