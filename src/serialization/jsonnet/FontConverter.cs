@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Newtonsoft.Json;
+using OpenTK;
 
 namespace amulware.Graphics.Serialization.JsonNet
 {
@@ -17,7 +18,46 @@ namespace amulware.Graphics.Serialization.JsonNet
         /// <returns>The <see cref="Font"/> identified in the JSON, or null.</returns>
         protected override Font readJsonImpl(JsonReader reader, JsonSerializer serializer)
         {
-            return null;
+            Vector2 pixelSymbolOffset = Vector2.Zero;
+            Vector2 pixelSymbolSize = Vector2.One  * (1f / 16f);
+            Vector2 symbolSize = Vector2.One;
+            
+            float[] letterWidths = null;
+
+            while (reader.Read())
+            {
+                if (reader.TokenType != JsonToken.PropertyName)
+                    break;
+
+                var propertyName = (string)reader.Value;
+
+                if (!reader.Read())
+                    // no property value? stop reading and let JSON.NET fail
+                    break;
+
+                switch (propertyName)
+                {
+                    case "pixelSymbolOffset":
+                        pixelSymbolOffset = serializer.Deserialize<Vector2>(reader);
+                        break;
+                    case "pixelSymbolSize":
+                        pixelSymbolSize = serializer.Deserialize<Vector2>(reader);
+                        break;
+                    case "symbolSize":
+                        symbolSize = serializer.Deserialize<Vector2>(reader);
+                        break;
+                    case "letterWidths":
+                        letterWidths = serializer.Deserialize<float[]>(reader);
+                        break;
+                    default:
+                        // should not happen
+                        break;
+                }
+
+            }
+            
+            
+            return new Font(pixelSymbolOffset, pixelSymbolSize, symbolSize, letterWidths);
         }
 
         /// <summary>

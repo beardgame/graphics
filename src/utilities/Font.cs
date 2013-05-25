@@ -6,7 +6,7 @@ using OpenTK;
 
 namespace amulware.Graphics
 {
-    class Font
+    public class Font
     {
         public Vector2 PixelSymbolOffset { get; private set; }
         public Vector2 PixelSymbolSize { get; private set; }
@@ -26,9 +26,12 @@ namespace amulware.Graphics
             this.PixelSymbolOffset = pixelSymbolOffset;
             this.PixelSymbolSize = pixelSymbolSize;
             this.SymbolSize = symbolSize;
-            if (letterWidths != null &&
-                letterWidths.Length == 256)
-                this.letterWidths = letterWidths;
+            if (letterWidths != null)
+            {
+                this.letterWidths = new float[256];
+                int max = Math.Max(letterWidths.Length, 256);
+                Array.Copy(letterWidths, this.letterWidths, max);
+            }
             this.MonoSpaced = this.letterWidths == null;
         }
 

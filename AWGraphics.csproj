@@ -49,6 +49,7 @@
     <Compile Include="src\geometries\Sprite3DGeometry.cs" />
     <Compile Include="src\serialization\jsonnet\FontConverter.cs" />
     <Compile Include="src\serialization\jsonnet\JsonConverterBase.cs" />
+    <Compile Include="src\serialization\jsonnet\Vector2Converter.cs" />
     <Compile Include="src\surfaces\PostProcessSurface.cs" />
     <Compile Include="src\surfaces\settings\Vector4Uniform.cs" />
     <Compile Include="src\surfaces\settings\Vector3Uniform.cs" />
