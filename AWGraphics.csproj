@@ -47,6 +47,8 @@
     <Compile Include="src\geometries\PrimitiveGeometry.cs" />
     <Compile Include="src\geometries\Sprite2DGeometry.cs" />
     <Compile Include="src\geometries\Sprite3DGeometry.cs" />
+    <Compile Include="src\serialization\jsonnet\Converters.cs" />
+    <Compile Include="src\serialization\jsonnet\Extensions.cs" />
     <Compile Include="src\serialization\jsonnet\FontConverter.cs" />
     <Compile Include="src\serialization\jsonnet\JsonConverterBase.cs" />
     <Compile Include="src\serialization\jsonnet\Vector2Converter.cs" />
