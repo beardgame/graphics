@@ -26,6 +26,7 @@ namespace amulware.Graphics.Serialization.JsonNet
 
             while (reader.Read())
             {
+                // break on unexpected or end of object
                 if (reader.TokenType != JsonToken.PropertyName)
                     break;
 
@@ -35,6 +36,8 @@ namespace amulware.Graphics.Serialization.JsonNet
                     // no property value? stop reading and let JSON.NET fail
                     break;
 
+
+                // read correct property
                 switch (propertyName)
                 {
                     case "pixelSymbolOffset":
