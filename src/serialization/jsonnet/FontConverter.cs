@@ -18,11 +18,7 @@ namespace amulware.Graphics.Serialization.JsonNet
         /// <returns>The <see cref="Font"/> identified in the JSON, or null.</returns>
         protected override Font readJsonImpl(JsonReader reader, JsonSerializer serializer)
         {
-            Vector2 pixelSymbolOffset = Vector2.Zero;
-            Vector2 pixelSymbolSize = Vector2.One  * (1f / 16f);
-            Vector2 symbolSize = Vector2.One;
-            
-            float[] letterWidths = null;
+            Font.Builder builder = new Font.Builder();
 
             while (reader.Read())
             {
@@ -40,27 +36,26 @@ namespace amulware.Graphics.Serialization.JsonNet
                 // read correct property
                 switch (propertyName)
                 {
-                    case "pixelSymbolOffset":
-                        pixelSymbolOffset = serializer.Deserialize<Vector2>(reader);
+                    case "uvSymbolOffset":
+                        builder.UVSymbolOffset = serializer.Deserialize<Vector2>(reader);
                         break;
-                    case "pixelSymbolSize":
-                        pixelSymbolSize = serializer.Deserialize<Vector2>(reader);
+                    case "uvSymbolSize":
+                        builder.UVSymbolSize = serializer.Deserialize<Vector2>(reader);
                         break;
                     case "symbolSize":
-                        symbolSize = serializer.Deserialize<Vector2>(reader);
+                        builder.SymbolSize = serializer.Deserialize<Vector2>(reader);
                         break;
                     case "letterWidths":
-                        letterWidths = serializer.Deserialize<float[]>(reader);
+                        builder.LetterWidths = serializer.Deserialize<float[]>(reader);
                         break;
                     default:
-                        throw new InvalidDataException(String.Format("Unknown property while desirialising font: {0}", propertyName));
-                        break;
+                        throw new InvalidDataException(String.Format("Unknown property while deserialising font: {0}", propertyName));
                 }
 
             }
-            
-            
-            return new Font(pixelSymbolOffset, pixelSymbolSize, symbolSize, letterWidths);
+
+
+            return builder.Build();
         }
 
         /// <summary>

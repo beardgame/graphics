@@ -15,25 +15,14 @@ namespace amulware.Graphics
         public Color Color = Color.White;
 
         /// <summary>
-        /// The UV origin in the font texture
-        /// </summary>
-        public Vector2 UVOffset = Vector2.Zero;
-        /// <summary>
-        /// The size of a character in UV coordinates
-        /// </summary>
-        public Vector2 UVSymbolSize = new Vector2(1 / 16f, 1 / 16f);
-
-        /// <summary>
-        /// The dimensions of a symbol
-        /// </summary>
-        public Vector2 SymbolSize = new Vector2(1, 1);
-
-        /// <summary>
         /// The font height to draw with
         /// </summary>
         public float Height = 1;
 
-        private FontSetting setting;
+        /// <summary>
+        /// The <see cref="Font"/> to draw with
+        /// </summary>
+        public Font Font { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FontGeometry"/> class.
@@ -49,10 +38,10 @@ namespace amulware.Graphics
         /// </summary>
         /// <param name="surface">The surface to use for drawing</param>
         /// <param name="setting">The <see cref="FontSetting"/> used</param>
-        public FontGeometry(QuadSurface<UVColorVertexData> surface, FontSetting setting)
+        public FontGeometry(QuadSurface<UVColorVertexData> surface, Font font)
             : base(surface)
         {
-            this.setting = setting;
+            this.Font = font;
         }
 
         /// <summary>
