@@ -60,7 +60,6 @@
     <Compile Include="src\surfaces\StaticVertexSurface.cs" />
     <Compile Include="src\utilities\Color.cs" />
     <Compile Include="src\utilities\Font.cs" />
-    <Compile Include="src\utilities\FontSetting.cs" />
     <Compile Include="src\surfaces\settings\SurfaceBlendSetting.cs" />
     <Compile Include="src\surfaces\settings\SurfaceDepthMaskSetting.cs" />
     <Compile Include="src\surfaces\settings\SurfaceSetting.cs" />

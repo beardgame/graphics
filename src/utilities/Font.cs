@@ -27,7 +27,7 @@ namespace amulware.Graphics
         /// <summary>
         /// Whether this font is monospaced.
         /// </summary>
-        public bool MonoSpaced { get; private set; }
+        public bool Monospaced { get; private set; }
 
         private float[] letterWidths;
 
@@ -51,7 +51,7 @@ namespace amulware.Graphics
                 int max = Math.Max(letterWidths.Length, 256);
                 Array.Copy(letterWidths, this.letterWidths, max);
             }
-            this.MonoSpaced = this.letterWidths == null;
+            this.Monospaced = this.letterWidths == null;
         }
 
         /// <summary>
@@ -64,7 +64,10 @@ namespace amulware.Graphics
             return this.letterWidths[c];
         }
 
-        public sealed class Builder()
+        /// <summary>
+        /// Font builder, used to create <see cref="Font"/>s.
+        /// </summary>
+        public sealed class Builder
         {
             /// <summary>
             /// The offset of the 0-char in the texture in uv coordinates.
@@ -98,7 +101,7 @@ namespace amulware.Graphics
             /// <summary>
             /// Builds a <see cref="Font"/> from the current settings.
             /// </summary>
-            /// <returns>An instance <see cref="Font"/>.</returns>
+            /// <returns>A <see cref="Font"/>.</returns>
             public Font Build()
             {
                 return new Font(this.UVSymbolOffset, this.UVSymbolSize,

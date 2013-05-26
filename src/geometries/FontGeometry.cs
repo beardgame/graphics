@@ -20,7 +20,7 @@ namespace amulware.Graphics
         public float Height = 1;
 
         /// <summary>
-        /// The <see cref="Font"/> to draw with
+        /// The <see cref="Font"/> to draw with, must always be set to a valid instance when this geometry is used.
         /// </summary>
         public Font Font { get; set; }
 
@@ -28,16 +28,7 @@ namespace amulware.Graphics
         /// Initializes a new instance of the <see cref="FontGeometry"/> class.
         /// </summary>
         /// <param name="surface">The surface to use for drawing</param>
-        public FontGeometry(QuadSurface<UVColorVertexData> surface)
-            : base(surface)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FontGeometry"/> class.
-        /// </summary>
-        /// <param name="surface">The surface to use for drawing</param>
-        /// <param name="setting">The <see cref="FontSetting"/> used</param>
+        /// <param name="font">The <see cref="Font"/> used</param>
         public FontGeometry(QuadSurface<UVColorVertexData> surface, Font font)
             : base(surface)
         {
@@ -55,18 +46,18 @@ namespace amulware.Graphics
         {
             float w;
             int l = s.Length;
-            if (this.setting == null)
+            if (this.Font.Monospaced)
                 w = l;
             else
             {
                 w = 0;
                 for (int i = 0; i < l; i++)
-                    w += this.setting.Width((int)s[i]);
+                    w += this.Font.LetterWidth((int)s[i]);
             }
             if (accountForFontHeight)
                 w *= this.Height;
             if (accountForSymbolWidth)
-                w *= this.SymbolSize.X;
+                w *= this.Font.SymbolSize.X;
             return w;
         }
 
@@ -154,26 +145,29 @@ namespace amulware.Graphics
 
             int v_i = 0;
 
-            Vector2 charSize = this.SymbolSize * this.Height;
+            Vector2 charSize = this.Font.SymbolSize * this.Height;
+            Vector2 uvSymbolSize = this.Font.UVSymbolSize;
+            Vector2 uvOffset = this.Font.UVSymbolOffset;
+            bool monospaced = this.Font.Monospaced;
 
             for (int i = 0; i < l; i++)
             {
                 byte c = (byte)text[i];
-                float u = (c % 16) * this.UVSymbolSize.X + this.UVOffset.X;
-                float v = (c / 16) * this.UVSymbolSize.Y + this.UVOffset.Y;
+                float u = (c % 16) * uvSymbolSize.X + uvOffset.X;
+                float v = (c / 16) * uvSymbolSize.Y + uvOffset.Y;
 
                 float w;
                 float wu;
-                if (this.setting == null)
+                if (monospaced)
                 {
                     w = charSize.X;
-                    wu = this.UVSymbolSize.X;
+                    wu = uvSymbolSize.X;
                 }
                 else
                 {
-                    float f = this.setting.Width(c);
+                    float f = this.Font.LetterWidth(c);
                     w = charSize.X * f;
-                    wu = this.UVSymbolSize.X * f;
+                    wu = uvSymbolSize.X * f;
                 }
 
                 // left top
@@ -186,11 +180,11 @@ namespace amulware.Graphics
 
                 // right bottom
                 vertices[v_i++] = new UVColorVertexData(position.X + w, position.Y + charSize.Y, position.Z,
-                    u + wu, v + this.UVSymbolSize.Y, this.Color);
+                    u + wu, v + uvSymbolSize.Y, this.Color);
 
                 // left bottom
                 vertices[v_i++] = new UVColorVertexData(position.X, position.Y + charSize.Y, position.Z,
-                    u, v + this.UVSymbolSize.Y, this.Color);
+                    u, v + uvSymbolSize.Y, this.Color);
 
                 position.X += w;
             }
