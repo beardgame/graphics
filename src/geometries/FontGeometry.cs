@@ -166,8 +166,8 @@ namespace amulware.Graphics
                 else
                 {
                     float f = this.Font.LetterWidth(c);
-                    w = charSize.X * f;
-                    wu = uvSymbolSize.X * f;
+                    w = charSize.Y * f;
+                    wu = uvSymbolSize.Y * f;
                 }
 
                 // left top
