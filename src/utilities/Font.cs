@@ -39,17 +39,16 @@ namespace amulware.Graphics
         /// <param name="uvSymbolSize">Size of a symbol in the texture in uv coordinates.</param>
         /// <param name="symbolSize">Default size of a symbol when drawing text.</param>
         /// <param name="letterWidths">Relative widths of the symbols. Null for monospaced font.</param>
-        private Font(Vector2 uvSymbolOffset, Vector2 uvSymbolSize,
-            Vector2 symbolSize, float[] letterWidths = null)
+        private Font(Builder builder)
         {
-            this.UVSymbolOffset = uvSymbolOffset;
-            this.UVSymbolSize = uvSymbolSize;
-            this.SymbolSize = symbolSize;
-            if (letterWidths != null)
+            this.UVSymbolOffset = builder.UVSymbolOffset;
+            this.UVSymbolSize = builder.UVSymbolSize;
+            this.SymbolSize = builder.SymbolSize;
+            if (builder.LetterWidths != null)
             {
                 this.letterWidths = new float[256];
-                int max = Math.Max(letterWidths.Length, 256);
-                Array.Copy(letterWidths, this.letterWidths, max);
+                int max = Math.Max(builder.LetterWidths.Length, 256);
+                Array.Copy(builder.LetterWidths, this.letterWidths, max);
             }
             this.Monospaced = this.letterWidths == null;
         }
@@ -104,8 +103,7 @@ namespace amulware.Graphics
             /// <returns>A <see cref="Font"/>.</returns>
             public Font Build()
             {
-                return new Font(this.UVSymbolOffset, this.UVSymbolSize,
-                    this.SymbolSize, this.LetterWidths);
+                return new Font(this);
             }
         }
     }
