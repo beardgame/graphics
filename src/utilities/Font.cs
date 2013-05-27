@@ -1,8 +1,11 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using OpenTK;
+using amulware.Graphics.Serialization.JsonNet;
+using Newtonsoft.Json;
 
 namespace amulware.Graphics
 {
@@ -48,6 +51,14 @@ namespace amulware.Graphics
                 Array.Copy(builder.LetterWidths, this.letterWidths, max);
             }
             this.Monospaced = this.letterWidths == null;
+        }
+
+        public static Font FromJsonFile(string filename)
+        {
+            return JsonConvert.DeserializeObject<Font>(
+                File.ReadAllText(filename),
+                new JsonSerializerSettings().ConfigureForGraphics()
+                );
         }
 
         /// <summary>

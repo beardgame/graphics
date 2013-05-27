@@ -138,7 +138,7 @@ namespace amulware.Graphics
         /// </summary>
         /// <param name="position">The position to draw at.</param>
         /// <param name="text">The string to draw.</param>
-        public void drawStringReal(Vector3 position, string text)
+        private void drawStringReal(Vector3 position, string text)
         {
             int l = text.Length;
             UVColorVertexData[] vertices = new UVColorVertexData[l * 4];
