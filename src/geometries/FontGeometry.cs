@@ -150,6 +150,8 @@ namespace amulware.Graphics
             Vector2 uvOffset = this.Font.UVSymbolOffset;
             bool monospaced = this.Font.Monospaced;
 
+            float uvRatio = this.Font.UVSymbolSize.X / this.Font.SymbolSize.X * this.Font.SymbolSize.Y;
+
             for (int i = 0; i < l; i++)
             {
                 byte c = (byte)text[i];
@@ -167,7 +169,7 @@ namespace amulware.Graphics
                 {
                     float f = this.Font.LetterWidth(c);
                     w = charSize.Y * f;
-                    wu = uvSymbolSize.Y * f;
+                    wu = uvRatio * f;
                 }
 
                 // left top
