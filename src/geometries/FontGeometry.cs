@@ -62,6 +62,7 @@ namespace amulware.Graphics
                 w = 0;
                 for (int i = 0; i < l; i++)
                     w += this.Font.LetterWidth((int)s[i]);
+                w *= this.Font.SymbolSize.Y / this.Font.SymbolSize.X;
             }
             if (accountForFontHeight)
                 w *= this.Height;
@@ -131,11 +132,12 @@ namespace amulware.Graphics
         {
             string[] lines = text.Split('\n');
             int l = lines.Length;
-            position.Y -= this.Height * this.SizeCoefficient.Y * l * alignY;
+            float step = this.Height * this.SizeCoefficient.Y;
+            position.Y -= step * l * alignY;
             for (int i = 0; i < l; i++)
             {
-                position.Y += this.Height;
                 this.DrawString(position, lines[i], alignX);
+                position.Y += step;
             }
         }
 
@@ -166,6 +168,7 @@ namespace amulware.Graphics
 
             float uvRatio = this.Font.UVSymbolSize.X / this.Font.SymbolSize.X * this.Font.SymbolSize.Y;
             float wRatio = charSize.X / this.Font.SymbolSize.X * this.Font.SymbolSize.Y;
+
 
             for (int i = 0; i < l; i++)
             {
