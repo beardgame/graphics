@@ -25,6 +25,12 @@ namespace amulware.Graphics
         public Font Font { get; set; }
 
         /// <summary>
+        /// Gets or sets the size coefficient with which strings are measured and drawn.
+        /// Use negative values to flip drawing.
+        /// </summary>
+        public Vector2 SizeCoefficient { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="FontGeometry"/> class.
         /// </summary>
         /// <param name="surface">The surface to use for drawing</param>
@@ -33,6 +39,7 @@ namespace amulware.Graphics
             : base(surface)
         {
             this.Font = font;
+            this.SizeCoefficient = Vector2.One;
         }
 
         /// <summary>
@@ -40,9 +47,11 @@ namespace amulware.Graphics
         /// </summary>
         /// <param name="s">The string</param>
         /// <param name="accountForFontHeight">if set to <c>true</c> multiplies result with the set font height</param>
+        /// <param name="accountForSizeCoefficient">if set to <c>true</c> multiplies result with the set vertical size coefficient</param>
         /// <param name="accountForSymbolWidth">if set to <c>true</c> multiplies result with the default symbol width</param>
         /// <returns>Width of the string</returns>
-        public float StringWidth(string s, bool accountForFontHeight = true, bool accountForSymbolWidth = true)
+        public float StringWidth(string s, bool accountForFontHeight = true, 
+            bool accountForSizeCoefficient = true, bool accountForSymbolWidth = true)
         {
             float w;
             int l = s.Length;
@@ -56,6 +65,8 @@ namespace amulware.Graphics
             }
             if (accountForFontHeight)
                 w *= this.Height;
+            if (accountForSizeCoefficient)
+                w *= this.SizeCoefficient.X;
             if (accountForSymbolWidth)
                 w *= this.Font.SymbolSize.X;
             return w;
@@ -86,7 +97,7 @@ namespace amulware.Graphics
         public void DrawString(Vector3 position, string text, float alignX = 0, float alignY = 0)
         {
             if (alignY != 0)
-                position.Y -= this.Height * alignY;
+                position.Y -= this.Height * this.SizeCoefficient.Y * alignY;
             if (alignX != 0)
                 position.X -= this.StringWidth(text) * alignX;
             this.drawStringReal(position, text);
@@ -120,7 +131,7 @@ namespace amulware.Graphics
         {
             string[] lines = text.Split('\n');
             int l = lines.Length;
-            position.Y -= this.Height * l * alignY;
+            position.Y -= this.Height * this.SizeCoefficient.Y * l * alignY;
             for (int i = 0; i < l; i++)
             {
                 position.Y += this.Height;
@@ -146,11 +157,15 @@ namespace amulware.Graphics
             int v_i = 0;
 
             Vector2 charSize = this.Font.SymbolSize * this.Height;
+
+            charSize.X *= this.SizeCoefficient.X;
+            charSize.Y *= this.SizeCoefficient.Y;
             Vector2 uvSymbolSize = this.Font.UVSymbolSize;
             Vector2 uvOffset = this.Font.UVSymbolOffset;
             bool monospaced = this.Font.Monospaced;
 
             float uvRatio = this.Font.UVSymbolSize.X / this.Font.SymbolSize.X * this.Font.SymbolSize.Y;
+            float wRatio = charSize.X / this.Font.SymbolSize.X * this.Font.SymbolSize.Y;
 
             for (int i = 0; i < l; i++)
             {
@@ -168,7 +183,7 @@ namespace amulware.Graphics
                 else
                 {
                     float f = this.Font.LetterWidth(c);
-                    w = charSize.Y * f;
+                    w = wRatio * f;
                     wu = uvRatio * f;
                 }
 
