@@ -35,10 +35,7 @@ namespace amulware.Graphics
         /// <summary>
         /// Initializes a new instance of the <see cref="Font"/> class.
         /// </summary>
-        /// <param name="uvSymbolOffset">The offset of the 0-char in the texture in uv coordinates.</param>
-        /// <param name="uvSymbolSize">Size of a symbol in the texture in uv coordinates.</param>
-        /// <param name="symbolSize">Default size of a symbol when drawing text.</param>
-        /// <param name="letterWidths">Relative widths of the symbols. Null for monospaced font.</param>
+        /// <param name="builder">The <see cref="Builder"/> to create the font from.</param>
         private Font(Builder builder)
         {
             this.UVSymbolOffset = builder.UVSymbolOffset;
