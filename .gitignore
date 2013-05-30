@@ -1,4 +1,3 @@
-*.sln
 *.suo
 *.csproj.user
 /obj/
