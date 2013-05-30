@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{59BEDA5C-D68A-4011-89BA-C09421D22974}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>amulware.Graphics</RootNamespace>
+    <AssemblyName>amulware.Graphics</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\amulware.Graphics.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="geometries\FontGeometry.cs" />
+    <Compile Include="geometries\Geometry.cs" />
+    <Compile Include="geometries\PrimitiveGeometry.cs" />
+    <Compile Include="geometries\Sprite2DGeometry.cs" />
+    <Compile Include="geometries\Sprite3DGeometry.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Serialization\JsonNet\Converters.cs" />
+    <Compile Include="Serialization\JsonNet\Extensions.cs" />
+    <Compile Include="Serialization\JsonNet\FontConverter.cs" />
+    <Compile Include="Serialization\JsonNet\JsonConverterBase.cs" />
+    <Compile Include="Serialization\JsonNet\Vector2Converter.cs" />
+    <Compile Include="shading\FragmentShader.cs" />
+    <Compile Include="shading\Shader.cs" />
+    <Compile Include="shading\ShaderProgram.cs" />
+    <Compile Include="shading\VertexAttribute.cs" />
+    <Compile Include="shading\VertexShader.cs" />
+    <Compile Include="surfaces\IndexedSurface.cs" />
+    <Compile Include="surfaces\PostProcessSurface.cs" />
+    <Compile Include="surfaces\QuadSurface.cs" />
+    <Compile Include="surfaces\settings\FloatUniform.cs" />
+    <Compile Include="surfaces\settings\Matrix4Uniform.cs" />
+    <Compile Include="surfaces\settings\SurfaceBlendSetting.cs" />
+    <Compile Include="surfaces\settings\SurfaceDepthMaskSetting.cs" />
+    <Compile Include="surfaces\settings\SurfaceSetting.cs" />
+    <Compile Include="surfaces\settings\TextureUniform.cs" />
+    <Compile Include="surfaces\settings\Vector2Uniform.cs" />
+    <Compile Include="surfaces\settings\Vector3Uniform.cs" />
+    <Compile Include="surfaces\settings\Vector4Uniform.cs" />
+    <Compile Include="surfaces\StaticVertexSurface.cs" />
+    <Compile Include="surfaces\Surface.cs" />
+    <Compile Include="surfaces\VertexSurface.cs" />
+    <Compile Include="utilities\Color.cs" />
+    <Compile Include="utilities\Font.cs" />
+    <Compile Include="utilities\Matrix2.cs" />
+    <Compile Include="utilities\RenderTarget.cs" />
+    <Compile Include="utilities\Texture.cs" />
+    <Compile Include="utilities\UpdateEventArgs.cs" />
+    <Compile Include="utilities\UVRectangle.cs" />
+    <Compile Include="vertexdata\IVertexData.cs" />
+    <Compile Include="vertexdata\PostProcessVertexData.cs" />
+    <Compile Include="vertexdata\PrimitiveVertexData.cs" />
+    <Compile Include="vertexdata\SimpleSpriteVertexData.cs" />
+    <Compile Include="vertexdata\UVColorVertexData.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\libs\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>..\..\libs\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
