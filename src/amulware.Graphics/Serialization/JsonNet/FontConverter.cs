@@ -36,6 +36,9 @@ namespace amulware.Graphics.Serialization.JsonNet
                 // read correct property
                 switch (propertyName)
                 {
+                    case "uvSize":
+                        builder.UVSize = serializer.Deserialize<Vector2>(reader);
+                        break;
                     case "uvSymbolOffset":
                         builder.UVSymbolOffset = serializer.Deserialize<Vector2>(reader);
                         break;

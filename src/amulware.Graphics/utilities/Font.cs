@@ -19,7 +19,7 @@ namespace amulware.Graphics
         /// </summary>
         public Vector2 UVSymbolOffset { get; private set; }
         /// <summary>
-        /// Syze of the symbol in the texture in uv coordinates.
+        /// Size of the symbol in the texture in uv coordinates.
         /// </summary>
         public Vector2 UVSymbolSize { get; private set; }
         /// <summary>
@@ -41,16 +41,27 @@ namespace amulware.Graphics
         /// <param name="builder">The <see cref="Builder"/> to create the font from.</param>
         private Font(Builder builder)
         {
-            this.UVSymbolOffset = builder.UVSymbolOffset;
-            this.UVSymbolSize = builder.UVSymbolSize;
+            this.UVSymbolOffset = divideComponents(builder.UVSymbolOffset, builder.UVSize);
+            this.UVSymbolSize = divideComponents(builder.UVSymbolSize, builder.UVSize);
+            //TODO: figure out what exactly symbol size means...
+            // is it just the same as the fontgeometry.sizecoefficient?
+            // is that needed?
+            // how does it behave differently when monospaced or proportional?
             this.SymbolSize = builder.SymbolSize;
             if (builder.LetterWidths != null)
             {
                 this.letterWidths = new float[256];
                 int max = Math.Max(builder.LetterWidths.Length, 256);
                 Array.Copy(builder.LetterWidths, this.letterWidths, max);
+                for (int i = 0; i < 256; i++)
+                    this.letterWidths[i] /= builder.UVSize.X;
             }
             this.Monospaced = this.letterWidths == null;
+        }
+
+        private static Vector2 divideComponents(Vector2 v1, Vector2 v2)
+        {
+            return new Vector2(v1.X / v2.X, v1.Y / v2.Y);
         }
 
         public static Font FromJsonFile(string filename)
@@ -77,6 +88,12 @@ namespace amulware.Graphics
         public sealed class Builder
         {
             /// <summary>
+            /// Represents the dimension of the texture that will be sampled from.
+            /// When building a font, the uv-coordinates are divided by this scalar.
+            /// </summary>
+            public Vector2 UVSize { get; set; }
+
+            /// <summary>
             /// The offset of the 0-char in the texture in uv coordinates.
             /// </summary>
             public Vector2 UVSymbolOffset { get; set; }
@@ -102,6 +119,7 @@ namespace amulware.Graphics
                 this.UVSymbolSize = new Vector2(1f / 16f, 1f / 16f);
                 this.UVSymbolOffset = Vector2.Zero;
                 this.SymbolSize = Vector2.One;
+                this.UVSize = Vector2.One;
                 this.LetterWidths = null;
             }
 

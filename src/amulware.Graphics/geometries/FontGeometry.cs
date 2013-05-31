@@ -62,7 +62,7 @@ namespace amulware.Graphics
                 w = 0;
                 for (int i = 0; i < l; i++)
                     w += this.Font.LetterWidth((int)s[i]);
-                w *= this.Font.SymbolSize.Y / this.Font.SymbolSize.X;
+                w *= 16;
             }
             if (accountForFontHeight)
                 w *= this.Height;
@@ -166,8 +166,7 @@ namespace amulware.Graphics
             Vector2 uvOffset = this.Font.UVSymbolOffset;
             bool monospaced = this.Font.Monospaced;
 
-            float uvRatio = this.Font.UVSymbolSize.X / this.Font.SymbolSize.X * this.Font.SymbolSize.Y;
-            float wRatio = charSize.X / this.Font.SymbolSize.X * this.Font.SymbolSize.Y;
+            float wRatio = charSize.X  * 16;
 
 
             for (int i = 0; i < l; i++)
@@ -187,7 +186,7 @@ namespace amulware.Graphics
                 {
                     float f = this.Font.LetterWidth(c);
                     w = wRatio * f;
-                    wu = uvRatio * f;
+                    wu = f;
                 }
 
                 // left top
