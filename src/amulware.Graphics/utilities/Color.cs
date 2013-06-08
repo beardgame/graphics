@@ -35,7 +35,8 @@ namespace amulware.Graphics
         #endregion
 
         #region Static W3C Colours /// @name Default static W3C colours
-
+        /// <summary>Default transparent color.</summary>
+        public static readonly Color Transparent = new Color(0x00FFFFFF);
         /// <summary>Default 'Pink' W3C color (FF C0 CB) / (255, 192, 203).</summary>
         public static readonly Color Pink = new Color(0xFFFFC0CB);
         /// <summary>Default 'LightPink' W3C color (FF B6 C1) / (255, 182, 193).</summary>
