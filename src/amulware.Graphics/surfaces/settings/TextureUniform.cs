@@ -48,5 +48,6 @@ namespace amulware.Graphics
             GL.BindTexture(TextureTarget.Texture2D, this.Texture);
             GL.Uniform1(program.GetUniformLocation(this.name), this.Target - TextureUnit.Texture0);
         }
+
     }
 }

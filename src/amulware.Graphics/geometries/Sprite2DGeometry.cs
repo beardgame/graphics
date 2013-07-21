@@ -269,12 +269,14 @@ namespace amulware.Graphics
             float nx = vy * ilxy;
             float ny = vx * ilxy;
 
-            this.Surface.AddVertices(new UVColorVertexData[] {
-                new UVColorVertexData(x1 + nx, y1 + ny, z1, this.UV.BottomLeft, this.Color),
-                new UVColorVertexData(x1 - nx, y1 - ny, z1, this.UV.TopLeft, this.Color),
-                new UVColorVertexData(x2 - nx, y2 - ny, z2, this.UV.TopRight, this.Color),
-                new UVColorVertexData(x2 + nx, y2 + ny, z2, this.UV.BottomRight, this.Color)
-                });
+            throw new NotImplementedException("Still needs to properly calculate normal base.");
+
+            //this.Surface.AddVertices(new UVColorVertexData[] {
+            //    new UVColorVertexData(x1 + nx, y1 + ny, z1, this.UV.BottomLeft, this.Color),
+            //    new UVColorVertexData(x1 - nx, y1 - ny, z1, this.UV.TopLeft, this.Color),
+            //    new UVColorVertexData(x2 - nx, y2 - ny, z2, this.UV.TopRight, this.Color),
+            //    new UVColorVertexData(x2 + nx, y2 + ny, z2, this.UV.BottomRight, this.Color)
+            //    });
         }
 
         #endregion

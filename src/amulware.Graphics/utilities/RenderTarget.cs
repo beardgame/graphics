@@ -39,10 +39,10 @@ namespace amulware.Graphics
         /// </summary>
         /// <param name="attachment">The attachment.</param>
         /// <param name="texture">The texture.</param>
-        public void Attach(FramebufferAttachment attachment, Texture texture)
+        public void Attach(FramebufferAttachment attachment, Texture texture, TextureTarget target = TextureTarget.Texture2D)
         {
             GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, this.Handle);
-            GL.FramebufferTexture2D(FramebufferTarget.DrawFramebuffer, attachment, TextureTarget.Texture2D, texture, 0);
+            GL.FramebufferTexture2D(FramebufferTarget.DrawFramebuffer, attachment, target, texture, 0);
             GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, 0);
         }
 

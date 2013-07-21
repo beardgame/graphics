@@ -32,7 +32,6 @@ namespace amulware.Graphics
             : base(primitiveType)
         {
             this.isStatic = false;
-            this.vertices = new VertexData[4];
         }
 
         /// <summary>
@@ -42,12 +41,7 @@ namespace amulware.Graphics
         /// <returns>Index of the vertex in vertex buffer.</returns>
         public ushort AddVertex(VertexData vertex)
         {
-            if (this.vertices.Length == this.vertexCount)
-                // not that it matters, but the selfmade copying may be insignificantly slower(not tested)
-                //this.vertices.CopyTo(this.vertices = new VertexData[this.vertices.Length * 2], 0);
-                Array.Resize<VertexData>(ref this.vertices, this.vertices.Length * 2);
-            this.vertices[this.vertexCount] = vertex;
-            return this.vertexCount++;
+            return this.vertexBuffer.AddVertex(vertex);
         }
 
         /// <summary>
@@ -57,12 +51,7 @@ namespace amulware.Graphics
         /// <returns>Index of first new vertex in vertex buffer.</returns>
         public ushort AddVertices(VertexData[] vertices)
         {
-            ushort ret = this.vertexCount;
-            if (this.vertices.Length <= this.vertexCount + vertices.Length)
-                this.vertices.CopyTo(this.vertices = new VertexData[Math.Max(this.vertices.Length * 2, this.vertexCount + vertices.Length)], 0);
-            Array.Copy(vertices, 0, this.vertices, this.vertexCount, vertices.Length);
-            this.vertexCount += (ushort)vertices.Length;
-            return ret;
+            return this.vertexBuffer.AddVertices(vertices);
         }
 
         /// <summary>

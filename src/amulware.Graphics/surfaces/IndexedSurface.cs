@@ -50,9 +50,9 @@ namespace amulware.Graphics
         {
             int[] buffers = new int[] { this.vertexBuffer, this.indexBuffer };
 
-            this.initBuffers(ref buffers);
+            //this.initBuffers(ref buffers);
 
-            this.vertexBuffer = buffers[0];
+            //this.vertexBuffer = buffers[0];
             this.indexBuffer = buffers[1];
 
             this.setVertexAttributes();
@@ -63,7 +63,7 @@ namespace amulware.Graphics
             GL.UseProgram(this.program);
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, this.vertexBuffer);
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(this.vertexSize * this.vertexCount), this.vertices, BufferUsageHint.StreamDraw);
+            //GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(this.vertexSize * this.vertexCount), this.vertices, BufferUsageHint.StreamDraw);
 
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, this.indexBuffer);
             GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(this.indexBytes * this.indexCount), this.indices, BufferUsageHint.StreamDraw);

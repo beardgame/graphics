@@ -20,8 +20,6 @@ namespace amulware.Graphics
 
         private void initVertices()
         {
-            this.vertices = new PostProcessVertexData[4];
-            this.vertexCount = 4;
             this.SetRectangle(-1, -1, 1, 1);
         }
 
@@ -46,10 +44,13 @@ namespace amulware.Graphics
         /// <param name="toY">Second corner's y cordinate.</param>
         public void SetRectangle(float fromX, float fromY, float toX, float toY)
         {
-            this.vertices[0] = new PostProcessVertexData(fromX, fromY);
-            this.vertices[1] = new PostProcessVertexData(toX, fromY);
-            this.vertices[2] = new PostProcessVertexData(toX, toY);
-            this.vertices[3] = new PostProcessVertexData(fromX, toY);
+            this.vertexBuffer.Clear();
+            this.vertexBuffer.AddVertices(new PostProcessVertexData[] {
+                new PostProcessVertexData(fromX, fromY),
+                new PostProcessVertexData(toX, fromY),
+                new PostProcessVertexData(toX, toY),
+                new PostProcessVertexData(fromX, toY)
+                });
             this.ForceBufferUpload();
         }
     }

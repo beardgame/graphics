@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\amulware.Graphics.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -76,6 +77,7 @@
     <Compile Include="utilities\Texture.cs" />
     <Compile Include="utilities\UpdateEventArgs.cs" />
     <Compile Include="utilities\UVRectangle.cs" />
+    <Compile Include="utilities\VertexBuffer.cs" />
     <Compile Include="vertexdata\IVertexData.cs" />
     <Compile Include="vertexdata\PostProcessVertexData.cs" />
     <Compile Include="vertexdata\PrimitiveVertexData.cs" />

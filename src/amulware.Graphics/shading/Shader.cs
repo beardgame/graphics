@@ -25,6 +25,7 @@ namespace amulware.Graphics
         {
             this.Handle = GL.CreateShader(type);
             StreamReader streamReader = new StreamReader(filename);
+
             GL.ShaderSource(this, streamReader.ReadToEnd());
             streamReader.Close();
             GL.CompileShader(this);

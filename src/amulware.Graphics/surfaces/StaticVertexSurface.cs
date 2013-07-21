@@ -7,25 +7,13 @@ namespace amulware.Graphics
     /// <summary>
     /// This class represents a vertex buffer object that can be rendered with a specified <see cref="BeginMode"/>.
     /// </summary>
-    /// <typeparam name="VertexData">The <see cref="IVertexData"/> used for the vertex buffer object</typeparam>
-    public abstract class StaticVertexSurface<VertexData> : Surface where VertexData : struct, IVertexData
+    /// <typeparam name="TVertexData">The <see cref="IVertexData"/> used for the vertex buffer object</typeparam>
+    public abstract class StaticVertexSurface<TVertexData> : Surface, IDisposable where TVertexData : struct, IVertexData
     {
         /// <summary>
-        /// The array of vertices
+        /// The OpenGL vertex buffer containing the rendered vertices
         /// </summary>
-        protected VertexData[] vertices = new VertexData[1];
-
-        /// <summary>
-        /// The number of vertices in <see cref="vertices"/>. Can be less than vertices.Length, but not more.
-        /// </summary>
-        protected ushort vertexCount;
-
-        private bool buffersGenerated = false;
-
-        /// <summary>
-        /// The OpenGL vertex buffer object handle
-        /// </summary>
-        protected int vertexBuffer;
+        protected VertexBuffer<TVertexData> vertexBuffer;
 
         private bool vertexArrayGenerated = false;
 
@@ -33,11 +21,6 @@ namespace amulware.Graphics
         /// The OpenGL vertex array object handle
         /// </summary>
         protected int vertexArray;
-
-        /// <summary>
-        /// This size of a vertex in bytes.
-        /// </summary>
-        protected int vertexSize { private set; get; }
 
         private BeginMode beginMode;
 
@@ -53,13 +36,13 @@ namespace amulware.Graphics
         protected bool staticBufferUploaded = false;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="StaticVertexSurface{VertexData}"/> class.
+        /// Initializes a new instance of the <see cref="StaticVertexSurface{TVertexData}"/> class.
         /// </summary>
         /// <param name="primitiveType">Type of the primitives to draw</param>
         public StaticVertexSurface(BeginMode primitiveType = BeginMode.Triangles)
         {
             this.beginMode = primitiveType;
-            this.vertexSize = vertices[0].Size();
+            this.vertexBuffer = new VertexBuffer<TVertexData>();
         }
 
         /// <summary>
@@ -69,28 +52,7 @@ namespace amulware.Graphics
         /// </summary>
         protected override void onNewShaderProgram()
         {
-            if (!buffersGenerated)
-            {
-                int[] buffers = new int[] { this.vertexBuffer };
-
-                this.initBuffers(ref buffers);
-
-                this.vertexBuffer = buffers[0];
-            }
             this.setVertexAttributes();
-        }
-
-        /// <summary>
-        /// (Re)initialises buffers.
-        /// </summary>
-        /// <param name="buffers">Buffers to (re)initialise</param>
-        protected void initBuffers(ref int[] buffers)
-        {
-            if (this.buffersGenerated)
-                GL.DeleteBuffers(buffers.Length, buffers);
-
-            GL.GenBuffers(buffers.Length, buffers);
-            this.buffersGenerated = true;
         }
 
         /// <summary>
@@ -108,7 +70,7 @@ namespace amulware.Graphics
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, this.vertexBuffer);
             
-            this.program.SetVertexAttributes(this.vertices[0].VertexAttributes());
+            this.program.SetVertexAttributes(new TVertexData().VertexAttributes());
 
             GL.BindVertexArray(0);
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
@@ -120,7 +82,7 @@ namespace amulware.Graphics
         /// </summary>
         override protected void render()
         {
-            if (this.vertexCount == 0)
+            if (this.vertexBuffer.Count == 0)
                 return;
 
             GL.BindVertexArray(this.vertexArray);
@@ -137,9 +99,9 @@ namespace amulware.Graphics
             }
 
             if (upload)
-                GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(this.vertexSize * this.vertexCount), this.vertices, BufferUsageHint.StreamDraw);
+                this.vertexBuffer.BufferData();
 
-            GL.DrawArrays(this.beginMode, 0, this.vertexCount);
+            GL.DrawArrays(this.beginMode, 0, this.vertexBuffer.Count);
 
             GL.BindVertexArray(0);
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
@@ -150,7 +112,7 @@ namespace amulware.Graphics
         /// </summary>
         public virtual void Clear()
         {
-            this.vertexCount = 0;
+            this.vertexBuffer.Clear();
             this.staticBufferUploaded = false;
         }
 
@@ -160,6 +122,12 @@ namespace amulware.Graphics
         public virtual void ForceBufferUpload()
         {
             this.staticBufferUploaded = false;
+        }
+
+        public void Dispose()
+        {
+            if (this.vertexArrayGenerated)
+                GL.DeleteVertexArrays(1, ref this.vertexArray);
         }
     }
 }
