@@ -357,6 +357,19 @@ namespace amulware.Graphics
             this.B = (byte)(argb & 255);
         }
 
+        /// <summary>
+        /// Constructs a colour from another colour and a new alpha value.
+        /// </summary>
+        /// <param name="color">The template colour</param>
+        /// <param name="newAlpha">The new alpha value</param>
+        public Color(Color color, byte newAlpha)
+        {
+            this.R = color.R;
+            this.G = color.G;
+            this.B = color.B;
+            this.A = newAlpha;
+        }
+
         #endregion
 
         #region Static Methods

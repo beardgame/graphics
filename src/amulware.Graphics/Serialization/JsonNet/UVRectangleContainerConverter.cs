@@ -18,7 +18,7 @@ namespace amulware.Graphics.Serialization.JsonNet
         /// <returns>The <see cref="UVRectangleContainer"/> identified in the JSON.</returns>
         protected override UVRectangleContainer readJsonImpl(JsonReader reader, JsonSerializer serializer)
         {
-            bool absolute = false;
+            bool absolute = true;
             UVRectangle uv = new UVRectangle();
 
             bool sizeGiven = false;
@@ -76,7 +76,7 @@ namespace amulware.Graphics.Serialization.JsonNet
             }
 
             if (sizeGiven)
-                uv = new UVRectangle(uv.TopLeft.X, uv.TopLeft.Y, uv.TopLeft.X + size.X, uv.TopLeft.Y + size.Y);
+                uv = new UVRectangle(uv.TopLeft.X, uv.TopLeft.X + size.X, uv.TopLeft.Y, uv.TopLeft.Y + size.Y);
 
             if (rotation != 0)
                 uv.Rotate(rotation);
