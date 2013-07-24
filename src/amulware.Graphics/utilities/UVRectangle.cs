@@ -61,6 +61,38 @@ namespace amulware.Graphics
         }
 
         /// <summary>
+        /// Rescales th UVRectangle by multiplying all coordinates with the given vector component-wise.
+        /// </summary>
+        /// <param name="scale">Scalar vector</param>
+        public void ReScale(Vector2 scale)
+        {
+            this.TopLeft.X *= scale.X;
+            this.TopLeft.Y *= scale.Y;
+            this.TopRight.X *= scale.X;
+            this.TopRight.Y *= scale.Y;
+            this.BottomLeft.X *= scale.X;
+            this.BottomLeft.Y *= scale.Y;
+            this.BottomRight.X *= scale.X;
+            this.BottomRight.Y *= scale.Y;
+        }
+
+        /// <summary>
+        /// Rescales the UVRectangle by multiplying all coordinates with the given scalar.
+        /// </summary>
+        /// <param name="scale">The scalar</param>
+        public void ReScale(float scale)
+        {
+            this.TopLeft.X *= scale;
+            this.TopLeft.Y *= scale;
+            this.TopRight.X *= scale;
+            this.TopRight.Y *= scale;
+            this.BottomLeft.X *= scale;
+            this.BottomLeft.Y *= scale;
+            this.BottomRight.X *= scale;
+            this.BottomRight.Y *= scale;
+        }
+
+        /// <summary>
         /// The center of the <see cref="UVRectangle"/>(arithmetic mean of the four corners)
         /// </summary>
         /// <remarks>

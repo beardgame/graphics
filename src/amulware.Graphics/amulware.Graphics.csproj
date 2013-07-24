@@ -49,6 +49,8 @@
     <Compile Include="Serialization\JsonNet\Extensions.cs" />
     <Compile Include="Serialization\JsonNet\FontConverter.cs" />
     <Compile Include="Serialization\JsonNet\JsonConverterBase.cs" />
+    <Compile Include="Serialization\JsonNet\UVRectangleContainer.cs" />
+    <Compile Include="Serialization\JsonNet\UVRectangleContainerConverter.cs" />
     <Compile Include="Serialization\JsonNet\Vector2Converter.cs" />
     <Compile Include="shading\FragmentShader.cs" />
     <Compile Include="shading\Shader.cs" />

@@ -47,7 +47,6 @@ namespace amulware.Graphics
 
         /// <summary>
         /// Handles setting up (new) shader program with this surface.
-        /// Calls <see cref="initBuffers"/> on first call to initialise the vertex buffer.
         /// Calls <see cref="setVertexAttributes"/>.
         /// </summary>
         protected override void onNewShaderProgram()

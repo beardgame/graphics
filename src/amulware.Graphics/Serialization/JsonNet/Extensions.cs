@@ -18,6 +18,7 @@ namespace amulware.Graphics.Serialization.JsonNet
         {
             settings.Converters.Add(Converters.Vector2Converter);
             settings.Converters.Add(Converters.FontConverter);
+            settings.Converters.Add(Converters.UVRectangleContainerConverter);
 
             // return to allow for chaining
             return settings;
@@ -30,6 +31,7 @@ namespace amulware.Graphics.Serialization.JsonNet
         {
             serializer.Converters.Add(Converters.Vector2Converter);
             serializer.Converters.Add(Converters.FontConverter);
+            serializer.Converters.Add(Converters.UVRectangleContainerConverter);
 
             // return to allow for chaining
             return serializer;

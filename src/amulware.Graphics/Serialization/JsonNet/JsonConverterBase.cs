@@ -18,7 +18,7 @@ namespace amulware.Graphics.Serialization.JsonNet
     /// This deals handles all the boilerplate code dealing with nullity.
     /// </summary>
     /// <typeparam name="T">The type to convert to/from JSON.</typeparam>
-    internal abstract class JsonConverterBase<T> : JsonConverter
+    public abstract class JsonConverterBase<T> : JsonConverter
     {
         private static readonly Type NullableT = typeof(T).IsValueType ? typeof(Nullable<>).MakeGenericType(typeof(T)) : typeof(T);
 
