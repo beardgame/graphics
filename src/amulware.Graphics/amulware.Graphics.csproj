@@ -39,9 +39,15 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="containers\Sprite.cs" />
+    <Compile Include="containers\SpriteContainer.cs" />
+    <Compile Include="containers\SpriteSet.cs" />
+    <Compile Include="Serialization\JsonNet\TupleConverter.cs" />
     <Compile Include="geometries\FontGeometry.cs" />
     <Compile Include="geometries\Geometry.cs" />
+    <Compile Include="geometries\IQuadGeometry.cs" />
     <Compile Include="geometries\PrimitiveGeometry.cs" />
+    <Compile Include="geometries\QuadGeometry.cs" />
     <Compile Include="geometries\Sprite2DGeometry.cs" />
     <Compile Include="geometries\Sprite3DGeometry.cs" />
     <Compile Include="Program.cs" />
@@ -49,8 +55,11 @@
     <Compile Include="Serialization\JsonNet\Extensions.cs" />
     <Compile Include="Serialization\JsonNet\FontConverter.cs" />
     <Compile Include="Serialization\JsonNet\JsonConverterBase.cs" />
+    <Compile Include="Serialization\JsonNet\SpriteConverter.cs" />
+    <Compile Include="Serialization\JsonNet\SpriteSetConverter.cs" />
     <Compile Include="Serialization\JsonNet\UVRectangleContainer.cs" />
     <Compile Include="Serialization\JsonNet\UVRectangleContainerConverter.cs" />
+    <Compile Include="Serialization\JsonNet\UVRectangleConverter.cs" />
     <Compile Include="Serialization\JsonNet\Vector2Converter.cs" />
     <Compile Include="shading\FragmentShader.cs" />
     <Compile Include="shading\Shader.cs" />
