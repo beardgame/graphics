@@ -39,12 +39,13 @@ namespace amulware.Graphics
 
         static public SpriteSet<TVertexData> FromJsonFile<TVertexData>(
             string filename, Func<QuadSurface<TVertexData>, UVQuadGeometry<TVertexData>> geometryMaker,
-            ShaderProgram shaderProgram = null, SurfaceSetting[] surfaceSettings = null)
+            ShaderProgram shaderProgram = null, SurfaceSetting[] surfaceSettings = null,
+            Func<string, Texture> textureProvider = null)
             where TVertexData : struct, IVertexData
         {
             var jsonSettings = new JsonSerializerSettings().ConfigureForGraphics();
             jsonSettings.Converters.Add(
-                new SpriteSetConverter<TVertexData>(shaderProgram, surfaceSettings, geometryMaker)
+                new SpriteSetConverter<TVertexData>(shaderProgram, surfaceSettings, geometryMaker, textureProvider)
                     );
 
             var set = JsonConvert.DeserializeObject<SpriteSet<TVertexData>>(

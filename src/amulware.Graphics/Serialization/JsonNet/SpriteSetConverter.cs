@@ -13,13 +13,15 @@ namespace amulware.Graphics.Serialization.JsonNet
         private readonly Func<QuadSurface<TVertexData>, UVQuadGeometry<TVertexData>> geometryMaker;
         private readonly ShaderProgram shaderProgram;
         private readonly SurfaceSetting[] surfaceSettings;
+        private readonly Func<string, Texture> textureProvider;
 
         public SpriteSetConverter(ShaderProgram shaderProgram, SurfaceSetting[] surfaceSettings,
-            Func<QuadSurface<TVertexData>, UVQuadGeometry<TVertexData>> geometryMaker)
+            Func<QuadSurface<TVertexData>, UVQuadGeometry<TVertexData>> geometryMaker, Func<string, Texture> textureProvider = null)
         {
             this.shaderProgram = shaderProgram;
             this.surfaceSettings = surfaceSettings;
             this.geometryMaker = geometryMaker;
+            this.textureProvider = textureProvider ?? (s => new Texture(s));
         }
 
         protected override SpriteSet<TVertexData> readJsonImpl(JsonReader reader, JsonSerializer serializer)
