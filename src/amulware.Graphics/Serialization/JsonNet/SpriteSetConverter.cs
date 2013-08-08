@@ -34,6 +34,8 @@ namespace amulware.Graphics.Serialization.JsonNet
             var spriteConverter = new SpriteConverter<TVertexData>(() => this.geometryMaker(set.Surface));
             serializer.Converters.Add(spriteConverter);
 
+            int textureCount = 0;
+
             while (reader.Read())
             {
                 // break on unexpected or end of object
@@ -55,7 +57,8 @@ namespace amulware.Graphics.Serialization.JsonNet
                         var textures = serializer.Deserialize<List<Tuple<string, string>>>(reader);
                         serializer.Converters.Remove(texConverter);
                         textures.ForEach(
-                            t => set.Surface.AddSetting(new TextureUniform(t.Item1, new Texture(t.Item2)))
+                            t => set.Surface.AddSetting(new TextureUniform(t.Item1, new Texture(t.Item2),
+                                OpenTK.Graphics.OpenGL.TextureUnit.Texture0 + textureCount++))
                                 );
                         break;
                     case "uvSize":

@@ -50,61 +50,6 @@ namespace amulware.Graphics
 
         #endregion
 
-        #region Draw Animated /// @name Draw Animated
-
-        /// <summary>
-        /// Draws a sprite.
-        /// </summary>
-        /// <param name="position">The coordinates to draw the sprite at. The sprite is drawn centered around this point.</param>
-        /// <param name="angle">The angle to rotate the sprite by, around the z axis, in radians.</param>
-        /// <param name="scale">An additional scalar to scale the sprite by.</param>
-        /// <param name="frame">Frame of the animation</param>
-        public void Draw(Vector2 position, float angle = 0, float scale = 1, int frame = 0)
-        {
-            this.AnimationFrame = frame;
-            this.geometry.DrawSprite(position, angle, scale);
-        }
-
-        /// <summary>
-        /// Draws a sprite.
-        /// </summary>
-        /// <param name="position">The coordinates to draw the sprite at. The sprite is drawn centered around this point.</param>
-        /// <param name="angle">The angle to rotate the sprite by, around the z axis, in radians.</param>
-        /// <param name="scale">An additional scalar to scale the sprite by.</param>
-        /// <param name="time">Time since begin of the animation</param>
-        public void Draw(Vector2 position, float angle = 0, float scale = 1, float time = 0)
-        {
-            this.AnimationTime = time;
-            this.geometry.DrawSprite(position, angle, scale);
-        }
-
-        /// <summary>
-        /// Draws a sprite.
-        /// </summary>
-        /// <param name="position">The coordinates to draw the sprite at. The sprite is drawn centered around this point.</param>
-        /// <param name="angle">The angle to rotate the sprite by, around the z axis, in radians.</param>
-        /// <param name="scale">An additional scalar to scale the sprite by.</param>
-        /// <param name="frame">Frame of the animation</param>
-        public void Draw(Vector3 position, float angle = 0, float scale = 1, int frame = 0)
-        {
-            this.AnimationFrame = frame;
-            this.geometry.DrawSprite(position, angle, scale);
-        }
-
-        /// <summary>
-        /// Draws a sprite.
-        /// </summary>
-        /// <param name="position">The coordinates to draw the sprite at. The sprite is drawn centered around this point.</param>
-        /// <param name="angle">The angle to rotate the sprite by, around the z axis, in radians.</param>
-        /// <param name="scale">An additional scalar to scale the sprite by.</param>
-        /// <param name="time">Time since begin of the animation</param>
-        public void Draw(Vector3 position, float angle = 0, float scale = 1, float time = 0)
-        {
-            this.AnimationTime = time;
-            this.geometry.DrawSprite(position, angle, scale);
-        }
-
-        #endregion
     }
 
     public class Sprite<TVertexData> : Sprite
