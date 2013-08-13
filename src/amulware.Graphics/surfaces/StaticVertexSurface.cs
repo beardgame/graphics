@@ -22,7 +22,9 @@ namespace amulware.Graphics
         /// </summary>
         protected int vertexArray;
 
-        private BeginMode beginMode;
+        private readonly BeginMode _beginMode;
+
+        protected BeginMode beginMode { get { return this._beginMode; } }
 
         /// <summary>
         /// Wether the vertex buffer object is assumed to be static.
@@ -41,7 +43,7 @@ namespace amulware.Graphics
         /// <param name="primitiveType">Type of the primitives to draw</param>
         public StaticVertexSurface(BeginMode primitiveType = BeginMode.Triangles)
         {
-            this.beginMode = primitiveType;
+            this._beginMode = primitiveType;
             this.vertexBuffer = new VertexBuffer<TVertexData>();
         }
 
@@ -100,7 +102,7 @@ namespace amulware.Graphics
             if (upload)
                 this.vertexBuffer.BufferData();
 
-            GL.DrawArrays(this.beginMode, 0, this.vertexBuffer.Count);
+            GL.DrawArrays(this._beginMode, 0, this.vertexBuffer.Count);
 
             GL.BindVertexArray(0);
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
@@ -125,8 +127,7 @@ namespace amulware.Graphics
 
         public void Dispose()
         {
-            if (this.vertexArrayGenerated)
-                GL.DeleteVertexArrays(1, ref this.vertexArray);
+            GL.DeleteVertexArray(this.vertexArray);
         }
     }
 }

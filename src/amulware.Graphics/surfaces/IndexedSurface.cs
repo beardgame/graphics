@@ -4,77 +4,91 @@ using OpenTK.Graphics.OpenGL;
 namespace amulware.Graphics
 {
     /// <summary>
-    /// This class represents an indexed vertex buffer object. It is not up to date and cannot be used at this point.
+    /// This class represents an indexed vertex buffer object, that can be draws with a specified <see cref="BeginMode"/>.
     /// </summary>
-    public class IndexedSurface<VertexData> : VertexSurface<VertexData>
-        where VertexData : struct, IVertexData
+    public class IndexedSurface<TVertexData> : VertexSurface<TVertexData>
+        where TVertexData : struct, IVertexData
     {
-        //todo: check file for functionality
+        /// <summary>
+        /// The OpenGL index buffer container the rendered indices
+        /// </summary>
+        protected IndexBuffer indexBuffer;
 
-        ushort[] indices = new ushort[16];
-        int indexCount = 0;
-
-        readonly int indexBytes;
-
-        int indexBuffer;
-
-        BeginMode beginMode;
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IndexedSurface"/> class.
+        /// </summary>
+        /// <param name="primitiveType">Type of the primitives to draw.</param>
         public IndexedSurface(BeginMode primitiveType = BeginMode.Triangles)
-            : base()
+            : base(primitiveType)
         {
-            this.beginMode = primitiveType;
-            this.indexBytes = sizeof(ushort);
-            throw new ApplicationException("Indexed surfaces not up to date!");
+            this.indexBuffer = new IndexBuffer();
         }
 
-        public int AddIndex(ushort index)
+        /// <summary>
+        /// Adds an index.
+        /// </summary>
+        /// <param name="index">The index.</param>
+        public void AddIndex(ushort index)
         {
-            if (this.indices.Length == this.indexCount)
-                this.indices.CopyTo(this.indices = new ushort[this.indices.Length * 2], 0);
-            this.indices[this.indexCount] = index;
-            return this.indexCount++;
+            this.indexBuffer.AddIndex(index);
         }
 
-        public int AddIndices(ushort[] indices)
+        /// <summary>
+        /// Adds indices.
+        /// </summary>
+        /// <param name="indices">The indices.</param>
+        public void AddIndices(params ushort[] indices)
         {
-            int ret = this.indexCount;
-            if (this.indices.Length <= this.indexCount + indices.Length)
-                this.indices.CopyTo(this.indices = new ushort[Math.Max(this.indices.Length * 2, this.indexCount + indices.Length)], 0);
-            Array.Copy(indices, 0, this.indices, this.indexCount, indices.Length);
-            this.indexCount += indices.Length;
-            return ret;
+            this.indexBuffer.AddIndices(indices);
         }
 
-        protected override void onNewShaderProgram()
-        {
-            int[] buffers = new int[] { this.vertexBuffer, this.indexBuffer };
-
-            //this.initBuffers(ref buffers);
-
-            //this.vertexBuffer = buffers[0];
-            this.indexBuffer = buffers[1];
-
-            this.setVertexAttributes();
-        }
-
+        /// <summary>
+        /// Renders from the index and vertex buffers and clears them afterwards, if <see cref="ClearOnRender"/> is set to true.
+        /// </summary>
         protected override void render()
         {
-            GL.UseProgram(this.program);
+            if (this.indexBuffer.Count == 0)
+                return;
+
+            GL.BindVertexArray(this.vertexArray);
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, this.vertexBuffer);
-            //GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(this.vertexSize * this.vertexCount), this.vertices, BufferUsageHint.StreamDraw);
 
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, this.indexBuffer);
-            GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(this.indexBytes * this.indexCount), this.indices, BufferUsageHint.StreamDraw);
 
-            GL.DrawElements(this.beginMode, this.indexCount, DrawElementsType.UnsignedShort, 0);
+            bool upload = true;
+            if (this.isStatic)
+            {
+                if (this.staticBufferUploaded)
+                    upload = false;
+                else
+                    this.staticBufferUploaded = true;
+            }
+
+            if (upload)
+            {
+                this.vertexBuffer.BufferData();
+                this.indexBuffer.BufferData();
+            }
+
+            GL.DrawElements(this.beginMode, this.indexBuffer.Count, DrawElementsType.UnsignedShort, 0);
+
+            GL.BindVertexArray(0);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
+
+            if (this.ClearOnRender)
+                this.Clear();
         }
 
+        /// <summary>
+        /// Clears index and vertex buffers.
+        /// </summary>
         public override void Clear()
         {
             base.Clear();
-            this.indexCount = 0;
+            this.indexBuffer.Clear();
         }
+
     }
 }

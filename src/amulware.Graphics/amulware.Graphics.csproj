@@ -83,6 +83,7 @@
     <Compile Include="surfaces\VertexSurface.cs" />
     <Compile Include="utilities\Color.cs" />
     <Compile Include="utilities\Font.cs" />
+    <Compile Include="utilities\IndexBuffer.cs" />
     <Compile Include="utilities\Matrix2.cs" />
     <Compile Include="utilities\RenderTarget.cs" />
     <Compile Include="utilities\Texture.cs" />

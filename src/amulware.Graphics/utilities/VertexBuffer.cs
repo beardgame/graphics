@@ -4,6 +4,10 @@ using OpenTK.Graphics.OpenGL;
 
 namespace amulware.Graphics
 {
+    /// <summary>
+    /// This class represents and OpenGL vertex buffer
+    /// </summary>
+    /// <typeparam name="TVertexData">The type of vertex in the buffer.</typeparam>
     sealed public class VertexBuffer<TVertexData> : IDisposable where TVertexData : struct, IVertexData
     {
         /// <summary>
@@ -21,37 +25,28 @@ namespace amulware.Graphics
         /// </summary>
         public ushort Count { get { return this.vertexCount; } }
 
+        private readonly int handle;
+
         /// <summary>
         /// The OpenGL vertex buffer object handle
         /// </summary>
-        public int Handle { get; private set; }
-
-        private bool bufferGenerated = false;
+        public int Handle { get { return this.handle; } }
 
         private readonly int vertexSize;
 
         /// <summary>
-        /// This size of a vertex in bytes.
+        /// The size of a vertex in bytes.
         /// </summary>
         public int VertexSize { get { return this.vertexSize; } }
 
+        /// <summary>
+        /// Initialises a new instance of <see cref="VertexBuffer"/>
+        /// </summary>
         public VertexBuffer()
         {
             this.vertexSize = new TVertexData().Size();
-            this.initBuffer();
-        }
 
-        private void initBuffer()
-        {
-            int[] buffers = new int[] { this.Handle };
-
-            if (this.bufferGenerated)
-                GL.DeleteBuffers(1, buffers);
-
-            GL.GenBuffers(1, buffers);
-
-            this.Handle = buffers[0];
-            this.bufferGenerated = true;
+            this.handle = GL.GenBuffer();
         }
 
         /// <summary>
@@ -72,12 +67,11 @@ namespace amulware.Graphics
         /// </summary>
         /// <param name="vertices">The vertices.</param>
         /// <returns>Index of first new vertex in vertex buffer.</returns>
-        public ushort AddVertices(TVertexData[] vertices)
+        public ushort AddVertices(params TVertexData[] vertices)
         {
             ushort oldCount = this.vertexCount;
             int newCount = oldCount + vertices.Length;
             if (this.vertices.Length <= newCount)
-                //this.vertices.CopyTo(this.vertices = new TVertexData[Math.Max(this.vertices.Length * 2, this.vertexCount + vertices.Length)], 0);
                 Array.Resize(ref this.vertices, Math.Max(this.vertices.Length * 2, newCount));
             Array.Copy(vertices, 0, this.vertices, this.vertexCount, vertices.Length);
             this.vertexCount = (ushort)newCount;
@@ -91,7 +85,7 @@ namespace amulware.Graphics
         /// <param name="usageHint">The usage hint</param>
         public void BufferData(BufferTarget target = BufferTarget.ArrayBuffer, BufferUsageHint usageHint = BufferUsageHint.StreamDraw)
         {
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(this.vertexSize * this.vertexCount), this.vertices, BufferUsageHint.StreamDraw);
+            GL.BufferData(target, (IntPtr)(this.vertexSize * this.vertexCount), this.vertices, usageHint);
         }
 
         /// <summary>
@@ -104,12 +98,15 @@ namespace amulware.Graphics
 
         static public implicit operator int(VertexBuffer<TVertexData> buffer)
         {
-            return buffer.Handle;
+            return buffer.handle;
         }
 
+        /// <summary>
+        /// Disposes the <see cref="VertexBuffer"/>
+        /// </summary>
         public void Dispose()
         {
-            throw new NotImplementedException();
+            GL.DeleteBuffer(this);
         }
     }
 }

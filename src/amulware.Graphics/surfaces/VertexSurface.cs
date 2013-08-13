@@ -49,7 +49,7 @@ namespace amulware.Graphics
         /// </summary>
         /// <param name="vertices">The vertices.</param>
         /// <returns>Index of first new vertex in vertex buffer.</returns>
-        public ushort AddVertices(VertexData[] vertices)
+        public ushort AddVertices(params VertexData[] vertices)
         {
             return this.vertexBuffer.AddVertices(vertices);
         }
