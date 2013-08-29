@@ -66,6 +66,7 @@
     <Compile Include="shading\ShaderProgram.cs" />
     <Compile Include="shading\VertexAttribute.cs" />
     <Compile Include="shading\VertexShader.cs" />
+    <Compile Include="surfaces\IndexedQuadSurface.cs" />
     <Compile Include="surfaces\IndexedSurface.cs" />
     <Compile Include="surfaces\PostProcessSurface.cs" />
     <Compile Include="surfaces\QuadSurface.cs" />

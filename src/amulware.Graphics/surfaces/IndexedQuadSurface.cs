@@ -1,11 +1,18 @@
 ﻿using OpenTK.Graphics.OpenGL;
 using System;
 
-namespace amulware.Graphics.surfaces
+namespace amulware.Graphics
 {
-    class IndexedQuadSurface<TVertexData> : IndexedSurface<TVertexData>
+    /// <summary>
+    /// A surface rendering quads using indexed triangle lists.
+    /// </summary>
+    /// <typeparam name="TVertexData"></typeparam>
+    public class IndexedQuadSurface<TVertexData> : IndexedSurface<TVertexData>
         where TVertexData : struct, IVertexData
     {
+        /// <summary>
+        /// Initialises a new <see cref="IndexedQuadSurface"/>
+        /// </summary>
         public IndexedQuadSurface()
             : base(BeginMode.Triangles)
         {
