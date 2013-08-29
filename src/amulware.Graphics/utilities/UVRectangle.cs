@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
@@ -61,7 +61,41 @@ namespace amulware.Graphics
         }
 
         /// <summary>
-        /// Rescales th UVRectangle by multiplying all coordinates with the given vector component-wise.
+        /// Constructs a new <see cref="UVRectangle"/> by copying its values from a template.
+        /// </summary>
+        /// <param name="template">The UVRectangle to copy values from</param>
+        public UVRectangle(UVRectangle template)
+        {
+            this.TopLeft = template.TopLeft;
+            this.TopRight = template.TopRight;
+            this.BottomLeft = template.BottomLeft;
+            this.BottomRight = template.BottomRight;
+        }
+
+        /// <summary>
+        /// Returns a new <see cref="UVRectangle"/> scaled by multiplying all coordinates with the given vector component-wise.
+        /// </summary>
+        /// <param name="scale">Scalar vector</param>
+        public UVRectangle ReScaled(Vector2 scale)
+        {
+            UVRectangle ret = new UVRectangle(this);
+            ret.ReScale(scale);
+            return ret;
+        }
+
+        /// <summary>
+        /// Returns a new <see cref="UVRectangle"/> scaled by multiplying all coordinates with the given scalar.
+        /// </summary>
+        /// <param name="scale">The scalar</param>
+        public UVRectangle ReScaled(float scale)
+        {
+            UVRectangle ret = new UVRectangle(this);
+            ret.ReScale(scale);
+            return ret;
+        }
+
+        /// <summary>
+        /// Rescales th <see cref="UVRectangle"/> by multiplying all coordinates with the given vector component-wise.
         /// </summary>
         /// <param name="scale">Scalar vector</param>
         public void ReScale(Vector2 scale)
@@ -77,7 +111,7 @@ namespace amulware.Graphics
         }
 
         /// <summary>
-        /// Rescales the UVRectangle by multiplying all coordinates with the given scalar.
+        /// Rescales the <see cref="UVRectangle"/> by multiplying all coordinates with the given scalar.
         /// </summary>
         /// <param name="scale">The scalar</param>
         public void ReScale(float scale)
@@ -101,54 +135,93 @@ namespace amulware.Graphics
         public Vector2 Center { get { return 0.25f * (this.BottomLeft + this.BottomRight + this.TopLeft + this.TopRight); } }
 
         /// <summary>
-        /// Rotates the four corners of the <see cref="UVRectangle"/> by a given angle around a given point.
+        /// Returns a new <see cref="UVRectangle"/> rotated by a given angle around a given point.
         /// </summary>
         /// <param name="angle">The angle by which to rotate</param>
         /// <param name="center">The point around which to rotate</param>
         public UVRectangle Rotated(float angle, Vector2 center)
         {
+            UVRectangle ret = new UVRectangle(this);
+            ret.Rotate(angle, center);
+            return ret;
+        }
+
+        /// <summary>
+        /// Returns a new <see cref="UVRectangle"/> rotated by a given angle around its <see cref="Center"/>.
+        /// </summary>
+        /// <param name="angle">The angle by which to rotate</param>
+        public UVRectangle Rotated(float angle)
+        {
+            return this.Rotated(angle, this.Center);
+        }
+
+        /// <summary>
+        /// Rotates the four corners of the <see cref="UVRectangle"/> by a given angle around a given point.
+        /// </summary>
+        /// <param name="angle">The angle by which to rotate</param>
+        /// <param name="center">The point around which to rotate</param>
+        public void Rotate(float angle, Vector2 center)
+        {
             Matrix2 m = Matrix2.CreateRotation(angle);
-            return new UVRectangle(
-                center + m * (this.TopLeft - center),
-                center + m * (this.TopRight - center),
-                center + m * (this.BottomLeft - center),
-                center + m * (this.BottomRight - center)
-                );
+            this.TopLeft = center + m * (this.TopLeft - center);
+            this.TopRight = center + m * (this.TopRight - center);
+            this.BottomLeft = center + m * (this.BottomLeft - center);
+            this.BottomRight = center + m * (this.BottomRight - center);
         }
 
         /// <summary>
         /// Rotates the four corners of the <see cref="UVRectangle"/> by a given angle around its <see cref="Center"/>.
         /// </summary>
         /// <param name="angle">The angle by which to rotate</param>
-        public UVRectangle Rotated(float angle)
+        public void Rotate(float angle)
         {
-            return Rotated(angle, this.Center);
+            this.Rotate(angle, this.Center);
+        }
+
+        /// <summary>
+        /// Returns a new <see cref="UVRectangle"/> flipped horizontally.
+        /// </summary>
+        public UVRectangle FlippedH()
+        {
+            UVRectangle ret = new UVRectangle(this);
+            ret.FlipH();
+            return ret;
+        }
+
+        /// <summary>
+        /// Returns a new <see cref="UVRectangle"/> flipped vertically.
+        /// </summary>
+        public UVRectangle FlippedV()
+        {
+            UVRectangle ret = new UVRectangle(this);
+            ret.FlipV();
+            return ret;
         }
 
         /// <summary>
         /// Flips the <see cref="UVRectangle"/> horizontally.
         /// </summary>
-        public UVRectangle FlippedH()
+        public void FlipH()
         {
-            return new UVRectangle(
-                new Vector2(this.TopRight.X, this.TopLeft.Y),
-                new Vector2(this.TopLeft.X, this.TopRight.Y),
-                new Vector2(this.BottomRight.X, this.BottomLeft.Y),
-                new Vector2(this.BottomLeft.X, this.BottomRight.Y)
-                );
+            float temp = this.TopLeft.X;
+            this.TopLeft.X = this.TopRight.X;
+            this.TopRight.X = temp;
+            temp = this.BottomLeft.X;
+            this.BottomLeft.X = this.BottomRight.X;
+            this.BottomRight.X = temp;
         }
 
         /// <summary>
         /// Flips the <see cref="UVRectangle"/> vertically.
         /// </summary>
-        public UVRectangle FlippedV()
+        public void FlipV()
         {
-            return new UVRectangle(
-                new Vector2(this.TopLeft.X, this.BottomLeft.Y),
-                new Vector2(this.TopRight.X, this.BottomRight.Y),
-                new Vector2(this.BottomLeft.X, this.TopLeft.Y),
-                new Vector2(this.BottomRight.X, this.TopRight.Y)
-                );
+            float temp = this.TopLeft.Y;
+            this.TopLeft.Y = this.BottomLeft.Y;
+            this.BottomLeft.Y = temp;
+            temp = this.TopRight.Y;
+            this.TopRight.Y = this.BottomRight.Y;
+            this.BottomRight.Y = temp;
         }
 
         /// <summary>
