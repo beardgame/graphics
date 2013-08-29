@@ -85,13 +85,15 @@ namespace amulware.Graphics
             }
         }
 
-        public Sprite(string name, IEnumerable<UVRectangle> frames, float duration, UVQuadGeometry<TVertexData> geometry)
+        public Sprite(string name, IEnumerable<UVRectangle> frames, float duration, UVQuadGeometry<TVertexData> geometry, bool setFirstFrame = true)
             : base(name, geometry)
         {
             if (frames == null || (this.uvFrames = frames.ToArray<UVRectangle>()).Length == 0)
                 this.uvFrames = new UVRectangle[] { UVRectangle.Default };
             this.Duration = duration;
             this.geometry = geometry;
+            if (setFirstFrame)
+                this.AnimationFrame = 0;
         }
 
     }
