@@ -1,9 +1,8 @@
-notes.txt
-*.sln
 *.suo
 *.csproj.user
 obj/
 bin/
 libs/
 docs/
+notes/
 doxwarnings.log
