@@ -55,7 +55,7 @@ namespace amulware.Graphics
             this.Frame = lastFrame.Frame + 1;
             this.ElapsedTimeInMs = currentTime - lastFrame.TimeInMs;
             this.ElapsedTimeInS = this.ElapsedTimeInMs * 0.001;
-            this.ElapsedTimeInS = (float)this.ElapsedTimeInS;
+            this.ElapsedTimeInSf = (float)this.ElapsedTimeInS;
 
             this.TimeInMs = currentTime;
             this.TimeInS = currentTime * 0.001;
