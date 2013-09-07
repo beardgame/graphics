@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace amulware.Graphics
 {
@@ -31,6 +31,11 @@ namespace amulware.Graphics
         public readonly double ElapsedTimeInS = 0;
 
         /// <summary>
+        /// The elapsed time ince the last update in seconds
+        /// </summary>
+        public readonly float ElapsedTimeInSf = 0;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="UpdateEventArgs"/> class.
         /// </summary>
         /// <param name="currentTime">The current time.</param>
@@ -50,6 +55,7 @@ namespace amulware.Graphics
             this.Frame = lastFrame.Frame + 1;
             this.ElapsedTimeInMs = currentTime - lastFrame.TimeInMs;
             this.ElapsedTimeInS = this.ElapsedTimeInMs * 0.001;
+            this.ElapsedTimeInS = (float)this.ElapsedTimeInS;
 
             this.TimeInMs = currentTime;
             this.TimeInS = currentTime * 0.001;
