@@ -38,18 +38,21 @@ namespace amulware.Graphics
 
         public override void DrawSprite(Vector3 position, float angle, float scale)
         {
-            Vector2 expand = new Vector2(expandX, expandY) * scale;
+            Vector2 expand1 = new Vector2(expandX, expandY) * scale;
+            Vector2 expand2 = new Vector2(-expand1.X, expand1.Y);
 
             if (angle != 0)
             {
-                expand = Matrix2.CreateRotation(angle) * expand;
+                Matrix2 rotation = Matrix2.CreateRotation(angle);
+                expand1 = rotation * expand1;
+                expand2 = rotation * expand2;
             }
 
             this.Surface.AddVertices(new SimpleSpriteVertexData[] {
-                new SimpleSpriteVertexData(position, this.UV.TopLeft, this.Color, -expand.X, expand.Y),
-                new SimpleSpriteVertexData(position, this.UV.TopRight, this.Color, expand.X, expand.Y),
-                new SimpleSpriteVertexData(position, this.UV.BottomRight, this.Color, expand.X, -expand.Y),
-                new SimpleSpriteVertexData(position, this.UV.BottomLeft, this.Color, -expand.X, -expand.Y)
+                new SimpleSpriteVertexData(position, this.UV.TopLeft, this.Color, expand2),
+                new SimpleSpriteVertexData(position, this.UV.TopRight, this.Color, expand1),
+                new SimpleSpriteVertexData(position, this.UV.BottomRight, this.Color, -expand2),
+                new SimpleSpriteVertexData(position, this.UV.BottomLeft, this.Color, -expand1)
                 });
         }
 
