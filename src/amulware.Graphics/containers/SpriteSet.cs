@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.IO;
 using amulware.Graphics.Serialization.JsonNet;
 
@@ -37,11 +38,29 @@ namespace amulware.Graphics
                 this.surface.SetShaderProgram(shaderProgram);
         }
 
-        static public SpriteSet<TVertexData> FromJsonFile<TVertexData>(
+        public static SpriteSet<TVertexData> Copy<TVertexDataIn>
+            (SpriteSet<TVertexDataIn> template, Func<QuadSurface<TVertexData>, UVQuadGeometry<TVertexData>> geometryMaker,
+            ShaderProgram shaderProgram = null, SurfaceSetting[] surfaceSettings = null, bool keepTextureUniforms = true)
+            where TVertexDataIn : struct, IVertexData
+        {
+            SpriteSet<TVertexData> set = new SpriteSet<TVertexData>(shaderProgram, surfaceSettings);
+
+            foreach(var item in template.sprites)
+            {
+                set.sprites.Add(item.Key, Sprite<TVertexData>
+                .Copy(item.Value, geometryMaker(set.surface)));
+            }
+
+            if (keepTextureUniforms)
+                set.surface.AddSettings(template.surface.Settings.Where(setting => setting is TextureUniform));
+
+            return set;
+        }
+
+        static public SpriteSet<TVertexData> FromJsonFile(
             string filename, Func<QuadSurface<TVertexData>, UVQuadGeometry<TVertexData>> geometryMaker,
             ShaderProgram shaderProgram = null, SurfaceSetting[] surfaceSettings = null,
             Func<string, Texture> textureProvider = null)
-            where TVertexData : struct, IVertexData
         {
             var jsonSettings = new JsonSerializerSettings().ConfigureForGraphics();
             jsonSettings.Converters.Add(

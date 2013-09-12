@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using OpenTK.Graphics.OpenGL;
+using System.Collections.ObjectModel;
 
 namespace amulware.Graphics
 {
@@ -15,6 +16,8 @@ namespace amulware.Graphics
 
         private readonly List<SurfaceSetting> settingsSet = new List<SurfaceSetting>();
         private readonly List<SurfaceSetting> settingsUnSet = new List<SurfaceSetting>();
+
+        public ReadOnlyCollection<SurfaceSetting> Settings { get { return this.settingsSet.AsReadOnly(); } }
 
         /// <summary>
         /// Sets the shader program used to render this surface.

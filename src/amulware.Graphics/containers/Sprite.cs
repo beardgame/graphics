@@ -1,4 +1,4 @@
-﻿using OpenTK;
+using OpenTK;
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -94,6 +94,33 @@ namespace amulware.Graphics
             this.geometry = geometry;
             if (setFirstFrame)
                 this.AnimationFrame = 0;
+        }
+
+        public Sprite(Sprite<TVertexData> template, UVQuadGeometry<TVertexData> geometry, bool setFirstFrame = true)
+            : base(template.Name, geometry)
+        {
+            this.uvFrames = template.uvFrames;
+            this.Duration = template.Duration;
+            this.geometry = geometry;
+            if (setFirstFrame)
+                this.AnimationFrame = 0;
+        }
+
+        private Sprite(string name, UVRectangle[] frames, float duration, UVQuadGeometry<TVertexData> geometry, bool setFirstFrame = true)
+            : base(name, geometry)
+        {
+            this.uvFrames = frames;
+            this.Duration = duration;
+            this.geometry = geometry;
+            if (setFirstFrame)
+                this.AnimationFrame = 0;
+        }
+
+        public static Sprite<TVertexData> Copy<TVertexDataIn>
+            (Sprite<TVertexDataIn> template, UVQuadGeometry<TVertexData> geometry, bool setFirstFrame = true)
+            where TVertexDataIn : struct, IVertexData
+        {
+            return new Sprite<TVertexData>(template.Name, template.uvFrames, template.Duration, geometry, setFirstFrame);
         }
 
     }
