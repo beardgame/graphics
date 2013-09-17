@@ -30,6 +30,18 @@ namespace amulware.Graphics
         /// </summary>
         public Vector2 SizeCoefficient { get; set; }
 
+        public Vector3 UnitX { get; set; }
+        public Vector3 UnitY { get; set; }
+
+        public Matrix3 UnitTransformation
+        {
+            set
+            {
+                this.UnitX = value.Row0;
+                this.UnitY = value.Row1;
+            }
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FontGeometry"/> class.
         /// </summary>
@@ -40,6 +52,8 @@ namespace amulware.Graphics
         {
             this.Font = font;
             this.SizeCoefficient = Vector2.One;
+
+            this.UnitTransformation = Matrix3.Identity;
         }
 
         /// <summary>
@@ -167,7 +181,8 @@ namespace amulware.Graphics
             bool monospaced = this.Font.Monospaced;
 
             float wRatio = charSize.X  * 16;
-
+            
+            Vector3 yOffset = charSize.Y * this.UnitY;
 
             for (int i = 0; i < l; i++)
             {
@@ -189,23 +204,25 @@ namespace amulware.Graphics
                     wu = f;
                 }
 
+                Vector3 position2 = position + w * this.UnitX;
+
                 // left top
-                vertices[v_i++] = new UVColorVertexData(position.X, position.Y, position.Z,
-                    u, v, this.Color);
+                vertices[v_i++] = new UVColorVertexData(position,
+                    new Vector2(u, v), this.Color);
 
                 // right top
-                vertices[v_i++] = new UVColorVertexData(position.X + w, position.Y, position.Z,
-                    u + wu, v, this.Color);
+                vertices[v_i++] = new UVColorVertexData(position2,
+                    new Vector2(u + wu, v), this.Color);
 
                 // right bottom
-                vertices[v_i++] = new UVColorVertexData(position.X + w, position.Y + charSize.Y, position.Z,
-                    u + wu, v + uvSymbolSize.Y, this.Color);
+                vertices[v_i++] = new UVColorVertexData(position2 + yOffset,
+                    new Vector2(u + wu, v + uvSymbolSize.Y), this.Color);
 
                 // left bottom
-                vertices[v_i++] = new UVColorVertexData(position.X, position.Y + charSize.Y, position.Z,
-                    u, v + uvSymbolSize.Y, this.Color);
+                vertices[v_i++] = new UVColorVertexData(position + yOffset,
+                    new Vector2(u, v + uvSymbolSize.Y), this.Color);
 
-                position.X += w;
+                position = position2;
             }
 
             this.Surface.AddVertices(vertices);
