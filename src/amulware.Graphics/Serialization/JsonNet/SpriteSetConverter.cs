@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -57,7 +57,7 @@ namespace amulware.Graphics.Serialization.JsonNet
                         var textures = serializer.Deserialize<List<Tuple<string, string>>>(reader);
                         serializer.Converters.Remove(texConverter);
                         textures.ForEach(
-                            t => set.Surface.AddSetting(new TextureUniform(t.Item1, new Texture(t.Item2),
+                            t => set.Surface.AddSetting(new TextureUniform(t.Item1, this.textureProvider(t.Item2),
                                 OpenTK.Graphics.OpenGL.TextureUnit.Texture0 + textureCount++))
                                 );
                         break;

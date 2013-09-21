@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
@@ -10,12 +10,14 @@ namespace amulware.Graphics
     /// </summary>
     public class SurfaceBlendSetting : SurfaceSetting
     {
-        private BlendingFactorSrc srcBlend;
-        private BlendingFactorDest destBlend;
-        private BlendEquationMode equation;
+        private readonly BlendingFactorSrc srcBlend;
+        private readonly BlendingFactorDest destBlend;
+        private readonly BlendEquationMode equation;
 
         /// <summary>Default 'Alpha' blend function</summary>
         public static readonly SurfaceBlendSetting Alpha = new SurfaceBlendSetting(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha, BlendEquationMode.FuncAdd);
+        /// <summary>Default 'Pre-multiplied Alpha' blend function</summary>
+        public static readonly SurfaceBlendSetting PremultipliedAlpha = new SurfaceBlendSetting(BlendingFactorSrc.One, BlendingFactorDest.OneMinusSrcAlpha, BlendEquationMode.FuncAdd);
         /// <summary>Default 'Add' blend function</summary>
         public static readonly SurfaceBlendSetting Add = new SurfaceBlendSetting(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.One, BlendEquationMode.FuncAdd);
         /// <summary>Default 'Substract' blend function</summary>

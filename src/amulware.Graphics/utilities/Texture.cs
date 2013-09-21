@@ -72,25 +72,52 @@ namespace amulware.Graphics
         /// Initializes a new instance of the <see cref="Texture"/> class.
         /// </summary>
         /// <param name="path">The image file to load.</param>
-        public Texture(string path)
+        /// <param name="preMultiplyAlpha">If true, the colour values of each pixel are multiplied by its alpha value.</param>
+        public Texture(string path, bool preMultiplyAlpha = false)
         {
             this.Handle = -1;
             if (System.IO.File.Exists(path))
             {
-                Bitmap bitmap = new Bitmap(path);
+                using (Bitmap bitmap = new Bitmap(path))
+                {
 
-                int tex;
-                GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
+                    int tex;
+                    GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
 
-                GL.GenTextures(1, out tex);
-                GL.BindTexture(TextureTarget.Texture2D, tex);
+                    GL.GenTextures(1, out tex);
+                    GL.BindTexture(TextureTarget.Texture2D, tex);
 
-                System.Drawing.Imaging.BitmapData data = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height),
-                    System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                    System.Drawing.Imaging.BitmapData data = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height),
+                        System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
-                GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, data.Width, data.Height, 0,
-                    OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
-                bitmap.UnlockBits(data);
+                    if (preMultiplyAlpha)
+                    {
+                        int size = data.Width * data.Height * 4;
+                        byte[] array = new byte[size];
+                        System.Runtime.InteropServices.Marshal.Copy(data.Scan0, array, 0, size);
+                        for (int i = 0; i < size; i += 4)
+                        {
+                            float alpha = array[i + 3] / 255f;
+                            array[i] = (byte)(array[i] * alpha);
+                            array[i + 1] = (byte)(array[i + 1] * alpha);
+                            array[i + 2] = (byte)(array[i + 2] * alpha);
+                        }
+
+                        GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, data.Width, data.Height, 0,
+                            OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, array);
+                    }
+                    else
+                    {
+                        GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, data.Width, data.Height, 0,
+                            OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
+                    }
+
+                    bitmap.UnlockBits(data);
+
+                    this.Handle = tex;
+                    this.Width = bitmap.Width;
+                    this.Height = bitmap.Height;
+                }
 
                 GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
 
@@ -98,13 +125,6 @@ namespace amulware.Graphics
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
-
-
-
-                this.Handle = tex;
-                this.Width = bitmap.Width;
-                this.Height = bitmap.Height;
-
 
                 GL.BindTexture(TextureTarget.Texture2D, 0);
 

@@ -1,9 +1,8 @@
-﻿// This code file is an almost direct copy of NodeConverterBase.cs
+﻿// This code file is an almost direct copy of NodaConverterBase.cs
 // from the Noda Time library. Original copyright notice:
 
 // Copyright 2012 The Noda Time Authors. All rights reserved.
-// Use of this source code is governed by the Apache License 2.0,
-// as found in the LICENSE.txt file.
+// Use of this source code is governed by the Apache License 2.0
 
 // We thank the authors of Noda Time for sharing this code!
 

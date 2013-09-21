@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
@@ -479,6 +479,24 @@ namespace amulware.Graphics
             }
         }
 
+
+        /// <summary>
+        /// The colour, pre-multiplied with its alpha value.
+        /// </summary>
+        public Color Premultiplied
+        {
+            get
+            {
+                float a = this.A / 255f;
+                return new Color(
+                    (byte)(this.R * a),
+                    (byte)(this.G * a),
+                    (byte)(this.B * a),
+                    this.A
+                    );
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -493,6 +511,7 @@ namespace amulware.Graphics
         {
             return "#" + this.ARGB.ToString("X8");
         }
+
 
         #endregion
 
