@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace amulware.Graphics
 {
-    class SpriteSetContainer<TVertexData> : ISpriteSet<TVertexData>
+    public class SpriteSetContainer<TVertexData> : ISpriteSet<TVertexData>
         where TVertexData : struct, IVertexData
     {
         private readonly List<SpriteSet<TVertexData>> spriteSets;
