@@ -43,7 +43,7 @@
   <ItemGroup>
     <Compile Include="containers\ISpriteSet.cs" />
     <Compile Include="containers\Sprite.cs" />
-    <Compile Include="containers\SpriteContainer.cs" />
+    <Compile Include="containers\SpriteSetContainer.cs" />
     <Compile Include="containers\SpriteSet.cs" />
     <Compile Include="Serialization\JsonNet\TupleConverter.cs" />
     <Compile Include="geometries\FontGeometry.cs" />
