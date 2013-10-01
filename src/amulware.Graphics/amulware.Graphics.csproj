@@ -41,6 +41,7 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="containers\ISpriteSet.cs" />
     <Compile Include="containers\Sprite.cs" />
     <Compile Include="containers\SpriteContainer.cs" />
     <Compile Include="containers\SpriteSet.cs" />

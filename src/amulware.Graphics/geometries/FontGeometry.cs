@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
@@ -112,9 +112,9 @@ namespace amulware.Graphics
         public void DrawString(Vector3 position, string text, float alignX = 0, float alignY = 0)
         {
             if (alignY != 0)
-                position.Y -= this.Height * this.SizeCoefficient.Y * alignY;
+                position -= this.Height * this.SizeCoefficient.Y * alignY * this.UnitY;
             if (alignX != 0)
-                position.X -= this.StringWidth(text) * alignX;
+                position -= this.StringWidth(text) * alignX * this.UnitX;
             this.drawStringReal(position, text);
         }
 

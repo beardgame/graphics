@@ -8,7 +8,7 @@ using amulware.Graphics.Serialization.JsonNet;
 namespace amulware.Graphics
 {
     
-    public class SpriteSet<TVertexData>
+    public class SpriteSet<TVertexData> : ISpriteSet<TVertexData>
         where TVertexData : struct, IVertexData
     {
         private readonly QuadSurface<TVertexData> surface;
