@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace amulware.Graphics
@@ -10,7 +10,7 @@ namespace amulware.Graphics
 
         private readonly Dictionary<string, Sprite<TVertexData>> sprites;
 
-        public readonly IEnumerable<SpriteSet<TVertexData>> SpriteSets { get { return this.spriteSets; } }
+        public IEnumerable<SpriteSet<TVertexData>> SpriteSets { get { return this.spriteSets; } }
 
         public Sprite<TVertexData> this[string spriteName]
         {
