@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
+using OpenTK;
 using System;
 using System.IO;
 
@@ -19,6 +20,7 @@ namespace amulware.Graphics.Serialization.JsonNet
             float duration = 1;
             string name = null;
             UVRectangle[] uvs = null;
+            Vector2 size = new Vector2(1, 1);
 
             while (reader.Read())
             {
@@ -44,6 +46,9 @@ namespace amulware.Graphics.Serialization.JsonNet
                     case "uv":
                         uvs = serializer.Deserialize<UVRectangle[]>(reader);
                         break;
+                    case "size":
+                        size = serializer.Deserialize<Vector2>(reader);
+                        break;
                     default:
                         throw new InvalidDataException(String.Format("Unknown property while deserialising sprite: {0}", propertyName));
                 }
@@ -52,7 +57,7 @@ namespace amulware.Graphics.Serialization.JsonNet
             if (name == null || name == "")
                 throw new InvalidDataException("Sprite must have a name!");
 
-            return new Sprite<TVertexData>(name, uvs, duration, geometryMaker());
+            return new Sprite<TVertexData>(name, uvs, duration, geometryMaker(), size, true);
         }
 
         protected override void writeJsonImpl(JsonWriter writer, Sprite<TVertexData> value, JsonSerializer serializer)

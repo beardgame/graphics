@@ -85,33 +85,39 @@ namespace amulware.Graphics
             }
         }
 
-        public Sprite(string name, IEnumerable<UVRectangle> frames, float duration, UVQuadGeometry<TVertexData> geometry, bool setFirstFrame = true)
+        public Sprite(string name, IEnumerable<UVRectangle> frames, float duration,
+            UVQuadGeometry<TVertexData> geometry, Vector2 size, bool setFirstFrame = true)
             : base(name, geometry)
         {
             if (frames == null || (this.uvFrames = frames.ToArray<UVRectangle>()).Length == 0)
                 this.uvFrames = new UVRectangle[] { UVRectangle.Default };
             this.Duration = duration;
             this.geometry = geometry;
+            this.geometry.Size = size;
             if (setFirstFrame)
                 this.AnimationFrame = 0;
         }
 
-        public Sprite(Sprite<TVertexData> template, UVQuadGeometry<TVertexData> geometry, bool setFirstFrame = true)
+        public Sprite(Sprite<TVertexData> template,
+            UVQuadGeometry<TVertexData> geometry, bool setFirstFrame = true)
             : base(template.Name, geometry)
         {
             this.uvFrames = template.uvFrames;
             this.Duration = template.Duration;
             this.geometry = geometry;
+            this.geometry.Size = template.geometry.Size;
             if (setFirstFrame)
                 this.AnimationFrame = 0;
         }
 
-        private Sprite(string name, UVRectangle[] frames, float duration, UVQuadGeometry<TVertexData> geometry, bool setFirstFrame = true)
+        private Sprite(string name, UVRectangle[] frames, float duration,
+            UVQuadGeometry<TVertexData> geometry, Vector2 size, bool setFirstFrame = true)
             : base(name, geometry)
         {
             this.uvFrames = frames;
             this.Duration = duration;
             this.geometry = geometry;
+            this.geometry.Size = size;
             if (setFirstFrame)
                 this.AnimationFrame = 0;
         }
@@ -120,7 +126,8 @@ namespace amulware.Graphics
             (Sprite<TVertexDataIn> template, UVQuadGeometry<TVertexData> geometry, bool setFirstFrame = true)
             where TVertexDataIn : struct, IVertexData
         {
-            return new Sprite<TVertexData>(template.Name, template.uvFrames, template.Duration, geometry, setFirstFrame);
+            return new Sprite<TVertexData>(template.Name, template.uvFrames, template.Duration,
+                geometry, template.geometry.Size, setFirstFrame);
         }
 
     }
