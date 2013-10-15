@@ -25,5 +25,10 @@ namespace amulware.Graphics.Serialization.JsonNet
         /// Converter for <see cref="UVRectangleContainer"/>
         /// </summary>
         public static readonly JsonConverter UVRectangleContainerConverter = new UVRectangleContainerConverter();
+
+        /// <summary>
+        /// Converter for <see cref="Color"/>
+        /// </summary>
+        public static readonly JsonConverter ColorContainerConverter = new ColorConverter();
     }
 }

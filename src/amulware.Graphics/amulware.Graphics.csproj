@@ -45,6 +45,7 @@
     <Compile Include="containers\Sprite.cs" />
     <Compile Include="containers\SpriteSetContainer.cs" />
     <Compile Include="containers\SpriteSet.cs" />
+    <Compile Include="Serialization\JsonNet\ColorConverter.cs" />
     <Compile Include="Serialization\JsonNet\TupleConverter.cs" />
     <Compile Include="geometries\FontGeometry.cs" />
     <Compile Include="geometries\Geometry.cs" />
