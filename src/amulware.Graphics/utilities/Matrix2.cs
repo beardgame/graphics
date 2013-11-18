@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
@@ -71,6 +71,17 @@ namespace amulware.Graphics
                     throw new DivideByZeroException("Matrix is not invertible, determinant is zero!");
                 }
                 return new Matrix2(this.M22, -this.M21, -this.M12, this.M11) * (1.0f / det);
+            }
+        }
+
+        /// <summary>
+        /// Transpose of the Matrix
+        /// </summary>
+        public Matrix2 Transpose
+        {
+            get
+            {
+                return new Matrix2(this.M11, this.M12, this.M21, this.M22);
             }
         }
 

@@ -1,18 +1,25 @@
-﻿using OpenTK;
+using System.IO;
+using OpenTK;
 
 namespace amulware.Graphics.Animation
 {
     sealed public class KeyframeData
     {
-        private readonly BoneTemplate boneTemplate;
+        private readonly BoneTemplate bone;
         private readonly Vector2 offset;
         private readonly float angle;
 
-        public KeyframeData(BoneTemplate boneTemplate, Vector2 offset, float angle)
+
+        internal KeyframeData(KeyframeDataJsonRepresentation data, SkeletonTemplate skeleton)
         {
-            this.offset = offset;
-            this.angle = angle;
-            this.boneTemplate = boneTemplate;
+            this.offset = data.Offset;
+            this.angle = data.Angle;
+
+
+            this.bone = skeleton[data.Bone];
+
+            if (this.bone == null)
+                throw new InvalidDataException("Keyframe data must specify valid bone.");
         }
 
         public Vector2 Offset
@@ -25,9 +32,9 @@ namespace amulware.Graphics.Animation
             get { return this.angle; }
         }
 
-        public BoneTemplate BoneTemplate
+        public BoneTemplate Bone
         {
-            get { return this.boneTemplate; }
+            get { return this.bone; }
         }
     }
 }

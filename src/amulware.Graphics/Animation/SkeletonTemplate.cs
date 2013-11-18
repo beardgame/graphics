@@ -74,7 +74,12 @@ namespace amulware.Graphics.Animation
 
         public BoneTemplate this[string boneName]
         {
-            get { return this.boneDictionary[boneName]; }
+            get
+            {
+                BoneTemplate bone;
+                this.boneDictionary.TryGetValue(boneName, out bone);
+                return bone;
+            }
         }
 
         public ReadOnlyCollection<BoneTemplate> Bones

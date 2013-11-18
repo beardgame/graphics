@@ -41,10 +41,18 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Animation\AnimationSequence.cs" />
+    <Compile Include="Animation\AnimationSeqence.cs" />
+    <Compile Include="Animation\AnimationSequenceTemplate.cs" />
     <Compile Include="Animation\AnimationSystem.cs" />
+    <Compile Include="Animation\BoneParameters.cs" />
+    <Compile Include="Animation\json\AnimationTemplateJsonRepresentation.cs" />
+    <Compile Include="Animation\Bone.cs" />
     <Compile Include="Animation\BoneTemplate.cs" />
     <Compile Include="Animation\json\BoneJsonRepresentation.cs" />
+    <Compile Include="Animation\json\KeyframeDataJsonRepresentation.cs" />
+    <Compile Include="Animation\json\KeyframeJsonRepresentation.cs" />
+    <Compile Include="Animation\json\SequenceJsonRepresentation.cs" />
+    <Compile Include="Animation\json\TransitionJsonRepresentation.cs" />
     <Compile Include="Animation\KeyframeData.cs" />
     <Compile Include="Animation\SkeletonTemplate.cs" />
     <Compile Include="Animation\Keyframe.cs" />
