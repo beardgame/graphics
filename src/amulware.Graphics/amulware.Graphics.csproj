@@ -41,6 +41,15 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Animation\AnimationSequence.cs" />
+    <Compile Include="Animation\AnimationSystem.cs" />
+    <Compile Include="Animation\BoneTemplate.cs" />
+    <Compile Include="Animation\json\BoneJsonRepresentation.cs" />
+    <Compile Include="Animation\KeyframeData.cs" />
+    <Compile Include="Animation\SkeletonTemplate.cs" />
+    <Compile Include="Animation\Keyframe.cs" />
+    <Compile Include="Animation\AnimationTemplate.cs" />
+    <Compile Include="Animation\FrameTransition.cs" />
     <Compile Include="containers\ISpriteSet.cs" />
     <Compile Include="containers\Sprite.cs" />
     <Compile Include="containers\SpriteSetContainer.cs" />
@@ -89,6 +98,7 @@
     <Compile Include="utilities\Color.cs" />
     <Compile Include="utilities\Font.cs" />
     <Compile Include="utilities\IndexBuffer.cs" />
+    <Compile Include="utilities\InternalExtensions.cs" />
     <Compile Include="utilities\Matrix2.cs" />
     <Compile Include="utilities\RenderTarget.cs" />
     <Compile Include="utilities\Texture.cs" />
@@ -113,6 +123,7 @@
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -37,6 +37,7 @@ namespace amulware.Graphics
             GL.GetShader(this, ShaderParameter.CompileStatus, out status_code);
 
             if (status_code != 1)
+
                 throw new ApplicationException(info);
 
             //Console.WriteLine(type.ToString() + " created");
