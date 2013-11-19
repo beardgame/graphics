@@ -7,7 +7,7 @@ namespace amulware.Graphics
     /// <summary>
     /// This class represents a GLSL fragment shader
     /// </summary>
-    public class FragmentShader : Shader
+    sealed public class FragmentShader : Shader
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="FragmentShader"/> class.

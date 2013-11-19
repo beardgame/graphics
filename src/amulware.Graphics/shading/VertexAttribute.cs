@@ -7,7 +7,7 @@ namespace amulware.Graphics
     /// <summary>
     /// This class represents a vertex attributes, defining the layout if <see cref="IVertexData"/> implementations.
     /// </summary>
-    public class VertexAttribute
+    sealed public class VertexAttribute
     {
         readonly string name;
         readonly int size;

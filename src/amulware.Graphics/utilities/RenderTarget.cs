@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
@@ -7,7 +7,7 @@ namespace amulware.Graphics
     /// <summary>
     /// This class represents an OpenGL framebuffer object that can be rendered to.
     /// </summary>
-    public class RenderTarget : IDisposable
+    sealed public class RenderTarget : IDisposable
     {
         /// <summary>
         /// The handle of the OpenGL framebuffer object associated with this render target
@@ -56,13 +56,33 @@ namespace amulware.Graphics
             return rendertarget.Handle;
         }
 
-        /// <summary>
-        /// Deletes the framebuffer object associated with this render target.
-        /// </summary>
+
+        #region Disposing
+
+        private bool disposed = false;
+
         public void Dispose()
         {
+            this.dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void dispose(bool disposing)
+        {
+            if (this.disposed)
+                return;
+
             int handle = this.Handle;
             GL.DeleteFramebuffers(1, ref handle);
+
+            this.disposed = true;
         }
+
+        ~RenderTarget()
+        {
+            this.dispose(false);
+        }
+
+        #endregion
     }
 }

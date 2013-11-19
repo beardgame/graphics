@@ -7,7 +7,7 @@ namespace amulware.Graphics
     /// <summary>
     /// This class represents a GLSL vertex shader.
     /// </summary>
-    public class VertexShader : Shader
+    sealed public class VertexShader : Shader
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="VertexShader"/> class.

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
@@ -101,12 +101,31 @@ namespace amulware.Graphics
             return buffer.handle;
         }
 
-        /// <summary>
-        /// Disposes the <see cref="VertexBuffer"/>
-        /// </summary>
+        #region Disposing
+
+        private bool disposed = false;
+
         public void Dispose()
         {
-            GL.DeleteBuffer(this);
+            this.dispose(true);
+            GC.SuppressFinalize(this);
         }
+
+        private void dispose(bool disposing)
+        {
+            if (this.disposed)
+                return;
+
+            GL.DeleteBuffer(this);
+
+            this.disposed = true;
+        }
+
+        ~VertexBuffer()
+        {
+            this.dispose(false);
+        }
+
+        #endregion
     }
 }

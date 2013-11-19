@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
@@ -125,9 +125,32 @@ namespace amulware.Graphics
             this.staticBufferUploaded = false;
         }
 
+        
+        #region Disposing
+
+        private bool disposed = false;
+
         public void Dispose()
         {
-            GL.DeleteVertexArray(this.vertexArray);
+            this.dispose(true);
+            GC.SuppressFinalize(this);
         }
+
+        private void dispose(bool disposing)
+        {
+            if (this.disposed)
+                return;
+
+            GL.DeleteVertexArray(this.vertexArray);
+
+            this.disposed = true;
+        }
+
+        ~StaticVertexSurface()
+        {
+            this.dispose(false);
+        }
+
+        #endregion
     }
 }

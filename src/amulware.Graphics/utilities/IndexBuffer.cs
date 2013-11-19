@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
@@ -80,13 +80,32 @@ namespace amulware.Graphics
         {
             return buffer.handle;
         }
+        
+        #region Disposing
 
-        /// <summary>
-        /// Disposes the <see cref="IndexBuffer"/>
-        /// </summary>
+        private bool disposed = false;
+
         public void Dispose()
         {
-            GL.DeleteBuffer(this);
+            this.dispose(true);
+            GC.SuppressFinalize(this);
         }
+
+        private void dispose(bool disposing)
+        {
+            if (this.disposed)
+                return;
+
+            GL.DeleteBuffer(this);
+
+            this.disposed = true;
+        }
+
+        ~IndexBuffer()
+        {
+            this.dispose(false);
+        }
+
+        #endregion
     }
 }

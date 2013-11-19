@@ -8,7 +8,7 @@ namespace amulware.Graphics
     /// <summary>
     /// This class represents a GLSL shader.
     /// </summary>
-    public abstract class Shader
+    public abstract class Shader : IDisposable
     {
         /// <summary>
         /// The GLSL shader object handle.
@@ -52,5 +52,32 @@ namespace amulware.Graphics
         {
             return shader.Handle;
         }
+
+        #region Disposing
+
+        private bool disposed = false;
+
+        public void Dispose()
+        {
+            this.dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void dispose(bool disposing)
+        {
+            if (this.disposed)
+                return;
+
+            GL.DeleteShader(this);
+
+            this.disposed = true;
+        }
+
+        ~Shader()
+        {
+            this.dispose(false);
+        }
+
+        #endregion
     }
 }

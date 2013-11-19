@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using OpenTK;
 using OpenTK.Graphics;
@@ -9,7 +9,7 @@ namespace amulware.Graphics
     /// <summary>
     /// This class represents an OpenGL texture.
     /// </summary>
-    public class Texture : IDisposable
+    sealed public class Texture : IDisposable
     {
         /// <summary>
         /// Handle of te OpenGL texture.
@@ -20,6 +20,7 @@ namespace amulware.Graphics
         /// Height of the texture.
         /// </summary>
         public int Height { get; private set; }
+
         /// <summary>
         /// Width of the texture.
         /// </summary>
@@ -52,10 +53,12 @@ namespace amulware.Graphics
             GL.BindTexture(TextureTarget.Texture2D, tex);
 
             // create empty texture
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, width, height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, width, height, 0, PixelFormat.Rgba,
+                PixelType.UnsignedByte, IntPtr.Zero);
 
 
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapLinear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter,
+                (int)TextureMinFilter.LinearMipmapLinear);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
@@ -87,8 +90,10 @@ namespace amulware.Graphics
                     GL.GenTextures(1, out tex);
                     GL.BindTexture(TextureTarget.Texture2D, tex);
 
-                    System.Drawing.Imaging.BitmapData data = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height),
-                        System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                    System.Drawing.Imaging.BitmapData data =
+                        bitmap.LockBits(new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height),
+                            System.Drawing.Imaging.ImageLockMode.ReadOnly,
+                            System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
                     if (preMultiplyAlpha)
                     {
@@ -121,8 +126,10 @@ namespace amulware.Graphics
 
                 GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
 
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapLinear);
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter,
+                    (int)TextureMinFilter.LinearMipmapLinear);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter,
+                    (int)TextureMagFilter.Linear);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
 
@@ -146,7 +153,8 @@ namespace amulware.Graphics
         public void Resize(int width, int height, PixelInternalFormat internalFormat = PixelInternalFormat.Rgba)
         {
             GL.BindTexture(TextureTarget.Texture2D, this.Handle);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, internalFormat, width, height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, internalFormat, width, height, 0, PixelFormat.Rgba,
+                PixelType.UnsignedByte, IntPtr.Zero);
             GL.BindTexture(TextureTarget.Texture2D, 0);
             this.Width = width;
             this.Height = height;
@@ -159,7 +167,8 @@ namespace amulware.Graphics
         /// <param name="magFilter">The <see cref="TextureMagFilter"/>.</param>
         /// <param name="wrapS">The horizontal <see cref="TextureWrapMode"/>.</param>
         /// <param name="wrapT">The vertical <see cref="TextureWrapMode"/>.</param>
-        public void SetParameters(TextureMinFilter minFilter, TextureMagFilter magFilter, TextureWrapMode wrapS, TextureWrapMode wrapT)
+        public void SetParameters(TextureMinFilter minFilter, TextureMagFilter magFilter, TextureWrapMode wrapS,
+            TextureWrapMode wrapT)
         {
             GL.BindTexture(TextureTarget.Texture2D, this.Handle);
 
@@ -203,17 +212,38 @@ namespace amulware.Graphics
         /// <summary>
         /// Casts the Texture to its OpenGL handle, for easy use with OpenGL functions.
         /// </summary>
-        static public implicit operator int(Texture texture)
+        public static implicit operator int(Texture texture)
         {
             return texture.Handle;
         }
 
-        /// <summary>
-        /// Deletes the OpenGL texture.
-        /// </summary>
+        #region Disposing
+
+        private bool disposed = false;
+
         public void Dispose()
         {
-            GL.DeleteTexture(this);
+            this.dispose(true);
+            GC.SuppressFinalize(this);
         }
+
+        private void dispose(bool disposing)
+        {
+            if (this.disposed)
+                return;
+
+            GL.DeleteTexture(this);
+            this.Handle = 0;
+
+            this.disposed = true;
+        }
+
+        ~Texture()
+        {
+            this.dispose(false);
+        }
+
+        #endregion
+
     }
 }
