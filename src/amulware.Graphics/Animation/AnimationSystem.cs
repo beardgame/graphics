@@ -24,7 +24,7 @@ namespace amulware.Graphics.Animation
             var skeleton = new List<Bone>(template.Skeleton.Bones.Count);
             foreach (var b in template.Skeleton.Bones)
             {
-                skeleton.Add(new Bone(b.Parent == null ? null : skeleton[b.Parent.Id]));
+                skeleton.Add(new Bone(b.Parent == null ? null : skeleton[b.Parent.Id], b.Sprite));
             }
             this.skeleton = skeleton.AsReadOnly();
 

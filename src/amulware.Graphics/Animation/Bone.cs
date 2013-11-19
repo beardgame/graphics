@@ -20,9 +20,13 @@ namespace amulware.Graphics.Animation
 
         private bool localAngleChanged = true;
 
-        public Bone(Bone parent)
+        private readonly string sprite;
+        public string Sprite { get { return this.sprite; } }
+
+        public Bone(Bone parent, string sprite = null)
         {
             this.parent = parent;
+            this.sprite = sprite;
         }
 
         public void SetParameters(BoneParameters parameters)
