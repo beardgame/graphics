@@ -1,5 +1,6 @@
 using System;
 using OpenTK;
+using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 
 namespace amulware.Graphics
@@ -95,6 +96,9 @@ namespace amulware.Graphics
         {
             if (this.disposed)
                 return;
+
+            if (GraphicsContext.CurrentContext == null || GraphicsContext.CurrentContext.IsDisposed)
+                return; 
 
             GL.DeleteBuffer(this);
 

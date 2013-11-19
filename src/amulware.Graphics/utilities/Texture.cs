@@ -232,6 +232,9 @@ namespace amulware.Graphics
             if (this.disposed)
                 return;
 
+            if (GraphicsContext.CurrentContext == null || GraphicsContext.CurrentContext.IsDisposed)
+                return;
+
             GL.DeleteTexture(this);
             this.Handle = 0;
 
