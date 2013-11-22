@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,7 +43,7 @@ namespace amulware.Graphics
             ShaderProgram shaderProgram = null, SurfaceSetting[] surfaceSettings = null, bool keepTextureUniforms = true)
             where TVertexDataIn : struct, IVertexData
         {
-            SpriteSet<TVertexData> set = new SpriteSet<TVertexData>(shaderProgram, surfaceSettings);
+            var set = new SpriteSet<TVertexData>(shaderProgram, surfaceSettings);
 
             foreach(var item in template.sprites)
             {
@@ -60,8 +60,18 @@ namespace amulware.Graphics
         static public SpriteSet<TVertexData> FromJsonFile(
             string filename, Func<QuadSurface<TVertexData>, UVQuadGeometry<TVertexData>> geometryMaker,
             ShaderProgram shaderProgram = null, SurfaceSetting[] surfaceSettings = null,
-            Func<string, Texture> textureProvider = null)
+            Func<string, Texture> textureProvider = null, bool texturesRelativeToJson = false)
         {
+            if (textureProvider == null)
+                textureProvider = file => new Texture(file);
+
+            if (texturesRelativeToJson)
+            {
+                string path = Path.GetDirectoryName(filename) ?? "";
+                var providerCopy = textureProvider;
+                textureProvider = file => providerCopy(Path.Combine(path, file));
+            }
+
             var jsonSettings = new JsonSerializerSettings().ConfigureForGraphics();
             jsonSettings.Converters.Add(
                 new SpriteSetConverter<TVertexData>(shaderProgram, surfaceSettings, geometryMaker, textureProvider)
