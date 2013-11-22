@@ -50,7 +50,7 @@ namespace amulware.Graphics.Animation
         public void SetTime(float time)
         {
             float delta = time - this.time;
-            this.AdvanceTime(delta % this.template.Duration);
+            this.AdvanceTime(delta);
         }
 
         public void AdvanceTime(float delta)
@@ -116,6 +116,12 @@ namespace amulware.Graphics.Animation
             }
         }
 
+        private static readonly Func<float, float>[] transitionFuncions =
+        {
+            x => x,
+            x => 0.5f - 0.5f * (float)Math.Cos(Math.PI * x)
+        };
+
         public void ApplyTo(BoneParameters[] parameters)
         {
             if (this.Stopped)
@@ -129,6 +135,8 @@ namespace amulware.Graphics.Animation
             }
 
             float t = (this.time - this.activeTransition.DelayEnd) / this.activeTransition.Duration;
+
+            t = AnimationSeqence.transitionFuncions[(int)this.activeTransition.Transition](t);
 
             if (this.activeTransition.StartFrame != null)
                 this.activeTransition.StartFrame.ApplyTo(parameters, 1 - t);

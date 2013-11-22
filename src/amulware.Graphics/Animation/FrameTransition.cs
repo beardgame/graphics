@@ -7,7 +7,8 @@ namespace amulware.Graphics.Animation
     {
         internal enum TransitionType
         {
-            Linear
+            Linear = 0,
+            Smooth = 1
         }
 
         public float StartTime { get; private set; }
@@ -17,7 +18,7 @@ namespace amulware.Graphics.Animation
         public float Duration { get; private set; }
         public float Delay { get; private set; }
         public float DelayEnd { get; private set; }
-        private TransitionType transition;
+        internal TransitionType Transition { get; private set; }
 
         internal FrameTransition(TransitionJsonRepresentation json, Dictionary<string, Keyframe> keyframes, FrameTransition preceedingFrame)
         {
@@ -29,7 +30,7 @@ namespace amulware.Graphics.Animation
 
             this.Duration = json.Time;
             this.Delay = json.Delay;
-            this.transition = json.Transition;
+            this.Transition = json.Transition;
 
             this.StartTime = preceedingFrame == null ? 0 : preceedingFrame.EndTime;
             this.StartFrame = preceedingFrame == null ? null : preceedingFrame.EndFrame;
