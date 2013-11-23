@@ -17,19 +17,31 @@ namespace amulware.Graphics.Animation
         private BoneParameters[] baseParameters;
         private BoneParameters[] parameters;
 
+        private int[] rootIndices;
+
+        public BoneParameters RootParameters { get; set; }
+
         public AnimationSystem(AnimationTemplate template, string baseFrameName = "base")
         {
             this.template = template;
 
             var skeleton = new List<Bone>(template.Skeleton.Bones.Count);
+            var rootIndices = new List<int>();
             foreach (var b in template.Skeleton.Bones)
             {
                 skeleton.Add(new Bone(b.Parent == null ? null : skeleton[b.Parent.Id], b.Sprite));
+                if (b.Parent == null)
+                    rootIndices.Add(b.Id);
             }
             this.skeleton = skeleton.AsReadOnly();
+            this.rootIndices = rootIndices.ToArray();
 
             this.baseParameters = new BoneParameters[this.skeleton.Count];
             this.parameters = new BoneParameters[this.skeleton.Count];
+            for (int i = 0; i < this.parameters.Length; i++)
+            {
+                this.baseParameters[i].Scale = 1;
+            }
             Keyframe baseFrame;
             if (baseFrameName != null && (baseFrame = template.GetKeyFrame("base")) != null)
             {
@@ -73,6 +85,11 @@ namespace amulware.Graphics.Animation
         public void Update(float advanceTime)
         {
             this.baseParameters.CopyTo(this.parameters, 0);
+
+            for (int i = 0; i < this.rootIndices.Length; i++)
+            {
+                this.parameters[this.rootIndices[i]].Add(this.RootParameters);
+            }
 
             foreach (var sequence in this.activeSeqences)
             {
