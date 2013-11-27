@@ -146,12 +146,12 @@ namespace amulware.Graphics
         {
             string[] lines = text.Split('\n');
             int l = lines.Length;
-            float step = this.Height * this.SizeCoefficient.Y;
-            position.Y -= step * l * alignY;
+            Vector3 step = this.Height * this.SizeCoefficient.Y * this.UnitY;
+            position -= step * l * alignY;
             for (int i = 0; i < l; i++)
             {
                 this.DrawString(position, lines[i], alignX);
-                position.Y += step;
+                position += step;
             }
         }
 
