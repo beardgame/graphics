@@ -1,4 +1,5 @@
 using System;
+using amulware.Graphics.utilities;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
@@ -9,19 +10,17 @@ namespace amulware.Graphics
     /// This class represents a vertex buffer object that can be rendered with a specified <see cref="BeginMode"/>.
     /// </summary>
     /// <typeparam name="TVertexData">The <see cref="IVertexData"/> used for the vertex buffer object</typeparam>
-    public abstract class StaticVertexSurface<TVertexData> : Surface, IDisposable where TVertexData : struct, IVertexData
+    public abstract class StaticVertexSurface<TVertexData> : Surface where TVertexData : struct, IVertexData
     {
         /// <summary>
         /// The OpenGL vertex buffer containing the rendered vertices
         /// </summary>
         protected VertexBuffer<TVertexData> vertexBuffer;
 
-        private bool vertexArrayGenerated = false;
-
         /// <summary>
         /// The OpenGL vertex array object handle
         /// </summary>
-        protected int vertexArray;
+        protected IVertexAttributeProvider<TVertexData> vertexAttributeProvider; 
 
         private readonly BeginMode _beginMode;
 
@@ -46,6 +45,9 @@ namespace amulware.Graphics
         {
             this._beginMode = primitiveType;
             this.vertexBuffer = new VertexBuffer<TVertexData>();
+            this.vertexAttributeProvider = InternalExtensions.IsInLegacyMode ?
+                (IVertexAttributeProvider<TVertexData>)new LegacyVertexAttributeProvider<TVertexData>()
+                : new VertexArray<TVertexData>(this.vertexBuffer);
         }
 
         /// <summary>
@@ -54,28 +56,7 @@ namespace amulware.Graphics
         /// </summary>
         protected override void onNewShaderProgram()
         {
-            this.setVertexAttributes();
-        }
-
-        /// <summary>
-        /// Sets the vertex attributes of the used <see cref="IVertexData"/> for the current program using a OpenGL vertex array object.
-        /// </summary>
-        protected void setVertexAttributes()
-        {
-            if (this.vertexArrayGenerated)
-                GL.DeleteVertexArrays(1, ref this.vertexArray);
-
-            GL.GenVertexArrays(1, out this.vertexArray);
-            this.vertexArrayGenerated = true;
-
-            GL.BindVertexArray(this.vertexArray);
-
-            GL.BindBuffer(BufferTarget.ArrayBuffer, this.vertexBuffer);
-            
-            this.program.SetVertexAttributes(new TVertexData().VertexAttributes());
-
-            GL.BindVertexArray(0);
-            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+            this.vertexAttributeProvider.SetShaderProgram(this.program);
         }
 
         /// <summary>
@@ -87,9 +68,9 @@ namespace amulware.Graphics
             if (this.vertexBuffer.Count == 0)
                 return;
 
-            GL.BindVertexArray(this.vertexArray);
-
             GL.BindBuffer(BufferTarget.ArrayBuffer, this.vertexBuffer);
+
+            this.vertexAttributeProvider.SetVertexData();
 
             bool upload = true;
             if (this.isStatic)
@@ -105,7 +86,8 @@ namespace amulware.Graphics
 
             GL.DrawArrays(this._beginMode, 0, this.vertexBuffer.Count);
 
-            GL.BindVertexArray(0);
+            this.vertexAttributeProvider.UnSetVertexData();
+
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
         }
 
@@ -126,35 +108,5 @@ namespace amulware.Graphics
             this.staticBufferUploaded = false;
         }
 
-        
-        #region Disposing
-
-        private bool disposed = false;
-
-        public void Dispose()
-        {
-            this.dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        private void dispose(bool disposing)
-        {
-            if (this.disposed)
-                return;
-
-            if (GraphicsContext.CurrentContext == null || GraphicsContext.CurrentContext.IsDisposed)
-                return;
-
-            GL.DeleteVertexArray(this.vertexArray);
-
-            this.disposed = true;
-        }
-
-        ~StaticVertexSurface()
-        {
-            this.dispose(false);
-        }
-
-        #endregion
     }
 }
