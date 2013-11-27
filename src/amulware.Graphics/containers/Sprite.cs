@@ -24,6 +24,8 @@ namespace amulware.Graphics
         abstract public int AnimationFrame { get; set; }
         abstract public float AnimationTime { set; }
 
+        abstract public int AnimationFrameCount { get; }
+
         #region Draw /// @name Draw
 
         /// <summary>
@@ -83,6 +85,11 @@ namespace amulware.Graphics
             {
                 this.AnimationFrame = (int)(value / this.Duration * this.uvFrames.Length);
             }
+        }
+
+        public override int AnimationFrameCount
+        {
+            get { return this.uvFrames.Length; }
         }
 
         public Sprite(string name, IEnumerable<UVRectangle> frames, float duration,
