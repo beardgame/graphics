@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using OpenTK.Graphics.OpenGL;
 
 namespace amulware.Graphics
@@ -50,9 +50,8 @@ namespace amulware.Graphics
             if (this.indexBuffer.Count == 0)
                 return;
 
-            GL.BindVertexArray(this.vertexArray);
-
             GL.BindBuffer(BufferTarget.ArrayBuffer, this.vertexBuffer);
+            this.vertexAttributeProvider.SetVertexData();
 
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, this.indexBuffer);
 
@@ -73,7 +72,7 @@ namespace amulware.Graphics
 
             GL.DrawElements(this.beginMode, this.indexBuffer.Count, DrawElementsType.UnsignedShort, 0);
 
-            GL.BindVertexArray(0);
+            this.vertexAttributeProvider.UnSetVertexData();
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
 

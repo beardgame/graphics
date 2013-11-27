@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace amulware.Graphics.surfaces
+namespace amulware.Graphics
 {
-    internal interface IVertexAttributeProvider<TVertexData>
+    public interface IVertexAttributeProvider<TVertexData>
         where TVertexData : struct, IVertexData
     {
         void SetVertexData();
+        void UnSetVertexData();
+        void SetShaderProgram(ShaderProgram program);
     }
 }

@@ -21,7 +21,10 @@ namespace amulware.Graphics.utilities
             get
             {
                 if (!InternalExtensions.checkedForLegacyMode)
+                {
                     InternalExtensions.isInLegacyMode = InternalExtensions.getLegacy();
+                    InternalExtensions.checkedForLegacyMode = true;
+                }
                 return InternalExtensions.isInLegacyMode;
             }
         }
