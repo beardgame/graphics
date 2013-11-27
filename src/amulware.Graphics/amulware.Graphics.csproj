@@ -89,6 +89,7 @@
     <Compile Include="shading\VertexShader.cs" />
     <Compile Include="surfaces\IndexedQuadSurface.cs" />
     <Compile Include="surfaces\IndexedSurface.cs" />
+    <Compile Include="surfaces\IVertexAttributeProvider.cs" />
     <Compile Include="surfaces\PostProcessSurface.cs" />
     <Compile Include="surfaces\QuadSurface.cs" />
     <Compile Include="surfaces\settings\FloatUniform.cs" />
@@ -126,12 +127,11 @@
     </Reference>
     <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\beardgame\libs\OpenTK.dll</HintPath>
+      <HintPath>..\..\libs\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

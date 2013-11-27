@@ -90,6 +90,14 @@ namespace amulware.Graphics
                     GL.GenTextures(1, out tex);
                     GL.BindTexture(TextureTarget.Texture2D, tex);
 
+                    int j = 1;
+                    //GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.GenerateMipmap, ref j);
+                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.GenerateMipmap, 1);
+
+                    //glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP_SGIS, GL_TRUE);
+
+                    
+
                     System.Drawing.Imaging.BitmapData data =
                         bitmap.LockBits(new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height),
                             System.Drawing.Imaging.ImageLockMode.ReadOnly,
@@ -124,7 +132,7 @@ namespace amulware.Graphics
                     this.Height = bitmap.Height;
                 }
 
-                GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
+                //GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
 
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter,
                     (int)TextureMinFilter.LinearMipmapLinear);

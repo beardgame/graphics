@@ -54,7 +54,7 @@ namespace amulware.Graphics
         /// </summary>
         protected override void onNewShaderProgram()
         {
-            this.setVertexAttributes();
+            //this.setVertexAttributes();
         }
 
         /// <summary>
@@ -62,6 +62,8 @@ namespace amulware.Graphics
         /// </summary>
         protected void setVertexAttributes()
         {
+            return;
+
             if (this.vertexArrayGenerated)
                 GL.DeleteVertexArrays(1, ref this.vertexArray);
 
@@ -87,9 +89,13 @@ namespace amulware.Graphics
             if (this.vertexBuffer.Count == 0)
                 return;
 
-            GL.BindVertexArray(this.vertexArray);
+            //GL.BindVertexArray(this.vertexArray);
+
+            this.program.SetVertexAttributes(new TVertexData().VertexAttributes());
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, this.vertexBuffer);
+
+            this.program.SetVertexAttributes(new TVertexData().VertexAttributes());
 
             bool upload = true;
             if (this.isStatic)
@@ -105,7 +111,7 @@ namespace amulware.Graphics
 
             GL.DrawArrays(this._beginMode, 0, this.vertexBuffer.Count);
 
-            GL.BindVertexArray(0);
+            //GL.BindVertexArray(0);
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
         }
 
