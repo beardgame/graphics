@@ -50,12 +50,12 @@ namespace amulware.Graphics.Animation
         public void SetTime(float time)
         {
             float delta = time - this.time;
-            this.AdvanceTime(delta);
+            this.advanceTime(delta, true);
         }
 
-        public void AdvanceTime(float delta)
+        private void advanceTime(float delta, bool forceAdvance)
         {
-            if (this.State != PlayState.Playing)
+            if (!forceAdvance && this.State != PlayState.Playing)
                 return;
             this.time += delta;
 
@@ -114,6 +114,11 @@ namespace amulware.Graphics.Animation
                     this.activeTransition = this.template.Transitions[this.activeTransitionId];
                 }
             }
+        }
+
+        public void AdvanceTime(float delta)
+        {
+            this.advanceTime(delta, false);
         }
 
         private static readonly Func<float, float>[] transitionFuncions =
