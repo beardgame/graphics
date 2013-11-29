@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading;
 using amulware.Graphics.utilities;
+using OpenTK;
 
 namespace amulware.Graphics.Animation
 {
@@ -48,6 +49,8 @@ namespace amulware.Graphics.Animation
                 foreach(var d in baseFrame.Data)
                     this.baseParameters[d.Bone.Id] = new BoneParameters(d);
             }
+
+            this.RootParameters = new BoneParameters(Vector2.Zero, 0, 1);
         }
 
         public ReadOnlyCollection<Bone> Skeleton { get { return this.skeleton; } }
