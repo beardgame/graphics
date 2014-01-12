@@ -1,77 +1,41 @@
-using System;
-using OpenTK;
-using OpenTK.Graphics.ES20;
-
 namespace amulware.Graphics.Animation
 {
-    sealed public class Bone
+    public interface ITransformedBone<TBoneParameters, TBoneTransformation>
+        where TBoneTransformation : IBoneTransformation<TBoneParameters, TBoneTransformation>
     {
-        private Bone parent;
-        public Bone Parent { get { return this.parent; } }
+        TBoneTransformation Transformation { get; }
+    }
 
-        // parameters
-        private BoneParameters parameters;
+    sealed public class Bone<TBoneParameters, TKeyframeParameters, TBoneAttributes, TBoneTransformation>
+        : ITransformedBone<TBoneParameters, TBoneTransformation>
+        where TBoneParameters : struct, IBoneParameters<TKeyframeParameters>
+        where TKeyframeParameters : IKeyframeParameters
+        where TBoneTransformation : IBoneTransformation<TBoneParameters, TBoneTransformation>, new()
+    {
+        private readonly Bone<TBoneParameters, TKeyframeParameters, TBoneAttributes, TBoneTransformation> parent;
+        public Bone<TBoneParameters, TKeyframeParameters, TBoneAttributes, TBoneTransformation> Parent { get { return this.parent; } }
 
-        // transformations
-        private float angleGlobal;
-        private Matrix2 rotationLocal;
-        private Matrix2 rotationGlobal;
-        private Vector2 offsetGlobal;
-        private float scaleGlobal;
+        private readonly BoneTemplate<TBoneAttributes> template;
+        public BoneTemplate<TBoneAttributes> Template { get { return this.template; } }
 
-        private bool localAngleChanged = true;
+        private TBoneTransformation transformation = new TBoneTransformation();
 
-        private readonly string sprite;
-        public string Sprite { get { return this.sprite; } }
-
-        public Bone(Bone parent, string sprite = null)
+        public Bone(
+            Bone<TBoneParameters, TKeyframeParameters, TBoneAttributes, TBoneTransformation> parent,
+            BoneTemplate<TBoneAttributes> template
+            )
         {
             this.parent = parent;
-            this.sprite = sprite;
+            this.template = template;
+            this.transformation.SetParent(parent);
         }
 
-        public void SetParameters(BoneParameters parameters)
+        public TBoneTransformation Transformation { get { return this.transformation; } }
+
+        public void SetParameters(TBoneParameters parameters)
         {
-            if (parameters.Angle != this.parameters.Angle || parameters.Scale != this.parameters.Scale)
-                this.localAngleChanged = true;
-            this.parameters = parameters;
+            this.transformation.SetParameters(parameters);
         }
 
-        public float AngleLocal { get { return this.parameters.Angle; } }
-        public float ScaleLocal { get { return this.parameters.Scale; } }
-
-        public Vector2 OffsetLocal { get { return this.parameters.Offset; } }
-
-
-        public float AngleGlobal { get { return this.angleGlobal; } }
-        public Matrix2 RotationGlobal { get { return this.rotationGlobal; } }
-        public Matrix2 RotationLocal { get { return this.rotationLocal; } }
-        public Vector2 OffsetGlobal { get { return this.offsetGlobal; } }
-        public float ScaleGlobal { get { return this.scaleGlobal; } }
-
-
-        public void Recalculate()
-        {
-            if (this.localAngleChanged)
-            {
-                this.rotationLocal = Matrix2.CreateRotation(this.parameters.Angle) * this.parameters.Scale;
-                this.localAngleChanged = false;
-            }
-
-            if (this.parent == null)
-            {
-                this.angleGlobal = this.parameters.Angle;
-                this.offsetGlobal = this.parameters.Offset;
-                this.rotationGlobal = this.rotationLocal;
-                this.scaleGlobal = this.parameters.Scale;
-            }
-            else
-            {
-                this.angleGlobal = this.parent.angleGlobal + this.parameters.Angle;
-                this.offsetGlobal = this.parent.offsetGlobal + this.parent.rotationGlobal * this.parameters.Offset;
-                this.rotationGlobal = this.parent.rotationGlobal * this.rotationLocal;
-                this.scaleGlobal = this.parent.ScaleGlobal * this.parameters.Scale;
-            }
-        }
     }
 }

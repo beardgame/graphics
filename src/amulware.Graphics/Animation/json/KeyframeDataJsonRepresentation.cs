@@ -2,10 +2,10 @@
 
 namespace amulware.Graphics.Animation
 {
-    internal class KeyframeDataJsonRepresentation
+    internal class KeyframeDataJsonRepresentation<TKeyframeParameters>
+        where TKeyframeParameters : IKeyframeParameters
     {
         public string Bone { get; set; }
-        public Vector2 Offset { get; set; }
-        public float Angle { get; set; }
+        public TKeyframeParameters Parameters { get; set; }
     }
 }

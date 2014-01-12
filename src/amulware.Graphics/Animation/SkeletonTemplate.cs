@@ -1,20 +1,20 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using amulware.Graphics.utilities;
 
 namespace amulware.Graphics.Animation
 {
-    sealed public class SkeletonTemplate
+    sealed public class SkeletonTemplate<TBoneAttributes>
     {
-        private readonly ReadOnlyCollection<BoneTemplate> bones;
-        private readonly Dictionary<string, BoneTemplate> boneDictionary;
+        private readonly ReadOnlyCollection<BoneTemplate<TBoneAttributes>> bones;
+        private readonly Dictionary<string, BoneTemplate<TBoneAttributes>> boneDictionary;
 
-        internal SkeletonTemplate(IEnumerable<BoneJsonRepresentation> bones)
+        internal SkeletonTemplate(IEnumerable<BoneJsonRepresentation<TBoneAttributes>> bones)
         {
-            var boneList = new List<BoneTemplate>();
+            var boneList = new List<BoneTemplate<TBoneAttributes>>();
             this.bones = boneList.AsReadOnly();
-            this.boneDictionary = new Dictionary<string, BoneTemplate>();
+            this.boneDictionary = new Dictionary<string, BoneTemplate<TBoneAttributes>>();
 
             // ReSharper disable PossibleMultipleEnumeration
             // see assignment of leftOverBones to bones at end of loop below
@@ -23,7 +23,7 @@ namespace amulware.Graphics.Animation
 
             int id = 0;
 
-            List<BoneJsonRepresentation> leftOverBones;
+            List<BoneJsonRepresentation<TBoneAttributes>> leftOverBones;
             bool pickedUpBone;
 
             // loop over bones repeatedly until all parent-child relations
@@ -34,11 +34,11 @@ namespace amulware.Graphics.Animation
             // are given in reverse
             do
             {
-                leftOverBones = new List<BoneJsonRepresentation>();
+                leftOverBones = new List<BoneJsonRepresentation<TBoneAttributes>>();
                 pickedUpBone = false;
                 foreach (var bone in bones)
                 {
-                    BoneTemplate parent = null;
+                    BoneTemplate<TBoneAttributes> parent = null;
                     if (!string.IsNullOrEmpty(bone.Parent) &&
                         !this.boneDictionary.TryGetValue(bone.Parent, out parent))
                     {
@@ -46,7 +46,7 @@ namespace amulware.Graphics.Animation
                         leftOverBones.Add(bone);
                         continue;
                     }
-                    var b = new BoneTemplate(id++, bone.Name, parent, bone.Sprite);
+                    var b = new BoneTemplate<TBoneAttributes>(id++, bone.Name, parent, bone.Attributes);
                     boneList.Add(b);
                     this.boneDictionary.Add(bone.Name, b);
                     pickedUpBone = true;
@@ -67,22 +67,22 @@ namespace amulware.Graphics.Animation
             boneList.TrimExcess();
         }
 
-        public BoneTemplate this[int boneId]
+        public BoneTemplate<TBoneAttributes> this[int boneId]
         {
             get { return this.bones[boneId]; }
         }
 
-        public BoneTemplate this[string boneName]
+        public BoneTemplate<TBoneAttributes> this[string boneName]
         {
             get
             {
-                BoneTemplate bone;
+                BoneTemplate<TBoneAttributes> bone;
                 this.boneDictionary.TryGetValue(boneName, out bone);
                 return bone;
             }
         }
 
-        public ReadOnlyCollection<BoneTemplate> Bones
+        public ReadOnlyCollection<BoneTemplate<TBoneAttributes>> Bones
         {
             get { return this.bones; }
         } 

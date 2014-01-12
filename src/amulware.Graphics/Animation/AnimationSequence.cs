@@ -1,9 +1,8 @@
 using System;
-using System.Net.Sockets;
 
 namespace amulware.Graphics.Animation
 {
-    sealed public class AnimationSeqence
+    public static class AnimationSequence
     {
         public enum Mode
         {
@@ -19,20 +18,36 @@ namespace amulware.Graphics.Animation
             Stopped
         }
 
-        private readonly AnimationSequenceTemplate template;
-        private readonly Mode mode;
-        public bool Stopped { get { return this.State == PlayState.Stopped; } }
+        internal static readonly Func<float, float>[] TransitionFuncions =
+        {
+            x => x,
+            x => 0.5f - 0.5f * (float)Math.Cos(Math.PI * x)
+        };
+    }
+
+    sealed public class AnimationSequence<TBoneParameters, TKeyframeParameters, TBoneAttributes>
+        where TBoneParameters : struct, IBoneParameters<TKeyframeParameters>
+        where TKeyframeParameters : IKeyframeParameters
+    {
+
+        private readonly AnimationSequenceTemplate<TBoneParameters, TKeyframeParameters, TBoneAttributes> template;
+        private readonly AnimationSequence.Mode mode;
+        public bool Stopped { get { return this.State == AnimationSequence.PlayState.Stopped; } }
 
         public float Duration { get { return this.template.Duration; } }
 
-        public PlayState State { get; private set; }
+        public AnimationSequence.PlayState State { get; private set; }
 
         private float time;
 
         private int activeTransitionId;
-        private FrameTransition activeTransition;
+        private FrameTransition<TBoneParameters, TKeyframeParameters, TBoneAttributes> activeTransition;
 
-        public AnimationSeqence(AnimationSequenceTemplate template, Mode mode = Mode.StopAtEnd, PlayState state = PlayState.Playing)
+        public AnimationSequence(
+            AnimationSequenceTemplate<TBoneParameters, TKeyframeParameters, TBoneAttributes> template,
+            AnimationSequence.Mode mode = AnimationSequence.Mode.StopAtEnd,
+            AnimationSequence.PlayState state = AnimationSequence.PlayState.Playing
+            )
         {
             if (template.Transitions.Count == 0)
                 throw new ArgumentException("Cannot animate sequence without keyframes.");
@@ -55,7 +70,7 @@ namespace amulware.Graphics.Animation
 
         private void advanceTime(float delta, bool forceAdvance)
         {
-            if (!forceAdvance && this.State != PlayState.Playing)
+            if (!forceAdvance && this.State != AnimationSequence.PlayState.Playing)
                 return;
             this.time += delta;
 
@@ -69,16 +84,16 @@ namespace amulware.Graphics.Animation
                     {
                         switch (this.mode)
                         {
-                            case Mode.Loop:
+                            case AnimationSequence.Mode.Loop:
                                 this.time += this.template.Duration;
                                 this.activeTransitionId = this.template.Transitions.Count - 1;
                                 break;
-                            case Mode.WaitAtEnd:
+                            case AnimationSequence.Mode.WaitAtEnd:
                                 this.time = 0;
-                                this.State = PlayState.Waiting;
+                                this.State = AnimationSequence.PlayState.Waiting;
                                 return;
-                            case Mode.StopAtEnd:
-                                this.State = PlayState.Stopped;
+                            case AnimationSequence.Mode.StopAtEnd:
+                                this.State = AnimationSequence.PlayState.Stopped;
                                 return;
                             default:
                                 throw new ArgumentOutOfRangeException();
@@ -96,16 +111,16 @@ namespace amulware.Graphics.Animation
                     {
                         switch (this.mode)
                         {
-                            case Mode.Loop:
+                            case AnimationSequence.Mode.Loop:
                                 this.time -= this.template.Duration;
                                 this.activeTransitionId = 0;
                                 break;
-                            case Mode.WaitAtEnd:
+                            case AnimationSequence.Mode.WaitAtEnd:
                                 this.time = this.template.Duration;
-                                this.State = PlayState.Waiting;
+                                this.State = AnimationSequence.PlayState.Waiting;
                                 return;
-                            case Mode.StopAtEnd:
-                                this.State = PlayState.Stopped;
+                            case AnimationSequence.Mode.StopAtEnd:
+                                this.State = AnimationSequence.PlayState.Stopped;
                                 return;
                             default:
                                 throw new ArgumentOutOfRangeException();
@@ -121,13 +136,7 @@ namespace amulware.Graphics.Animation
             this.advanceTime(delta, false);
         }
 
-        private static readonly Func<float, float>[] transitionFuncions =
-        {
-            x => x,
-            x => 0.5f - 0.5f * (float)Math.Cos(Math.PI * x)
-        };
-
-        public void ApplyTo(BoneParameters[] parameters)
+        public void ApplyTo(TBoneParameters[] parameters)
         {
             if (this.Stopped)
                 return;
@@ -141,7 +150,7 @@ namespace amulware.Graphics.Animation
 
             float t = (this.time - this.activeTransition.DelayEnd) / this.activeTransition.Duration;
 
-            t = AnimationSeqence.transitionFuncions[(int)this.activeTransition.Transition](t);
+            t = AnimationSequence.TransitionFuncions[(int)this.activeTransition.Transition](t);
 
             if (this.activeTransition.StartFrame != null)
                 this.activeTransition.StartFrame.ApplyTo(parameters, 1 - t);

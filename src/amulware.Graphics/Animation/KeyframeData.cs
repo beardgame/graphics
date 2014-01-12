@@ -1,40 +1,31 @@
 using System.IO;
-using OpenTK;
 
 namespace amulware.Graphics.Animation
 {
-    sealed public class KeyframeData
+    sealed public class KeyframeData<TKeyframeParameters, TBoneAttributes>
+        where TKeyframeParameters : IKeyframeParameters
     {
-        private readonly BoneTemplate bone;
-        private readonly Vector2 offset;
-        private readonly float angle;
+        private readonly BoneTemplate<TBoneAttributes> bone;
+        private readonly TKeyframeParameters parameters;
 
-
-        internal KeyframeData(KeyframeDataJsonRepresentation data, SkeletonTemplate skeleton)
+        internal KeyframeData(KeyframeDataJsonRepresentation<TKeyframeParameters> data, SkeletonTemplate<TBoneAttributes> skeleton)
         {
-            this.offset = data.Offset;
-            this.angle = data.Angle;
-
-
             this.bone = skeleton[data.Bone];
+
+            this.parameters = data.Parameters;
 
             if (this.bone == null)
                 throw new InvalidDataException("Keyframe data must specify valid bone.");
         }
 
-        public Vector2 Offset
-        {
-            get { return this.offset; }
-        }
-
-        public float Angle
-        {
-            get { return this.angle; }
-        }
-
-        public BoneTemplate Bone
+        public BoneTemplate<TBoneAttributes> Bone
         {
             get { return this.bone; }
+        }
+
+        public TKeyframeParameters Parameters
+        {
+            get { return this.parameters; }
         }
     }
 }

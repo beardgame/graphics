@@ -41,86 +41,250 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Animation\AnimationSeqence.cs" />
-    <Compile Include="Animation\AnimationSequenceTemplate.cs" />
-    <Compile Include="Animation\AnimationSystem.cs" />
-    <Compile Include="Animation\BoneParameters.cs" />
-    <Compile Include="Animation\json\AnimationTemplateJsonRepresentation.cs" />
-    <Compile Include="Animation\Bone.cs" />
-    <Compile Include="Animation\BoneTemplate.cs" />
-    <Compile Include="Animation\json\BoneJsonRepresentation.cs" />
-    <Compile Include="Animation\json\KeyframeDataJsonRepresentation.cs" />
-    <Compile Include="Animation\json\KeyframeJsonRepresentation.cs" />
-    <Compile Include="Animation\json\SequenceJsonRepresentation.cs" />
-    <Compile Include="Animation\json\TransitionJsonRepresentation.cs" />
-    <Compile Include="Animation\KeyframeData.cs" />
-    <Compile Include="Animation\SkeletonTemplate.cs" />
-    <Compile Include="Animation\Keyframe.cs" />
-    <Compile Include="Animation\AnimationTemplate.cs" />
-    <Compile Include="Animation\FrameTransition.cs" />
-    <Compile Include="containers\ISpriteSet.cs" />
-    <Compile Include="containers\Sprite.cs" />
-    <Compile Include="containers\SpriteSetContainer.cs" />
-    <Compile Include="containers\SpriteSet.cs" />
-    <Compile Include="Serialization\JsonNet\ColorConverter.cs" />
-    <Compile Include="Serialization\JsonNet\TupleConverter.cs" />
-    <Compile Include="geometries\FontGeometry.cs" />
-    <Compile Include="geometries\Geometry.cs" />
-    <Compile Include="geometries\IQuadGeometry.cs" />
-    <Compile Include="geometries\PrimitiveGeometry.cs" />
-    <Compile Include="geometries\QuadGeometry.cs" />
-    <Compile Include="geometries\Sprite2DGeometry.cs" />
-    <Compile Include="geometries\Sprite3DGeometry.cs" />
+    <Compile Include="Animation\AnimationSequence.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Animation\AnimationSequenceTemplate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Animation\AnimationSystem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Animation\AnimationTemplate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Animation\Bone.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Animation\2d\BoneParameters2D.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Animation\BoneTemplate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Animation\2d\BoneTransformation2D.cs" />
+    <Compile Include="Animation\FrameTransition.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Animation\IBoneParameters.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Animation\IBoneTransforation.cs" />
+    <Compile Include="Animation\IKeyframeParameters.cs" />
+    <Compile Include="Animation\json\AnimationTemplateJsonRepresentation.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Animation\json\BoneJsonRepresentation.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Animation\json\KeyframeDataJsonRepresentation.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Animation\json\KeyframeJsonRepresentation.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Animation\json\SequenceJsonRepresentation.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Animation\json\TransitionJsonRepresentation.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Animation\Keyframe.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Animation\KeyframeData.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Animation\SkeletonTemplate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="containers\ISpriteSet.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="containers\Sprite.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="containers\SpriteSet.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="containers\SpriteSetContainer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="geometries\FontGeometry.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="geometries\Geometry.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="geometries\IQuadGeometry.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="geometries\PrimitiveGeometry.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="geometries\QuadGeometry.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="geometries\Sprite2DGeometry.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="geometries\Sprite3DGeometry.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Program.cs" />
-    <Compile Include="Serialization\JsonNet\Converters.cs" />
-    <Compile Include="Serialization\JsonNet\Extensions.cs" />
-    <Compile Include="Serialization\JsonNet\FontConverter.cs" />
-    <Compile Include="Serialization\JsonNet\JsonConverterBase.cs" />
-    <Compile Include="Serialization\JsonNet\SpriteConverter.cs" />
-    <Compile Include="Serialization\JsonNet\SpriteSetConverter.cs" />
-    <Compile Include="Serialization\JsonNet\UVRectangleContainer.cs" />
-    <Compile Include="Serialization\JsonNet\UVRectangleContainerConverter.cs" />
-    <Compile Include="Serialization\JsonNet\UVRectangleConverter.cs" />
-    <Compile Include="Serialization\JsonNet\Vector2Converter.cs" />
-    <Compile Include="shading\FragmentShader.cs" />
-    <Compile Include="shading\Shader.cs" />
-    <Compile Include="shading\ShaderProgram.cs" />
-    <Compile Include="shading\VertexAttribute.cs" />
-    <Compile Include="shading\VertexShader.cs" />
-    <Compile Include="surfaces\IndexedQuadSurface.cs" />
-    <Compile Include="surfaces\IndexedSurface.cs" />
-    <Compile Include="surfaces\IVertexAttributeProvider.cs" />
-    <Compile Include="surfaces\LegacyVertexAttributeProvider.cs" />
-    <Compile Include="surfaces\PostProcessSurface.cs" />
-    <Compile Include="surfaces\QuadSurface.cs" />
-    <Compile Include="surfaces\settings\FloatUniform.cs" />
-    <Compile Include="surfaces\settings\Matrix4Uniform.cs" />
-    <Compile Include="surfaces\settings\SurfaceBlendSetting.cs" />
-    <Compile Include="surfaces\settings\SurfaceDepthMaskSetting.cs" />
-    <Compile Include="surfaces\settings\SurfaceSetting.cs" />
-    <Compile Include="surfaces\settings\TextureUniform.cs" />
-    <Compile Include="surfaces\settings\Vector2Uniform.cs" />
-    <Compile Include="surfaces\settings\Vector3Uniform.cs" />
-    <Compile Include="surfaces\settings\Vector4Uniform.cs" />
-    <Compile Include="surfaces\StaticVertexSurface.cs" />
-    <Compile Include="surfaces\Surface.cs" />
-    <Compile Include="surfaces\VertexArray.cs" />
-    <Compile Include="surfaces\VertexSurface.cs" />
-    <Compile Include="utilities\Color.cs" />
-    <Compile Include="utilities\Font.cs" />
-    <Compile Include="utilities\IndexBuffer.cs" />
-    <Compile Include="utilities\InternalExtensions.cs" />
-    <Compile Include="utilities\Matrix2.cs" />
-    <Compile Include="utilities\RenderTarget.cs" />
-    <Compile Include="utilities\Texture.cs" />
-    <Compile Include="utilities\UpdateEventArgs.cs" />
-    <Compile Include="utilities\UVRectangle.cs" />
-    <Compile Include="utilities\VertexBuffer.cs" />
-    <Compile Include="vertexdata\IVertexData.cs" />
-    <Compile Include="vertexdata\PostProcessVertexData.cs" />
-    <Compile Include="vertexdata\PrimitiveVertexData.cs" />
-    <Compile Include="vertexdata\SimpleSpriteVertexData.cs" />
-    <Compile Include="vertexdata\UVColorVertexData.cs" />
+    <Compile Include="Serialization\JsonNet\ColorConverter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\JsonNet\Converters.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\JsonNet\Extensions.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\JsonNet\FontConverter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\JsonNet\JsonConverterBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\JsonNet\SpriteConverter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\JsonNet\SpriteSetConverter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\JsonNet\TupleConverter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\JsonNet\UVRectangleContainer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\JsonNet\UVRectangleContainerConverter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\JsonNet\UVRectangleConverter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\JsonNet\Vector2Converter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="shading\FragmentShader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="shading\Shader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="shading\ShaderProgram.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="shading\VertexAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="shading\VertexShader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="surfaces\IndexedQuadSurface.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="surfaces\IndexedSurface.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="surfaces\IVertexAttributeProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="surfaces\LegacyVertexAttributeProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="surfaces\PostProcessSurface.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="surfaces\QuadSurface.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="surfaces\settings\FloatUniform.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="surfaces\settings\Matrix4Uniform.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="surfaces\settings\SurfaceBlendSetting.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="surfaces\settings\SurfaceDepthMaskSetting.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="surfaces\settings\SurfaceSetting.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="surfaces\settings\TextureUniform.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="surfaces\settings\Vector2Uniform.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="surfaces\settings\Vector3Uniform.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="surfaces\settings\Vector4Uniform.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="surfaces\StaticVertexSurface.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="surfaces\Surface.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="surfaces\VertexArray.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="surfaces\VertexSurface.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="utilities\Color.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="utilities\Font.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="utilities\IndexBuffer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="utilities\InternalExtensions.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="utilities\Matrix2.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="utilities\RenderTarget.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="utilities\Texture.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="utilities\UpdateEventArgs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="utilities\UVRectangle.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="utilities\VertexBuffer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="vertexdata\IVertexData.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="vertexdata\PostProcessVertexData.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="vertexdata\PrimitiveVertexData.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="vertexdata\SimpleSpriteVertexData.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="vertexdata\UVColorVertexData.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
