@@ -1,13 +1,12 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using OpenTK;
 
 namespace amulware.Graphics.Animation
 {
     sealed public class AnimationSystem<TBoneParameters, TKeyframeParameters, TBoneAttributes, TBoneTransformation>
         where TBoneParameters : struct, IBoneParameters<TKeyframeParameters>
-        where TKeyframeParameters : IKeyframeParameters, new()
-        where TBoneTransformation : IBoneTransformation<TBoneParameters, TBoneTransformation>, new()
+        where TKeyframeParameters : new()
+        where TBoneTransformation : IBoneTransformation<TBoneParameters, TKeyframeParameters, TBoneAttributes, TBoneTransformation>, new()
     {
         private AnimationTemplate<TBoneParameters, TKeyframeParameters, TBoneAttributes> template;
 
@@ -113,7 +112,7 @@ namespace amulware.Graphics.Animation
 
             for (int i = 0; i < this.parameters.Length; i++)
             {
-                this.skeleton[i].SetParameters(this.parameters[i]);
+                this.skeleton[i].UpdateParameters(this.parameters[i]);
             }
 
         }

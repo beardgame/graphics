@@ -3,7 +3,6 @@ using System.IO;
 namespace amulware.Graphics.Animation
 {
     sealed public class KeyframeData<TKeyframeParameters, TBoneAttributes>
-        where TKeyframeParameters : IKeyframeParameters
     {
         private readonly BoneTemplate<TBoneAttributes> bone;
         private readonly TKeyframeParameters parameters;

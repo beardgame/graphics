@@ -2,7 +2,7 @@ using OpenTK;
 
 namespace amulware.Graphics.Animation
 {
-    public struct BoneParameters2D : IBoneParameters<BoneParameters2D>, IKeyframeParameters
+    public struct BoneParameters2D : IBoneParameters<BoneParameters2D>
     {
         public Vector2 Offset { get; set; }
         public float Angle { get; set; }
@@ -20,7 +20,17 @@ namespace amulware.Graphics.Animation
             this.Offset += data.Offset * weight;
             this.Angle += data.Angle * weight;
 
-            this.Scale += data.Scale * weight;
+            this.Scale *= data.Scale * weight + (1 - weight);
+        }
+
+        public void Add(BoneParameters2D data1, BoneParameters2D data2, float data2Weight)
+        {
+            float data1Weight = 1 - data2Weight;
+
+            this.Offset += data2.Offset * data2Weight + data1.Offset * data1Weight;
+            this.Angle += data2.Angle * data2Weight + data1.Angle * data1Weight;
+
+            this.Scale *= data2.Scale * data2Weight + data1.Scale * data1Weight;
         }
     }
 }

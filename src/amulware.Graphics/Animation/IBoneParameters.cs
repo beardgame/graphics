@@ -1,12 +1,10 @@
 namespace amulware.Graphics.Animation
 {
     public interface IBoneParameters<TKeyframeParameters>
-        where TKeyframeParameters : IKeyframeParameters
     {
         void SetToDefault();
         void Add(TKeyframeParameters data, float weight);
-        // create overload with two keyframes
-        // and maybe a 'add root parameters' method, just in case?
+        void Add(TKeyframeParameters data1, TKeyframeParameters data2, float data2Weight);
 
         // also add bone attribute interface
     }

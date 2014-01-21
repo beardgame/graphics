@@ -3,7 +3,6 @@
 namespace amulware.Graphics.Animation
 {
     internal class AnimationTemplateJsonRepresentation<TKeyframeParameters, TBoneAttributes>
-        where TKeyframeParameters : IKeyframeParameters
     {
         public string Name { get; set; }
         public List<BoneJsonRepresentation<TBoneAttributes>> Skeleton { get; set; }

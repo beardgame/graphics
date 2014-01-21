@@ -2,14 +2,15 @@ using OpenTK;
 
 namespace amulware.Graphics.Animation
 {
-    public class BoneTransformation2D : IBoneTransformation<BoneParameters2D, BoneTransformation2D>
+    public class BoneTransformation2D<TBoneAttributes>
+        : IBoneTransformation<BoneParameters2D, BoneParameters2D, TBoneAttributes, BoneTransformation2D<TBoneAttributes>>
     {
-
-        private ITransformedBone<BoneParameters2D, BoneTransformation2D> parent;
+        private Bone<BoneParameters2D, BoneParameters2D, TBoneAttributes, BoneTransformation2D<TBoneAttributes>>
+            parent;
 
         private BoneParameters2D parameters;
 
-        private bool localAngleChanged = true;
+        private bool localAngleChanged;
 
         private float angleGlobal;
         private Matrix2 rotationLocal;
@@ -56,15 +57,18 @@ namespace amulware.Graphics.Animation
             }
         }
 
-        public void SetParent(ITransformedBone<BoneParameters2D, BoneTransformation2D> parent)
+        public void SetBone(
+            Bone<BoneParameters2D, BoneParameters2D, TBoneAttributes, BoneTransformation2D<TBoneAttributes>>
+            bone)
         {
-            this.parent = parent;
+            this.parent = bone.Parent;
         }
 
-        public void SetParameters(BoneParameters2D parameters)
+        public void UpdateParameters(BoneParameters2D parameters)
         {
             if (parameters.Angle != this.parameters.Angle || parameters.Scale != this.parameters.Scale)
                 this.localAngleChanged = true;
+            this.parameters = parameters;
         }
     }
 }

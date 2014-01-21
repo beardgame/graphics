@@ -7,7 +7,6 @@ namespace amulware.Graphics.Animation
 {
     sealed public class AnimationSequenceTemplate<TBoneParameters, TKeyframeParameters, TBoneAttributes>
         where TBoneParameters : struct, IBoneParameters<TKeyframeParameters>
-        where TKeyframeParameters : IKeyframeParameters
     {
         private readonly string name;
         private readonly ReadOnlyCollection<FrameTransition<TBoneParameters, TKeyframeParameters, TBoneAttributes>> transitions;

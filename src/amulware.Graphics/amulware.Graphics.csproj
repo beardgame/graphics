@@ -69,8 +69,7 @@
     <Compile Include="Animation\IBoneParameters.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Animation\IBoneTransforation.cs" />
-    <Compile Include="Animation\IKeyframeParameters.cs" />
+    <Compile Include="Animation\IBoneTransformation.cs" />
     <Compile Include="Animation\json\AnimationTemplateJsonRepresentation.cs">
       <SubType>Code</SubType>
     </Compile>
