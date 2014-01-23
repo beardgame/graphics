@@ -17,7 +17,7 @@ namespace amulware.Graphics
         /// Initializes a new instance of the <see cref="Sprite3DGeometry"/> class.
         /// </summary>
         /// <param name="surface">The surface two draw with.</param>
-        public Sprite3DGeometry(QuadSurface<SimpleSpriteVertexData> surface)
+        public Sprite3DGeometry(IndexedSurface<SimpleSpriteVertexData> surface)
             : base(surface)
         {
         }
@@ -28,12 +28,12 @@ namespace amulware.Graphics
         /// <param name="position">The coordinates to draw the sprite at. The sprite is drawn centered around this point.</param>
         public void DrawSprite(Vector3 position)
         {
-            this.Surface.AddVertices(new SimpleSpriteVertexData[] {
+            this.Surface.AddQuad(
                 new SimpleSpriteVertexData(position, this.UV.TopLeft, this.Color, -this.expandX, this.expandY),
                 new SimpleSpriteVertexData(position, this.UV.TopRight, this.Color, this.expandX, this.expandY),
                 new SimpleSpriteVertexData(position, this.UV.BottomRight, this.Color, this.expandX, -this.expandY),
                 new SimpleSpriteVertexData(position, this.UV.BottomLeft, this.Color, -this.expandX, -this.expandY)
-                });
+                );
         }
 
         public override void DrawSprite(Vector3 position, float angle, float scale)
@@ -48,12 +48,12 @@ namespace amulware.Graphics
                 expand2 = rotation * expand2;
             }
 
-            this.Surface.AddVertices(new SimpleSpriteVertexData[] {
+            this.Surface.AddQuad(
                 new SimpleSpriteVertexData(position, this.UV.TopLeft, this.Color, expand2),
                 new SimpleSpriteVertexData(position, this.UV.TopRight, this.Color, expand1),
                 new SimpleSpriteVertexData(position, this.UV.BottomRight, this.Color, -expand2),
                 new SimpleSpriteVertexData(position, this.UV.BottomLeft, this.Color, -expand1)
-                });
+                );
         }
 
         public override void DrawRectangle(float x, float y, float z, float w, float h)
