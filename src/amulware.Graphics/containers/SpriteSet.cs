@@ -11,9 +11,9 @@ namespace amulware.Graphics
     public class SpriteSet<TVertexData> : ISpriteSet<TVertexData>
         where TVertexData : struct, IVertexData
     {
-        private readonly QuadSurface<TVertexData> surface;
+        private readonly IndexedSurface<TVertexData> surface;
 
-        public QuadSurface<TVertexData> Surface { get { return this.surface; } }
+        public IndexedSurface<TVertexData> Surface { get { return this.surface; } }
 
         private readonly Dictionary<string, Sprite<TVertexData>> sprites;
 
@@ -31,7 +31,7 @@ namespace amulware.Graphics
         public SpriteSet(ShaderProgram shaderProgram, SurfaceSetting[] surfaceSettings)
         {
             this.sprites = new Dictionary<string, Sprite<TVertexData>>();
-            this.surface = new QuadSurface<TVertexData>();
+            this.surface = new IndexedSurface<TVertexData>();
             if (surfaceSettings != null)
                 this.surface.AddSettings(surfaceSettings);
             if (shaderProgram != null)
@@ -39,7 +39,7 @@ namespace amulware.Graphics
         }
 
         public static SpriteSet<TVertexData> Copy<TVertexDataIn>
-            (SpriteSet<TVertexDataIn> template, Func<QuadSurface<TVertexData>, UVQuadGeometry<TVertexData>> geometryMaker,
+            (SpriteSet<TVertexDataIn> template, Func<IndexedSurface<TVertexData>, UVQuadGeometry<TVertexData>> geometryMaker,
             ShaderProgram shaderProgram = null, SurfaceSetting[] surfaceSettings = null, bool keepTextureUniforms = true)
             where TVertexDataIn : struct, IVertexData
         {
@@ -58,7 +58,7 @@ namespace amulware.Graphics
         }
 
         static public SpriteSet<TVertexData> FromJsonFile(
-            string filename, Func<QuadSurface<TVertexData>, UVQuadGeometry<TVertexData>> geometryMaker,
+            string filename, Func<IndexedSurface<TVertexData>, UVQuadGeometry<TVertexData>> geometryMaker,
             ShaderProgram shaderProgram = null, SurfaceSetting[] surfaceSettings = null,
             Func<string, Texture> textureProvider = null, bool texturesRelativeToJson = false)
         {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
@@ -7,15 +7,15 @@ namespace amulware.Graphics
     /// <summary>
     /// Extends <see cref="StaticVertexSurface{Vertexdata}" /> with automatically adding vertices needed for post processing.
     /// </summary>
-    public class PostProcessSurface : StaticVertexSurface<PostProcessVertexData>
+    public class PostProcessSurface : IndexedSurface<PostProcessVertexData>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="PostProcessSurface"/> class.
         /// </summary>
         public PostProcessSurface()
-            : base(BeginMode.Quads)
         {
             this.initVertices();
+            this.ClearOnRender = false;
         }
 
         private void initVertices()
@@ -45,12 +45,13 @@ namespace amulware.Graphics
         public void SetRectangle(float fromX, float fromY, float toX, float toY)
         {
             this.vertexBuffer.Clear();
-            this.vertexBuffer.AddVertices(new PostProcessVertexData[] {
+            this.indexBuffer.Clear();
+            this.AddQuad(
                 new PostProcessVertexData(fromX, fromY),
                 new PostProcessVertexData(toX, fromY),
                 new PostProcessVertexData(toX, toY),
                 new PostProcessVertexData(fromX, toY)
-                });
+                );
             this.ForceBufferUpload();
         }
     }

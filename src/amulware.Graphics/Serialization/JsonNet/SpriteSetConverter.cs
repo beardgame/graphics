@@ -10,13 +10,13 @@ namespace amulware.Graphics.Serialization.JsonNet
     internal class SpriteSetConverter<TVertexData> : JsonConverterBase<SpriteSet<TVertexData>>
         where TVertexData : struct, IVertexData
     {
-        private readonly Func<QuadSurface<TVertexData>, UVQuadGeometry<TVertexData>> geometryMaker;
+        private readonly Func<IndexedSurface<TVertexData>, UVQuadGeometry<TVertexData>> geometryMaker;
         private readonly ShaderProgram shaderProgram;
         private readonly SurfaceSetting[] surfaceSettings;
         private readonly Func<string, Texture> textureProvider;
 
         public SpriteSetConverter(ShaderProgram shaderProgram, SurfaceSetting[] surfaceSettings,
-            Func<QuadSurface<TVertexData>, UVQuadGeometry<TVertexData>> geometryMaker, Func<string, Texture> textureProvider = null)
+            Func<IndexedSurface<TVertexData>, UVQuadGeometry<TVertexData>> geometryMaker, Func<string, Texture> textureProvider = null)
         {
             this.shaderProgram = shaderProgram;
             this.surfaceSettings = surfaceSettings;

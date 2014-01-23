@@ -92,7 +92,7 @@ namespace amulware.Graphics
 
                     int j = 1;
                     //GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.GenerateMipmap, ref j);
-                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.GenerateMipmap, 1);
+                    //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.GenerateMipmap, 1);
 
                     //glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP_SGIS, GL_TRUE);
 
@@ -132,7 +132,7 @@ namespace amulware.Graphics
                     this.Height = bitmap.Height;
                 }
 
-                //GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
+                GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
 
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter,
                     (int)TextureMinFilter.LinearMipmapLinear);
