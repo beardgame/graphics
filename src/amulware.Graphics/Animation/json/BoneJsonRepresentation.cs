@@ -1,9 +1,9 @@
 ﻿namespace amulware.Graphics.Animation
 {
-    class BoneJsonRepresentation
+    class BoneJsonRepresentation<TBoneAttributes>
     {
         public string Name { get; set; }
         public string Parent { get; set; }
-        public string Sprite { get; set; }
+        public TBoneAttributes Attributes { get; set; }
     }
 }

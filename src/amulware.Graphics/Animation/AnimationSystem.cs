@@ -1,67 +1,77 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Threading;
-using amulware.Graphics.utilities;
-using OpenTK;
+using System.Runtime.CompilerServices;
 
 namespace amulware.Graphics.Animation
 {
-    sealed public class AnimationSystem
+    sealed public class AnimationSystem<TBoneParameters, TKeyframeParameters, TBoneAttributes, TBoneTransformation>
+        where TBoneParameters : struct, IBoneParameters<TKeyframeParameters>
+        where TBoneTransformation : IBoneTransformation<TBoneParameters, TKeyframeParameters, TBoneAttributes, TBoneTransformation>, new()
     {
-        private AnimationTemplate template;
+        private AnimationTemplate<TBoneParameters, TKeyframeParameters, TBoneAttributes> template;
 
-        private List<AnimationSeqence> activeSeqences = new List<AnimationSeqence>();
+        private List<AnimationSequence<TBoneParameters, TKeyframeParameters, TBoneAttributes>> activeSeqences
+            = new List<AnimationSequence<TBoneParameters, TKeyframeParameters, TBoneAttributes>>();
 
-        private ReadOnlyCollection<Bone> skeleton;
+        private ReadOnlyCollection<Bone<TBoneParameters, TKeyframeParameters, TBoneAttributes, TBoneTransformation>> skeleton;
 
-        private BoneParameters[] baseParameters;
-        private BoneParameters[] parameters;
+        private TBoneParameters[] baseParameters;
+        private TBoneParameters[] parameters;
 
         private int[] rootIndices;
 
-        public BoneParameters RootParameters { get; set; }
+        public TKeyframeParameters RootParameters { get; set; }
 
-        public AnimationSystem(AnimationTemplate template, string baseFrameName = "base")
+        public AnimationSystem(
+            AnimationTemplate<TBoneParameters, TKeyframeParameters, TBoneAttributes> template,
+            string baseFrameName = "base")
         {
             this.template = template;
 
-            var skeleton = new List<Bone>(template.Skeleton.Bones.Count);
+            var skeleton = new List<Bone<TBoneParameters, TKeyframeParameters, TBoneAttributes, TBoneTransformation>>(template.Skeleton.Bones.Count);
             var rootIndices = new List<int>();
             foreach (var b in template.Skeleton.Bones)
             {
-                skeleton.Add(new Bone(b.Parent == null ? null : skeleton[b.Parent.Id], b.Sprite));
+                skeleton.Add(
+                    new Bone<TBoneParameters, TKeyframeParameters, TBoneAttributes, TBoneTransformation>
+                        (b.Parent == null ? null : skeleton[b.Parent.Id], b)
+                    );
                 if (b.Parent == null)
                     rootIndices.Add(b.Id);
             }
             this.skeleton = skeleton.AsReadOnly();
             this.rootIndices = rootIndices.ToArray();
 
-            this.baseParameters = new BoneParameters[this.skeleton.Count];
-            this.parameters = new BoneParameters[this.skeleton.Count];
-            for (int i = 0; i < this.parameters.Length; i++)
+            this.baseParameters = new TBoneParameters[this.skeleton.Count];
+            this.parameters = new TBoneParameters[this.skeleton.Count];
+
+            for (int i = 0; i < this.baseParameters.Length; i++)
             {
-                this.baseParameters[i].Scale = 1;
-            }
-            Keyframe baseFrame;
-            if (baseFrameName != null && (baseFrame = template.GetKeyFrame("base")) != null)
-            {
-                foreach(var d in baseFrame.Data)
-                    this.baseParameters[d.Bone.Id] = new BoneParameters(d);
+                TBoneParameters parameter = this.baseParameters[i];
+                parameter.SetToDefault();
+                this.baseParameters[i] = parameter;
             }
 
-            this.RootParameters = new BoneParameters(Vector2.Zero, 0, 1);
+            Keyframe<TBoneParameters, TKeyframeParameters, TBoneAttributes> baseFrame;
+            if (baseFrameName != null && (baseFrame = template.GetKeyFrame(baseFrameName)) != null)
+            {
+                baseFrame.ApplyTo(this.baseParameters, 1);
+            }
+
+            this.RootParameters = default(TKeyframeParameters);
         }
 
-        public ReadOnlyCollection<Bone> Skeleton { get { return this.skeleton; } }
+        public ReadOnlyCollection<Bone<TBoneParameters, TKeyframeParameters, TBoneAttributes, TBoneTransformation>>
+            Skeleton { get { return this.skeleton; } }
 
-        public bool Start(string sequenceName, AnimationSeqence.Mode mode, bool startPaused = false)
+        public bool Start(string sequenceName, AnimationSequence.Mode mode, bool startPaused = false)
         {
-            AnimationSeqence s;
+            AnimationSequence<TBoneParameters, TKeyframeParameters, TBoneAttributes> s;
             return this.Start(sequenceName, mode, startPaused, out s);
         }
 
-        public bool Start(string sequenceName, AnimationSeqence.Mode mode, bool startPaused, out AnimationSeqence sequence)
+        public bool Start(string sequenceName, AnimationSequence.Mode mode, bool startPaused,
+            out AnimationSequence<TBoneParameters, TKeyframeParameters, TBoneAttributes> sequence)
         {
             var template = this.template.GetSequence(sequenceName);
             if (template == null)
@@ -69,13 +79,13 @@ namespace amulware.Graphics.Animation
                 sequence = null;
                 return false;
             }
-            sequence = new AnimationSeqence(template, mode,
-                startPaused ? AnimationSeqence.PlayState.Waiting : AnimationSeqence.PlayState.Playing);
+            sequence = new AnimationSequence<TBoneParameters, TKeyframeParameters, TBoneAttributes>(template, mode,
+                startPaused ? AnimationSequence.PlayState.Waiting : AnimationSequence.PlayState.Playing);
             this.activeSeqences.Add(sequence);
             return true;
         }
 
-        public bool Stop(AnimationSeqence sequence)
+        public bool Stop(AnimationSequence<TBoneParameters, TKeyframeParameters, TBoneAttributes> sequence)
         {
             return this.activeSeqences.Remove(sequence);
         }
@@ -91,7 +101,7 @@ namespace amulware.Graphics.Animation
 
             for (int i = 0; i < this.rootIndices.Length; i++)
             {
-                this.parameters[this.rootIndices[i]].Add(this.RootParameters);
+                this.parameters[this.rootIndices[i]].Add(this.RootParameters, 1);
             }
 
             foreach (var sequence in this.activeSeqences)
@@ -104,8 +114,7 @@ namespace amulware.Graphics.Animation
 
             for (int i = 0; i < this.parameters.Length; i++)
             {
-                this.skeleton[i].SetParameters(this.parameters[i]);
-                this.skeleton[i].Recalculate();
+                this.skeleton[i].UpdateParameters(this.parameters[i]);
             }
 
         }

@@ -1,73 +1,75 @@
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using amulware.Graphics.Serialization.JsonNet;
 using Newtonsoft.Json;
-using OpenTK.Input;
 
 namespace amulware.Graphics.Animation
 {
-    sealed public class AnimationTemplate
+    sealed public class AnimationTemplate<TBoneParameters, TKeyframeParameters, TBoneAttributes>
+        where TBoneParameters : struct, IBoneParameters<TKeyframeParameters>
     {
         private readonly string name;
-        private readonly SkeletonTemplate skeleton;
-        private readonly ReadOnlyCollection<Keyframe> keyframes;
-        private readonly Dictionary<string, Keyframe> keyframeDictionary;
-        private readonly ReadOnlyCollection<AnimationSequenceTemplate> sequences;
-        private readonly Dictionary<string, AnimationSequenceTemplate> sequenceDictionary;
+        private readonly SkeletonTemplate<TBoneAttributes> skeleton;
+        private readonly ReadOnlyCollection<Keyframe<TBoneParameters, TKeyframeParameters, TBoneAttributes>> keyframes;
+        private readonly Dictionary<string, Keyframe<TBoneParameters, TKeyframeParameters, TBoneAttributes>> keyframeDictionary;
+        private readonly ReadOnlyCollection<AnimationSequenceTemplate<TBoneParameters, TKeyframeParameters, TBoneAttributes>> sequences;
+        private readonly Dictionary<string, AnimationSequenceTemplate<TBoneParameters, TKeyframeParameters, TBoneAttributes>> sequenceDictionary;
 
-        internal AnimationTemplate(AnimationTemplateJsonRepresentation json)
+        internal AnimationTemplate(AnimationTemplateJsonRepresentation<TKeyframeParameters, TBoneAttributes> json)
         {
             this.name = json.Name;
-            this.skeleton = new SkeletonTemplate(json.Skeleton);
+            this.skeleton = new SkeletonTemplate<TBoneAttributes>(json.Skeleton);
 
-            this.keyframes = json.Keyframes == null ? new List<Keyframe>().AsReadOnly()
-                : json.Keyframes.Select(f => new Keyframe(f, this.skeleton)).ToList().AsReadOnly();
+            this.keyframes = json.Keyframes == null ? new List<Keyframe<TBoneParameters, TKeyframeParameters, TBoneAttributes>>().AsReadOnly()
+                : json.Keyframes.Select(f => new Keyframe<TBoneParameters, TKeyframeParameters, TBoneAttributes>(f, this.skeleton)).ToList().AsReadOnly();
 
-            this.keyframeDictionary = this.Keyframes.ToDictionary(f => f.Name);
+            this.keyframeDictionary = this.keyframes.ToDictionary(f => f.Name);
 
-            this.sequences = json.Sequences == null ? new List<AnimationSequenceTemplate>().AsReadOnly()
-                : json.Sequences.Select(s => new AnimationSequenceTemplate(s, this.keyframeDictionary))
-                    .ToList().AsReadOnly();
+            this.sequences = json.Sequences == null
+                ? new List<AnimationSequenceTemplate<TBoneParameters, TKeyframeParameters, TBoneAttributes>>().AsReadOnly()
+                : json.Sequences.Select(
+                    s => new AnimationSequenceTemplate<TBoneParameters, TKeyframeParameters, TBoneAttributes>(s, this.keyframeDictionary))
+                        .ToList().AsReadOnly();
 
-            this.sequenceDictionary = this.Sequences.ToDictionary(s => s.Name);
+            this.sequenceDictionary = this.sequences.ToDictionary(s => s.Name);
         }
 
         public string Name { get { return this.name; } }
-        public SkeletonTemplate Skeleton { get { return this.skeleton; } }
+        public SkeletonTemplate<TBoneAttributes> Skeleton { get { return this.skeleton; } }
 
-        public ReadOnlyCollection<Keyframe> Keyframes
+        public ReadOnlyCollection<Keyframe<TBoneParameters, TKeyframeParameters, TBoneAttributes>> Keyframes
         {
             get { return this.keyframes; }
         }
 
-        public ReadOnlyCollection<AnimationSequenceTemplate> Sequences
+        public ReadOnlyCollection<AnimationSequenceTemplate<TBoneParameters, TKeyframeParameters, TBoneAttributes>> Sequences
         {
             get { return this.sequences; }
         }
 
-        public AnimationSequenceTemplate GetSequence(string name)
+        public AnimationSequenceTemplate<TBoneParameters, TKeyframeParameters, TBoneAttributes> GetSequence(string name)
         {
-            AnimationSequenceTemplate s;
+            AnimationSequenceTemplate<TBoneParameters, TKeyframeParameters, TBoneAttributes> s;
             this.sequenceDictionary.TryGetValue(name, out s);
             return s;
         }
 
-        public Keyframe GetKeyFrame(string name)
+        public Keyframe<TBoneParameters, TKeyframeParameters, TBoneAttributes> GetKeyFrame(string name)
         {
-            Keyframe f;
+            Keyframe<TBoneParameters, TKeyframeParameters, TBoneAttributes> f;
             this.keyframeDictionary.TryGetValue(name, out f);
             return f;
         }
-        
-        public static AnimationTemplate FromJsonFile(string filename)
+
+        public static AnimationTemplate<TBoneParameters, TKeyframeParameters, TBoneAttributes> FromJsonFile(string filename)
         {
-            return new AnimationTemplate(JsonConvert.DeserializeObject<AnimationTemplateJsonRepresentation>(
-                File.ReadAllText(filename),
-                new JsonSerializerSettings().ConfigureForGraphics()
-                ));
+            return new AnimationTemplate<TBoneParameters, TKeyframeParameters, TBoneAttributes>(
+                JsonConvert.DeserializeObject<AnimationTemplateJsonRepresentation<TKeyframeParameters, TBoneAttributes>>(
+                    File.ReadAllText(filename),
+                    new JsonSerializerSettings().ConfigureForGraphics()
+                    ));
         }
     }
 }
