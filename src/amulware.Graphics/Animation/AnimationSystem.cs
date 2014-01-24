@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Runtime.CompilerServices;
 
 namespace amulware.Graphics.Animation
 {
     sealed public class AnimationSystem<TBoneParameters, TKeyframeParameters, TBoneAttributes, TBoneTransformation>
         where TBoneParameters : struct, IBoneParameters<TKeyframeParameters>
-        where TKeyframeParameters : new()
         where TBoneTransformation : IBoneTransformation<TBoneParameters, TKeyframeParameters, TBoneAttributes, TBoneTransformation>, new()
     {
         private AnimationTemplate<TBoneParameters, TKeyframeParameters, TBoneAttributes> template;
@@ -45,9 +45,11 @@ namespace amulware.Graphics.Animation
             this.baseParameters = new TBoneParameters[this.skeleton.Count];
             this.parameters = new TBoneParameters[this.skeleton.Count];
 
-            foreach (var parameters in this.baseParameters)
+            for (int i = 0; i < this.baseParameters.Length; i++)
             {
-                parameters.SetToDefault();
+                TBoneParameters parameter = this.baseParameters[i];
+                parameter.SetToDefault();
+                this.baseParameters[i] = parameter;
             }
 
             Keyframe<TBoneParameters, TKeyframeParameters, TBoneAttributes> baseFrame;
@@ -56,7 +58,7 @@ namespace amulware.Graphics.Animation
                 baseFrame.ApplyTo(this.baseParameters, 1);
             }
 
-            this.RootParameters = new TKeyframeParameters();
+            this.RootParameters = default(TKeyframeParameters);
         }
 
         public ReadOnlyCollection<Bone<TBoneParameters, TKeyframeParameters, TBoneAttributes, TBoneTransformation>>

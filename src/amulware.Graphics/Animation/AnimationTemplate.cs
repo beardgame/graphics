@@ -9,7 +9,6 @@ namespace amulware.Graphics.Animation
 {
     sealed public class AnimationTemplate<TBoneParameters, TKeyframeParameters, TBoneAttributes>
         where TBoneParameters : struct, IBoneParameters<TKeyframeParameters>
-        where TKeyframeParameters : new()
     {
         private readonly string name;
         private readonly SkeletonTemplate<TBoneAttributes> skeleton;

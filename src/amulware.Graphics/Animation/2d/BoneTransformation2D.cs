@@ -69,6 +69,7 @@ namespace amulware.Graphics.Animation
             if (parameters.Angle != this.parameters.Angle || parameters.Scale != this.parameters.Scale)
                 this.localAngleChanged = true;
             this.parameters = parameters;
+            this.Recalculate();
         }
     }
 }

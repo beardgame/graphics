@@ -1,3 +1,5 @@
+using System.ComponentModel;
+using Newtonsoft.Json;
 using OpenTK;
 
 namespace amulware.Graphics.Animation
@@ -6,7 +8,18 @@ namespace amulware.Graphics.Animation
     {
         public Vector2 Offset { get; set; }
         public float Angle { get; set; }
+
+        [DefaultValue(1)]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
         public float Scale { get; set; }
+
+        public BoneParameters2D (Vector2 offset, float angle, float scale)
+            : this()
+        {
+            this.Offset = offset;
+            this.Angle = angle;
+            this.Scale = scale;
+        }
 
         public void SetToDefault()
         {

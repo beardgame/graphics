@@ -19,7 +19,7 @@ namespace amulware.Graphics.Animation
         {
             this.parent = parent;
             this.template = template;
-            this.transformation.SetBone(parent);
+            this.transformation.SetBone(this);
         }
 
         public TBoneTransformation Transformation { get { return this.transformation; } }
