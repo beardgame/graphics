@@ -42,12 +42,14 @@ namespace amulware.Graphics
             }
         }
 
+        public new IndexedSurface<UVColorVertexData> Surface { get; private set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FontGeometry"/> class.
         /// </summary>
         /// <param name="surface">The surface to use for drawing</param>
         /// <param name="font">The <see cref="Font"/> used</param>
-        public FontGeometry(QuadSurface<UVColorVertexData> surface, Font font)
+        public FontGeometry(IndexedSurface<UVColorVertexData> surface, Font font)
             : base(surface)
         {
             this.Font = font;
@@ -225,7 +227,22 @@ namespace amulware.Graphics
                 position = position2;
             }
 
-            this.Surface.AddVertices(vertices);
+            var indexOffset = this.Surface.AddVertices(vertices);
+
+            var indices = new ushort[l * 6];
+            int id = 0;
+            for (int i = 0; i < l; i++)
+            {
+                int b = indexOffset + i * 4;
+                indices[id++] = (ushort)(b);
+                indices[id++] = (ushort)(b + 1);
+                indices[id++] = (ushort)(b + 2);
+                indices[id++] = (ushort)(b);
+                indices[id++] = (ushort)(b + 2);
+                indices[id++] = (ushort)(b + 3);
+            }
+
+            this.Surface.AddIndices(indices);
         }
 
         #endregion

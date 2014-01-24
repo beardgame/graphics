@@ -9,7 +9,7 @@ namespace amulware.Graphics
     /// <summary>
     /// Geometry used for drawing of coloured primitives like rectangles and lines.
     /// </summary>
-    public class PrimitiveGeometry : Geometry<PrimitiveVertexData>
+     sealed public class PrimitiveGeometry : Geometry<PrimitiveVertexData>
     {
 
         /// <summary>
@@ -22,13 +22,15 @@ namespace amulware.Graphics
         /// </summary>
         public float LineWidth = 1;
 
+        private IndexedSurface<PrimitiveVertexData> surface; 
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PrimitiveGeometry"/> class.
         /// </summary>
         /// <param name="surface">The surface used for drawing.</param>
-        public PrimitiveGeometry(QuadSurface<PrimitiveVertexData> surface) : base(surface)
+        public PrimitiveGeometry(IndexedSurface<PrimitiveVertexData> surface) : base(surface)
         {
-
+            this.surface = surface;
         }
 
         #region DrawRectangle /// @name DrawRectangle
@@ -75,12 +77,12 @@ namespace amulware.Graphics
         /// <param name="h">The height of the rectangle.</param>
         public void DrawRectangle(float x, float y, float z, float w, float h)
         {
-             this.Surface.AddVertices(new PrimitiveVertexData[] {
+            this.surface.AddQuad(
                 new PrimitiveVertexData(x,      y,      z, this.Color),
                 new PrimitiveVertexData(x + w,  y,      z, this.Color),
                 new PrimitiveVertexData(x + w,  y + h,  z, this.Color),
                 new PrimitiveVertexData(x,      y + h,  z, this.Color)
-                });
+                );
         }
 
         #endregion
@@ -215,6 +217,8 @@ namespace amulware.Graphics
         /// <param name="filled">if set to <c>true</c> the oval is drawn solid, otherwise it is drawn with the specified line width.</param>
         private void drawOval(float centerX, float centerY, float centerZ, float halfWidth, float halfHeight, int edges, bool filled)
         {
+            throw new NotImplementedException("oval drawing not yet switched to indexed drawing");
+
             if (filled || this.LineWidth >= halfWidth || this.LineWidth >= halfHeight)
                 this.drawOvalFilled(centerX, centerY, centerZ, halfWidth, halfHeight, edges);
             else
@@ -388,12 +392,12 @@ namespace amulware.Graphics
             float ilxy = this.LineWidth / (float)Math.Sqrt(vx * vx + vy * vy);
             float nx = vy * ilxy;
             float ny = vx * ilxy;
-            this.Surface.AddVertices(new PrimitiveVertexData[] { 
+            this.surface.AddQuad(
                 new PrimitiveVertexData(x1 + nx, y1 + ny, z1, this.Color),
                 new PrimitiveVertexData(x1 - nx, y1 - ny, z1, this.Color),
                 new PrimitiveVertexData(x2 - nx, y2 - ny, z2, this.Color),
                 new PrimitiveVertexData(x2 + nx, y2 + ny, z2, this.Color)
-                });
+                );
         }
 
         #endregion

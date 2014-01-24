@@ -8,6 +8,7 @@ namespace amulware.Graphics
     /// Specialises <see cref="VertexSurface{VertexData}" /> to use <see cref="BeginMode.Quads" /> and adds method to add quads.
     /// </summary>
     /// <typeparam name="VertexData">The <see cref="IVertexData"/> to use.</typeparam>
+    [Obsolete("Drawing of quads is deprecated in newer OpenGL versions.")]
     public class QuadSurface<VertexData> : VertexSurface<VertexData>
         where VertexData : struct, IVertexData
     {

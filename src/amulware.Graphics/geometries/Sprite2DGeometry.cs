@@ -18,7 +18,7 @@ namespace amulware.Graphics
         /// Initializes a new instance of the <see cref="Sprite2DGeometry"/> class.
         /// </summary>
         /// <param name="surface">The surface used for drawing</param>
-        public Sprite2DGeometry(QuadSurface<UVColorVertexData> surface)
+        public Sprite2DGeometry(IndexedSurface<UVColorVertexData> surface)
             : base(surface)
         {
         }
@@ -45,12 +45,12 @@ namespace amulware.Graphics
                 bottomLeft = rotation * bottomLeft;
                 bottomRight = rotation * bottomRight;
             }
-            this.Surface.AddVertices(new UVColorVertexData[] {
+            this.Surface.AddQuad(
                 new UVColorVertexData(position.X + topLeft.X, position.Y + topLeft.Y, position.Z, this.UV.TopLeft, this.Color),
                 new UVColorVertexData(position.X + topRight.X, position.Y + topRight.Y, position.Z, this.UV.TopRight, this.Color),
                 new UVColorVertexData(position.X + bottomRight.X, position.Y + bottomRight.Y, position.Z, this.UV.BottomRight, this.Color),
-                new UVColorVertexData(position.X + bottomLeft.X, position.Y + bottomLeft.Y, position.Z, this.UV.BottomLeft, this.Color),
-                });
+                new UVColorVertexData(position.X + bottomLeft.X, position.Y + bottomLeft.Y, position.Z, this.UV.BottomLeft, this.Color)
+                );
         }
 
         /// <summary>
@@ -63,12 +63,12 @@ namespace amulware.Graphics
         /// <param name="h">The height of the rectangle.</param>
         public override void DrawRectangle(float x, float y, float z, float w, float h)
         {
-            this.Surface.AddVertices(new UVColorVertexData[] {
+            this.Surface.AddQuad(
                 new UVColorVertexData(x, y, z, this.UV.TopLeft, this.Color),
                 new UVColorVertexData(x + w, y, z, this.UV.TopRight, this.Color),
                 new UVColorVertexData(x + w, y + h, z, this.UV.BottomRight, this.Color),
                 new UVColorVertexData(x, y + h, z, this.UV.BottomLeft, this.Color)
-                });
+                );
         }
 
         /// <summary>
@@ -88,12 +88,12 @@ namespace amulware.Graphics
             float nx = vy * ilxy;
             float ny = vx * ilxy;
 
-            this.Surface.AddVertices(new UVColorVertexData[] {
+            this.Surface.AddQuad(
                 new UVColorVertexData(x1 + nx, y1 + ny, z1, this.UV.BottomLeft, this.Color),
                 new UVColorVertexData(x1 - nx, y1 - ny, z1, this.UV.TopLeft, this.Color),
                 new UVColorVertexData(x2 - nx, y2 - ny, z2, this.UV.TopRight, this.Color),
                 new UVColorVertexData(x2 + nx, y2 + ny, z2, this.UV.BottomRight, this.Color)
-                });
+                );
         }
     }
 }

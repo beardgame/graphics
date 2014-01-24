@@ -1,6 +1,5 @@
 namespace amulware.Graphics.Animation
 {
-
     sealed public class Bone<TBoneParameters, TKeyframeParameters, TBoneAttributes, TBoneTransformation>
         where TBoneParameters : struct, IBoneParameters<TKeyframeParameters>
         where TBoneTransformation : IBoneTransformation<TBoneParameters, TKeyframeParameters, TBoneAttributes, TBoneTransformation>, new()

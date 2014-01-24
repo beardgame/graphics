@@ -64,6 +64,45 @@ namespace amulware.Graphics
         }
 
         /// <summary>
+        /// Adds three vertices.
+        /// </summary>
+        /// <returns>Index of first new vertex in vertex buffer.</returns>
+        public ushort AddVertices(TVertexData vertex0, TVertexData vertex1, TVertexData vertex2)
+        {
+            ushort oldCount = this.vertexCount;
+            int newCount = oldCount + 3;
+            if (this.vertices.Length <= newCount)
+                Array.Resize(ref this.vertices, Math.Max(this.vertices.Length * 2, newCount));
+            this.vertexCount = (ushort)newCount;
+
+            this.vertices[oldCount] = vertex0;
+            this.vertices[oldCount + 1] = vertex1;
+            this.vertices[oldCount + 2] = vertex2;
+
+            return oldCount;
+        }
+
+        /// <summary>
+        /// Adds four vertices.
+        /// </summary>
+        /// <returns>Index of first new vertex in vertex buffer.</returns>
+        public ushort AddVertices(TVertexData vertex0, TVertexData vertex1, TVertexData vertex2, TVertexData vertex3)
+        {
+            ushort oldCount = this.vertexCount;
+            int newCount = oldCount + 4;
+            if (this.vertices.Length <= newCount)
+                Array.Resize(ref this.vertices, Math.Max(this.vertices.Length * 2, newCount));
+            this.vertexCount = (ushort)newCount;
+
+            this.vertices[oldCount] = vertex0;
+            this.vertices[oldCount + 1] = vertex1;
+            this.vertices[oldCount + 2] = vertex2;
+            this.vertices[oldCount + 3] = vertex3;
+
+            return oldCount;
+        }
+
+        /// <summary>
         /// Adds vertices.
         /// </summary>
         /// <param name="vertices">The vertices.</param>

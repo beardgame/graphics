@@ -32,17 +32,20 @@ namespace amulware.Graphics
         protected float expandX;
         protected float expandY;
 
+        new public IndexedSurface<TVertexData> Surface { get; private set; } 
+
         /// <summary>
         /// The <see cref="UVRectangle"/> used to map the sprite with. Obtain from <see cref="Texture.GrabUV"/>
         /// </summary>
         public UVRectangle UV { get; set; }
 
-        public UVQuadGeometry(QuadSurface<TVertexData> surface)
+        public UVQuadGeometry(IndexedSurface<TVertexData> surface)
             : base(surface)
         {
             this.Size = Vector2.One;
             this.LineWidth = 1;
             this.UV = UVRectangle.Default;
+            this.Surface = surface;
         }
 
         /// <summary>
