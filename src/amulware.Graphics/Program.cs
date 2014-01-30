@@ -178,12 +178,12 @@ namespace amulware.Graphics
             Run(0.0, 0.0);
         }
 
-        public void Run(double updateRate)
+        public void Run(double targetUpdatesPersecond)
         {
-            Run(updateRate, 0.0);
+            Run(targetUpdatesPersecond, 0.0);
         }
 
-        public void Run(double updates_per_second, double frames_per_second)
+        public void Run(double targetUpdatesPerSecond, double targetDrawsPerSecond, double maximumFrameTimeFactor = 3)
         {
             EnsureUndisposed();
 
@@ -191,64 +191,61 @@ namespace amulware.Graphics
             OnLoadInternal(EventArgs.Empty);
             OnResize(EventArgs.Empty);
 
-            this.update_time_interval = 0;
-            if (updates_per_second > 0 && updates_per_second <= 1000)
-                this.update_time_interval = (int)(1000 / updates_per_second);
-            this.render_time_interval = 0;
-            if (frames_per_second > 0 && frames_per_second <= 1000)
-                this.render_time_interval = (int)(1000 / frames_per_second);
+            double targetUpdateInterval = targetUpdatesPerSecond <= 0 ? 0 : 1 / targetUpdatesPerSecond;
+            double targetRenderInterval = targetDrawsPerSecond <= 0 ? 0 : 1 / targetDrawsPerSecond;
 
-            int startTime = System.Environment.TickCount;
-            int lastUpdateTime = startTime;
-
-
-            int next_fps_mark = 0;
-            int frames_this_second = 0;
-
-            next_fps_mark = startTime;
+            double maximumUpdateInterval = targetUpdateInterval == 0
+                ? double.PositiveInfinity
+                : targetUpdateInterval * maximumFrameTimeFactor;
             
-            UpdateEventArgs updateEventArgs = new UpdateEventArgs(startTime);
+            UpdateEventArgs updateEventArgs = new UpdateEventArgs(0);
 
-            int fakeCurrentTime = startTime;
+            double lastTimerTime = 0;
+
+            double gameSeconds = 0;
+
+            double nextTargetRenderTime = 0;
+
+            var gameTimer = Stopwatch.StartNew();
+
 
             // main loop
             while (true)
             {
-                int currentTime = System.Environment.TickCount;
-                frames_this_second++;
+                double thisTimerTime = gameTimer.Elapsed.TotalSeconds;
+                double elapsedSeconds = thisTimerTime - lastTimerTime;
+                lastTimerTime = thisTimerTime;
 
-                fakeCurrentTime += this.update_time_interval;
+                double updateSeconds = Math.Min(elapsedSeconds, maximumUpdateInterval);
 
-                ProcessEvents();
-                if (Exists && !IsExiting)
+                gameSeconds += updateSeconds;
+
+
+                this.ProcessEvents();
+                if (this.Exists && !this.IsExiting)
                 {
                     // update
-                    updateEventArgs = new UpdateEventArgs(updateEventArgs, fakeCurrentTime);
+                    updateEventArgs = new UpdateEventArgs(updateEventArgs, gameSeconds);
 
-                    OnUpdate(updateEventArgs);
+                    this.OnUpdate(updateEventArgs);
 
-                    if (currentTime >= this.next_render_time)
+                    if (thisTimerTime >= nextTargetRenderTime)
                     {
                         // render
-                        OnRender(updateEventArgs);
-                        this.next_render_time = currentTime + this.render_time_interval;
+                        this.OnRender(updateEventArgs);
+                        nextTargetRenderTime = thisTimerTime + targetRenderInterval;
                     }
                 }
                 else
                     return;
 
-                int timeAfterFrame = System.Environment.TickCount;
-                if (timeAfterFrame >= next_fps_mark)
-                {
-                    frames_last_second = frames_this_second;
-                    frames_this_second = 0;
-                    next_fps_mark = timeAfterFrame + 1000;
-                    //this.Title = this.frames_last_second.ToString();
-                }
-                int updateTime = timeAfterFrame - currentTime;
-                int waitTime = this.update_time_interval - updateTime;
+                double timeAfterFrame = gameTimer.Elapsed.TotalSeconds;
+
+                double frameTime = timeAfterFrame - thisTimerTime;
+                double waitTime = targetUpdateInterval - frameTime;
                 if (waitTime > 0)
-                    Thread.Sleep(waitTime);
+                    Thread.Sleep(TimeSpan.FromSeconds(waitTime));
+
             }
         }
         
@@ -386,6 +383,8 @@ namespace amulware.Graphics
 
         #endregion
 
+        #endregion
+
         #region --- Protected Members ---
 
         #region Dispose
@@ -492,7 +491,6 @@ namespace amulware.Graphics
 
         #endregion
 
-        #endregion
         #endregion
         
     }

@@ -13,18 +13,10 @@ namespace amulware.Graphics
         public readonly int Frame = 0;
 
         /// <summary>
-        /// The time since the start of the program in milliseconds
-        /// </summary>
-        public readonly int TimeInMs = 0;
-        /// <summary>
         /// The time since the start of the program in seconds
         /// </summary>
         public readonly double TimeInS = 0;
 
-        /// <summary>
-        /// The elapsed time since the last update in milliseconds
-        /// </summary>
-        public readonly int ElapsedTimeInMs = 0;
         /// <summary>
         /// The elapsed time ince the last update in seconds
         /// </summary>
@@ -39,26 +31,23 @@ namespace amulware.Graphics
         /// Initializes a new instance of the <see cref="UpdateEventArgs"/> class.
         /// </summary>
         /// <param name="currentTime">The current time.</param>
-        public UpdateEventArgs(int currentTime)
+        public UpdateEventArgs(double currentTime)
         {
-            this.TimeInMs = currentTime;
-            this.TimeInS = currentTime * 0.001;
+            this.TimeInS = currentTime;
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpdateEventArgs"/> class.
         /// </summary>
         /// <param name="lastFrame">The <see cref="UpdateEventArgs"/> instance of the last frame.</param>
-        /// <param name="currentTime">The current time.</param>
-        public UpdateEventArgs(UpdateEventArgs lastFrame, int currentTime)
+        /// <param name="currentTimeInSeconds">The current time.</param>
+        public UpdateEventArgs(UpdateEventArgs lastFrame, double currentTimeInSeconds)
         {
             this.Frame = lastFrame.Frame + 1;
-            this.ElapsedTimeInMs = currentTime - lastFrame.TimeInMs;
-            this.ElapsedTimeInS = this.ElapsedTimeInMs * 0.001;
+            this.ElapsedTimeInS = currentTimeInSeconds - lastFrame.TimeInS;
             this.ElapsedTimeInSf = (float)this.ElapsedTimeInS;
 
-            this.TimeInMs = currentTime;
-            this.TimeInS = currentTime * 0.001;
+            this.TimeInS = currentTimeInSeconds;
         }
     }
 }
