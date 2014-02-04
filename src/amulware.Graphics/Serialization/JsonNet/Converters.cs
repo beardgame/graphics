@@ -17,6 +17,11 @@ namespace amulware.Graphics.Serialization.JsonNet
         public static readonly JsonConverter Vector2Converter = new Vector2Converter();
 
         /// <summary>
+        /// Converter for <see cref="Vector3"/>
+        /// </summary>
+        public static readonly JsonConverter Vector3Converter = new Vector3Converter();
+
+        /// <summary>
         /// Converter for <see cref="Font"/>
         /// </summary>
         public static readonly JsonConverter FontConverter = new FontConverter();

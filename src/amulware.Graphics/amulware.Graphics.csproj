@@ -46,6 +46,8 @@
     <Compile Include="Animation\AnimationSequence.cs" />
     <Compile Include="Animation\AnimationSequenceTemplate.cs" />
     <Compile Include="Animation\AnimationSystem.cs" />
+    <Compile Include="Animation\3d\BoneParameters3D.cs" />
+    <Compile Include="Animation\3d\BoneTransformation3D.cs" />
     <Compile Include="Animation\IBoneParameters.cs" />
     <Compile Include="Animation\IBoneTransformation.cs" />
     <Compile Include="Animation\json\AnimationTemplateJsonRepresentation.cs" />
@@ -66,6 +68,7 @@
     <Compile Include="containers\SpriteSetContainer.cs" />
     <Compile Include="containers\SpriteSet.cs" />
     <Compile Include="Serialization\JsonNet\ColorConverter.cs" />
+    <Compile Include="Serialization\JsonNet\Vector3Converter.cs" />
     <Compile Include="Serialization\JsonNet\TupleConverter.cs" />
     <Compile Include="geometries\FontGeometry.cs" />
     <Compile Include="geometries\Geometry.cs" />
@@ -109,6 +112,7 @@
     <Compile Include="surfaces\VertexArray.cs" />
     <Compile Include="surfaces\VertexSurface.cs" />
     <Compile Include="utilities\Color.cs" />
+    <Compile Include="utilities\Extensions.cs" />
     <Compile Include="utilities\Font.cs" />
     <Compile Include="utilities\IndexBuffer.cs" />
     <Compile Include="utilities\InternalExtensions.cs" />

@@ -17,6 +17,7 @@ namespace amulware.Graphics.Serialization.JsonNet
         public static JsonSerializerSettings ConfigureForGraphics(this JsonSerializerSettings settings)
         {
             settings.Converters.Add(Converters.Vector2Converter);
+            settings.Converters.Add(Converters.Vector3Converter);
             settings.Converters.Add(Converters.FontConverter);
             settings.Converters.Add(Converters.UVRectangleContainerConverter);
             settings.Converters.Add(Converters.ColorContainerConverter);
@@ -31,6 +32,7 @@ namespace amulware.Graphics.Serialization.JsonNet
         public static JsonSerializer ConfigureForGraphics(this JsonSerializer serializer)
         {
             serializer.Converters.Add(Converters.Vector2Converter);
+            serializer.Converters.Add(Converters.Vector3Converter);
             serializer.Converters.Add(Converters.FontConverter);
             serializer.Converters.Add(Converters.UVRectangleContainerConverter);
             serializer.Converters.Add(Converters.ColorContainerConverter);
