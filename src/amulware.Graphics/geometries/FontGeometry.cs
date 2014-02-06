@@ -52,6 +52,7 @@ namespace amulware.Graphics
         public FontGeometry(IndexedSurface<UVColorVertexData> surface, Font font)
             : base(surface)
         {
+            this.Surface = surface;
             this.Font = font;
             this.SizeCoefficient = Vector2.One;
 
