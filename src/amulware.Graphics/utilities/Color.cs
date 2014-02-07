@@ -528,6 +528,19 @@ namespace amulware.Graphics
             return System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
         }
 
+        static public bool operator ==(Color color1, Color color2)
+        {
+            return color1.R == color2.R
+                   && color1.G == color2.G
+                   && color1.B == color2.B
+                   && color1.A == color2.A;
+        }
+
+        public static bool operator !=(Color color1, Color color2)
+        {
+            return !(color1 == color2);
+        }
+
         #endregion
 
     }
