@@ -71,5 +71,14 @@ namespace amulware.Graphics.Animation
                     new JsonSerializerSettings().ConfigureForGraphics()
                     ));
         }
+
+        public AnimationSystem<TBoneParameters, TKeyframeParameters, TBoneAttributes, TBoneTransformation>
+            Instantiate<TBoneTransformation>(string baseFrameName = "base")
+            where TBoneTransformation :
+                IBoneTransformation<TBoneParameters, TKeyframeParameters, TBoneAttributes, TBoneTransformation>, new()
+        {
+            return new AnimationSystem<TBoneParameters, TKeyframeParameters, TBoneAttributes, TBoneTransformation>(
+                this, baseFrameName);
+        }
     }
 }

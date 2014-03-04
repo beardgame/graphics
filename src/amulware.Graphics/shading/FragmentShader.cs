@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
@@ -13,6 +14,15 @@ namespace amulware.Graphics
         /// Initializes a new instance of the <see cref="FragmentShader"/> class.
         /// </summary>
         /// <param name="filename">The file to load the shader from.</param>
-        public FragmentShader(string filename) : base(ShaderType.FragmentShader, filename) { }
+        public FragmentShader(string code) : base(ShaderType.FragmentShader, code) { }
+
+        public static FragmentShader FromFile(string filename)
+        {
+            using (var streamReader = new StreamReader(filename))
+            {
+                string code = streamReader.ReadToEnd();
+                return new FragmentShader(code);
+            }
+        }
     }
 }

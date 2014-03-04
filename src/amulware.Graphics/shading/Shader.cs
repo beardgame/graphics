@@ -16,19 +16,11 @@ namespace amulware.Graphics
         /// </summary>
         public readonly int Handle;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Shader"/> class.
-        /// </summary>
-        /// <param name="type">The type of shader.</param>
-        /// <param name="filename">The file to load the shader from.</param>
-        /// <exception cref="System.ApplicationException">Throws an exception of OpenGL reports an error when compiling the shader.</exception>
-        public Shader(ShaderType type, string filename)
+        public Shader(ShaderType type, string code)
         {
             this.Handle = GL.CreateShader(type);
-            StreamReader streamReader = new StreamReader(filename);
 
-            GL.ShaderSource(this, streamReader.ReadToEnd());
-            streamReader.Close();
+            GL.ShaderSource(this, code);
             GL.CompileShader(this);
 
             // throw exception if compile failed
@@ -38,10 +30,8 @@ namespace amulware.Graphics
             GL.GetShader(this, ShaderParameter.CompileStatus, out status_code);
 
             if (status_code != 1)
-
                 throw new ApplicationException(info);
 
-            //Console.WriteLine(type.ToString() + " created");
         }
 
         /// <summary>

@@ -45,7 +45,7 @@ namespace amulware.Graphics.utilities
 
             if (vMajor < 3)
                 return true;
-            if (sMajor < 2 && sMinor < 3)
+            if (vMajor < 2 && vMinor < 3)
                 return true;
 
             return false;

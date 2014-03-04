@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
@@ -21,14 +21,15 @@ namespace amulware.Graphics
         Dictionary<string, int> attributeLocations = new Dictionary<string, int>();
         Dictionary<string, int> uniformLocations = new Dictionary<string, int>();
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ShaderProgram"/> class.
-        /// </summary>
-        /// <param name="vertexShaderPath">The file to load the vertex shader from.</param>
-        /// <param name="fragmentShaderPath">The file to load the fragment shader from.</param>
-        /// <exception cref="System.ApplicationException">Throws an exception if OpenGL reports an error when linking the linking the shaders to the program.</exception>
-        public ShaderProgram(string vertexShaderPath, string fragmentShaderPath)
-            : this(new VertexShader(vertexShaderPath), new FragmentShader(fragmentShaderPath)) { }
+        public static ShaderProgram FromFiles(string vertexShaderPath, string fragmentShaderPath)
+        {
+            return new ShaderProgram(VertexShader.FromFile(vertexShaderPath), FragmentShader.FromFile(fragmentShaderPath));
+        }
+
+        public static ShaderProgram FromCode(string vertexShaderCode, string fragmentShaderCode)
+        {
+            return new ShaderProgram(new VertexShader(vertexShaderCode), new FragmentShader(fragmentShaderCode));
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ShaderProgram"/> class.
