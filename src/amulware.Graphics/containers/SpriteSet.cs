@@ -57,6 +57,24 @@ namespace amulware.Graphics
             return set;
         }
 
+        static public SpriteSet<TVertexData> FromJsonTextReader(
+            TextReader textReader, Func<IndexedSurface<TVertexData>, UVQuadGeometry<TVertexData>> geometryMaker,
+            ShaderProgram shaderProgram = null, SurfaceSetting[] surfaceSettings = null,
+            Func<string, Texture> textureProvider = null)
+        {
+            if (textureProvider == null)
+                textureProvider = file => new Texture(file);
+
+            var serialiser = new JsonSerializer().ConfigureForGraphics();
+            serialiser.Converters.Add(
+                new SpriteSetConverter<TVertexData>(shaderProgram, surfaceSettings, geometryMaker, textureProvider)
+                    );
+
+            var set = serialiser.Deserialize<SpriteSet<TVertexData>>(new JsonTextReader(textReader));
+
+            return set;
+        }
+
         static public SpriteSet<TVertexData> FromJsonFile(
             string filename, Func<IndexedSurface<TVertexData>, UVQuadGeometry<TVertexData>> geometryMaker,
             ShaderProgram shaderProgram = null, SurfaceSetting[] surfaceSettings = null,
@@ -72,15 +90,8 @@ namespace amulware.Graphics
                 textureProvider = file => providerCopy(Path.Combine(path, file));
             }
 
-            var jsonSettings = new JsonSerializerSettings().ConfigureForGraphics();
-            jsonSettings.Converters.Add(
-                new SpriteSetConverter<TVertexData>(shaderProgram, surfaceSettings, geometryMaker, textureProvider)
-                    );
-
-            var set = JsonConvert.DeserializeObject<SpriteSet<TVertexData>>(
-                File.ReadAllText(filename), jsonSettings);
-
-            return set;
+            return SpriteSet<TVertexData>.FromJsonTextReader(File.OpenText(filename), geometryMaker, shaderProgram,
+                surfaceSettings, textureProvider);
         }
     }
 }

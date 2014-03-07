@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.IO;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
@@ -70,6 +71,76 @@ namespace amulware.Graphics
             this.Height = height;
 
         }
+        
+        public Texture(Stream stream, bool preMultiplyAlpha = false)
+            : this(new Bitmap(stream), preMultiplyAlpha, true)
+        {
+        }
+
+
+        private Texture(Bitmap bitmap, bool preMultiplyAlpha = false, bool disposeBitmap = false)
+        {
+            int tex;
+            GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
+
+            GL.GenTextures(1, out tex);
+            GL.BindTexture(TextureTarget.Texture2D, tex);
+
+            int j = 1;
+            //GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.GenerateMipmap, ref j);
+            //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.GenerateMipmap, 1);
+
+            //glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP_SGIS, GL_TRUE);
+
+
+            this.Handle = tex;
+            this.Width = bitmap.Width;
+            this.Height = bitmap.Height;
+
+            System.Drawing.Imaging.BitmapData data =
+                bitmap.LockBits(new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height),
+                    System.Drawing.Imaging.ImageLockMode.ReadOnly,
+                    System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+            if (preMultiplyAlpha)
+            {
+                int size = data.Width * data.Height * 4;
+                byte[] array = new byte[size];
+                System.Runtime.InteropServices.Marshal.Copy(data.Scan0, array, 0, size);
+                for (int i = 0; i < size; i += 4)
+                {
+                    float alpha = array[i + 3] / 255f;
+                    array[i] = (byte)(array[i] * alpha);
+                    array[i + 1] = (byte)(array[i + 1] * alpha);
+                    array[i + 2] = (byte)(array[i + 2] * alpha);
+                }
+
+                GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, data.Width, data.Height, 0,
+                    OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, array);
+            }
+            else
+            {
+                GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, data.Width, data.Height, 0,
+                    OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
+            }
+
+            bitmap.UnlockBits(data);
+
+            if (disposeBitmap)
+                bitmap.Dispose();
+
+
+            GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
+
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter,
+                (int)TextureMinFilter.LinearMipmapLinear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter,
+                (int)TextureMagFilter.Linear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
+
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Texture"/> class.
@@ -77,79 +148,8 @@ namespace amulware.Graphics
         /// <param name="path">The image file to load.</param>
         /// <param name="preMultiplyAlpha">If true, the colour values of each pixel are multiplied by its alpha value.</param>
         public Texture(string path, bool preMultiplyAlpha = false)
+            : this(new Bitmap(path), preMultiplyAlpha, true)
         {
-            this.Handle = -1;
-            if (System.IO.File.Exists(path))
-            {
-                using (Bitmap bitmap = new Bitmap(path))
-                {
-
-                    int tex;
-                    GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
-
-                    GL.GenTextures(1, out tex);
-                    GL.BindTexture(TextureTarget.Texture2D, tex);
-
-                    int j = 1;
-                    //GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.GenerateMipmap, ref j);
-                    //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.GenerateMipmap, 1);
-
-                    //glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP_SGIS, GL_TRUE);
-
-                    
-
-                    System.Drawing.Imaging.BitmapData data =
-                        bitmap.LockBits(new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height),
-                            System.Drawing.Imaging.ImageLockMode.ReadOnly,
-                            System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-
-                    if (preMultiplyAlpha)
-                    {
-                        int size = data.Width * data.Height * 4;
-                        byte[] array = new byte[size];
-                        System.Runtime.InteropServices.Marshal.Copy(data.Scan0, array, 0, size);
-                        for (int i = 0; i < size; i += 4)
-                        {
-                            float alpha = array[i + 3] / 255f;
-                            array[i] = (byte)(array[i] * alpha);
-                            array[i + 1] = (byte)(array[i + 1] * alpha);
-                            array[i + 2] = (byte)(array[i + 2] * alpha);
-                        }
-
-                        GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, data.Width, data.Height, 0,
-                            OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, array);
-                    }
-                    else
-                    {
-                        GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, data.Width, data.Height, 0,
-                            OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
-                    }
-
-                    bitmap.UnlockBits(data);
-
-                    this.Handle = tex;
-                    this.Width = bitmap.Width;
-                    this.Height = bitmap.Height;
-                }
-
-                GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
-
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter,
-                    (int)TextureMinFilter.LinearMipmapLinear);
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter,
-                    (int)TextureMagFilter.Linear);
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
-
-                GL.BindTexture(TextureTarget.Texture2D, 0);
-
-                //Console.WriteLine("texture loaded");
-            }
-            else
-            {
-                Console.WriteLine("texture not found (" + path + ")");
-            }
-
         }
 
         /// <summary>

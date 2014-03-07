@@ -65,11 +65,18 @@ namespace amulware.Graphics.Animation
 
         public static AnimationTemplate<TBoneParameters, TKeyframeParameters, TBoneAttributes> FromJsonFile(string filename)
         {
+            return AnimationTemplate<TBoneParameters, TKeyframeParameters, TBoneAttributes>.FromJsonTextReader(
+                File.OpenText(filename));
+        }
+
+        public static AnimationTemplate<TBoneParameters, TKeyframeParameters, TBoneAttributes> FromJsonTextReader(
+            TextReader textreader)
+        {
+            var serialiser = new JsonSerializer().ConfigureForGraphics();
+
             return new AnimationTemplate<TBoneParameters, TKeyframeParameters, TBoneAttributes>(
-                JsonConvert.DeserializeObject<AnimationTemplateJsonRepresentation<TKeyframeParameters, TBoneAttributes>>(
-                    File.ReadAllText(filename),
-                    new JsonSerializerSettings().ConfigureForGraphics()
-                    ));
+                serialiser.Deserialize<AnimationTemplateJsonRepresentation<TKeyframeParameters, TBoneAttributes>>(
+                new JsonTextReader(textreader)));
         }
 
         public AnimationSystem<TBoneParameters, TKeyframeParameters, TBoneAttributes, TBoneTransformation>
