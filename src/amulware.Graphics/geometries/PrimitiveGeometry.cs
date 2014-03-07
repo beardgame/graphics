@@ -217,7 +217,8 @@ namespace amulware.Graphics
         /// <param name="filled">if set to <c>true</c> the oval is drawn solid, otherwise it is drawn with the specified line width.</param>
         private void drawOval(float centerX, float centerY, float centerZ, float halfWidth, float halfHeight, int edges, bool filled)
         {
-            throw new NotImplementedException("oval drawing not yet switched to indexed drawing");
+            if (edges < 3)
+                return;
 
             if (filled || this.LineWidth >= halfWidth || this.LineWidth >= halfHeight)
                 this.drawOvalFilled(centerX, centerY, centerZ, halfWidth, halfHeight, edges);
@@ -236,44 +237,38 @@ namespace amulware.Graphics
         /// <param name="edges">The number of edges to draw the oval width.</param>
         private void drawOvalFilled(float centerX, float centerY, float centerZ, float halfWidth, float halfHeight, int edges)
         {
-            edges &= ~1;
-            int parts = Math.Max((edges - 2) / 4, 1);
-            int vertexCount = parts * 8;
+            var vertices = new PrimitiveVertexData[edges];
 
-            PrimitiveVertexData[] vertices = new PrimitiveVertexData[vertexCount];
+            Matrix2 rotation = Matrix2.CreateRotation(MathHelper.TwoPi / edges);
 
-            Matrix2 rotation = Matrix2.CreateRotation(MathHelper.Pi / (parts * 2 + 1));
-
-            Vector2 lastN = new Vector2(-1, 0);
-
-            Vector2 last = new Vector2(lastN.X * halfWidth, lastN.Y * halfHeight);
+            Vector2 xy = new Vector2(0, -1);
 
             Color argb = this.Color;
 
+            vertices[0] = new PrimitiveVertexData(
+                centerX + xy.X * halfWidth, centerY + xy.Y * halfHeight, centerZ, argb);
 
-            for (int i = 0; i < parts; i++)
+            for (int i = 1; i < edges; i++)
             {
-                int j = i * 4;
-                int k = parts * 4 + i * 4;
+                xy = rotation * xy;
 
-                lastN = rotation * lastN;
-
-                Vector2 next = new Vector2(lastN.X * halfWidth, lastN.Y * halfHeight);
-
-                vertices[j + 0] = new PrimitiveVertexData(centerX + last.X, centerY + last.Y, centerZ, argb);
-                vertices[j + 1] = new PrimitiveVertexData(centerX + next.X, centerY + next.Y, centerZ, argb);
-                vertices[j + 2] = new PrimitiveVertexData(centerX - next.X, centerY + next.Y, centerZ, argb);
-                vertices[j + 3] = new PrimitiveVertexData(centerX - last.X, centerY + last.Y, centerZ, argb);
-
-                vertices[k + 0] = new PrimitiveVertexData(centerX + last.X, centerY - last.Y, centerZ, argb);
-                vertices[k + 1] = new PrimitiveVertexData(centerX - last.X, centerY - last.Y, centerZ, argb);
-                vertices[k + 2] = new PrimitiveVertexData(centerX - next.X, centerY - next.Y, centerZ, argb);
-                vertices[k + 3] = new PrimitiveVertexData(centerX + next.X, centerY - next.Y, centerZ, argb);
-
-                last = next;
+                vertices[i] = new PrimitiveVertexData(
+                    centerX + xy.X * halfWidth, centerY + xy.Y * halfHeight, centerZ, argb);
             }
 
-            this.Surface.AddVertices(vertices);
+            ushort offset = this.surface.AddVertices(vertices);
+
+            var ids = new ushort[(edges - 2) * 3];
+
+            for (int i = 0; i < edges - 2; i++)
+            {
+                int o = i * 3;
+                ids[o++] = offset;
+                ids[o++] = (ushort)(offset + i + 1);
+                ids[o] = (ushort)(offset + i + 2);
+            }
+
+            this.surface.AddIndices(ids);
         }
 
         /// <summary>
@@ -287,56 +282,62 @@ namespace amulware.Graphics
         /// <param name="edges">The number of edges to draw the oval width.</param>
         private void drawOvalUnfilled(float centerX, float centerY, float centerZ, float halfWidth, float halfHeight, int edges)
         {
-            int vertexCount = edges * 4;
-
-            PrimitiveVertexData[] vertices = new PrimitiveVertexData[vertexCount];
+            var vertices = new PrimitiveVertexData[edges * 2];
 
             Matrix2 rotation = Matrix2.CreateRotation(MathHelper.TwoPi / edges);
 
-            Vector2 lastN = new Vector2(-1, 0);
-
-            float halfWInner = halfWidth - this.LineWidth;
-            float halfHInner = halfHeight - this.LineWidth;
-
-            Vector2 lastOuter = new Vector2(lastN.X * halfWidth, lastN.Y * halfHeight);
-            Vector2 lastInner = new Vector2(lastN.X * halfWInner, lastN.Y * halfHInner);
+            Vector2 xy = new Vector2(0, -1);
 
             Color argb = this.Color;
 
+            float innerW = halfWidth - this.LineWidth;
+            float innerH = halfHeight - this.LineWidth;
 
-            for (int i = 0; i < edges / 2; i++)
+            vertices[0] = new PrimitiveVertexData(
+                centerX + xy.X * halfWidth, centerY + xy.Y * halfHeight, centerZ, argb);
+
+            vertices[1] = new PrimitiveVertexData(
+                centerX + xy.X * innerW, centerY + xy.Y * innerH, centerZ, argb);
+
+            for (int i = 1; i < edges; i++)
             {
-                int j = i * 4;
+                xy = rotation * xy;
 
-                lastN = rotation * lastN;
+                vertices[2 * i] = new PrimitiveVertexData(
+                    centerX + xy.X * halfWidth, centerY + xy.Y * halfHeight, centerZ, argb);
 
-                Vector2 nextOuter = new Vector2(lastN.X * halfWidth, lastN.Y * halfHeight);
-                Vector2 nextInner = new Vector2(lastN.X * halfWInner, lastN.Y * halfHInner);
-
-                vertices[j + 0] = new PrimitiveVertexData(centerX + lastOuter.X, centerY + lastOuter.Y, centerZ, argb);
-                vertices[j + 1] = new PrimitiveVertexData(centerX + nextOuter.X, centerY + nextOuter.Y, centerZ, argb);
-                vertices[j + 2] = new PrimitiveVertexData(centerX + nextInner.X, centerY + nextInner.Y, centerZ, argb);
-                vertices[j + 3] = new PrimitiveVertexData(centerX + lastInner.X, centerY + lastInner.Y, centerZ, argb);
-
-                vertices[vertexCount - j - 1] = new PrimitiveVertexData(centerX + lastOuter.X, centerY - lastOuter.Y, centerZ, argb);
-                vertices[vertexCount - j - 2] = new PrimitiveVertexData(centerX + nextOuter.X, centerY - nextOuter.Y, centerZ, argb);
-                vertices[vertexCount - j - 3] = new PrimitiveVertexData(centerX + nextInner.X, centerY - nextInner.Y, centerZ, argb);
-                vertices[vertexCount - j - 4] = new PrimitiveVertexData(centerX + lastInner.X, centerY - lastInner.Y, centerZ, argb);
-
-                lastOuter = nextOuter;
-                lastInner = nextInner;
+                vertices[2 * i + 1] = new PrimitiveVertexData(
+                    centerX + xy.X * innerW, centerY + xy.Y * innerH, centerZ, argb);
             }
 
-            if ((edges & 1) != 0)
+            ushort offset = this.surface.AddVertices(vertices);
+
+            var ids = new ushort[edges * 6];
+
+            for (int i = 0; i < edges - 1; i++)
             {
-                int j = (edges / 2) * 4;
-                vertices[j + 0] = new PrimitiveVertexData(centerX + lastInner.X, centerY + lastInner.Y, centerZ, argb);
-                vertices[j + 1] = new PrimitiveVertexData(centerX + lastOuter.X, centerY + lastOuter.Y, centerZ, argb);
-                vertices[j + 2] = new PrimitiveVertexData(centerX + lastOuter.X, centerY - lastOuter.Y, centerZ, argb);
-                vertices[j + 3] = new PrimitiveVertexData(centerX + lastInner.X, centerY - lastInner.Y, centerZ, argb);
+                int j = i * 6;
+                int o = i * 2;
+                ids[j] = (ushort)(offset + o);
+                ids[j + 1] = (ushort)(offset + o + 2);
+                ids[j + 2] = (ushort)(offset + o + 1);
+
+                ids[j + 3] = (ushort)(offset + o + 1);
+                ids[j + 4] = (ushort)(offset + o + 2);
+                ids[j + 5] = (ushort)(offset + o + 3);
             }
 
-            this.Surface.AddVertices(vertices);
+            int lastJ = edges * 6 - 6;
+
+            ids[lastJ] = (ushort)(offset + edges * 2 - 2);
+            ids[lastJ + 1] = (ushort)(offset);
+            ids[lastJ + 2] = (ushort)(offset + edges * 2 - 1);
+
+            ids[lastJ + 3] = (ushort)(offset + edges * 2 - 1);
+            ids[lastJ + 4] = (ushort)(offset);
+            ids[lastJ + 5] = (ushort)(offset + 1);
+
+            this.surface.AddIndices(ids);
         }
         #endregion
 
