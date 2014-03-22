@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Security.AccessControl;
 using amulware.Graphics.Serialization.JsonNet;
 using Newtonsoft.Json;
 
@@ -65,8 +66,10 @@ namespace amulware.Graphics.Animation
 
         public static AnimationTemplate<TBoneParameters, TKeyframeParameters, TBoneAttributes> FromJsonFile(string filename)
         {
-            return AnimationTemplate<TBoneParameters, TKeyframeParameters, TBoneAttributes>.FromJsonTextReader(
-                File.OpenText(filename));
+            using (var reader = File.OpenText(filename))
+            {
+                return AnimationTemplate<TBoneParameters, TKeyframeParameters, TBoneAttributes>.FromJsonTextReader(reader);
+            }
         }
 
         public static AnimationTemplate<TBoneParameters, TKeyframeParameters, TBoneAttributes> FromJsonTextReader(
