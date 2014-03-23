@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.Remoting.Messaging;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
@@ -539,6 +540,20 @@ namespace amulware.Graphics
         public static bool operator !=(Color color1, Color color2)
         {
             return !(color1 == color2);
+        }
+
+        static public Color operator *(Color color, float factor)
+        {
+            return new Color(
+                (byte)(color.R * factor),
+                (byte)(color.G * factor),
+                (byte)(color.B * factor),
+                (byte)(color.A * factor));
+        }
+
+        static public Color operator *(float factor, Color color)
+        {
+            return color * factor;
         }
 
         #endregion
