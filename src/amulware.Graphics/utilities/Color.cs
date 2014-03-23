@@ -502,6 +502,16 @@ namespace amulware.Graphics
 
         #region Methods
 
+        public Color WithAlpha(byte alpha = 0)
+        {
+            return new Color(this, alpha);
+        }
+
+        public Color WithAlpha(float alpha)
+        {
+            return this.WithAlpha((byte)(255 * alpha));
+        }
+
         /// <summary>
         /// Returns a hexadecimal <see cref="System.String" /> that represents this color.
         /// </summary>
@@ -513,6 +523,10 @@ namespace amulware.Graphics
             return "#" + this.ARGB.ToString("X8");
         }
 
+        public static Color GrayScale(byte value, byte alpha = 255)
+        {
+            return new Color(value, value, value, alpha);
+        }
 
         #endregion
 
