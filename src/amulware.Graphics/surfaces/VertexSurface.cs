@@ -28,7 +28,7 @@ namespace amulware.Graphics
         /// Initializes a new instance of the <see cref="VertexSurface{VertexData}"/> class.
         /// </summary>
         /// <param name="primitiveType">Type of the primitives to draw.</param>
-        public VertexSurface(BeginMode primitiveType = BeginMode.Triangles)
+        public VertexSurface(PrimitiveType primitiveType = PrimitiveType.Triangles)
             : base(primitiveType)
         {
             this.isStatic = false;

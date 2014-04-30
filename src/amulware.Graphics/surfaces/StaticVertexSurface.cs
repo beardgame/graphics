@@ -22,9 +22,9 @@ namespace amulware.Graphics
         /// </summary>
         protected IVertexAttributeProvider<TVertexData> vertexAttributeProvider; 
 
-        private readonly BeginMode _beginMode;
+        private readonly PrimitiveType _primitiveType;
 
-        protected BeginMode beginMode { get { return this._beginMode; } }
+        protected PrimitiveType primitiveType { get { return this._primitiveType; } }
 
         /// <summary>
         /// Wether the vertex buffer object is assumed to be static.
@@ -41,9 +41,9 @@ namespace amulware.Graphics
         /// Initializes a new instance of the <see cref="StaticVertexSurface{TVertexData}"/> class.
         /// </summary>
         /// <param name="primitiveType">Type of the primitives to draw</param>
-        public StaticVertexSurface(BeginMode primitiveType = BeginMode.Triangles)
+        public StaticVertexSurface(PrimitiveType primitiveType = PrimitiveType.Triangles)
         {
-            this._beginMode = primitiveType;
+            this._primitiveType = primitiveType;
             this.vertexBuffer = new VertexBuffer<TVertexData>();
             this.vertexAttributeProvider = InternalExtensions.IsInLegacyMode ?
                 (IVertexAttributeProvider<TVertexData>)new LegacyVertexAttributeProvider<TVertexData>()
@@ -84,7 +84,7 @@ namespace amulware.Graphics
             if (upload)
                 this.vertexBuffer.BufferData();
 
-            GL.DrawArrays(this._beginMode, 0, this.vertexBuffer.Count);
+            GL.DrawArrays(this._primitiveType, 0, this.vertexBuffer.Count);
 
             this.vertexAttributeProvider.UnSetVertexData();
 
