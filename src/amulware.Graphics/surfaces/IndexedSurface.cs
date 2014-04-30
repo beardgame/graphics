@@ -18,7 +18,7 @@ namespace amulware.Graphics
         /// Initializes a new instance of the <see cref="IndexedSurface"/> class.
         /// </summary>
         /// <param name="primitiveType">Type of the primitives to draw.</param>
-        public IndexedSurface(BeginMode primitiveType = BeginMode.Triangles)
+        public IndexedSurface(PrimitiveType primitiveType = PrimitiveType.Triangles)
             : base(primitiveType)
         {
             this.indexBuffer = new IndexBuffer();
@@ -70,7 +70,7 @@ namespace amulware.Graphics
                 this.indexBuffer.BufferData();
             }
 
-            GL.DrawElements(this.beginMode, this.indexBuffer.Count, DrawElementsType.UnsignedShort, 0);
+            GL.DrawElements(this.primitiveType, this.indexBuffer.Count, DrawElementsType.UnsignedShort, 0);
 
             this.vertexAttributeProvider.UnSetVertexData();
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);

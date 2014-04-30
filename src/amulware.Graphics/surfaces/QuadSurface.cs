@@ -15,7 +15,7 @@ namespace amulware.Graphics
         /// <summary>
         /// Initializes a new instance of the <see cref="QuadSurface{VertexData}"/> class.
         /// </summary>
-        public QuadSurface() : base(BeginMode.Quads) { }
+        public QuadSurface() : base(PrimitiveType.Quads) { }
 
         /// <summary>
         /// Adds a quad of vertices.
