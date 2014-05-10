@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using OpenTK;
+using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 
 namespace amulware.Graphics
@@ -8,7 +9,7 @@ namespace amulware.Graphics
     /// <summary>
     /// This class represents a GLSL shader program.
     /// </summary>
-    public class ShaderProgram
+    public class ShaderProgram : IDisposable
     {
         VertexShader vertexShader;
         FragmentShader fragmentShader;
@@ -114,5 +115,34 @@ namespace amulware.Graphics
             return program.Handle;
         }
 
+        #region Disposing
+
+        private bool disposed = false;
+
+        public void Dispose()
+        {
+            this.dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void dispose(bool disposing)
+        {
+            if (this.disposed)
+                return;
+
+            if (GraphicsContext.CurrentContext == null || GraphicsContext.CurrentContext.IsDisposed)
+                return;
+            
+            GL.DeleteProgram(this);
+
+            this.disposed = true;
+        }
+
+        ~ShaderProgram()
+        {
+            this.dispose(false);
+        }
+
+        #endregion
     }
 }
