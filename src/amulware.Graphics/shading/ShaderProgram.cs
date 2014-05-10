@@ -9,7 +9,7 @@ namespace amulware.Graphics
     /// <summary>
     /// This class represents a GLSL shader program.
     /// </summary>
-    public class ShaderProgram : IDisposable
+    public class ShaderProgram : IDisposable, ISurfaceShader
     {
         VertexShader vertexShader;
         FragmentShader fragmentShader;
@@ -141,6 +141,11 @@ namespace amulware.Graphics
         ~ShaderProgram()
         {
             this.dispose(false);
+        }
+
+        public void UseOnSurface(Surface surface)
+        {
+            surface.SetShaderProgram(this);
         }
 
         #endregion

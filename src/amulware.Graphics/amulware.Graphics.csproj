@@ -130,6 +130,8 @@
     <Compile Include="Serialization\JsonNet\UVRectangleConverter.cs" />
     <Compile Include="Serialization\JsonNet\Vector2Converter.cs" />
     <Compile Include="shading\FragmentShader.cs" />
+    <Compile Include="shading\ISurfaceShader.cs" />
+    <Compile Include="shading\ShaderProgramRefresher.cs" />
     <Compile Include="shading\Shader.cs" />
     <Compile Include="shading\ShaderProgram.cs" />
     <Compile Include="shading\VertexAttribute.cs" />
