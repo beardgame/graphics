@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.Contracts;
 using System.Runtime.Remoting.Messaging;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
@@ -457,6 +458,12 @@ namespace amulware.Graphics
                 );
         }
 
+        public static Color GrayScale(byte value, byte alpha = 255)
+        {
+            return new Color(value, value, value, alpha);
+        }
+
+
         #endregion
 
         #region Properties
@@ -522,12 +529,6 @@ namespace amulware.Graphics
         {
             return "#" + this.ARGB.ToString("X8");
         }
-
-        public static Color GrayScale(byte value, byte alpha = 255)
-        {
-            return new Color(value, value, value, alpha);
-        }
-
         #endregion
 
 

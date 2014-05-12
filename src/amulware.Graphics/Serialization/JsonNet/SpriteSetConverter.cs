@@ -11,11 +11,11 @@ namespace amulware.Graphics.Serialization.JsonNet
         where TVertexData : struct, IVertexData
     {
         private readonly Func<IndexedSurface<TVertexData>, UVQuadGeometry<TVertexData>> geometryMaker;
-        private readonly ShaderProgram shaderProgram;
+        private readonly ISurfaceShader shaderProgram;
         private readonly SurfaceSetting[] surfaceSettings;
         private readonly Func<string, Texture> textureProvider;
 
-        public SpriteSetConverter(ShaderProgram shaderProgram, SurfaceSetting[] surfaceSettings,
+        public SpriteSetConverter(ISurfaceShader shaderProgram, SurfaceSetting[] surfaceSettings,
             Func<IndexedSurface<TVertexData>, UVQuadGeometry<TVertexData>> geometryMaker, Func<string, Texture> textureProvider = null)
         {
             this.shaderProgram = shaderProgram;

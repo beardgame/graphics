@@ -28,19 +28,19 @@ namespace amulware.Graphics
             }
         }
 
-        public SpriteSet(ShaderProgram shaderProgram, SurfaceSetting[] surfaceSettings)
+        public SpriteSet(ISurfaceShader shaderProgram, SurfaceSetting[] surfaceSettings)
         {
             this.sprites = new Dictionary<string, Sprite<TVertexData>>();
             this.surface = new IndexedSurface<TVertexData>();
             if (surfaceSettings != null)
                 this.surface.AddSettings(surfaceSettings);
             if (shaderProgram != null)
-                this.surface.SetShaderProgram(shaderProgram);
+                shaderProgram.UseOnSurface(this.surface);
         }
 
         public static SpriteSet<TVertexData> Copy<TVertexDataIn>
             (SpriteSet<TVertexDataIn> template, Func<IndexedSurface<TVertexData>, UVQuadGeometry<TVertexData>> geometryMaker,
-            ShaderProgram shaderProgram = null, SurfaceSetting[] surfaceSettings = null, bool keepTextureUniforms = true)
+            ISurfaceShader shaderProgram = null, SurfaceSetting[] surfaceSettings = null, bool keepTextureUniforms = true)
             where TVertexDataIn : struct, IVertexData
         {
             var set = new SpriteSet<TVertexData>(shaderProgram, surfaceSettings);
@@ -59,7 +59,7 @@ namespace amulware.Graphics
 
         static public SpriteSet<TVertexData> FromJsonTextReader(
             TextReader textReader, Func<IndexedSurface<TVertexData>, UVQuadGeometry<TVertexData>> geometryMaker,
-            ShaderProgram shaderProgram = null, SurfaceSetting[] surfaceSettings = null,
+            ISurfaceShader shaderProgram = null, SurfaceSetting[] surfaceSettings = null,
             Func<string, Texture> textureProvider = null)
         {
             if (textureProvider == null)
@@ -77,7 +77,7 @@ namespace amulware.Graphics
 
         static public SpriteSet<TVertexData> FromJsonFile(
             string filename, Func<IndexedSurface<TVertexData>, UVQuadGeometry<TVertexData>> geometryMaker,
-            ShaderProgram shaderProgram = null, SurfaceSetting[] surfaceSettings = null,
+            ISurfaceShader shaderProgram = null, SurfaceSetting[] surfaceSettings = null,
             Func<string, Texture> textureProvider = null, bool texturesRelativeToJson = false)
         {
             if (textureProvider == null)
