@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using Newtonsoft.Json;
 using OpenTK;
@@ -65,10 +65,7 @@ namespace amulware.Graphics.Serialization.JsonNet
                         sizeGiven = true;
                         break;
                     case "rotation":
-                        if (reader.Read() && (reader.TokenType == JsonToken.Integer || reader.TokenType == JsonToken.Float))
-                            rotation = Convert.ToSingle(reader.Value);
-                        else
-                            throw new InvalidDataException("The rotation of a uv rectangle must be a number.");
+                        rotation = serializer.Deserialize<float>(reader);
                         break;
                     default:
                         throw new InvalidDataException(String.Format("Unknown property while deserialising uv rectangle: {0}", propertyName));
