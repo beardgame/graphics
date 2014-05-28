@@ -6,16 +6,16 @@ namespace amulware.Graphics.Charts
     {
         private readonly double originValue;
         private readonly double scale;
-        private readonly float drawThickness;
-        private readonly float length;
+        private readonly float lengthPositive;
+        private readonly float lengthNegative;
         private readonly Color color;
 
-        public AffineAxis(double originValue, double scale, float drawThickness, float length, Color color)
+        public AffineAxis(double originValue, double scale, float lengthPositive, float lengthNegative, Color color)
         {
             this.originValue = originValue;
             this.scale = scale;
-            this.drawThickness = drawThickness;
-            this.length = length;
+            this.lengthPositive = lengthPositive;
+            this.lengthNegative = lengthNegative;
             this.color = color;
         }
 
@@ -32,7 +32,9 @@ namespace amulware.Graphics.Charts
         public void Draw(Chart2DSpriteContainer sprites, Vector2 direction, Vector2 offset)
         {
             sprites.Color = this.color;
-            sprites.DrawLine(offset, offset + direction * this.length, this.drawThickness);
+            sprites.DrawLine(offset - direction * this.lengthNegative,
+                offset + direction * this.lengthPositive,
+                sprites.ThinLineWidth);
         }
     }
 }

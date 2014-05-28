@@ -4,15 +4,14 @@ using OpenTK;
 namespace amulware.Graphics.Charts
 {
     sealed public class PointCloud2D<TPoint> : IChart2DData
+        where TPoint : IPoint2D
     {
-        private readonly List<Point2D<TPoint>> points;
-        private readonly float pointSize;
+        private readonly List<TPoint> points;
         private readonly Color color;
 
-        public PointCloud2D(List<Point2D<TPoint>> points, float pointSize, Color color)
+        public PointCloud2D(List<TPoint> points, Color color)
         {
             this.points = points;
-            this.pointSize = pointSize;
             this.color = color;
         }
 
@@ -23,7 +22,7 @@ namespace amulware.Graphics.Charts
             {
                 var x = (float)axis1.DataToChart(point.Position.X);
                 var y = (float)axis2.DataToChart(point.Position.Y);
-                sprites.DrawPoint(new Vector2(x, y) + offset, this.pointSize);
+                sprites.DrawPoint(new Vector2(x, y) + offset, sprites.LargePointSize);
             }
         }
     }
