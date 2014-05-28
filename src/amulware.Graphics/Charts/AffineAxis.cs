@@ -29,6 +29,21 @@ namespace amulware.Graphics.Charts
             return x / this.scale + this.originValue;
         }
 
+        public double OriginValue
+        {
+            get { return this.originValue; }
+        }
+
+        public double MinValue
+        {
+            get { return this.ChartToData(-this.lengthNegative) - this.originValue; }
+        }
+
+        public double MaxValue
+        {
+            get { return this.ChartToData(this.lengthPositive) - this.originValue; }
+        }
+
         public void Draw(Chart2DSpriteContainer sprites, Vector2 direction, Vector2 offset)
         {
             sprites.Color = this.color;

@@ -1,9 +1,9 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using OpenTK;
 
 namespace amulware.Graphics.Charts
 {
-    public class LineChart2D<TPoint> : DiscreteFunction2D<TPoint>, IChart2DData
+    public class LineChart2D<TPoint> : DiscreteFunction2D<TPoint>, IChart2DComponent
         where TPoint : IPoint2D
     {
         private readonly Color color;

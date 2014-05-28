@@ -1,4 +1,4 @@
-﻿using OpenTK;
+using OpenTK;
 
 namespace amulware.Graphics.Charts
 {
@@ -6,6 +6,10 @@ namespace amulware.Graphics.Charts
     {
         double DataToChart(double x);
         double ChartToData(double x);
+
+        double OriginValue { get; }
+        double MinValue { get; }
+        double MaxValue { get; }
 
         void Draw(Chart2DSpriteContainer sprites, Vector2 direction, Vector2 offset);
     }

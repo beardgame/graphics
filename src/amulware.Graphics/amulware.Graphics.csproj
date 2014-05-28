@@ -111,10 +111,11 @@
     <Compile Include="Charts\Chart2D.cs" />
     <Compile Include="Charts\Chart2DSpriteContainer.cs" />
     <Compile Include="Charts\DiscreteFunction2D.cs" />
+    <Compile Include="Charts\GridLine.cs" />
     <Compile Include="Charts\LineChart2D.cs" />
     <Compile Include="Charts\Grid2D.cs" />
     <Compile Include="Charts\IAxis.cs" />
-    <Compile Include="Charts\IChart2DData.cs" />
+    <Compile Include="Charts\IChart2DComponent.cs" />
     <Compile Include="Charts\Point2D.cs" />
     <Compile Include="Charts\PointCloud2D.cs" />
     <Compile Include="Charts\RegularDiscreteFunction2D.cs" />

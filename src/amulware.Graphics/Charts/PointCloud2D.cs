@@ -3,7 +3,7 @@ using OpenTK;
 
 namespace amulware.Graphics.Charts
 {
-    sealed public class PointCloud2D<TPoint> : IChart2DData
+    sealed public class PointCloud2D<TPoint> : IChart2DComponent
         where TPoint : IPoint2D
     {
         private readonly List<TPoint> points;

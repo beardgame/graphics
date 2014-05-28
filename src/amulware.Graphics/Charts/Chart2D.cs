@@ -10,7 +10,7 @@ namespace amulware.Graphics.Charts
 
         public Grid2D Grid { get; set; }
 
-        public List<IChart2DData> Data { get; set; }
+        public List<IChart2DComponent> Data { get; set; }
 
         public Chart2DSpriteContainer Sprites { get; set; }
 
@@ -18,7 +18,7 @@ namespace amulware.Graphics.Charts
 
         public Chart2D()
         {
-            this.Data = new List<IChart2DData>();
+            this.Data = new List<IChart2DComponent>();
         }
 
 
@@ -28,6 +28,8 @@ namespace amulware.Graphics.Charts
                 data.Draw(this.Sprites, this.Axis1, this.Axis2, this.Offset);
             Axis1.Draw(this.Sprites, Vector2.UnitX, this.Offset);
             Axis2.Draw(this.Sprites, Vector2.UnitY, this.Offset);
+            if(this.Grid != null)
+                this.Grid.Draw(this.Sprites, this.Axis1, this.Axis2, this.Offset);
         }
     }
 }

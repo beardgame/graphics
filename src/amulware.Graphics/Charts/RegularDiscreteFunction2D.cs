@@ -1,11 +1,11 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using OpenTK;
 
 namespace amulware.Graphics.Charts
 {
-    public class RegularDiscreteFunction2D : IChart2DData
+    public class RegularDiscreteFunction2D : IChart2DComponent
     {
         private readonly List<double> values;
         private double drawStepSize = 1f;
