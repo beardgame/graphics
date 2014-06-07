@@ -24,5 +24,10 @@ namespace amulware.Graphics
             foreach (var surface in this.surfaces)
                 surface.SetShaderProgram(program);
         }
+
+        public void RemoveFromSurface(Surface surface)
+        {
+            this.surfaces.Remove(surface);
+        }
     }
 }
