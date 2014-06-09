@@ -25,6 +25,9 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\amulware.Graphics.xml</DocumentationFile>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <WarningsAsErrors>
+    </WarningsAsErrors>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -104,6 +107,18 @@
     <Compile Include="Animation\Keyframe.cs" />
     <Compile Include="Animation\AnimationTemplate.cs" />
     <Compile Include="Animation\FrameTransition.cs" />
+    <Compile Include="Charts\AffineAxis.cs" />
+    <Compile Include="Charts\Chart2D.cs" />
+    <Compile Include="Charts\Chart2DSpriteContainer.cs" />
+    <Compile Include="Charts\DiscreteFunction2D.cs" />
+    <Compile Include="Charts\GridLine.cs" />
+    <Compile Include="Charts\LineChart2D.cs" />
+    <Compile Include="Charts\Grid2D.cs" />
+    <Compile Include="Charts\IAxis.cs" />
+    <Compile Include="Charts\IChart2DComponent.cs" />
+    <Compile Include="Charts\Point2D.cs" />
+    <Compile Include="Charts\PointCloud2D.cs" />
+    <Compile Include="Charts\RegularDiscreteFunction2D.cs" />
     <Compile Include="containers\ISpriteSet.cs" />
     <Compile Include="containers\Sprite.cs" />
     <Compile Include="containers\SpriteSetContainer.cs" />
