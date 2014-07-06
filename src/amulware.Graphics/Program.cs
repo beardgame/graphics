@@ -25,6 +25,7 @@ namespace amulware.Graphics
         private int render_time_interval;
 
         int frames_last_second = 0;
+        private double targetUpdateInterval;
 
         #endregion
 
@@ -172,7 +173,12 @@ namespace amulware.Graphics
         }
 
         #endregion
-        
+
+        public void SetFramesPerSecond(double targetUpdatesPerSecond)
+        {
+            this.targetUpdateInterval = targetUpdatesPerSecond <= 0 ? 0 : 1 / targetUpdatesPerSecond;
+        }
+
         public void Run()
         {
             Run(0.0, 0.0);
@@ -183,7 +189,7 @@ namespace amulware.Graphics
             Run(targetUpdatesPersecond, 0.0);
         }
 
-        public void Run(double targetUpdatesPerSecond, double targetDrawsPerSecond, double maximumFrameTimeFactor = 3)
+        public void Run(double targetUpdatesPerSecond, double targetDrawsPerSecond, double maximumFrameTimeFactor = 3, bool dontOverrideFps = false)
         {
             EnsureUndisposed();
 
@@ -191,12 +197,17 @@ namespace amulware.Graphics
             OnLoadInternal(EventArgs.Empty);
             OnResize(EventArgs.Empty);
 
-            double targetUpdateInterval = targetUpdatesPerSecond <= 0 ? 0 : 1 / targetUpdatesPerSecond;
+            double prevUpdateInterval = this.targetUpdateInterval;
+
+            this.targetUpdateInterval = targetUpdatesPerSecond <= 0 ? 0 : 1 / targetUpdatesPerSecond;
             double targetRenderInterval = targetDrawsPerSecond <= 0 ? 0 : 1 / targetDrawsPerSecond;
 
-            double maximumUpdateInterval = targetUpdateInterval == 0
+            double maximumUpdateInterval = this.targetUpdateInterval == 0
                 ? double.PositiveInfinity
-                : targetUpdateInterval * maximumFrameTimeFactor;
+                : this.targetUpdateInterval * maximumFrameTimeFactor;
+
+            if (dontOverrideFps)
+                this.targetUpdateInterval = prevUpdateInterval;
             
             UpdateEventArgs updateEventArgs = new UpdateEventArgs(0);
 
@@ -242,10 +253,9 @@ namespace amulware.Graphics
                 double timeAfterFrame = gameTimer.Elapsed.TotalSeconds;
 
                 double frameTime = timeAfterFrame - thisTimerTime;
-                double waitTime = targetUpdateInterval - frameTime;
+                double waitTime = this.targetUpdateInterval - frameTime;
                 if (waitTime > 0)
-                    Thread.Sleep(TimeSpan.FromSeconds(waitTime));
-
+                    Thread.Sleep((int)(waitTime * 1000));
             }
         }
         
