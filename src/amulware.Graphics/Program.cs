@@ -174,6 +174,11 @@ namespace amulware.Graphics
 
         #endregion
 
+        public void SetVSync(bool enable)
+        {
+            GraphicsContext.CurrentContext.SwapInterval = enable ? 1 : 0;
+        }
+
         public void SetFramesPerSecond(double targetUpdatesPerSecond)
         {
             this.targetUpdateInterval = targetUpdatesPerSecond <= 0 ? 0 : 1 / targetUpdatesPerSecond;
