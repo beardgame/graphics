@@ -26,6 +26,7 @@ namespace amulware.Graphics
 
         int frames_last_second = 0;
         private double targetUpdateInterval;
+        private bool vsync;
 
         #endregion
 
@@ -177,6 +178,7 @@ namespace amulware.Graphics
         public void SetVSync(bool enable)
         {
             GraphicsContext.CurrentContext.SwapInterval = enable ? 1 : 0;
+            this.vsync = enable;
         }
 
         public void SetFramesPerSecond(double targetUpdatesPerSecond)
@@ -255,12 +257,15 @@ namespace amulware.Graphics
                 else
                     return;
 
-                double timeAfterFrame = gameTimer.Elapsed.TotalSeconds;
+                if (!this.vsync)
+                {
+                    double timeAfterFrame = gameTimer.Elapsed.TotalSeconds;
 
-                double frameTime = timeAfterFrame - thisTimerTime;
-                double waitTime = this.targetUpdateInterval - frameTime;
-                if (waitTime > 0)
-                    Thread.Sleep((int)(waitTime * 1000));
+                    double frameTime = timeAfterFrame - thisTimerTime;
+                    double waitTime = this.targetUpdateInterval - frameTime;
+                    if (waitTime > 0)
+                        Thread.Sleep((int)(waitTime * 1000));
+                }
             }
         }
         
