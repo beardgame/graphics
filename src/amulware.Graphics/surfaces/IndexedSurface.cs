@@ -24,6 +24,11 @@ namespace amulware.Graphics
             this.indexBuffer = new IndexBuffer();
         }
 
+        public int IndexCount
+        {
+            get { return this.indexBuffer.Count; }
+        }
+
         /// <summary>
         /// Adds an index.
         /// </summary>
