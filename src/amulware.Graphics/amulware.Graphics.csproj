@@ -175,6 +175,7 @@
     <Compile Include="utilities\IndexBuffer.cs" />
     <Compile Include="utilities\InternalExtensions.cs" />
     <Compile Include="utilities\Matrix2.cs" />
+    <Compile Include="utilities\OverridingBool.cs" />
     <Compile Include="utilities\RenderTarget.cs" />
     <Compile Include="utilities\Texture.cs" />
     <Compile Include="utilities\UpdateEventArgs.cs" />
@@ -185,6 +186,7 @@
     <Compile Include="vertexdata\PrimitiveVertexData.cs" />
     <Compile Include="vertexdata\SimpleSpriteVertexData.cs" />
     <Compile Include="vertexdata\UVColorVertexData.cs" />
+    <Compile Include="vertexdata\VertexData.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">

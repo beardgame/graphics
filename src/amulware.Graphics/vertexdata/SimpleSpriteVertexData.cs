@@ -1,4 +1,4 @@
-﻿using OpenTK;
+using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
 namespace amulware.Graphics
@@ -61,12 +61,12 @@ namespace amulware.Graphics
 
         static private void setVertexAttributes()
         {
-            SimpleSpriteVertexData.vertexAttributes = new VertexAttribute[]{
-                new VertexAttribute("v_position", 3, VertexAttribPointerType.Float, 32, 0),
-                new VertexAttribute("v_texcoord", 2, VertexAttribPointerType.Float, 32, 12),
-                new VertexAttribute("v_color", 4, VertexAttribPointerType.UnsignedByte, 32, 20, true),
-                new VertexAttribute("v_expand", 2, VertexAttribPointerType.Float, 32, 24),
-            };
+            SimpleSpriteVertexData.vertexAttributes = VertexData.MakeAttributeArray(
+                VertexData.MakeAttributeTemplate<Vector3>("v_position"),
+                VertexData.MakeAttributeTemplate<Vector2>("v_texcoord"),
+                VertexData.MakeAttributeTemplate<Color>("v_color"),
+                VertexData.MakeAttributeTemplate<Vector2>("v_expand")
+                );
         }
 
         /// <summary>
