@@ -1,31 +1,29 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using OpenTK;
 
 namespace amulware.Graphics.Charts
 {
-    public class RegularDiscreteFunction2D : IChart2DComponent
+    public abstract class RegularDiscreteFunction2D<TValue> : IChart2DComponent
     {
-        private readonly List<double> values;
-        private double drawStepSize = 1f;
+        private readonly List<TValue> values;
 
         private int maxNumberOfValues;
-        private double drawOffset;
-        private readonly Color color;
 
-        public RegularDiscreteFunction2D(Color color)
-            :this(Enumerable.Empty<double>(), color)
+        private double drawStepSize = 1f;
+        private double drawOffset;
+
+        protected RegularDiscreteFunction2D()
+            : this(Enumerable.Empty<TValue>())
         {
             
         }
 
-        public RegularDiscreteFunction2D(IEnumerable<double> values, Color color)
+        protected RegularDiscreteFunction2D(IEnumerable<TValue> values)
         {
-            this.color = color;
             this.values = values.ToList();
             this.maxNumberOfValues = this.values.Count;
-            this.AreaTransparency = 0.5f;
         }
 
         public int MaxNumberOfValues
@@ -40,13 +38,7 @@ namespace amulware.Graphics.Charts
             }
         }
 
-        public double DrawStepSize { get { return this.drawStepSize; } set { this.drawStepSize = value; } }
-        public double DrawOffset { get { return this.drawOffset; } set { this.drawOffset = value; } }
-
-        public DrawMode DrawMode { get; set; }
-        public float AreaTransparency { get; set; }
-
-        private void truncateIfNeeded()
+        protected void truncateIfNeeded()
         {
             if (this.values.Count > 16 &&
                 this.values.Count > 2 * this.maxNumberOfValues)
@@ -62,38 +54,81 @@ namespace amulware.Graphics.Charts
                 this.values.TrimExcess();
         }
 
-        public void Add(double value)
+        public void Add(TValue value)
         {
             this.values.Add(value);
             this.truncateIfNeeded();
         }
 
-        protected IEnumerable<double> drawnValues
-        {
-            get
-            {
-                int minI = Math.Max(0, this.values.Count - this.maxNumberOfValues);
-                for (int i = minI; i < this.values.Count; i++)
-                    yield return this.values[i];
-            }
-        }
+        public double DrawStepSize { get { return this.drawStepSize; } set { this.drawStepSize = value; } }
+        public double DrawOffset { get { return this.drawOffset; } set { this.drawOffset = value; } }
 
-        protected IEnumerable<Vector2> drawnPoints(IAxis axis1, IAxis axis2, Vector2 offset)
+        protected IEnumerable<DrawableValue> drawnPoints(IAxis axis1, Vector2 offset)
         {
             int minI = Math.Max(0, this.values.Count - this.maxNumberOfValues);
             int xI = 0;
             for (int i = minI; i < this.values.Count; i++)
             {
-                var x = (float)(axis1.DataToChart(xI * this.drawStepSize) + this.drawOffset);
-                var y = (float)axis2.DataToChart(this.values[i]);
+                var x = (float)(axis1.DataToChart(xI * this.drawStepSize) + this.drawOffset) + offset.X;
+                var v = this.values[i];
 
-                yield return new Vector2(x, y) + offset;
+                yield return new DrawableValue(v, x);
 
                 xI++;
             }
         }
 
-        public void Draw(Chart2DSpriteContainer sprites, IAxis axis1, IAxis axis2, Vector2 offset)
+        protected struct DrawableValue
+        {
+            private readonly TValue value;
+            private readonly float xCoordinate;
+
+            public DrawableValue(TValue value, float xCoordinate) : this()
+            {
+                this.value = value;
+                this.xCoordinate = xCoordinate;
+            }
+
+            public float XCoordinate
+            {
+                get { return this.xCoordinate; }
+            }
+
+            public TValue Value
+            {
+                get { return this.value; }
+            }
+        }
+
+        public abstract void Draw(Chart2DSpriteContainer sprites, IAxis axis1, IAxis axis2, Vector2 offset);
+    }
+
+    public class RegularDiscreteFunction2D : RegularDiscreteFunction2D<double>
+    {
+        private readonly Color color;
+
+        public RegularDiscreteFunction2D(Color color)
+            : this(Enumerable.Empty<double>(), color)
+        {
+        }
+
+        public RegularDiscreteFunction2D(IEnumerable<double> values, Color color)
+            : base(values)
+        {
+            this.color = color;
+            this.AreaTransparency = 0.5f;
+        }
+
+        public DrawMode DrawMode { get; set; }
+        public float AreaTransparency { get; set; }
+
+        private IEnumerable<Vector2> drawnPoints(IAxis axis1, IAxis axis2, Vector2 offset)
+        {
+            return this.drawnPoints(axis1, offset).Select(v =>
+                new Vector2(v.XCoordinate, (float)axis2.DataToChart(v.Value) + offset.Y));
+        }
+
+        public override void Draw(Chart2DSpriteContainer sprites, IAxis axis1, IAxis axis2, Vector2 offset)
         {
             Vector2 previous = default(Vector2);
             bool first = true;
