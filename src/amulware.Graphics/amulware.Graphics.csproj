@@ -119,6 +119,7 @@
     <Compile Include="Charts\Point2D.cs" />
     <Compile Include="Charts\PointCloud2D.cs" />
     <Compile Include="Charts\RegularDiscreteFunction2D.cs" />
+    <Compile Include="Charts\StackingBarChart2D.cs" />
     <Compile Include="containers\ISpriteSet.cs" />
     <Compile Include="containers\Sprite.cs" />
     <Compile Include="containers\SpriteSetContainer.cs" />
