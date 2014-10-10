@@ -152,6 +152,7 @@
     <Compile Include="shading\ShaderProgram.cs" />
     <Compile Include="shading\VertexAttribute.cs" />
     <Compile Include="shading\VertexShader.cs" />
+    <Compile Include="surfaces\BatchedVertexSurface.cs" />
     <Compile Include="surfaces\ExpandingVertexSurface.cs" />
     <Compile Include="surfaces\IndexedSurface.cs" />
     <Compile Include="surfaces\IVertexAttributeProvider.cs" />

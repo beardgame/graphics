@@ -20,18 +20,10 @@ namespace amulware.Graphics
         private int activeBufferIndex;
         private VertexBuffer<TVertexData> activeVertexBuffer;
 
-        private bool staticBufferUploaded;
-
         /// <summary>
         /// Wether to clear vertex buffer after drawing.
         /// </summary>
         public bool ClearOnRender { get; set; }
-
-        /// <summary>
-        /// Set to true to not upload vertices to the GPU with every draw call.
-        /// </summary>
-        public bool IsStatic { get; set; }
-
         
         /// <summary>
         /// Initializes a new instance of the <see cref="ExpandingVertexSurface{TVertexData}"/> class.
@@ -47,7 +39,6 @@ namespace amulware.Graphics
                 { new VertexArray<TVertexData>(this.activeVertexBuffer) };
 
             this.ClearOnRender = true;
-            this.IsStatic = false;
         }
 
         /// <summary>
@@ -76,15 +67,6 @@ namespace amulware.Graphics
             if (this.vertexBuffers[0].Count == 0)
                 return;
 
-            bool upload = true;
-            if (this.IsStatic)
-            {
-                if (this.staticBufferUploaded)
-                    upload = false;
-                else
-                    this.staticBufferUploaded = true;
-            }
-
             for (int i = 0; i < this.vertexBuffers.Count; i++)
             {
                 var vertexBuffer = this.vertexBuffers[i];
@@ -96,8 +78,7 @@ namespace amulware.Graphics
                 GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBuffer);
 
                 vertexArray.SetVertexData();
-                if (upload)
-                    vertexBuffer.BufferData();
+                vertexBuffer.BufferData();
 
                 GL.DrawArrays(this._primitiveType, 0, vertexBuffer.Count);
 
@@ -115,8 +96,6 @@ namespace amulware.Graphics
         {
             this.activeBufferIndex = 0;
             this.activeVertexBuffer = this.vertexBuffers[0];
-
-            this.staticBufferUploaded = false;
 
             foreach (var vertexBuffer in this.vertexBuffers)
             {
@@ -188,7 +167,6 @@ namespace amulware.Graphics
             this.makeBufferSpaceFor(count);
             return this.activeVertexBuffer.WriteVerticesDirectly(count, out offset);
         }
-
 
         /// <summary>
         /// Makes sure the active vertex buffer can handle the given number of new vertices
