@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using OpenTK.Graphics.OpenGL;
 
 namespace amulware.Graphics
@@ -14,7 +14,7 @@ namespace amulware.Graphics
         /// <summary>
         /// Wether to clear vertex buffer after drawing.
         /// </summary>
-        public bool ClearOnRender = true;
+        public bool ClearOnRender { get; set; }
 
         /// <summary>
         /// Set to true to not upload vertices to the GPU with every draw call.
@@ -33,6 +33,7 @@ namespace amulware.Graphics
             : base(primitiveType)
         {
             this.isStatic = false;
+            this.ClearOnRender = true;
         }
 
         /// <summary>

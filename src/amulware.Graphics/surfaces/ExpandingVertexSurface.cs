@@ -20,6 +20,18 @@ namespace amulware.Graphics
         private int activeBufferIndex;
         private VertexBuffer<TVertexData> activeVertexBuffer;
 
+        private bool staticBufferUploaded;
+
+        /// <summary>
+        /// Wether to clear vertex buffer after drawing.
+        /// </summary>
+        public bool ClearOnRender { get; set; }
+
+        /// <summary>
+        /// Set to true to not upload vertices to the GPU with every draw call.
+        /// </summary>
+        public bool IsStatic { get; set; }
+
         
         /// <summary>
         /// Initializes a new instance of the <see cref="ExpandingVertexSurface{TVertexData}"/> class.
@@ -33,6 +45,9 @@ namespace amulware.Graphics
 
             this.vertexArrays = new List<VertexArray<TVertexData>>
                 { new VertexArray<TVertexData>(this.activeVertexBuffer) };
+
+            this.ClearOnRender = true;
+            this.IsStatic = false;
         }
 
         /// <summary>
@@ -61,6 +76,15 @@ namespace amulware.Graphics
             if (this.vertexBuffers[0].Count == 0)
                 return;
 
+            bool upload = true;
+            if (this.IsStatic)
+            {
+                if (this.staticBufferUploaded)
+                    upload = false;
+                else
+                    this.staticBufferUploaded = true;
+            }
+
             for (int i = 0; i < this.vertexBuffers.Count; i++)
             {
                 var vertexBuffer = this.vertexBuffers[i];
@@ -72,20 +96,34 @@ namespace amulware.Graphics
                 GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBuffer);
 
                 vertexArray.SetVertexData();
-                vertexBuffer.BufferData();
+                if (upload)
+                    vertexBuffer.BufferData();
 
                 GL.DrawArrays(this._primitiveType, 0, vertexBuffer.Count);
 
                 vertexArray.UnSetVertexData();
 
-                vertexBuffer.Clear();
             }
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
 
+            if (this.ClearOnRender)
+                this.Clear();
+        }
+
+        private void Clear()
+        {
             this.activeBufferIndex = 0;
             this.activeVertexBuffer = this.vertexBuffers[0];
+
+            this.staticBufferUploaded = false;
+
+            foreach (var vertexBuffer in this.vertexBuffers)
+            {
+                vertexBuffer.Clear();
+            }
         }
+
 
         /// <summary>
         /// Adds a vertex to be drawn.
