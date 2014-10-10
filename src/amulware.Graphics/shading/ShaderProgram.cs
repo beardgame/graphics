@@ -41,6 +41,10 @@ namespace amulware.Graphics
                 GL.AttachShader(this, shader);
             }
             GL.LinkProgram(this);
+            foreach (var shader in shaders)
+            {
+                GL.DetachShader(this, shader);
+            }
 
             // throw exception if linking failed
             int statusCode;
