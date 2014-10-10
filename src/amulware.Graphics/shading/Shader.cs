@@ -24,13 +24,15 @@ namespace amulware.Graphics
             GL.CompileShader(this);
 
             // throw exception if compile failed
-            string info;
-            int status_code;
-            GL.GetShaderInfoLog(this, out info);
-            GL.GetShader(this, ShaderParameter.CompileStatus, out status_code);
+            int statusCode;
+            GL.GetShader(this, ShaderParameter.CompileStatus, out statusCode);
 
-            if (status_code != 1)
-                throw new ApplicationException(info);
+            if (statusCode != 1)
+            {
+                string info;
+                GL.GetShaderInfoLog(this, out info);
+                throw new ApplicationException(string.Format("Could not load shader: {0}", info));
+            }
 
         }
 

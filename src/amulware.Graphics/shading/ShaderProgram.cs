@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 
@@ -11,16 +10,13 @@ namespace amulware.Graphics
     /// </summary>
     public class ShaderProgram : IDisposable, ISurfaceShader
     {
-        VertexShader vertexShader;
-        FragmentShader fragmentShader;
-
         /// <summary>
         /// The GLSL shader program handle
         /// </summary>
         public readonly int Handle;
 
-        Dictionary<string, int> attributeLocations = new Dictionary<string, int>();
-        Dictionary<string, int> uniformLocations = new Dictionary<string, int>();
+        private readonly Dictionary<string, int> attributeLocations = new Dictionary<string, int>();
+        private readonly Dictionary<string, int> uniformLocations = new Dictionary<string, int>();
 
         public static ShaderProgram FromFiles(string vertexShaderPath, string fragmentShaderPath)
         {
@@ -33,33 +29,31 @@ namespace amulware.Graphics
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ShaderProgram"/> class.
+        /// Creates a new shader program.
         /// </summary>
-        /// <param name="vs">The vertex shader.</param>
-        /// <param name="fs">The fragment shader.</param>
-        /// <exception cref="System.ApplicationException">Throws an exception if OpenGL reports an error when linking the linking the shaders to the program.</exception>
-        public ShaderProgram(VertexShader vs, FragmentShader fs)
+        /// <param name="shaders">The different shaders of the program.</param>
+        public ShaderProgram(params Shader[] shaders)
         {
-            this.vertexShader = vs;
-            this.fragmentShader = fs;
-
             this.Handle = GL.CreateProgram();
 
-            GL.AttachShader(this, vs);
-            GL.AttachShader(this, fs);
+            foreach (var shader in shaders)
+            {
+                GL.AttachShader(this, shader);
+            }
             GL.LinkProgram(this);
 
             // throw exception if linking failed
-            string info;
-            int status_code;
-            GL.GetProgramInfoLog(this, out info);
-            GL.GetProgram(this, ProgramParameter.LinkStatus, out status_code);
+            int statusCode;
+            GL.GetProgram(this, GetProgramParameterName.LinkStatus, out statusCode);
 
-            if (status_code != 1)
-                throw new ApplicationException(info);
+            if (statusCode != 1)
+            {
+                string info;
+                GL.GetProgramInfoLog(this, out info);
+                throw new ApplicationException(string.Format("Could not link shader: {0}", info));
+            }
 
             //Console.WriteLine("created shader program");
-
         }
 
         /// <summary>
@@ -117,7 +111,7 @@ namespace amulware.Graphics
 
         #region Disposing
 
-        private bool disposed = false;
+        private bool disposed;
 
         public void Dispose()
         {
