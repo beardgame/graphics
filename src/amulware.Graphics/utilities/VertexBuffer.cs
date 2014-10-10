@@ -1,20 +1,20 @@
 using System;
-using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 
 namespace amulware.Graphics
 {
     /// <summary>
-    /// This class represents and OpenGL vertex buffer
+    /// This class represents and OpenGL vertex buffer object.
     /// </summary>
+    /// <remarks>Note that this object can hold no more than 2^16 vertices.</remarks>
     /// <typeparam name="TVertexData">The type of vertex in the buffer.</typeparam>
     sealed public class VertexBuffer<TVertexData> : IDisposable where TVertexData : struct, IVertexData
     {
         /// <summary>
-        /// The array of vertices
+        /// The array of vertices.
         /// </summary>
-        private TVertexData[] vertices = new TVertexData[1];
+        private TVertexData[] vertices;
 
         /// <summary>
         /// The number of vertices in <see cref="vertices"/>. Can be less than vertices.Length, but not more.
@@ -26,10 +26,15 @@ namespace amulware.Graphics
         /// </summary>
         public ushort Count { get { return this.vertexCount; } }
 
+        /// <summary>
+        /// The size of the underlying array of vertices.
+        /// </summary>
+        public int Capacity { get { return this.vertices.Length; } }
+
         private readonly int handle;
 
         /// <summary>
-        /// The OpenGL vertex buffer object handle
+        /// The OpenGL vertex buffer object handle.
         /// </summary>
         public int Handle { get { return this.handle; } }
 
@@ -41,11 +46,14 @@ namespace amulware.Graphics
         public int VertexSize { get { return this.vertexSize; } }
 
         /// <summary>
-        /// Initialises a new instance of <see cref="VertexBuffer"/>
+        /// Initialises a new instance of <see cref="VertexBuffer"/>.
+        /// <param name="capacity">The initial capacity of the buffer.</param>
         /// </summary>
-        public VertexBuffer()
+        public VertexBuffer(int capacity = 0)
         {
             this.vertexSize = new TVertexData().Size();
+
+            this.vertices = new TVertexData[capacity > 0 ? capacity : 4];
 
             this.handle = GL.GenBuffer();
         }
@@ -61,6 +69,24 @@ namespace amulware.Graphics
                 Array.Resize(ref this.vertices, this.vertices.Length * 2);
             this.vertices[this.vertexCount] = vertex;
             return this.vertexCount++;
+        }
+
+        /// <summary>
+        /// Adds two vertices.
+        /// </summary>
+        /// <returns>Index of first new vertex in vertex buffer.</returns>
+        public ushort AddVertices(TVertexData vertex0, TVertexData vertex1)
+        {
+            ushort oldCount = this.vertexCount;
+            int newCount = oldCount + 2;
+            if (this.vertices.Length <= newCount)
+                Array.Resize(ref this.vertices, Math.Max(this.vertices.Length * 2, newCount));
+            this.vertexCount = (ushort)newCount;
+
+            this.vertices[oldCount] = vertex0;
+            this.vertices[oldCount + 1] = vertex1;
+
+            return oldCount;
         }
 
         /// <summary>
@@ -116,6 +142,33 @@ namespace amulware.Graphics
             Array.Copy(vertices, 0, this.vertices, this.vertexCount, vertices.Length);
             this.vertexCount = (ushort)newCount;
             return oldCount;
+        }
+
+        /// <summary>
+        /// Exposes the underlying array of the vertex buffer directly,
+        /// to allow for faster vertex creation.
+        /// </summary>
+        /// <param name="count">The amount of vertices to write.
+        /// The returned array is guaranteed to have this much space.
+        /// Do not write more than this number of vertices.
+        /// Note also that writing less vertices than specified may result in undefined behaviour.</param>
+        /// <param name="offset">The offset of the first vertex to write to.</param>
+        /// <remarks>Write vertices to the array in the full range [offset, offset + count[.
+        /// Writing more or less or outside that range may result in undefined behaviour.</remarks>
+        /// <returns>The underlying array of vertices to write to. This array is only valid for this single call.
+        /// To copy more vertices, call this method again and use the new return value.</returns>
+        public TVertexData[] WriteVerticesDirectly(int count, out ushort offset)
+        {
+            ushort oldCount = this.vertexCount;
+            int newCount = oldCount + count;
+
+            if (this.vertices.Length <= newCount)
+                Array.Resize(ref this.vertices, Math.Max(this.vertices.Length * 2, newCount));
+
+            this.vertexCount = (ushort)newCount;
+
+            offset = oldCount;
+            return this.vertices;
         }
 
         /// <summary>

@@ -5,10 +5,11 @@ namespace amulware.Graphics
 {
 
     /// <summary>
-    /// Extends <see cref="StaticVertexSurface{Vertexdata}" /> with the ability to add vertices at will.
+    /// Extends <see cref="StaticVertexSurface{TVertexdata}" /> with the ability to add vertices at will.
     /// </summary>
-    /// <typeparam name="VertexData">The <see cref="IVertexData" /> used.</typeparam>
-    public class VertexSurface<VertexData> : StaticVertexSurface<VertexData> where VertexData : struct, IVertexData
+    /// <typeparam name="TVertexData">The <see cref="IVertexData" /> used.</typeparam>
+    public class VertexSurface<TVertexData> : StaticVertexSurface<TVertexData>
+        where TVertexData : struct, IVertexData
     {
         /// <summary>
         /// Wether to clear vertex buffer after drawing.
@@ -39,7 +40,7 @@ namespace amulware.Graphics
         /// </summary>
         /// <param name="vertex">The vertex.</param>
         /// <returns>Index of the vertex in vertex buffer.</returns>
-        public ushort AddVertex(VertexData vertex)
+        public ushort AddVertex(TVertexData vertex)
         {
             return this.vertexBuffer.AddVertex(vertex);
         }
@@ -49,7 +50,7 @@ namespace amulware.Graphics
         /// </summary>
         /// <param name="vertices">The vertices.</param>
         /// <returns>Index of first new vertex in vertex buffer.</returns>
-        public ushort AddVertices(params VertexData[] vertices)
+        public ushort AddVertices(params TVertexData[] vertices)
         {
             return this.vertexBuffer.AddVertices(vertices);
         }
