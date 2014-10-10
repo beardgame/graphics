@@ -13,9 +13,7 @@ namespace amulware.Graphics
         private readonly List<VertexBuffer<TVertexData>> vertexBuffers;
         private readonly List<VertexArray<TVertexData>> vertexArrays;
 
-        private readonly PrimitiveType _primitiveType;
-
-        protected PrimitiveType primitiveType { get { return this._primitiveType; } }
+        private readonly PrimitiveType primitiveType;
 
         private int activeBufferIndex;
         private VertexBuffer<TVertexData> activeVertexBuffer;
@@ -31,7 +29,7 @@ namespace amulware.Graphics
         /// <param name="primitiveType">Type of the primitives to draw</param>
         public ExpandingVertexSurface(PrimitiveType primitiveType = PrimitiveType.Triangles)
         {
-            this._primitiveType = primitiveType;
+            this.primitiveType = primitiveType;
             this.vertexBuffers = new List<VertexBuffer<TVertexData>>
                 { (this.activeVertexBuffer = new VertexBuffer<TVertexData>()) };
 
@@ -43,7 +41,6 @@ namespace amulware.Graphics
 
         /// <summary>
         /// Handles setting up (new) shader program with this surface.
-        /// Calls <see cref="setVertexAttributes"/>.
         /// </summary>
         protected override void onNewShaderProgram()
         {
@@ -80,7 +77,7 @@ namespace amulware.Graphics
                 vertexArray.SetVertexData();
                 vertexBuffer.BufferData();
 
-                GL.DrawArrays(this._primitiveType, 0, vertexBuffer.Count);
+                GL.DrawArrays(this.primitiveType, 0, vertexBuffer.Count);
 
                 vertexArray.UnSetVertexData();
 
@@ -92,7 +89,10 @@ namespace amulware.Graphics
                 this.Clear();
         }
 
-        private void Clear()
+        /// <summary>
+        /// Clears the surface of all vertices.
+        /// </summary>
+        public void Clear()
         {
             this.activeBufferIndex = 0;
             this.activeVertexBuffer = this.vertexBuffers[0];
