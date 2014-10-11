@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 
@@ -33,15 +34,26 @@ namespace amulware.Graphics
         /// </summary>
         /// <param name="shaders">The different shaders of the program.</param>
         public ShaderProgram(params Shader[] shaders)
+            :this((IEnumerable<Shader>)shaders)
+        {
+        }
+
+        /// <summary>
+        /// Creates a new shader program.
+        /// </summary>
+        /// <param name="shaders">The different shaders of the program.</param>
+        public ShaderProgram(IEnumerable<Shader> shaders)
         {
             this.Handle = GL.CreateProgram();
 
-            foreach (var shader in shaders)
+            var enumerable = shaders as IList<Shader> ?? shaders.ToList();
+
+            foreach (var shader in enumerable)
             {
                 GL.AttachShader(this, shader);
             }
             GL.LinkProgram(this);
-            foreach (var shader in shaders)
+            foreach (var shader in enumerable)
             {
                 GL.DetachShader(this, shader);
             }
@@ -56,8 +68,6 @@ namespace amulware.Graphics
                 GL.GetProgramInfoLog(this, out info);
                 throw new ApplicationException(string.Format("Could not link shader: {0}", info));
             }
-
-            //Console.WriteLine("created shader program");
         }
 
         /// <summary>
