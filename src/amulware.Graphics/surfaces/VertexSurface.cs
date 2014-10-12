@@ -55,6 +55,9 @@ namespace amulware.Graphics
         {
             return this.vertexBuffer.AddVertices(vertices);
         }
+        
+        // TODO: REMOVE THIS
+        public VertexBuffer<TVertexData> VertexBuffer { get { return this.vertexBuffer; } }
 
         /// <summary>
         /// Renders the vertex buffer and clears it afterwards, if <see cref="ClearOnRender"/> is set to true.

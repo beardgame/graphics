@@ -160,6 +160,7 @@
     <Compile Include="surfaces\LegacyVertexAttributeProvider.cs" />
     <Compile Include="surfaces\PostProcessSurface.cs" />
     <Compile Include="surfaces\QuadSurface.cs" />
+    <Compile Include="surfaces\settings\ColorUniform.cs" />
     <Compile Include="surfaces\settings\FloatUniform.cs" />
     <Compile Include="surfaces\settings\Matrix4Uniform.cs" />
     <Compile Include="surfaces\settings\SurfaceBlendSetting.cs" />

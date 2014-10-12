@@ -33,7 +33,7 @@ namespace amulware.Graphics
         public Texture()
         {
             int tex;
-            GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
+            //GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
 
             GL.GenTextures(1, out tex);
 
@@ -48,7 +48,7 @@ namespace amulware.Graphics
         public Texture(int width, int height)
         {
             int tex;
-            GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
+            //GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
 
             GL.GenTextures(1, out tex);
             GL.BindTexture(TextureTarget.Texture2D, tex);
@@ -81,7 +81,7 @@ namespace amulware.Graphics
         private Texture(Bitmap bitmap, bool preMultiplyAlpha = false, bool disposeBitmap = false)
         {
             int tex;
-            GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
+            //GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
 
             GL.GenTextures(1, out tex);
             GL.BindTexture(TextureTarget.Texture2D, tex);

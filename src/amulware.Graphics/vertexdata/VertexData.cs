@@ -49,6 +49,11 @@ namespace amulware.Graphics
                 { typeof(Vector3), VertexAttribPointerType.Float.ToInfo(3, false) },
                 { typeof(Vector4), VertexAttribPointerType.Float.ToInfo(4, false) },
 
+                { typeof(Half), VertexAttribPointerType.HalfFloat.ToInfo(1, false) },
+                { typeof(Vector2h), VertexAttribPointerType.HalfFloat.ToInfo(2, false) },
+                { typeof(Vector3h), VertexAttribPointerType.HalfFloat.ToInfo(3, false) },
+                { typeof(Vector4h), VertexAttribPointerType.HalfFloat.ToInfo(4, false) },
+
                 { typeof(byte), VertexAttribPointerType.UnsignedByte.ToInfo(1, true) },
                 { typeof(sbyte), VertexAttribPointerType.Byte.ToInfo(1, true) },
                 

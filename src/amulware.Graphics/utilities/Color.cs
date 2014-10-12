@@ -519,6 +519,16 @@ namespace amulware.Graphics
             return this.WithAlpha((byte)(255 * alpha));
         }
 
+        public Vector4 ToRGBAVector()
+        {
+            return new Vector4(
+                this.R / 255f,
+                this.G / 255f,
+                this.B / 255f,
+                this.A / 255f
+                );
+        }
+
         /// <summary>
         /// Returns a hexadecimal <see cref="System.String" /> that represents this color.
         /// </summary>

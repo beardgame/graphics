@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using OpenTK.Graphics.OpenGL;
 
@@ -11,6 +12,11 @@ namespace amulware.Graphics
 
             private readonly List<SurfaceSetting> settingsSet = new List<SurfaceSetting>();
             private readonly List<SurfaceSetting> settingsUnSet = new List<SurfaceSetting>();
+
+            public Batch()
+            {
+                this.VertexBuffer = new VertexBuffer<TVertexData>();
+            }
 
             /// <summary>
             /// Adds <see cref="SurfaceSetting"/>s to this batch.
@@ -98,9 +104,24 @@ namespace amulware.Graphics
 
         private readonly PrimitiveType primitiveType;
 
+        public int ActiveBatches { get { return this.activeBatches.Count; } }
+
         public BatchedVertexSurface(PrimitiveType primitiveType = PrimitiveType.Triangles)
         {
             this.primitiveType = primitiveType;
+        }
+
+        protected override void onNewShaderProgram()
+        {
+            foreach (var container in this.activeBatches)
+            {
+                container.VertexArray.SetShaderProgram(this.program);
+            }
+
+            foreach (var container in this.unusedBatches)
+            {
+                container.VertexArray.SetShaderProgram(this.program);
+            }
         }
 
         protected override void render()
@@ -118,14 +139,13 @@ namespace amulware.Graphics
                 GL.BindBuffer(BufferTarget.ArrayBuffer, batch.Batch.VertexBuffer);
 
                 batch.VertexArray.SetVertexData();
-                batch.Batch.VertexBuffer.BufferData();
+                batch.Batch.VertexBuffer.BufferData(); // TODO: upload only once?
 
                 GL.DrawArrays(this.primitiveType, 0, batch.Batch.VertexBuffer.Count);
 
                 batch.VertexArray.UnSetVertexData();
 
                 batch.Batch.UnsetAllSettings(this.program);
-
             }
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
@@ -136,6 +156,9 @@ namespace amulware.Graphics
             var batch = this.unusedBatches.Count > 0
                 ? this.unusedBatches.Pop()
                 : BatchContainer.Make();
+
+            if(this.program != null)
+                batch.VertexArray.SetShaderProgram(this.program);
 
             this.activeBatches.Add(batch);
 
@@ -148,6 +171,7 @@ namespace amulware.Graphics
             var batchContainer = this.activeBatches[i];
             this.activeBatches.RemoveAt(i);
             batchContainer.Batch.ClearSettings();
+            batchContainer.Batch.VertexBuffer.Clear();
             this.unusedBatches.Push(batchContainer);
         }
     }
