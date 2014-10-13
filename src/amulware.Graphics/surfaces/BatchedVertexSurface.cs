@@ -13,9 +13,22 @@ namespace amulware.Graphics
             private readonly List<SurfaceSetting> settingsSet = new List<SurfaceSetting>();
             private readonly List<SurfaceSetting> settingsUnSet = new List<SurfaceSetting>();
 
+            public bool NeedsUploading { get; private set; }
+
             public Batch()
             {
                 this.VertexBuffer = new VertexBuffer<TVertexData>();
+            }
+
+            public void MarkAsDirty()
+            {
+                this.NeedsUploading = true;
+            }
+
+            public void BufferData()
+            {
+                this.VertexBuffer.BufferData();
+                this.NeedsUploading = false;
             }
 
             /// <summary>
@@ -139,7 +152,8 @@ namespace amulware.Graphics
                 GL.BindBuffer(BufferTarget.ArrayBuffer, batch.Batch.VertexBuffer);
 
                 batch.VertexArray.SetVertexData();
-                batch.Batch.VertexBuffer.BufferData(); // TODO: upload only once?
+                if(batch.Batch.NeedsUploading)
+                    batch.Batch.BufferData();
 
                 GL.DrawArrays(this.primitiveType, 0, batch.Batch.VertexBuffer.Count);
 
