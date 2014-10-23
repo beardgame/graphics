@@ -15,9 +15,9 @@ namespace amulware.Graphics
 
             public bool NeedsUploading { get; private set; }
 
-            public Batch()
+            public Batch(VertexBuffer<TVertexData> buffer)
             {
-                this.VertexBuffer = new VertexBuffer<TVertexData>();
+                this.VertexBuffer = buffer ?? new VertexBuffer<TVertexData>();
             }
 
             public void MarkAsDirty()
@@ -105,14 +105,23 @@ namespace amulware.Graphics
                 this.Batch = batch;
             }
 
-            public static BatchContainer Make()
+            public static BatchContainer Make(VertexBuffer<TVertexData> buffer)
             {
-                var batch = new Batch();
+                var batch = new Batch(buffer);
                 return new BatchContainer(batch, new VertexArray<TVertexData>(batch.VertexBuffer));
+            }
+
+            public void Delete()
+            {
+                this.VertexArray.Dispose();
+                this.Batch.ClearSettings();
+                this.Batch.VertexBuffer.Clear();
+                this.Batch.VertexBuffer.Dispose();
             }
         }
 
-        private readonly List<BatchContainer> activeBatches = new List<BatchContainer>();
+        private List<BatchContainer> inactiveBatches = new List<BatchContainer>();
+        private List<BatchContainer> activeBatches = new List<BatchContainer>();
         private readonly Stack<BatchContainer> unusedBatches = new Stack<BatchContainer>();
 
         private readonly PrimitiveType primitiveType;
@@ -127,6 +136,11 @@ namespace amulware.Graphics
         protected override void onNewShaderProgram()
         {
             foreach (var container in this.activeBatches)
+            {
+                container.VertexArray.SetShaderProgram(this.program);
+            }
+
+            foreach (var container in this.inactiveBatches)
             {
                 container.VertexArray.SetShaderProgram(this.program);
             }
@@ -165,28 +179,85 @@ namespace amulware.Graphics
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
         }
 
-        public Batch GetEmptyVertexBuffer()
+        public Batch GetEmptyVertexBuffer(bool draw = true)
         {
             var batch = this.unusedBatches.Count > 0
                 ? this.unusedBatches.Pop()
-                : BatchContainer.Make();
+                : BatchContainer.Make(null);
 
-            if(this.program != null)
-                batch.VertexArray.SetShaderProgram(this.program);
-
-            this.activeBatches.Add(batch);
+            this.addBatch(batch, draw);
 
             return batch.Batch;
         }
 
-        public void DeleteVertexBuffer(Batch batch)
+        public Batch AdoptVertexBuffer(VertexBuffer<TVertexData> buffer, bool draw = true)
         {
-            var i = this.activeBatches.FindIndex(b => b.Batch == batch);
-            var batchContainer = this.activeBatches[i];
-            this.activeBatches.RemoveAt(i);
-            batchContainer.Batch.ClearSettings();
-            batchContainer.Batch.VertexBuffer.Clear();
-            this.unusedBatches.Push(batchContainer);
+            var batch = BatchContainer.Make(buffer);
+
+            this.addBatch(batch, draw);
+
+            return batch.Batch;
+        }
+
+        private void addBatch(BatchContainer batch, bool draw)
+        {
+            if (this.program != null)
+                batch.VertexArray.SetShaderProgram(this.program);
+
+            (draw ? this.activeBatches : this.inactiveBatches).Add(batch);
+        }
+
+        public void ActivateVertexBuffer(Batch batch)
+        {
+            this.moveBetweenLists(this.activeBatches, this.inactiveBatches, batch);
+        }
+
+        public void InactivateVertexBuffer(Batch batch)
+        {
+            this.moveBetweenLists(this.inactiveBatches, this.activeBatches, batch);
+        }
+
+        private void moveBetweenLists(List<BatchContainer> list, List<BatchContainer> list2, Batch batch)
+        {
+            var i = list.FindIndex(b => b.Batch == batch);
+            var batchContainer = list[i];
+            list.RemoveAt(i);
+
+            list2.Add(batchContainer);
+        }
+
+        public void SwapActiveAndInactiveBuffers()
+        {
+            var temp = this.inactiveBatches;
+            this.inactiveBatches = this.activeBatches;
+            this.activeBatches = temp;
+        }
+
+        public void DeleteVertexBuffer(Batch batch, bool cacheForLater = true)
+        {
+            this.deleteFromList(this.activeBatches, batch, cacheForLater);
+        }
+
+        public void DeleteInactiveVertexBuffer(Batch batch, bool cacheForLater = true)
+        {
+            this.deleteFromList(this.inactiveBatches, batch, cacheForLater);
+        }
+
+        private void deleteFromList(List<BatchContainer> list, Batch batch, bool cacheForLater)
+        {
+            var i = list.FindIndex(b => b.Batch == batch);
+            var batchContainer = list[i];
+            list.RemoveAt(i);
+            if (cacheForLater)
+            {
+                batchContainer.Batch.ClearSettings();
+                batchContainer.Batch.VertexBuffer.Clear();
+                this.unusedBatches.Push(batchContainer);
+            }
+            else
+            {
+                batchContainer.Delete();
+            }
         }
     }
 }

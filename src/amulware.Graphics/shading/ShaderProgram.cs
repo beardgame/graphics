@@ -34,15 +34,25 @@ namespace amulware.Graphics
         /// </summary>
         /// <param name="shaders">The different shaders of the program.</param>
         public ShaderProgram(params Shader[] shaders)
-            :this((IEnumerable<Shader>)shaders)
+            :this(null, (IEnumerable<Shader>)shaders)
+        {
+        }
+        public ShaderProgram(IEnumerable<Shader> shaders)
+            : this(null, shaders)
+        {
+        }
+
+        public ShaderProgram(Action<ShaderProgram> preLinkAction, params Shader[] shaders)
+            : this(preLinkAction, (IEnumerable<Shader>)shaders)
         {
         }
 
         /// <summary>
         /// Creates a new shader program.
         /// </summary>
+        /// <param name="preLinkAction">An action to perform before linking the shader program.</param>
         /// <param name="shaders">The different shaders of the program.</param>
-        public ShaderProgram(IEnumerable<Shader> shaders)
+        public ShaderProgram(Action<ShaderProgram> preLinkAction, IEnumerable<Shader> shaders)
         {
             this.Handle = GL.CreateProgram();
 
@@ -52,6 +62,10 @@ namespace amulware.Graphics
             {
                 GL.AttachShader(this, shader);
             }
+
+            if (preLinkAction != null)
+                preLinkAction(this);
+
             GL.LinkProgram(this);
             foreach (var shader in enumerable)
             {

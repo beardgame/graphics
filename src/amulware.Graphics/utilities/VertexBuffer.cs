@@ -182,6 +182,17 @@ namespace amulware.Graphics
         }
 
         /// <summary>
+        /// Reserve a number of bytes in GPU memory for this vertex buffer
+        /// </summary>
+        /// <param name="bytes">The amount of bytes reserved</param>
+        /// <param name="target">The target</param>
+        /// <param name="usageHint">The usage hint</param>
+        public void BufferNoData(int bytes, BufferTarget target = BufferTarget.ArrayBuffer, BufferUsageHint usageHint = BufferUsageHint.StreamDraw)
+        {
+            GL.BufferData(target, (IntPtr)bytes, IntPtr.Zero, usageHint);
+        }
+
+        /// <summary>
         /// Clears the vertex buffer.
         /// </summary>
         public void Clear()

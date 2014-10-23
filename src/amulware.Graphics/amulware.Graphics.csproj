@@ -160,6 +160,7 @@
     <Compile Include="surfaces\LegacyVertexAttributeProvider.cs" />
     <Compile Include="surfaces\PostProcessSurface.cs" />
     <Compile Include="surfaces\QuadSurface.cs" />
+    <Compile Include="surfaces\settings\ActionSurfaceSetting.cs" />
     <Compile Include="surfaces\settings\ColorUniform.cs" />
     <Compile Include="surfaces\settings\FloatUniform.cs" />
     <Compile Include="surfaces\settings\Matrix4Uniform.cs" />
@@ -197,7 +198,8 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\..\binaries\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="OpenTK">
+    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\binaries\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
