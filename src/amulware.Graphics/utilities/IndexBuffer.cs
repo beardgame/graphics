@@ -58,6 +58,16 @@ namespace amulware.Graphics
             this.indexCount = newCount;
         }
 
+        public ushort[] WriteIndicesDirectly(int count, out int offset)
+        {
+            int newCount = this.indexCount + count;
+            if (this.indices.Length <= newCount)
+                Array.Resize(ref this.indices, Math.Max(this.indices.Length * 2, newCount));
+            offset = this.indexCount;
+            this.indexCount = newCount;
+            return this.indices;
+        }
+
         /// <summary>
         /// Uploads the index buffer to the GPU
         /// </summary>
@@ -111,5 +121,6 @@ namespace amulware.Graphics
         }
 
         #endregion
+
     }
 }

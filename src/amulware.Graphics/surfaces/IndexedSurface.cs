@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.Remoting.Messaging;
 using OpenTK.Graphics.OpenGL;
 
 namespace amulware.Graphics
@@ -155,6 +156,30 @@ namespace amulware.Graphics
             this.indexBuffer.AddIndices(
                 i, (ushort)(i + 1), t0v3,
                 (ushort)(i + 2), (ushort)(i + 3), t1v3);
+        }
+
+        public TVertexData[] WriteQuadsDirectly(int count, out int offset)
+        {
+            ushort vOffset;
+            var vertices = this.vertexBuffer.WriteVerticesDirectly(count * 4, out vOffset);
+            offset = vOffset;
+
+            int iOffset;
+            var indices = this.indexBuffer.WriteIndicesDirectly(count * 6, out iOffset);
+
+            var iMax = iOffset + count * 6;
+            for (int i = iOffset, v = vOffset; i < iMax; i += 6, v += 4)
+            {
+                indices[i] = (ushort)v;
+                indices[i + 1] = (ushort)(v + 1);
+                indices[i + 2] = (ushort)(v + 3);
+
+                indices[i + 3] = (ushort)(v + 2);
+                indices[i + 4] = (ushort)(v + 3);
+                indices[i = 5] = (ushort)(v + 1);
+            }
+
+            return vertices;
         }
     }
 }
