@@ -1,4 +1,5 @@
 ﻿using OpenTK;
+using OpenTK.Graphics.OpenGL;
 
 namespace amulware.Graphics.Charts
 {
@@ -10,6 +11,7 @@ namespace amulware.Graphics.Charts
         private readonly IndexedSurface<UVColorVertexData> surface;
         private readonly UVRectangle quadUV;
 
+        private readonly VertexSurface<FastChart2DBarVertex> fastBarSurface; 
 
         public float ThinLineWidth { get; set; }
         public float ThickLineWidth { get; set; }
@@ -19,7 +21,8 @@ namespace amulware.Graphics.Charts
 
         public Color Color { get; set; }
 
-        public Chart2DSpriteContainer(SpriteSet<UVColorVertexData> sprites, FontGeometry fontGeo)
+        public Chart2DSpriteContainer(SpriteSet<UVColorVertexData> sprites, FontGeometry fontGeo,
+            VertexSurface<FastChart2DBarVertex> fastBarSurface = null)
         {
             this.line = (Sprite2DGeometry)sprites["line"].Geometry;
             this.point = (Sprite2DGeometry)sprites["point"].Geometry;
@@ -35,8 +38,26 @@ namespace amulware.Graphics.Charts
             this.SmallPointSize = 0.03f;
             this.LargePointSize = 0.1f;
             this.Color = Color.DeepPink;
+
+            if (fastBarSurface != null)
+            {
+                this.fastBarSurface = fastBarSurface;
+                this.fastBarSurface.AddSettings(sprites.Surface.Settings);
+                this.fastBarSurface.AddSettings(
+                    new Vector2Uniform("uv01", this.quadUV.TopLeft),
+                    new Vector2Uniform("uv11", this.quadUV.TopRight),
+                    new Vector2Uniform("uv00", this.quadUV.BottomLeft),
+                    new Vector2Uniform("uv10", this.quadUV.BottomRight)
+                    );
+            }
         }
 
+        public bool CanDrawBarsFast { get { return this.fastBarSurface != null; } }
+
+        public FastChart2DBarVertex[] DrawFastBars(int count, out ushort offset)
+        {
+            return this.fastBarSurface.WriteVerticesDirectly(count, out offset);
+        }
 
         public void DrawLine(Vector2 from, Vector2 to, float thickness = 1)
         {

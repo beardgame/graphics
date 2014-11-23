@@ -187,6 +187,7 @@
     <Compile Include="utilities\UpdateEventArgs.cs" />
     <Compile Include="utilities\UVRectangle.cs" />
     <Compile Include="utilities\VertexBuffer.cs" />
+    <Compile Include="vertexdata\FastChart2DBarVertex.cs" />
     <Compile Include="vertexdata\IVertexData.cs" />
     <Compile Include="vertexdata\PostProcessVertexData.cs" />
     <Compile Include="vertexdata\PrimitiveVertexData.cs" />
