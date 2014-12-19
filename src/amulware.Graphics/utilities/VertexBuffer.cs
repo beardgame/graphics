@@ -171,6 +171,13 @@ namespace amulware.Graphics
             return this.vertices;
         }
 
+        public void RemoveVertices(int count)
+        {
+            this.vertexCount = count > this.vertexCount
+                ? (ushort)0
+                : (ushort)(this.vertexCount - count);
+        }
+
         /// <summary>
         /// Uploads the vertex buffer to the GPU
         /// </summary>
