@@ -191,12 +191,16 @@ namespace amulware.Graphics
         /// <summary>
         /// Reserve a number of bytes in GPU memory for this vertex buffer
         /// </summary>
-        /// <param name="bytes">The amount of bytes reserved</param>
+        /// <param name="vertexCount">The amount of vertices reserved</param>
         /// <param name="target">The target</param>
         /// <param name="usageHint">The usage hint</param>
-        public void BufferNoData(int bytes, BufferTarget target = BufferTarget.ArrayBuffer, BufferUsageHint usageHint = BufferUsageHint.StreamDraw)
+        /// <param name="setVertexCount">Whether to set the given vertex count as size of this vertex buffer</param>
+        public void BufferNoData(int vertexCount, BufferTarget target = BufferTarget.ArrayBuffer,
+            BufferUsageHint usageHint = BufferUsageHint.StreamDraw, bool setVertexCount = false)
         {
-            GL.BufferData(target, (IntPtr)bytes, IntPtr.Zero, usageHint);
+            GL.BufferData(target, (IntPtr)(this.vertexSize * vertexCount), IntPtr.Zero, usageHint);
+            if (setVertexCount)
+                this.vertexCount = (ushort)vertexCount;
         }
 
         /// <summary>
