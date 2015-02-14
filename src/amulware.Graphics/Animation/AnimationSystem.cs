@@ -45,11 +45,12 @@ namespace amulware.Graphics.Animation
             this.baseParameters = new TBoneParameters[this.skeleton.Count];
             this.parameters = new TBoneParameters[this.skeleton.Count];
 
+            var defaultParams = default(TBoneParameters);
+            defaultParams.SetToDefault();
+
             for (int i = 0; i < this.baseParameters.Length; i++)
             {
-                TBoneParameters parameter = this.baseParameters[i];
-                parameter.SetToDefault();
-                this.baseParameters[i] = parameter;
+                this.baseParameters[i] = defaultParams;
             }
 
             Keyframe<TBoneParameters, TKeyframeParameters, TBoneAttributes> baseFrame;

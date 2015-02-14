@@ -30,7 +30,7 @@ namespace amulware.Graphics.Animation
             this.Offset = Vector3.Zero;
             this.AngleX = 0;
             this.AngleY = 0;
-            this.AngleY = 0;
+            this.AngleZ = 0;
             this.Scale = 1;
         }
 
