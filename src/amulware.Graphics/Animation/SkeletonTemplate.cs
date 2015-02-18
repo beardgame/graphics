@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using amulware.Graphics.utilities;
 
 namespace amulware.Graphics.Animation
 {

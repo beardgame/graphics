@@ -7,7 +7,7 @@ namespace amulware.Graphics
     /// <summary>
     /// Geometry that draws ASCII strings
     /// </summary>
-    public class FontGeometry : Geometry<UVColorVertexData>
+    public class FontGeometry
     {
         /// <summary>
         /// The color to draw with
@@ -42,7 +42,7 @@ namespace amulware.Graphics
             }
         }
 
-        public new IndexedSurface<UVColorVertexData> Surface { get; private set; }
+        public IndexedSurface<UVColorVertexData> Surface { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FontGeometry"/> class.
@@ -50,7 +50,6 @@ namespace amulware.Graphics
         /// <param name="surface">The surface to use for drawing</param>
         /// <param name="font">The <see cref="Font"/> used</param>
         public FontGeometry(IndexedSurface<UVColorVertexData> surface, Font font)
-            : base(surface)
         {
             this.Surface = surface;
             this.Font = font;

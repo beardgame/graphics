@@ -40,10 +40,10 @@ namespace amulware.Graphics
             if (angle != 0)
             {
                 Matrix2 rotation = Matrix2.CreateRotation(angle);
-                topLeft = rotation * topLeft;
-                topRight = rotation * topRight;
-                bottomLeft = rotation * bottomLeft;
-                bottomRight = rotation * bottomRight;
+                topLeft = rotation.Times(topLeft);
+                topRight = rotation.Times(topRight);
+                bottomLeft = rotation.Times(bottomLeft);
+                bottomRight = rotation.Times(bottomRight);
             }
             this.Surface.AddQuad(
                 new UVColorVertexData(position.X + topLeft.X, position.Y + topLeft.Y, position.Z, this.UV.TopLeft, this.Color),

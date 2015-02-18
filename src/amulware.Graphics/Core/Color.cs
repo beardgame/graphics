@@ -14,25 +14,24 @@ namespace amulware.Graphics
     /// </remarks>
     public struct Color
     {
-
         #region Properties
 
         /// <summary>
         /// The colour's red value
         /// </summary>
-        public byte R;
+        public readonly byte R;
         /// <summary>
         /// The colour's green value
         /// </summary>
-        public byte G;
+        public readonly byte G;
         /// <summary>
         /// The colour's blue value
         /// </summary>
-        public byte B;
+        public readonly byte B;
         /// <summary>
         /// The colour's alpha value (0 = fully transparent, 255 = fully opaque)
         /// </summary>
-        public byte A;
+        public readonly byte A;
 
         #endregion
 
@@ -325,21 +324,13 @@ namespace amulware.Graphics
         #region Constructors
 
         /// <summary>
-        /// Constructs a fully opaque colour from a red, green and blue value
-        /// </summary>
-        /// <param name="r">the red value</param>
-        /// <param name="g">the green value</param>
-        /// <param name="b">the blue value</param>
-        public Color(byte r, byte g, byte b) : this(r, g, b, 255) { }
-
-        /// <summary>
         /// Constructs a colour from a red, green, blue and alpha value
         /// </summary>
         /// <param name="r">the red value</param>
         /// <param name="g">the green value</param>
         /// <param name="b">the blue value</param>
         /// <param name="a">the alpha value</param>
-        public Color(byte r, byte g, byte b, byte a)
+        public Color(byte r, byte g, byte b, byte a = 255)
         {
             this.R = r;
             this.G = g;
@@ -478,12 +469,7 @@ namespace amulware.Graphics
                 return ((uint)this.A << 24)
                     | ((uint)this.R << 16)
                     | ((uint)this.G << 8)
-                    | ((uint)this.B);
-            }
-
-            set
-            {
-                this = new Color(value);
+                    | this.B;
             }
         }
 
@@ -582,6 +568,30 @@ namespace amulware.Graphics
         }
 
         #endregion
+
+
+        public bool Equals(Color other)
+        {
+            return this.R == other.R && this.G == other.G && this.B == other.B && this.A == other.A;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            return obj is Color && Equals((Color)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hashCode = this.R.GetHashCode();
+                hashCode = (hashCode * 397) ^ this.G.GetHashCode();
+                hashCode = (hashCode * 397) ^ this.B.GetHashCode();
+                hashCode = (hashCode * 397) ^ this.A.GetHashCode();
+                return hashCode;
+            }
+        }
 
     }
 }

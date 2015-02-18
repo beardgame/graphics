@@ -22,20 +22,6 @@ namespace amulware.Graphics
         {
         }
 
-        /// <summary>
-        /// Draws a sprite.
-        /// </summary>
-        /// <param name="position">The coordinates to draw the sprite at. The sprite is drawn centered around this point.</param>
-        public void DrawSprite(Vector3 position)
-        {
-            this.Surface.AddQuad(
-                new SimpleSpriteVertexData(position, this.UV.TopLeft, this.Color, -this.expandX, this.expandY),
-                new SimpleSpriteVertexData(position, this.UV.TopRight, this.Color, this.expandX, this.expandY),
-                new SimpleSpriteVertexData(position, this.UV.BottomRight, this.Color, this.expandX, -this.expandY),
-                new SimpleSpriteVertexData(position, this.UV.BottomLeft, this.Color, -this.expandX, -this.expandY)
-                );
-        }
-
         public override void DrawSprite(Vector3 position, float angle, float scale)
         {
             Vector2 expand1 = new Vector2(expandX, expandY) * scale;
@@ -44,8 +30,8 @@ namespace amulware.Graphics
             if (angle != 0)
             {
                 Matrix2 rotation = Matrix2.CreateRotation(angle);
-                expand1 = rotation * expand1;
-                expand2 = rotation * expand2;
+                expand1 = rotation.Times(expand1);
+                expand2 = rotation.Times(expand2);
             }
 
             this.Surface.AddQuad(

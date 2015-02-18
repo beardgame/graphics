@@ -51,7 +51,7 @@ namespace amulware.Graphics.Animation
             {
                 var t = parent.Transformation;
                 this.angleGlobal = t.angleGlobal + this.parameters.Angle;
-                this.offsetGlobal = t.offsetGlobal + t.rotationGlobal * this.parameters.Offset;
+                this.offsetGlobal = t.offsetGlobal + t.rotationGlobal.Times(this.parameters.Offset);
                 this.rotationGlobal = t.rotationGlobal * this.rotationLocal;
                 this.scaleGlobal = t.ScaleGlobal * this.parameters.Scale;
             }

@@ -9,7 +9,7 @@ namespace amulware.Graphics
     /// <summary>
     /// Geometry used for drawing of coloured primitives like rectangles and lines.
     /// </summary>
-     sealed public class PrimitiveGeometry : Geometry<PrimitiveVertexData>
+     sealed public class PrimitiveGeometry
     {
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace amulware.Graphics
         /// Initializes a new instance of the <see cref="PrimitiveGeometry"/> class.
         /// </summary>
         /// <param name="surface">The surface used for drawing.</param>
-        public PrimitiveGeometry(IndexedSurface<PrimitiveVertexData> surface) : base(surface)
+        public PrimitiveGeometry(IndexedSurface<PrimitiveVertexData> surface)
         {
             this.surface = surface;
         }
@@ -250,7 +250,7 @@ namespace amulware.Graphics
 
             for (int i = 1; i < edges; i++)
             {
-                xy = rotation * xy;
+                xy = rotation.Times(xy);
 
                 vertices[i] = new PrimitiveVertexData(
                     centerX + xy.X * halfWidth, centerY + xy.Y * halfHeight, centerZ, argb);
@@ -301,7 +301,7 @@ namespace amulware.Graphics
 
             for (int i = 1; i < edges; i++)
             {
-                xy = rotation * xy;
+                xy = rotation.Times(xy);
 
                 vertices[2 * i] = new PrimitiveVertexData(
                     centerX + xy.X * halfWidth, centerY + xy.Y * halfHeight, centerZ, argb);

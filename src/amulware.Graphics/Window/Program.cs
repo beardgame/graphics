@@ -20,11 +20,6 @@ namespace amulware.Graphics
 
         bool isExiting = false;
 
-        private int next_render_time = 0;
-        private int update_time_interval;
-        private int render_time_interval;
-
-        int frames_last_second = 0;
         private double targetUpdateInterval;
         private bool vsync;
 
@@ -75,7 +70,6 @@ namespace amulware.Graphics
                 base.Dispose();
                 throw;
             }
-            this.Context.VSync = false; // disable vsync
         }
 
         #endregion

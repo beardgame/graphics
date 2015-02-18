@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
@@ -163,10 +163,10 @@ namespace amulware.Graphics
         public void Rotate(float angle, Vector2 center)
         {
             Matrix2 m = Matrix2.CreateRotation(angle);
-            this.TopLeft = center + m * (this.TopLeft - center);
-            this.TopRight = center + m * (this.TopRight - center);
-            this.BottomLeft = center + m * (this.BottomLeft - center);
-            this.BottomRight = center + m * (this.BottomRight - center);
+            this.TopLeft = center + m.Times(this.TopLeft - center);
+            this.TopRight = center + m.Times(this.TopRight - center);
+            this.BottomLeft = center + m.Times(this.BottomLeft - center);
+            this.BottomRight = center + m.Times(this.BottomRight - center);
         }
 
         /// <summary>

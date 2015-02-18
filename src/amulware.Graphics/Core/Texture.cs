@@ -86,7 +86,7 @@ namespace amulware.Graphics
             GL.GenTextures(1, out tex);
             GL.BindTexture(TextureTarget.Texture2D, tex);
 
-            int j = 1;
+            //int j = 1;
             //GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.GenerateMipmap, ref j);
             //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.GenerateMipmap, 1);
 

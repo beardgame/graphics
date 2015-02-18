@@ -1,9 +1,26 @@
+using System.Collections.Generic;
+using System.Linq;
 using OpenTK;
 
 namespace amulware.Graphics
 {
     static public class Extensions
     {
+
+        internal static bool IsNullOrEmpty<T>(this IEnumerable<T> source)
+        {
+            return source == null || !source.Any();
+        }
+
+
+        public static Vector2 Times(this Matrix2 matrix, Vector2 vector)
+        {
+            return new Vector2(
+                matrix.M11 * vector.X + matrix.M12 * vector.Y,
+                matrix.M21 * vector.X + matrix.M22 * vector.Y
+                );
+        }
+
         public static Vector3 Times(this Matrix3 matrix, Vector3 vector)
         {
             return new Vector3(
@@ -12,7 +29,6 @@ namespace amulware.Graphics
                 matrix.M31 * vector.X + matrix.M32 * vector.Y + matrix.M33 * vector.Z
                 );
         }
-
 
         public static Matrix3 ScaleBy(this Matrix3 matrix, float scale)
         {

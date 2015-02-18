@@ -3,7 +3,7 @@ using System;
 
 namespace amulware.Graphics
 {
-    public abstract class UVQuadGeometry<TVertexData> : Geometry<TVertexData>, IQuadGeometry
+    public abstract class UVQuadGeometry<TVertexData> : IQuadGeometry
         where TVertexData : struct, IVertexData
     {
         /// <summary>
@@ -32,7 +32,7 @@ namespace amulware.Graphics
         protected float expandX;
         protected float expandY;
 
-        new public IndexedSurface<TVertexData> Surface { get; private set; } 
+        public IndexedSurface<TVertexData> Surface { get; private set; } 
 
         /// <summary>
         /// The <see cref="UVRectangle"/> used to map the sprite with. Obtain from <see cref="Texture.GrabUV"/>
@@ -40,7 +40,6 @@ namespace amulware.Graphics
         public UVRectangle UV { get; set; }
 
         public UVQuadGeometry(IndexedSurface<TVertexData> surface)
-            : base(surface)
         {
             this.Size = Vector2.One;
             this.LineWidth = 1;

@@ -1,4 +1,3 @@
-using amulware.Graphics.utilities;
 using OpenTK.Graphics.OpenGL;
 
 namespace amulware.Graphics
@@ -42,9 +41,7 @@ namespace amulware.Graphics
         {
             this._primitiveType = primitiveType;
             this.vertexBuffer = new VertexBuffer<TVertexData>();
-            this.vertexAttributeProvider = InternalExtensions.IsInLegacyMode ?
-                (IVertexAttributeProvider<TVertexData>)new LegacyVertexAttributeProvider<TVertexData>()
-                : new VertexArray<TVertexData>(this.vertexBuffer);
+            this.vertexAttributeProvider = new VertexArray<TVertexData>(this.vertexBuffer);
         }
 
         /// <summary>

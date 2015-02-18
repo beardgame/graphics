@@ -35,30 +35,28 @@ namespace amulware.Graphics.Serialization.JsonNet
             {
                 if (reader.Read() && reader.TokenType == JsonToken.Integer)
                 {
-                    Color argb = default(Color);
-                    argb.R = Convert.ToByte(reader.Value);
+                    byte r = Convert.ToByte(reader.Value);
 
                     if (reader.Read() && reader.TokenType == JsonToken.Integer)
                     {
-                        argb.G = Convert.ToByte(reader.Value);
+                        byte g = Convert.ToByte(reader.Value);
 
                         if (reader.Read() && reader.TokenType == JsonToken.Integer)
                         {
-                            argb.B = Convert.ToByte(reader.Value);
+                            byte b = Convert.ToByte(reader.Value);
 
                             if (reader.Read())
                             {
                                 if (reader.TokenType == JsonToken.Integer)
                                 {
-                                    argb.A = Convert.ToByte(reader.Value);
+                                    byte a = Convert.ToByte(reader.Value);
                                     if (reader.Read() && reader.TokenType == JsonToken.EndArray)
-                                        return argb;
+                                        return new Color(r, g, b, a);
                                 }
 
                                 if (reader.TokenType == JsonToken.EndArray)
                                 {
-                                    argb.A = 255;
-                                    return argb;
+                                    return new Color(r, g, b);
                                 }
                             }
                         }

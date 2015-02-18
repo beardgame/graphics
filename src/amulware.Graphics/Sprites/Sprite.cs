@@ -57,7 +57,7 @@ namespace amulware.Graphics
     public class Sprite<TVertexData> : Sprite
         where TVertexData : struct, IVertexData
     {
-        new private readonly UVQuadGeometry<TVertexData> geometry;
+        private readonly UVQuadGeometry<TVertexData> geometry;
 
         new public UVQuadGeometry<TVertexData> Geometry { get { return this.geometry; } }
 

@@ -182,11 +182,6 @@ namespace amulware.Graphics
             return vertices;
         }
 
-        public TVertexData[] WriteVerticesDirectly(int count, out ushort offset)
-        {
-            return this.vertexBuffer.WriteVerticesDirectly(count, out offset);
-        }
-
         public ushort[] WriteIndicesDirectly(int count, out int offset)
         {
             return this.indexBuffer.WriteIndicesDirectly(count, out offset);

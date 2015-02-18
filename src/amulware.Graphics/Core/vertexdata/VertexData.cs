@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security.Policy;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
@@ -88,24 +89,18 @@ namespace amulware.Graphics
         #endregion
 
         #region MakeAttributeTemplate()
-        public static IAttributeTemplate MakeAttributeTemplate<T>(string name,
-            OverridingBool normalize = default(OverridingBool))
+        public static IAttributeTemplate MakeAttributeTemplate<T>(string name, bool? normalize = null)
         {
-            AttribTypeInfo info;
-            if (!knownTypes.TryGetValue(typeof(T), out info))
-                throw new Exception(string.Format("Unknown type: {0}", typeof(T).Name));
-
-            return MakeAttributeTemplate(name, info.Type, info.Count, normalize.OrDefault(info.DefaultNormalize));
+            return MakeAttributeTemplate(name, typeof (T), normalize);
         }
 
-        public static IAttributeTemplate MakeAttributeTemplate(string name, Type type,
-            OverridingBool normalize = default(OverridingBool))
+        public static IAttributeTemplate MakeAttributeTemplate(string name, Type type, bool? normalize = null)
         {
             AttribTypeInfo info;
             if(!knownTypes.TryGetValue(type, out info))
                 throw new Exception(string.Format("Unknown type: {0}", type.Name));
 
-            return MakeAttributeTemplate(name, info.Type, info.Count, normalize.OrDefault(info.DefaultNormalize));
+            return MakeAttributeTemplate(name, info.Type, info.Count, normalize ?? info.DefaultNormalize);
         }
 
         public static IAttributeTemplate MakeAttributeTemplate(string name, VertexAttribPointerType type,
