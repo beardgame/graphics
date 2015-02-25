@@ -2,7 +2,6 @@
 *.csproj.user
 obj/
 bin/
-libs/
 docs/
 notes/
 doxwarnings.log
