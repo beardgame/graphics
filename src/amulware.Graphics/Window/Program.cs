@@ -198,6 +198,26 @@ namespace amulware.Graphics
             OnLoadInternal(EventArgs.Empty);
             OnResize(EventArgs.Empty);
 
+            this.Context.MakeCurrent(null);
+
+            var glThread = new Thread(() =>
+                this.run(targetUpdatesPerSecond, targetDrawsPerSecond, maximumFrameTimeFactor, dontOverrideFps)
+                );
+
+
+            glThread.Start();
+
+            while (this.Exists && !this.IsExiting)
+            {
+                this.ProcessEvents();
+                Thread.Sleep(2);
+            }
+        }
+
+        private void run(double targetUpdatesPerSecond, double targetDrawsPerSecond, double maximumFrameTimeFactor = 3, bool dontOverrideFps = false)
+        {
+            this.Context.MakeCurrent(this.WindowInfo);
+
             double prevUpdateInterval = this.targetUpdateInterval;
 
             this.targetUpdateInterval = targetUpdatesPerSecond <= 0 ? 0 : 1 / targetUpdatesPerSecond;
@@ -209,7 +229,7 @@ namespace amulware.Graphics
 
             if (dontOverrideFps)
                 this.targetUpdateInterval = prevUpdateInterval;
-            
+
             UpdateEventArgs updateEventArgs = new UpdateEventArgs(0);
 
             double lastTimerTime = 0;
@@ -233,7 +253,7 @@ namespace amulware.Graphics
                 gameSeconds += updateSeconds;
 
 
-                this.ProcessEvents();
+                //this.ProcessEvents();
                 if (this.Exists && !this.IsExiting)
                 {
                     // update
