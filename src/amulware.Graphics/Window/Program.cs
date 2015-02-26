@@ -212,6 +212,8 @@ namespace amulware.Graphics
                 this.ProcessEvents();
                 Thread.Sleep(2);
             }
+
+            glThread.Abort();
         }
 
         private void run(double targetUpdatesPerSecond, double targetDrawsPerSecond, double maximumFrameTimeFactor = 3, bool dontOverrideFps = false)
