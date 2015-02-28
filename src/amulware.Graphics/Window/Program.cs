@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Diagnostics;
 using System.Collections.Generic;
+using Bearded.Utilities.Threading;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
@@ -207,13 +208,22 @@ namespace amulware.Graphics
 
             glThread.Start();
 
+            this.eventHandleLoop();
+
+            glThread.Abort();
+        }
+
+        private readonly ManualActionQueue uiQueue = new ManualActionQueue();
+
+        public IActionQueue UIActionQueue { get { return this.uiQueue; } }
+
+        private void eventHandleLoop()
+        {
             while (this.Exists && !this.IsExiting)
             {
                 this.ProcessEvents();
-                Thread.Sleep(2);
+                this.uiQueue.ExecuteFor(TimeSpan.FromMilliseconds(2));
             }
-
-            glThread.Abort();
         }
 
         private void run(double targetUpdatesPerSecond, double targetDrawsPerSecond, double maximumFrameTimeFactor = 3, bool dontOverrideFps = false)
