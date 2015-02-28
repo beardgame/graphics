@@ -202,6 +202,12 @@
   <ItemGroup>
     <Folder Include="Debug\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\libs\utilities\src\Bearded.Utilities.csproj">
+      <Project>{2f580b9d-6255-4427-8395-5ef236c9401c}</Project>
+      <Name>Bearded.Utilities</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
