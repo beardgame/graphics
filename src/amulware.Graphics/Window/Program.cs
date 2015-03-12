@@ -5,13 +5,12 @@ using System.Collections.Generic;
 using Bearded.Utilities.Threading;
 using OpenTK;
 using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using OpenTK.Platform;
 
 namespace amulware.Graphics
 {
-    public class Program : NativeWindow, IGameWindow, IDisposable
+    public class Program : NativeWindow, IGameWindow
     {
         #region --- Fields ---
 

@@ -133,6 +133,8 @@
     <Compile Include="Sprites\Simple\UVQuadGeometry.cs" />
     <Compile Include="Sprites\Simple\Sprite2DGeometry.cs" />
     <Compile Include="Sprites\Simple\Sprite3DGeometry.cs" />
+    <Compile Include="Utilities\ShaderFile.cs" />
+    <Compile Include="Utilities\ShaderManager.cs" />
     <Compile Include="Window\Program.cs" />
     <Compile Include="Serialization\JsonNet\Converters.cs" />
     <Compile Include="Serialization\JsonNet\Extensions.cs" />
