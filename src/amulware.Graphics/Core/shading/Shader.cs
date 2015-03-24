@@ -11,6 +11,8 @@ namespace amulware.Graphics
     /// </summary>
     public abstract class Shader : IDisposable
     {
+        private readonly ShaderType type;
+
         /// <summary>
         /// The GLSL shader object handle.
         /// </summary>
@@ -18,6 +20,7 @@ namespace amulware.Graphics
 
         public Shader(ShaderType type, string code)
         {
+            this.type = type;
             this.Handle = GL.CreateShader(type);
 
             GL.ShaderSource(this, code);

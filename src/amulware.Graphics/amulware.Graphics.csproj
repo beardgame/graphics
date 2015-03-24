@@ -120,6 +120,14 @@
     <Compile Include="Charts\PointCloud2D.cs" />
     <Compile Include="Charts\RegularDiscreteFunction2D.cs" />
     <Compile Include="Charts\StackingBarChart2D.cs" />
+    <Compile Include="ShaderManagement\IShaderReloader.cs" />
+    <Compile Include="ShaderManagement\ReloadableShader.cs" />
+    <Compile Include="ShaderManagement\ReloadableShaderProgram.cs" />
+    <Compile Include="ShaderManagement\ReplaceableShaderProgram.cs" />
+    <Compile Include="ShaderManagement\ShaderFile.cs" />
+    <Compile Include="ShaderManagement\ShaderManager.cs" />
+    <Compile Include="ShaderManagement\ShaderReloader.cs" />
+    <Compile Include="ShaderManagement\ShaderSource.cs" />
     <Compile Include="Sprites\ISpriteSet.cs" />
     <Compile Include="Sprites\Sprite.cs" />
     <Compile Include="Sprites\SpriteSetContainer.cs" />
@@ -133,8 +141,6 @@
     <Compile Include="Sprites\Simple\UVQuadGeometry.cs" />
     <Compile Include="Sprites\Simple\Sprite2DGeometry.cs" />
     <Compile Include="Sprites\Simple\Sprite3DGeometry.cs" />
-    <Compile Include="Utilities\ShaderFile.cs" />
-    <Compile Include="Utilities\ShaderManager.cs" />
     <Compile Include="Window\Program.cs" />
     <Compile Include="Serialization\JsonNet\Converters.cs" />
     <Compile Include="Serialization\JsonNet\Extensions.cs" />
@@ -149,7 +155,6 @@
     <Compile Include="Core\shading\GeometryShader.cs" />
     <Compile Include="Core\shading\FragmentShader.cs" />
     <Compile Include="Core\shading\ISurfaceShader.cs" />
-    <Compile Include="Core\shading\ShaderProgramRefresher.cs" />
     <Compile Include="Core\shading\Shader.cs" />
     <Compile Include="Core\shading\ShaderProgram.cs" />
     <Compile Include="Core\shading\VertexAttribute.cs" />
@@ -196,13 +201,14 @@
       <HintPath>..\..\libs\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK">
-      <HintPath>..\..\libs\OpenTK.dll</HintPath>
+      <HintPath>..\..\libs\utilities\libs\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Debug\" />
+    <Folder Include="Utilities\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\libs\utilities\src\Bearded.Utilities.csproj">
