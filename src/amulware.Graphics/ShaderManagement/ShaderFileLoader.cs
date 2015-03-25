@@ -80,15 +80,18 @@ namespace amulware.Graphics.ShaderManagement
 
             if (this.canBlindlyLoadVS)
             {
-                shaders.AddRange(this.load(ShaderType.VertexShader, searchPath, searchPattern, searchOption));
+                shaders.AddRange(this.load(ShaderType.VertexShader,
+                    searchPath, searchPattern + this.vsExtension, searchOption));
             }
             if (this.canBlindlyLoadFS)
             {
-                shaders.AddRange(this.load(ShaderType.FragmentShader, searchPath, searchPattern, searchOption));
+                shaders.AddRange(this.load(ShaderType.FragmentShader,
+                    searchPath, searchPattern + this.fsExtension, searchOption));
             }
             if (this.canBlindlyLoadGS)
             {
-                shaders.AddRange(this.load(ShaderType.GeometryShader, searchPath, searchPattern, searchOption));
+                shaders.AddRange(this.load(ShaderType.GeometryShader,
+                    searchPath, searchPattern + this.gsExtension, searchOption));
             }
 
             return shaders;
