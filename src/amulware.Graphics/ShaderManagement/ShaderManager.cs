@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using OpenTK.Graphics.OpenGL;
 
 namespace amulware.Graphics.ShaderManagement
@@ -23,21 +24,150 @@ namespace amulware.Graphics.ShaderManagement
         private readonly Dictionary<ReloadableShader, List<ReloadableShaderProgram>> programsByShader
             = new Dictionary<ReloadableShader, List<ReloadableShaderProgram>>();
 
+        private readonly HashSet<ReloadableShader> reloadedShaders = new HashSet<ReloadableShader>();
+
+        public enum ReloadReport
+        {
+            None = 0,
+            Overview,
+            Detailed
+        }
+
+        public ReloadReport ReloadReportType { get; set; }
+
         #region TryReload()
 
         public void TryReloadAll()
         {
-            // TODO: implement
+            foreach (var shader in this.shaders.Values.SelectMany(d => d.Values))
+            {
+                if (this.tryReloadShader(shader))
+                    this.reloadedShaders.Add(shader);
+            }
+
+            if (this.reloadedShaders.Count == 0)
+                return;
+
+            var reloadedPrograms = programs.Values.Count(this.tryReloadProgramIfContainsReloadedShaders);
+
+            this.reloadedShaders.Clear();
         }
 
-        public void TryReload(string shaderProgramName)
+        public void TryReload(string shaderProgramName, bool reloadProgramsSharingShaders = true)
         {
-            // TODO: implement
+            ReloadableShaderProgram program;
+            if(!this.programs.TryGetValue(shaderProgramName, out program))
+                throw new ArgumentException(string.Format("Shader program with name '{0}' not found.", shaderProgramName));
+
+            HashSet<ReloadableShaderProgram> programsToReload = null;
+
+            if(reloadProgramsSharingShaders)
+                programsToReload = new HashSet<ReloadableShaderProgram>();
+
+            var reloadedAny = false;
+
+            foreach (var shader in program.Shaders)
+            {
+                if (!this.tryReloadShader(shader))
+                    continue;
+
+                reloadedAny = true;
+                if (reloadProgramsSharingShaders)
+                {
+                    foreach (var p in this.programsByShader[shader])
+                    {
+                        programsToReload.Add(p);
+                    }
+                }
+                else
+                {
+                    // make sure shader is marked reloaded for next TryReloadAll call
+                    this.reloadedShaders.Add(shader);
+                }
+            }
+
+            if (reloadedAny)
+            {
+                var reloadedPrograms = 0;
+                if (reloadProgramsSharingShaders)
+                {
+                    reloadedPrograms = programsToReload.Count(this.tryReloadProgram);
+                }
+                else
+                {
+                    if (this.tryReloadProgram(program))
+                        reloadedPrograms = 1;
+                }
+            }
         }
 
         public void TryReload(ShaderType type, string shaderName)
         {
-            // TODO: implement
+            var shader = this[type, shaderName];
+
+            if(shader == null)
+                throw new ArgumentException(string.Format("{0} with name '{1}' not found.", type, shaderName));
+
+            if(!this.tryReloadShader(shader))
+                return;
+
+            // remove in case it was added earlier to avoid double reloading
+            this.reloadedShaders.Remove(shader);
+
+            // shader was reloaded successfully, attempt to reload programs
+
+            List<ReloadableShaderProgram> programs;
+            this.programsByShader.TryGetValue(shader, out programs);
+
+            if (programs == null)
+                // shader has no programs
+                return;
+
+            var reloadedPrograms = programs.Count(this.tryReloadProgram);
+        }
+
+
+        private bool tryReloadProgram(ReloadableShaderProgram program)
+        {       
+            try
+            {
+                program.Reload();
+                
+                return true;
+            }
+            catch (Exception e)
+            {
+                // linking program with new shader failed
+            }
+            return false;
+        }
+
+        private bool tryReloadProgramIfContainsReloadedShaders(ReloadableShaderProgram program)
+        {
+            try
+            {
+                program.ReloadIfContainsAny(this.reloadedShaders);
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                // linking program with new shader failed
+            }
+            return false;
+        }
+
+        private bool tryReloadShader(ReloadableShader shader)
+        {
+            try
+            {
+                return shader.TryReload();
+            }
+            catch (Exception e)
+            {
+                // reloading shader failed, probably invalid file or code
+            }
+            return false;
         }
 
         #endregion
@@ -129,7 +259,7 @@ namespace amulware.Graphics.ShaderManagement
             }
         }
 
-        public ReloadableShader this[string shaderName, ShaderType type]
+        public ReloadableShader this[ShaderType type, string shaderName]
         {
             get
             {
@@ -166,7 +296,7 @@ namespace amulware.Graphics.ShaderManagement
 
             public ProgramBuilder With(ShaderType type, string shaderName)
             {
-                var shader = this.manager[shaderName, type];
+                var shader = this.manager[type, shaderName];
                 if(shader == null)
                     throw new ArgumentException(string.Format("{0} with name '{1}' not found.", type, shaderName));
                 return this.With(shader);
