@@ -44,6 +44,11 @@ namespace amulware.Graphics.ShaderManagement
 
         #region Add()
 
+        public void Add(ShaderFile shaderFile)
+        {
+            this.Add(shaderFile, shaderFile.FriendlyName);
+        }
+
         public void Add(IShaderReloader shader, string name)
         {
             this.Add(new ReloadableShader(shader), name);

@@ -125,6 +125,7 @@
     <Compile Include="ShaderManagement\ReloadableShaderProgram.cs" />
     <Compile Include="ShaderManagement\ReplaceableShaderProgram.cs" />
     <Compile Include="ShaderManagement\ShaderFile.cs" />
+    <Compile Include="ShaderManagement\ShaderFileLoader.cs" />
     <Compile Include="ShaderManagement\ShaderManager.cs" />
     <Compile Include="ShaderManagement\ShaderReloader.cs" />
     <Compile Include="ShaderManagement\ShaderSource.cs" />
