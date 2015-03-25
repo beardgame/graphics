@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -41,6 +41,8 @@ namespace amulware.Graphics.ShaderManagement
             this.canBlindlyLoadAnything = this.canBlindlyLoadFS || this.canBlindlyLoadVS || this.canBlindlyLoadGS;
         }
 
+        #region Load()
+
         public ShaderFile Load(string fileName, ShaderType shaderType)
         {
             var path = Path.Combine(this.pathPrefix, fileName);
@@ -48,21 +50,6 @@ namespace amulware.Graphics.ShaderManagement
                 path = this.appendExtension(path, shaderType);
             
             return new ShaderFile(shaderType, path, fileName);
-        }
-
-        private string appendExtension(string path, ShaderType shaderType)
-        {
-            switch (shaderType)
-            {
-                case ShaderType.FragmentShader:
-                    return path + this.fsExtension;
-                case ShaderType.VertexShader:
-                    return path + this.vsExtension;
-                case ShaderType.GeometryShader:
-                    return path + this.gsExtension;
-                default:
-                    throw new ArgumentOutOfRangeException("shaderType");
-            }
         }
 
         public IEnumerable<ShaderFile> Load(string path, string searchPattern = "*", bool searchRecursive = true)
@@ -97,6 +84,10 @@ namespace amulware.Graphics.ShaderManagement
             return shaders;
         }
 
+        #endregion
+
+        #region private methods
+
         private IEnumerable<ShaderFile> load(ShaderType type, string searchPath,
             string searchPattern, SearchOption searchOption)
         {
@@ -110,6 +101,23 @@ namespace amulware.Graphics.ShaderManagement
         {
             return Path.ChangeExtension(fullPath.Replace(@"\", "/").Substring(prefix.Length), null);
         }
+
+        private string appendExtension(string path, ShaderType shaderType)
+        {
+            switch (shaderType)
+            {
+                case ShaderType.FragmentShader:
+                    return path + this.fsExtension;
+                case ShaderType.VertexShader:
+                    return path + this.vsExtension;
+                case ShaderType.GeometryShader:
+                    return path + this.gsExtension;
+                default:
+                    throw new ArgumentOutOfRangeException("shaderType");
+            }
+        }
+
+        #endregion
 
         #region Building
 
