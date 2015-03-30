@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using OpenTK.Graphics.OpenGL;
 
 namespace amulware.Graphics.ShaderManagement
 {
-    sealed class ShaderManager
+    sealed public class ShaderManager
     {
         private readonly Dictionary<ReloadableShader, string> shaderNames
             = new Dictionary<ReloadableShader, string>();
@@ -173,6 +173,14 @@ namespace amulware.Graphics.ShaderManagement
         #endregion
 
         #region Add()
+
+        public void Add(IEnumerable<ShaderFile> shaderFiles)
+        {
+            foreach (var file in shaderFiles)
+            {
+                this.Add(file);
+            }
+        }
 
         public void Add(ShaderFile shaderFile)
         {

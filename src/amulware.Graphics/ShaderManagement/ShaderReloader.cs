@@ -3,7 +3,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace amulware.Graphics.ShaderManagement
 {
-    abstract class ShaderReloader : IShaderReloader
+    abstract public class ShaderReloader : IShaderReloader
     {
         private readonly ShaderType type;
         public ShaderType Type { get { return this.type; } }

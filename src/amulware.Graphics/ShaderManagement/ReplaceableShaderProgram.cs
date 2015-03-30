@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace amulware.Graphics.ShaderManagement
 {
-    sealed class ReplaceableShaderProgram : ISurfaceShader
+    sealed public class ReplaceableShaderProgram : ISurfaceShader
     {
         private ShaderProgram program;
         private readonly List<Surface> surfaces = new List<Surface>();
