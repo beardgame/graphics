@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace amulware.Graphics.ShaderManagement
 {
-    sealed class ReloadableShaderProgram : ISurfaceShader
+    sealed public class ReloadableShaderProgram : ISurfaceShader
     {
         private readonly ReadOnlyCollection<ReloadableShader> shaders;
         private readonly ReplaceableShaderProgram program = new ReplaceableShaderProgram(null);

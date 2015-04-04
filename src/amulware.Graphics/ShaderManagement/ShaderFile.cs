@@ -4,7 +4,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace amulware.Graphics.ShaderManagement
 {
-    sealed class ShaderFile : ShaderReloader
+    sealed public class ShaderFile : ShaderReloader
     {
         private readonly string filename;
         private readonly string friendlyName;

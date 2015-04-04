@@ -2,7 +2,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace amulware.Graphics.ShaderManagement
 {
-    interface IShaderReloader
+    public interface IShaderReloader
     {
         bool ChangedSinceLastLoad { get; }
         ShaderType Type { get; }

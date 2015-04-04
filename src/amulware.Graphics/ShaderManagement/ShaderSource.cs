@@ -2,7 +2,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace amulware.Graphics.ShaderManagement
 {
-    sealed class ShaderSource : ShaderReloader
+    sealed public class ShaderSource : ShaderReloader
     {
         private string source;
         private bool changed;

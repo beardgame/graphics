@@ -7,7 +7,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace amulware.Graphics.ShaderManagement
 {
-    sealed class ShaderFileLoader
+    sealed public class ShaderFileLoader
     {
         private readonly string pathPrefix;
         private readonly string vsExtension;

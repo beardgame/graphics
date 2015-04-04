@@ -3,7 +3,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace amulware.Graphics.ShaderManagement
 {
-    sealed class ReloadableShader
+    sealed public class ReloadableShader
     {
         private readonly IShaderReloader reloader;
 
@@ -12,6 +12,7 @@ namespace amulware.Graphics.ShaderManagement
         public ReloadableShader(IShaderReloader reloader)
         {
             this.reloader = reloader;
+            this.shader = reloader.Load();
         }
 
         public ShaderType Type
