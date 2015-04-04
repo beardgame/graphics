@@ -1,12 +1,19 @@
-﻿using System;
+using System;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Diagnostics;
 using System.Collections.Generic;
 using Bearded.Utilities.Threading;
 using OpenTK;
 using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using OpenTK.Platform;
+using Encoder = System.Drawing.Imaging.Encoder;
+using PixelFormat = OpenTK.Graphics.OpenGL.PixelFormat;
 
 namespace amulware.Graphics
 {
@@ -302,6 +309,99 @@ namespace amulware.Graphics
         {
             EnsureUndisposed();
             this.Context.SwapBuffers();
+        }
+
+        public Bitmap GrabScreenshot()
+        {
+            var size = this.ClientSize;
+
+            return this.GrabScreenshot(0, 0, size.Width, size.Height);
+        }
+        public Bitmap GrabScreenshot(int x, int y, int width, int height)
+        {
+            var bmp = new Bitmap(width, height);
+
+            System.Drawing.Imaging.BitmapData data = bmp.LockBits(new System.Drawing.Rectangle(0, 0, width, height),
+                System.Drawing.Imaging.ImageLockMode.WriteOnly,
+                System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            GL.ReadPixels(x, y, width, height, PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
+            bmp.UnlockBits(data);
+
+            bmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
+
+            return bmp;
+        }
+
+        public void SaveScreenshot(
+            string path, string filename = "screenshot",
+            bool saveAsPng = true, bool appendDate = true)
+        {
+            var size = this.ClientSize;
+
+            this.SaveScreenshot(0, 0, size.Width, size.Height, path, filename, saveAsPng, appendDate);
+        }
+
+        public void SaveScreenshot(int x, int y, int width, int height,
+            string path, string filename = "screenshot",
+            bool saveAsPng = true, bool appendDate = true)
+        {
+            using (var bitmap = this.GrabScreenshot(x, y, width, height))
+            {
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+
+                var extension = "";
+
+                // strip extension from file name
+                if (saveAsPng)
+                {
+                    if (filename.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
+                    {
+                        extension = filename.Substring(filename.Length - 4);
+                        filename = filename.Substring(0, filename.Length - 4);
+                    }
+                    else
+                    {
+                        extension = ".png";
+                    }
+                }
+                else
+                {
+
+                    if (filename.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase))
+                    {
+                        extension = filename.Substring(filename.Length - 4);
+                        filename = filename.Substring(0, filename.Length - 4);
+                    }
+                    else if (filename.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase))
+                    {
+                        extension = filename.Substring(filename.Length - 5);
+                        filename = filename.Substring(0, filename.Length - 5);
+                    }
+                    else
+                    {
+                        extension = ".jpg";
+                    }
+                }
+
+                filename += appendDate
+                    ? "_" + DateTime.Now.ToString("yyyy-MM-ddTHH-mm-ss.ff") + extension
+                    : extension;
+
+                if (saveAsPng)
+                {
+                    bitmap.Save(filename, System.Drawing.Imaging.ImageFormat.Png);   
+                }
+                else
+                {
+                    var encoder = ImageCodecInfo.GetImageDecoders()
+                        .First(c => c.FormatID == ImageFormat.Jpeg.Guid);
+                    var parameters = new EncoderParameters(1);
+                    parameters.Param[0] = new EncoderParameter(Encoder.Quality, 100L);
+
+                    bitmap.Save(filename + ".jpg", encoder, parameters);
+                }
+            }
         }
 
         #region Properties
