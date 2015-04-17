@@ -1,43 +1,21 @@
 using System;
-using System.Diagnostics.Contracts;
-using System.Runtime.Remoting.Messaging;
+using System.Runtime.InteropServices;
 using OpenTK;
-using OpenTK.Graphics.OpenGL;
 
 namespace amulware.Graphics
 {
     /// <summary>
-    /// A struct representing a 32bit argb colour
+    /// A struct representing a 32bit argb colour.
     /// </summary>
     /// <remarks>
     /// The actual order of the components in the struct is RGBA(one byte each), to conform to how shader languages order colour components.
     /// </remarks>
-    public struct Color
+    [StructLayout(LayoutKind.Sequential)]
+    public struct Color : IEquatable<Color>
     {
-        #region Properties
-
-        /// <summary>
-        /// The colour's red value
-        /// </summary>
-        public readonly byte R;
-        /// <summary>
-        /// The colour's green value
-        /// </summary>
-        public readonly byte G;
-        /// <summary>
-        /// The colour's blue value
-        /// </summary>
-        public readonly byte B;
-        /// <summary>
-        /// The colour's alpha value (0 = fully transparent, 255 = fully opaque)
-        /// </summary>
-        public readonly byte A;
-
-        #endregion
-
         #region Static W3C Colours /// @name Default static W3C colours
         /// <summary>Default transparent color.</summary>
-        public static readonly Color Transparent = new Color(0x00FFFFFF);
+        public static readonly Color Transparent = new Color(0x00000000);
         /// <summary>Default 'Pink' W3C color (FF C0 CB) / (255, 192, 203).</summary>
         public static readonly Color Pink = new Color(0xFFFFC0CB);
         /// <summary>Default 'LightPink' W3C color (FF B6 C1) / (255, 182, 193).</summary>
@@ -321,60 +299,68 @@ namespace amulware.Graphics
 
         #endregion
 
+        #region Fields
+
+        private readonly byte r, g, b, a;
+
+        #endregion
+
         #region Constructors
 
         /// <summary>
-        /// Constructs a colour from a red, green, blue and alpha value
+        /// Constructs a colour from a red, green, blue and alpha value.
         /// </summary>
-        /// <param name="r">the red value</param>
-        /// <param name="g">the green value</param>
-        /// <param name="b">the blue value</param>
-        /// <param name="a">the alpha value</param>
+        /// <param name="r">The red value.</param>
+        /// <param name="g">The green value.</param>
+        /// <param name="b">The blue value.</param>
+        /// <param name="a">The alpha value.</param>
         public Color(byte r, byte g, byte b, byte a = 255)
         {
-            this.R = r;
-            this.G = g;
-            this.B = b;
-            this.A = a;
+            this.r = r;
+            this.g = g;
+            this.b = b;
+            this.a = a;
         }
 
         /// <summary>
-        /// Constructs a colour from a 32bit unsigned integer including the colour components in the order ARGB
+        /// Constructs a colour from a 32bit unsigned integer including the colour components in the order ARGB.
         /// </summary>
-        /// <param name="argb">the unsigned integer representing the colour</param>
+        /// <param name="argb">The unsigned integer representing the colour.</param>
         public Color(uint argb)
         {
-            this.A = (byte)((argb >> 24) & 255);
-            this.R = (byte)((argb >> 16) & 255);
-            this.G = (byte)((argb >> 8) & 255);
-            this.B = (byte)(argb & 255);
+            this.a = (byte)((argb >> 24) & 255);
+            this.r = (byte)((argb >> 16) & 255);
+            this.g = (byte)((argb >> 8) & 255);
+            this.b = (byte)(argb & 255);
         }
 
         /// <summary>
         /// Constructs a colour from another colour and a new alpha value.
         /// </summary>
-        /// <param name="color">The template colour</param>
-        /// <param name="newAlpha">The new alpha value</param>
+        /// <param name="color">The template colour.</param>
+        /// <param name="newAlpha">The new alpha value.</param>
         public Color(Color color, byte newAlpha)
         {
-            this.R = color.R;
-            this.G = color.G;
-            this.B = color.B;
-            this.A = newAlpha;
+            this.r = color.r;
+            this.g = color.g;
+            this.b = color.b;
+            this.a = newAlpha;
         }
 
         #endregion
 
         #region Static Methods
 
+        #region Construction
+
         /// <summary>
-        /// Creates a colour from hue, saturation and value
+        /// Creates a colour from hue, saturation and value.
         /// </summary>
-        /// <param name="h">hue of the colour (0-2pi)</param>
-        /// <param name="s">saturation of the colour (0-1)</param>
-        /// <param name="v">value of the colour (0-1)</param>
-        /// <param name="a">alpha of the colour</param>
-        /// <returns>the constructed colour</returns>
+        /// <param name="h">Hue of the colour (0-2pi).</param>
+        /// <param name="s">Saturation of the colour (0-1).</param>
+        /// <param name="v">Value of the colour (0-1).</param>
+        /// <param name="a">Alpha of the colour.</param>
+        /// <returns>The constructed colour.</returns>
         public static Color FromHSVA(float h, float s, float v, byte a = 255)
         {
             float chroma = v * s;
@@ -428,48 +414,198 @@ namespace amulware.Graphics
         }
 
         /// <summary>
-        /// Linearly interpolates between two colours and returns the result
+        /// Creates a new gray color.
         /// </summary>
-        /// <param name="color1">The first colour</param>
-        /// <param name="color2">The second colour</param>
-        /// <param name="p">Interpolation parameter, is clamped to [0, 1]</param>
-        /// <returns>The interpolated colour</returns>
-        public static Color Lerp(Color color1, Color color2, float p)
-        {
-            if (p < 0)
-                p = 0;
-            else if (p > 1)
-                p = 1;
-            float q = 1 - p;
-            return new Color(
-                (byte)(color1.R * q + color2.R * p),
-                (byte)(color1.G * q + color2.G * p),
-                (byte)(color1.B * q + color2.B * p),
-                (byte)(color1.A * q + color2.A * p)
-                );
-        }
-
+        /// <param name="value">The value (brightness) of the color.</param>
+        /// <param name="alpha">The opacity of the color.</param>
+        /// <returns>A gray colour with the given value and transparency.</returns>
         public static Color GrayScale(byte value, byte alpha = 255)
         {
             return new Color(value, value, value, alpha);
         }
 
+        #endregion
+
+        #region Other
+
+        /// <summary>
+        /// Linearly interpolates between two colours and returns the result.
+        /// </summary>
+        /// <param name="color0">The first colour.</param>
+        /// <param name="color1">The second colour.</param>
+        /// <param name="p">Interpolation parameter, is clamped to [0, 1]</param>
+        /// <returns>The interpolated colour</returns>
+        public static Color Lerp(Color color0, Color color1, float p)
+        {
+            if (p <= 0)
+                return color0;
+            if (p >= 1)
+                return color1;
+
+            float q = 1 - p;
+            return new Color(
+                (byte)(color0.r * q + color1.r * p),
+                (byte)(color0.g * q + color1.g * p),
+                (byte)(color0.b * q + color1.b * p),
+                (byte)(color0.a * q + color1.a * p)
+                );
+        }
+
+        #endregion
 
         #endregion
 
         #region Properties
 
         /// <summary>
-        /// The colour, represented as 32bit unsigned integer, with its colour components in the order ARGB
+        /// The colour's red value
+        /// </summary>
+        public byte R { get { return this.r; } }
+        /// <summary>
+        /// The colour's green value
+        /// </summary>
+        public byte G { get { return this.g; } }
+        /// <summary>
+        /// The colour's blue value
+        /// </summary>
+        public byte B { get { return this.b; } }
+        /// <summary>
+        /// The colour's alpha value (0 = fully transparent, 255 = fully opaque)
+        /// </summary>
+        public byte A { get { return this.a; } }
+
+
+        /// <summary>
+        /// The colour, represented as 32bit unsigned integer, with its colour components in the order ARGB.
         /// </summary>
         public uint ARGB
         {
             get
             {
-                return ((uint)this.A << 24)
-                    | ((uint)this.R << 16)
-                    | ((uint)this.G << 8)
-                    | this.B;
+                return ((uint)this.a << 24)
+                    | ((uint)this.r << 16)
+                    | ((uint)this.g << 8)
+                    | this.b;
+            }
+        }
+
+        /// <summary>
+        /// Returns the value (lightness) of the colour in the range 0 to 1.
+        /// </summary>
+        public float Value
+        {
+            get
+            {
+                return Math.Max(this.r, Math.Max(this.g, this.b)) / 255f;
+            }
+        }
+
+        /// <summary>
+        /// Returns the saturation of the colour in the range 0 to 1.
+        /// </summary>
+        public float Saturation
+        {
+            get
+            {
+                var max = Math.Max(this.r, Math.Max(this.g, this.b));
+                if (max == 0)
+                    return 0;
+
+                var min = Math.Min(this.r, Math.Min(this.g, this.b));
+
+                return (float)(max - min) / max;
+            }
+        }
+
+        /// <summary>
+        /// Returns the hue of the colour in the range 0 to 2pi.
+        /// </summary>
+        public float Hue
+        {
+            get
+            {
+                float r = this.r / 255f;
+                float g = this.g / 255f;
+                float b = this.b / 255f;
+
+                float h;
+
+                var max = Math.Max(r, Math.Max(g, b));
+                if (max == 0)
+                    return 0;
+
+                var min = Math.Min(r, Math.Min(g, b));
+                var delta = max - min;
+
+                if (r == max)
+                    h = (g - b) / delta;
+                else if (g == max)
+                    h = 2 + (b - r) / delta;
+                else
+                    h = 4 + (r - g) / delta;
+
+                h *= (float)(Math.PI / 3);
+                if (h < 0)
+                    h += (float)(Math.PI * 2);
+
+                return h;
+            }
+        }
+
+        /// <summary>
+        /// Converts the colour to a float vector with components Hue, Saturation, Value in that order.
+        /// The range of the hue is 0 to 2pi, the range of all over components is 0 to 1.
+        /// </summary>
+        public Vector4 AsHSVAVector
+        {
+            get
+            {
+                float r = this.r / 255f;
+                float g = this.g / 255f;
+                float b = this.b / 255f;
+                float a = this.a / 255f;
+
+                var max = Math.Max(r, Math.Max(g, b));
+                if (max == 0)
+                    return new Vector4(0, 0, 0, a);
+
+                var v = max;
+                var min = Math.Min(r, Math.Min(g, b));
+                var delta = max - min;
+
+                var s = delta / max;
+
+                float h;
+
+                if (r == max)
+                    h = (g - b) / delta;
+                else if (g == max)
+                    h = 2 + (b - r) / delta;
+                else
+                    h = 4 + (r - g) / delta;
+
+                h *= (float)(Math.PI / 3);
+                if (h < 0)
+                    h += (float)(Math.PI * 2);
+
+                return new Vector4(h, s, v, a);
+            }
+        }
+
+        /// <summary>
+        /// Converts the colour to a float vector with components RGBA in that order.
+        /// The range of each component is 0 to 1.
+        /// </summary>
+        public Vector4 AsRGBAVector
+        {
+            get
+            {
+                return new Vector4(
+                    this.r / 255f,
+                    this.g / 255f,
+                    this.b / 255f,
+                    this.a / 255f
+                    );
             }
         }
 
@@ -481,12 +617,12 @@ namespace amulware.Graphics
         {
             get
             {
-                float a = this.A / 255f;
+                float a = this.a / 255f;
                 return new Color(
-                    (byte)(this.R * a),
-                    (byte)(this.G * a),
-                    (byte)(this.B * a),
-                    this.A
+                    (byte)(this.r * a),
+                    (byte)(this.g * a),
+                    (byte)(this.b * a),
+                    this.a
                     );
             }
         }
@@ -495,24 +631,59 @@ namespace amulware.Graphics
 
         #region Methods
 
+        /// <summary>
+        /// Returns a new colour with the same RGB values, but a different alpha value.
+        /// </summary>
+        /// <param name="alpha">The new alpha value (0-255).</param>
         public Color WithAlpha(byte alpha = 0)
         {
             return new Color(this, alpha);
         }
 
+        /// <summary>
+        /// Returns a new colour with the same RGB values, but a different alpha value.
+        /// </summary>
+        /// <param name="alpha">The new alpha value (0-1).</param>
+        /// <remarks>
+        /// This expects alpha values in the range 0 to 1.
+        /// Values outside that range will result in overflow of the valid range and may lead to undesirable values.</remarks>
         public Color WithAlpha(float alpha)
         {
             return this.WithAlpha((byte)(255 * alpha));
         }
 
-        public Vector4 ToRGBAVector()
+        #region Equals, GetHashCode, ToString
+
+        /// <summary>
+        /// Checks whether this colour is the same as another.
+        /// </summary>
+        public bool Equals(Color other)
         {
-            return new Vector4(
-                this.R / 255f,
-                this.G / 255f,
-                this.B / 255f,
-                this.A / 255f
-                );
+            return this.r == other.r && this.g == other.g && this.b == other.b && this.a == other.a;
+        }
+
+        /// <summary>
+        /// Checks whether this colour is the same as another.
+        /// </summary>
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            return obj is Color && Equals((Color)obj);
+        }
+
+        /// <summary>
+        /// Returns the hash code for this instance.
+        /// </summary>
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hashCode = this.r.GetHashCode();
+                hashCode = (hashCode * 397) ^ this.g.GetHashCode();
+                hashCode = (hashCode * 397) ^ this.b.GetHashCode();
+                hashCode = (hashCode * 397) ^ this.a.GetHashCode();
+                return hashCode;
+            }
         }
 
         /// <summary>
@@ -527,6 +698,7 @@ namespace amulware.Graphics
         }
         #endregion
 
+        #endregion
 
         #region Operators
 
@@ -537,61 +709,48 @@ namespace amulware.Graphics
         /// <returns><see cref="System.Drawing.Color"/></returns>
         static public implicit operator System.Drawing.Color(Color color)
         {
-            return System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
+            return System.Drawing.Color.FromArgb(color.a, color.r, color.g, color.b);
         }
 
+        /// <summary>
+        /// Compares two colours for equality.
+        /// </summary>
         static public bool operator ==(Color color1, Color color2)
         {
-            return color1.R == color2.R
-                   && color1.G == color2.G
-                   && color1.B == color2.B
-                   && color1.A == color2.A;
+            return color1.Equals(color2);
         }
 
+        /// <summary>
+        /// Compares two colours for inequality.
+        /// </summary>
         public static bool operator !=(Color color1, Color color2)
         {
             return !(color1 == color2);
         }
 
-        static public Color operator *(Color color, float factor)
+        /// <summary>
+        /// Multiplies all components of the colour by a given scalar.
+        /// Note that scalar values outside the range of 0 to 1 may result in overflow and cause unexpected results.
+        /// </summary>
+        static public Color operator *(Color color, float scalar)
         {
             return new Color(
-                (byte)(color.R * factor),
-                (byte)(color.G * factor),
-                (byte)(color.B * factor),
-                (byte)(color.A * factor));
+                (byte)(color.r * scalar),
+                (byte)(color.g * scalar),
+                (byte)(color.b * scalar),
+                (byte)(color.a * scalar));
         }
 
-        static public Color operator *(float factor, Color color)
+        /// <summary>
+        /// Multiplies all components of the colour by a given scalar.
+        /// Note that scalar values outside the range of 0 to 1 may result in overflow and cause unexpected results.
+        /// </summary>
+        static public Color operator *(float scalar, Color color)
         {
-            return color * factor;
+            return color * scalar;
         }
 
         #endregion
-
-
-        public bool Equals(Color other)
-        {
-            return this.R == other.R && this.G == other.G && this.B == other.B && this.A == other.A;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            return obj is Color && Equals((Color)obj);
-        }
-
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                int hashCode = this.R.GetHashCode();
-                hashCode = (hashCode * 397) ^ this.G.GetHashCode();
-                hashCode = (hashCode * 397) ^ this.B.GetHashCode();
-                hashCode = (hashCode * 397) ^ this.A.GetHashCode();
-                return hashCode;
-            }
-        }
 
     }
 }
