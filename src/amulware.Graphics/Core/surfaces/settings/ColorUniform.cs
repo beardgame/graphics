@@ -44,7 +44,7 @@ namespace amulware.Graphics
         /// <param name="program">The program.</param>
         public override void Set(ShaderProgram program)
         {
-            GL.Uniform4(program.GetUniformLocation(this.name), this.Color.ToRGBAVector());
+            GL.Uniform4(program.GetUniformLocation(this.name), this.Color.AsRGBAVector);
         }
     }
 }
