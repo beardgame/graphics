@@ -1,5 +1,4 @@
 using System;
-using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 
@@ -22,12 +21,12 @@ namespace amulware.Graphics
         private readonly int handle;
 
         /// <summary>
-        /// The OpenGL index buffer object handle
+        /// The OpenGL index buffer object handle.
         /// </summary>
         public int Handle { get { return this.handle; } }
 
         /// <summary>
-        /// Initialises a new instance of <see cref="IndexBuffer"/>
+        /// Initialises a new instance of <see cref="IndexBuffer"/>.
         /// </summary>
         public IndexBuffer()
         {
@@ -58,6 +57,15 @@ namespace amulware.Graphics
             this.indexCount = newCount;
         }
 
+        /// <summary>
+        /// Returns a reference to the backing array, and the offset from where to write the indices.
+        /// </summary>
+        /// <remarks>
+        /// The backing array is guaranteed to be large enough to write the given number of indices, providing that the total number of indices is less than 2^31.
+        /// </remarks>
+        /// <param name="count">The number of new indices we will write.</param>
+        /// <param name="offset">The offset of the first new index to write.</param>
+        /// <returns>The backing array containing the indices.</returns>
         public ushort[] WriteIndicesDirectly(int count, out int offset)
         {
             int newCount = this.indexCount + count;
@@ -69,10 +77,19 @@ namespace amulware.Graphics
         }
 
         /// <summary>
-        /// Uploads the index buffer to the GPU
+        /// Binds the index buffer.
         /// </summary>
-        /// <param name="target">The target</param>
-        /// <param name="usageHint">The usage hint</param>
+        /// <param name="target">The target.</param>
+        public void Bind(BufferTarget target = BufferTarget.ElementArrayBuffer)
+        {
+            GL.BindBuffer(target, this);
+        }
+
+        /// <summary>
+        /// Uploads the index buffer to the GPU.
+        /// </summary>
+        /// <param name="target">The target.</param>
+        /// <param name="usageHint">The usage hint.</param>
         public void BufferData(BufferTarget target = BufferTarget.ElementArrayBuffer, BufferUsageHint usageHint = BufferUsageHint.StreamDraw)
         {
             GL.BufferData(target, (IntPtr)(sizeof(ushort) * this.indexCount), this.indices, usageHint);
@@ -87,6 +104,9 @@ namespace amulware.Graphics
         }
 
 
+        /// <summary>
+        /// Implicit cast to int for easy usage in GL methods that require an integer handle.
+        /// </summary>
         static public implicit operator int(IndexBuffer buffer)
         {
             return buffer.handle;
@@ -94,15 +114,18 @@ namespace amulware.Graphics
         
         #region Disposing
 
-        private bool disposed = false;
+        private bool disposed;
 
+        /// <summary>
+        /// Disposes the buffer, to make sure GL resources are freed.
+        /// </summary>
         public void Dispose()
         {
-            this.dispose(true);
+            this.dispose();
             GC.SuppressFinalize(this);
         }
 
-        private void dispose(bool disposing)
+        private void dispose()
         {
             if (this.disposed)
                 return;
@@ -117,7 +140,7 @@ namespace amulware.Graphics
 
         ~IndexBuffer()
         {
-            this.dispose(false);
+            this.dispose();
         }
 
         #endregion
