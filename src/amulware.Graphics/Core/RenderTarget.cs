@@ -1,5 +1,4 @@
 using System;
-using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 
@@ -10,19 +9,29 @@ namespace amulware.Graphics
     /// </summary>
     sealed public class RenderTarget : IDisposable
     {
+        #region Fields
+
+        private readonly int handle;
+
+        #endregion
+
+        #region Properties
+
         /// <summary>
         /// The handle of the OpenGL framebuffer object associated with this render target
         /// </summary>
-        public readonly int Handle;
+        public int Handle { get { return this.handle; } }
+        
+        #endregion
+
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RenderTarget"/> class.
         /// </summary>
         public RenderTarget()
         {
-            int handle;
-            GL.GenFramebuffers(1, out handle);
-            this.Handle = handle;
+            GL.GenFramebuffers(1, out this.handle);
         }
 
         /// <summary>
@@ -35,21 +44,31 @@ namespace amulware.Graphics
             this.Attach(FramebufferAttachment.ColorAttachment0, texture);
         }
 
+        #endregion
+
+        #region Methods
+
         /// <summary>
         /// Attaches a <see cref="Texture"/> to the specified <see cref="FramebufferAttachment"/>, so it can be rendered to.
         /// </summary>
         /// <param name="attachment">The attachment.</param>
         /// <param name="texture">The texture.</param>
+        /// <param name="target">Texture target of the attachment.</param>
         public void Attach(FramebufferAttachment attachment, Texture texture, TextureTarget target = TextureTarget.Texture2D)
         {
-            GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, this.Handle);
+            GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, this.handle);
             GL.FramebufferTexture2D(FramebufferTarget.DrawFramebuffer, attachment, target, texture, 0);
             GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, 0);
         }
 
+        #endregion
+
+        #region Operators
+
         /// <summary>
         /// Casts the <see cref="RenderTarget"/> to its OpenGL framebuffer object handle, for easy use with OpenGL functions.
         /// </summary>
+        /// <remarks>Null is cast to 0.</remarks>
         static public implicit operator int(RenderTarget rendertarget)
         {
             if (rendertarget == null)
@@ -57,18 +76,22 @@ namespace amulware.Graphics
             return rendertarget.Handle;
         }
 
+        #endregion
 
         #region Disposing
 
-        private bool disposed = false;
+        private bool disposed;
 
+        /// <summary>
+        /// Disposes of the render target and deletes the underlying GL object.
+        /// </summary>
         public void Dispose()
         {
-            this.dispose(true);
+            this.dispose();
             GC.SuppressFinalize(this);
         }
 
-        private void dispose(bool disposing)
+        private void dispose()
         {
             if (this.disposed)
                 return;
@@ -84,7 +107,7 @@ namespace amulware.Graphics
 
         ~RenderTarget()
         {
-            this.dispose(false);
+            this.dispose();
         }
 
         #endregion
