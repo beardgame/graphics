@@ -281,9 +281,14 @@ namespace amulware.Graphics.ShaderManagement
 
         #region ProgramBuilding
 
-        public ProgramBuilder MakeShaderProgram()
+        public ProgramBuilder BuildShaderProgram()
         {
             return new ProgramBuilder(this);
+        }
+
+        public ISurfaceShader MakeShaderProgram(string shaderName, string optionalProgramName = null)
+        {
+            return new ProgramBuilder(this).TryAll(shaderName).As(optionalProgramName ?? shaderName);
         }
 
         public sealed class ProgramBuilder
@@ -308,6 +313,32 @@ namespace amulware.Graphics.ShaderManagement
                 if(shader == null)
                     throw new ArgumentException(string.Format("{0} with name '{1}' not found.", type, shaderName));
                 return this.With(shader);
+            }
+
+            public ProgramBuilder TryWith(ShaderType type, string shaderName)
+            {
+                bool succeeded;
+                return this.TryWith(type, shaderName, out succeeded);
+            }
+
+            public ProgramBuilder TryWith(ShaderType type, string shaderName, out bool succeeded)
+            {
+                succeeded = false;
+                var shader = this.manager[type, shaderName];
+                if (shader != null)
+                {
+                    succeeded = true;
+                    this.With(shader);
+                }
+                return this;
+            }
+
+            public ProgramBuilder TryAll(string shaderName)
+            {
+                this.TryWith(ShaderType.VertexShader, shaderName);
+                this.TryWith(ShaderType.GeometryShader, shaderName);
+                this.TryWith(ShaderType.FragmentShader, shaderName);
+                return this;
             }
 
             public ProgramBuilder WithVertexShader(string shaderName)
