@@ -176,7 +176,7 @@ namespace amulware.Graphics
 
                 indices[i + 3] = (ushort)(v + 2);
                 indices[i + 4] = (ushort)(v + 3);
-                indices[i = 5] = (ushort)(v + 1);
+                indices[i + 5] = (ushort)(v + 1);
             }
 
             return vertices;
