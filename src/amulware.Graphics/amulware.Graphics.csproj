@@ -120,6 +120,8 @@
     <Compile Include="Charts\PointCloud2D.cs" />
     <Compile Include="Charts\RegularDiscreteFunction2D.cs" />
     <Compile Include="Charts\StackingBarChart2D.cs" />
+    <Compile Include="Meshes\MeshVertex.cs" />
+    <Compile Include="Meshes\Triangle.cs" />
     <Compile Include="ShaderManagement\IShaderReloader.cs" />
     <Compile Include="ShaderManagement\ReloadableShader.cs" />
     <Compile Include="ShaderManagement\ReloadableShaderProgram.cs" />
