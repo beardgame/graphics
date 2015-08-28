@@ -13,7 +13,9 @@ namespace amulware.Graphics.Meshes
             this.triangles = triangles;
         }
 
-        public IndexedSurface<MeshVertex> ToIndexedSurface(Func<MeshVertex, MeshVertex> transform = null)
+        public IndexedSurface<MeshVertex> ToIndexedSurface(
+            Func<MeshVertex, MeshVertex> transform = null
+            )
         {
             var surface = new IndexedSurface<MeshVertex>();
 
@@ -22,7 +24,9 @@ namespace amulware.Graphics.Meshes
 
             return surface;
         }
-        public VertexSurface<MeshVertex> ToPointCloudSurface(Func<MeshVertex, MeshVertex> transform = null)
+        public VertexSurface<MeshVertex> ToPointCloudSurface(
+            Func<MeshVertex, MeshVertex> transform = null
+            )
         {
             var surface = new VertexSurface<MeshVertex>();
 
@@ -34,7 +38,8 @@ namespace amulware.Graphics.Meshes
         private void writeIndices(IndexedSurface<MeshVertex> surface)
         {
             int iOffset;
-            var indexArray = surface.WriteIndicesDirectly(this.vertices.Length * 3, out iOffset);
+            var indexArray = surface
+                .WriteIndicesDirectly(this.vertices.Length * 3, out iOffset);
 
             if (iOffset != 0)
             {
