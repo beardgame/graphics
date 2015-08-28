@@ -121,6 +121,7 @@
     <Compile Include="Charts\RegularDiscreteFunction2D.cs" />
     <Compile Include="Charts\StackingBarChart2D.cs" />
     <Compile Include="Meshes\Mesh.cs" />
+    <Compile Include="Meshes\Mesh.Builder.cs" />
     <Compile Include="Meshes\MeshVertex.cs" />
     <Compile Include="Meshes\IndexTriangle.cs" />
     <Compile Include="ShaderManagement\IShaderReloader.cs" />
@@ -219,6 +220,9 @@
       <Project>{2f580b9d-6255-4427-8395-5ef236c9401c}</Project>
       <Name>Bearded.Utilities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Meshes\Mesh.Solids.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
