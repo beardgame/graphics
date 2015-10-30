@@ -3,7 +3,6 @@ using OpenTK.Graphics.OpenGL;
 
 namespace amulware.Graphics
 {
-
     /// <summary>
     /// Extends <see cref="StaticVertexSurface{TVertexdata}" /> with the ability to add vertices at will.
     /// </summary>

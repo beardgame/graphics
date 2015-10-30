@@ -2,7 +2,10 @@
 
 namespace amulware.Graphics.Meshes
 {
-    sealed partial class Mesh
+    /// <summary>
+    /// Represents an immutable mesh of vertices and triangles.
+    /// </summary>
+    public sealed partial class Mesh
     {
         private readonly MeshVertex[] vertices;
         private readonly IndexTriangle[] triangles;
@@ -13,6 +16,10 @@ namespace amulware.Graphics.Meshes
             this.triangles = triangles;
         }
 
+        /// <summary>
+        /// Converts the mesh into a renderable indexed surface.
+        /// </summary>
+        /// <param name="transform">A function to apply to all the vertices.</param>
         public IndexedSurface<MeshVertex> ToIndexedSurface(
             Func<MeshVertex, MeshVertex> transform = null
             )
@@ -24,6 +31,10 @@ namespace amulware.Graphics.Meshes
 
             return surface;
         }
+        /// <summary>
+        /// Converts the mesh into a renderable surface as a point cloud. Only vertices and no triangles are included.
+        /// </summary>
+        /// <param name="transform">A function to apply to all the vertices.</param>
         public VertexSurface<MeshVertex> ToPointCloudSurface(
             Func<MeshVertex, MeshVertex> transform = null
             )
@@ -39,7 +50,7 @@ namespace amulware.Graphics.Meshes
         {
             int iOffset;
             var indexArray = surface
-                .WriteIndicesDirectly(this.vertices.Length * 3, out iOffset);
+                .WriteIndicesDirectly(this.triangles.Length * 3, out iOffset);
 
             if (iOffset != 0)
             {

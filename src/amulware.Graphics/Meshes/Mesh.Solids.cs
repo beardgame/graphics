@@ -2,8 +2,12 @@
 
 namespace amulware.Graphics.Meshes
 {
-    sealed partial class Mesh
+    partial class Mesh
     {
+        /// <summary>
+        /// Returns a simple tetrahedron centered around (0, 0, 0).
+        /// The first vertex is at (0, 0, 1).
+        /// </summary>
         public static Mesh Tetrahedron()
         {
             const float sqrt2 = 1.41421356237f;
@@ -26,14 +30,50 @@ namespace amulware.Graphics.Meshes
                 });
         }
 
+        /// <summary>
+        /// Returns a simple octahedron centered around (0, 0, 0).
+        /// All vertices lie on a euclidian axes at 1 or -1.
+        /// </summary>
+        public static Mesh Octahedron()
+        {
+            return new Mesh(
+                new[]
+                {
+                    new MeshVertex(new Vector3(1, 0, 0)),
+                    new MeshVertex(new Vector3(-1, 0, 0)),
+                    new MeshVertex(new Vector3(0, 1, 0)),
+                    new MeshVertex(new Vector3(0, -1, 0)),
+                    new MeshVertex(new Vector3(0, 0, 1)),
+                    new MeshVertex(new Vector3(0, 0, -1)),
+                },
+                new[]
+                {
+                    new IndexTriangle(4, 0, 2),
+                    new IndexTriangle(4, 2, 1),
+                    new IndexTriangle(4, 1, 3),
+                    new IndexTriangle(4, 3, 0),
+                    new IndexTriangle(5, 2, 0),
+                    new IndexTriangle(5, 1, 2),
+                    new IndexTriangle(5, 3, 1),
+                    new IndexTriangle(5, 0, 3),
+                });
+        }
+
+        /// <summary>
+        /// Returns a simple axis-aligned hexahedron/cube centered around (0, 0, 0).
+        /// All edges are length 1.
+        /// </summary>
         public static Mesh Cube()
         {
             return Hexahedron();
         }
+        /// <summary>
+        /// Returns a simple axis-aligned hexahedron/cube centered around (0, 0, 0).
+        /// All edges are length 1.
+        /// </summary>
         public static Mesh Hexahedron()
         {
-            const float sqrt3 = 1.73205080757f;
-            const float u = 1f / sqrt3;
+            const float u = 0.5f;
 
             return new Mesh(
                 new[]
@@ -65,31 +105,9 @@ namespace amulware.Graphics.Meshes
                 });
         }
 
-        public static Mesh Octahedron()
-        {
-            return new Mesh(
-                new[]
-                {
-                    new MeshVertex(new Vector3(1, 0, 0)),
-                    new MeshVertex(new Vector3(-1, 0, 0)),
-                    new MeshVertex(new Vector3(0, 1, 0)),
-                    new MeshVertex(new Vector3(0, -1, 0)),
-                    new MeshVertex(new Vector3(0, 0, 1)),
-                    new MeshVertex(new Vector3(0, 0, -1)),
-                },
-                new[]
-                {
-                    new IndexTriangle(4, 0, 2),
-                    new IndexTriangle(4, 2, 1),
-                    new IndexTriangle(4, 1, 3),
-                    new IndexTriangle(4, 3, 0),
-                    new IndexTriangle(5, 2, 0),
-                    new IndexTriangle(5, 1, 2),
-                    new IndexTriangle(5, 3, 1),
-                    new IndexTriangle(5, 0, 3),
-                });
-        }
-
+        /// <summary>
+        /// Returns a simple dodecahedron centered around (0, 0, 0).
+        /// </summary>
         public static Mesh Dodecahedron()
         {
             const float a = 0.57735026919f; // 1/sqrt(3)
@@ -99,26 +117,26 @@ namespace amulware.Graphics.Meshes
             return new Mesh(
                 new[]
                 {
-					new MeshVertex(new Vector3(a, a, a)),
-					new MeshVertex(new Vector3(-a, a, -a)),
-					new MeshVertex(new Vector3(b, -c, 0)),
-					new MeshVertex(new Vector3(-c, 0, -b)),
-					new MeshVertex(new Vector3(a, a, -a)),
-					new MeshVertex(new Vector3(-a, -a, a)),
-					new MeshVertex(new Vector3(-b, -c, 0)),
-					new MeshVertex(new Vector3(0, b, c)),
-					new MeshVertex(new Vector3(a, -a, a)),
-					new MeshVertex(new Vector3(-a, -a, -a)),
-					new MeshVertex(new Vector3(c, 0, b)),
-					new MeshVertex(new Vector3(0, -b, c)),
-					new MeshVertex(new Vector3(a, -a, -a)),
-					new MeshVertex(new Vector3(b, c, 0)),
-					new MeshVertex(new Vector3(c, 0, -b)),
-					new MeshVertex(new Vector3(0, b, -c)),
-					new MeshVertex(new Vector3(-a, a, a)),
-					new MeshVertex(new Vector3(-b, c, 0)),
-					new MeshVertex(new Vector3(-c, 0, b)),
-					new MeshVertex(new Vector3(0, -b, -c)),
+					new MeshVertex(new Vector3(a,a,a)),
+                    new MeshVertex(new Vector3(a,a,-a)),
+                    new MeshVertex(new Vector3(a,-a,a)),
+                    new MeshVertex(new Vector3(a,-a,-a)),
+                    new MeshVertex(new Vector3(-a,a,a)),
+                    new MeshVertex(new Vector3(-a,a,-a)),
+                    new MeshVertex(new Vector3(-a,-a,a)),
+                    new MeshVertex(new Vector3(-a,-a,-a)),
+                    new MeshVertex(new Vector3(b,c,0)),
+                    new MeshVertex(new Vector3(-b,c,0)),
+                    new MeshVertex(new Vector3(b,-c,0)),
+                    new MeshVertex(new Vector3(-b,-c,0)),
+                    new MeshVertex(new Vector3(c,0,b)),
+                    new MeshVertex(new Vector3(c,0,-b)),
+                    new MeshVertex(new Vector3(-c,0,b)),
+                    new MeshVertex(new Vector3(-c,0,-b)),
+                    new MeshVertex(new Vector3(0,b,c)),
+                    new MeshVertex(new Vector3(0,-b,c)),
+                    new MeshVertex(new Vector3(0,b,-c)),
+                    new MeshVertex(new Vector3(0,-b,-c)),
                 },
                 new[]
                 {
@@ -161,6 +179,9 @@ namespace amulware.Graphics.Meshes
                 });
         }
 
+        /// <summary>
+        /// Returns a simple icosahedron centered around (0, 0, 0).
+        /// </summary>
         public static Mesh Icosahedron()
         {
             const float t = 1.61803398875f; // (1+sqrt(5))/2
@@ -172,18 +193,18 @@ namespace amulware.Graphics.Meshes
             return new Mesh(
                 new[]
                 {
-					new MeshVertex(new Vector3(a, b, 0)),
-					new MeshVertex(new Vector3(-a, -b, 0)),
-					new MeshVertex(new Vector3(-b, 0, a)),
-					new MeshVertex(new Vector3(0, -a, b)),
-					new MeshVertex(new Vector3(-a, b, 0)),
-					new MeshVertex(new Vector3(b, 0, a)),
-					new MeshVertex(new Vector3(-b, 0, -a)),
-					new MeshVertex(new Vector3(0, a, -b)),
-					new MeshVertex(new Vector3(a, -b, 0)),
-					new MeshVertex(new Vector3(b, 0, -a)),
-					new MeshVertex(new Vector3(0, a, b)),
-					new MeshVertex(new Vector3(0, -a, -b)),
+					new MeshVertex(new Vector3(a,b,0)),
+                    new MeshVertex(new Vector3(-a,b,0)),
+                    new MeshVertex(new Vector3(a,-b,0)),
+                    new MeshVertex(new Vector3(-a,-b,0)),
+                    new MeshVertex(new Vector3(b,0,a)),
+                    new MeshVertex(new Vector3(b,0,-a)),
+                    new MeshVertex(new Vector3(-b,0,a)),
+                    new MeshVertex(new Vector3(-b,0,-a)),
+                    new MeshVertex(new Vector3(0,a,b)),
+                    new MeshVertex(new Vector3(0,-a,b)),
+                    new MeshVertex(new Vector3(0,a,-b)),
+                    new MeshVertex(new Vector3(0,-a,-b)),
                 },
                 new[]
                 {

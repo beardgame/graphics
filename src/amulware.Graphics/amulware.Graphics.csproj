@@ -120,10 +120,16 @@
     <Compile Include="Charts\PointCloud2D.cs" />
     <Compile Include="Charts\RegularDiscreteFunction2D.cs" />
     <Compile Include="Charts\StackingBarChart2D.cs" />
+    <Compile Include="Meshes\MeshSurfaceInstance.cs" />
     <Compile Include="Meshes\Mesh.cs" />
     <Compile Include="Meshes\Mesh.Builder.cs" />
     <Compile Include="Meshes\MeshVertex.cs" />
     <Compile Include="Meshes\IndexTriangle.cs" />
+    <Compile Include="Meshes\ObjFile\ObjFileMesh.ToMesh.cs" />
+    <Compile Include="Meshes\ObjFile\ObjFileMesh.Parsing.cs" />
+    <Compile Include="Meshes\ObjFile\ObjFileMesh.Face.cs" />
+    <Compile Include="Meshes\ObjFile\ObjFileMesh.Builder.cs" />
+    <Compile Include="Meshes\ObjFile\ObjFileMesh.cs" />
     <Compile Include="ShaderManagement\IShaderReloader.cs" />
     <Compile Include="ShaderManagement\ReloadableShader.cs" />
     <Compile Include="ShaderManagement\ReloadableShaderProgram.cs" />
