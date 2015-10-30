@@ -5,8 +5,9 @@ using OpenTK;
 
 namespace amulware.Graphics.Meshes.ObjFile
 {
-    public delegate MeshVertex ObjFileVertexParser(
-        Vector4 position, Vector3 uvCoordinates, Vector3 normal);
+    public delegate TVertex ObjFileVertexParser<out TVertex>(
+        Vector4 position, Vector3 uvCoordinates, Vector3 normal)
+        where TVertex : struct;
 
     partial class ObjFileMesh
     {
@@ -14,6 +15,21 @@ namespace amulware.Graphics.Meshes.ObjFile
         private int triangleCount;
         private int totalFaceVertexCount;
 
+        /// <summary>
+        /// Creates a mesh from the loaded obj file for further processing and rendering.
+        /// </summary>
+        /// <param name="mergeVertices">Whether to merge and reuse identical vertices.</param>
+        /// <param name="normalizeNormals">Whether to normalise normals before creating the mesh vertex.</param>
+        public Mesh<MeshVertex> ToMesh(
+            bool mergeVertices = true,
+            bool normalizeNormals = true)
+        {
+            return this.ToMesh(
+                meshVertexParser,
+                mergeVertices,
+                normalizeNormals
+                );
+        }
 
         /// <summary>
         /// Creates a mesh from the loaded obj file for further processing and rendering.
@@ -21,36 +37,36 @@ namespace amulware.Graphics.Meshes.ObjFile
         /// <param name="vertexParser">A function creating mesh vertices from position, uv coordinate and normal.</param>
         /// <param name="mergeVertices">Whether to merge and reuse identical vertices.</param>
         /// <param name="normalizeNormals">Whether to normalise normals before creating the mesh vertex.</param>
-        public Mesh ToMesh(
-            ObjFileVertexParser vertexParser = null,
+        public Mesh<TVertex> ToMesh<TVertex>(
+            ObjFileVertexParser<TVertex> vertexParser,
             bool mergeVertices = true,
             bool normalizeNormals = true)
+            where TVertex : struct
         {
             this.ensureStats();
 
-            var parser = vertexParser ?? defaultVertexParser;
-
             if (normalizeNormals)
             {
-                parser = normalizeNormal(parser);
+                vertexParser = normalizeNormal(vertexParser);
             }
 
-            var builder = new Mesh.Builder(
+            var builder = new Mesh<TVertex>.Builder(
                 mergeVertices ? 0 : this.totalFaceVertexCount);
 
             var vertexAdder = mergeVertices
-                ? new SimpleVertexAdder(builder, parser, this)
-                : new MergedVertexDictionary(builder, parser, this);
+                ? new SimpleVertexAdder<TVertex>(builder, vertexParser, this)
+                : new MergedVertexDictionary<TVertex>(builder, vertexParser, this);
 
             return this.toMesh(builder, vertexAdder);
         }
 
-        private static MeshVertex defaultVertexParser(Vector4 position, Vector3 uv, Vector3 normal)
+        private static MeshVertex meshVertexParser(Vector4 position, Vector3 uv, Vector3 normal)
         {
             return new MeshVertex(position.Xyz, normal);
         }
 
-        private static ObjFileVertexParser normalizeNormal(ObjFileVertexParser parser)
+        private static ObjFileVertexParser<TVertex> normalizeNormal<TVertex>(ObjFileVertexParser<TVertex> parser)
+            where TVertex : struct
         {
             return (p, uv, n) =>
                 {
@@ -79,7 +95,8 @@ namespace amulware.Graphics.Meshes.ObjFile
             this.calculatedStats = true;
         }
 
-        private Mesh toMesh(Mesh.Builder builder, IVertexAdder vertexAdder)
+        private Mesh<TVertex> toMesh<TVertex>(Mesh<TVertex>.Builder builder, IVertexAdder vertexAdder)
+            where TVertex : struct
         {
             foreach (var face in this.faces)
             {
@@ -89,8 +106,9 @@ namespace amulware.Graphics.Meshes.ObjFile
             return builder.Build();
         }
 
-        private static void addFaceToMeshBuilder(Face face,
-            IVertexAdder mergedVertices, Mesh.Builder builder)
+        private static void addFaceToMeshBuilder<TVertex>(Face face,
+            IVertexAdder mergedVertices, Mesh<TVertex>.Builder builder)
+            where TVertex : struct
         {
             var vId0 = mergedVertices[face.Ids[0]];
             var vId1 = mergedVertices[face.Ids[1]];
@@ -107,8 +125,9 @@ namespace amulware.Graphics.Meshes.ObjFile
             }
         }
 
-        private MeshVertex createVertex(
-            Face.VertexIds ids, ObjFileVertexParser parser)
+        private TVertex createVertex<TVertex>(
+            Face.VertexIds ids, ObjFileVertexParser<TVertex> parser)
+            where TVertex : struct
         {
             var position = this.positions[ids.Position];
             var uv = ids.UV < 2
@@ -128,14 +147,15 @@ namespace amulware.Graphics.Meshes.ObjFile
             int this[Face.VertexIds vIds] { get; }
         }
 
-        private class SimpleVertexAdder : IVertexAdder
+        private class SimpleVertexAdder<TVertex> : IVertexAdder
+            where TVertex : struct
         {
-            private readonly Mesh.Builder builder;
-            private readonly ObjFileVertexParser parser;
+            private readonly Mesh<TVertex>.Builder builder;
+            private readonly ObjFileVertexParser<TVertex> parser;
             private readonly ObjFileMesh owner;
 
-            public SimpleVertexAdder(Mesh.Builder builder,
-                ObjFileVertexParser parser, ObjFileMesh owner)
+            public SimpleVertexAdder(Mesh<TVertex>.Builder builder,
+                ObjFileVertexParser<TVertex> parser, ObjFileMesh owner)
             {
                 this.builder = builder;
                 this.parser = parser;
@@ -153,13 +173,14 @@ namespace amulware.Graphics.Meshes.ObjFile
             }
         }
 
-        private class MergedVertexDictionary : SimpleVertexAdder
+        private class MergedVertexDictionary<TVertex> : SimpleVertexAdder<TVertex>
+            where TVertex : struct
         {
             private readonly Dictionary<Face.VertexIds, int> vertices =
                 new Dictionary<Face.VertexIds, int>();
 
-            public MergedVertexDictionary(Mesh.Builder builder,
-                ObjFileVertexParser parser, ObjFileMesh owner)
+            public MergedVertexDictionary(Mesh<TVertex>.Builder builder,
+                ObjFileVertexParser<TVertex> parser, ObjFileMesh owner)
                 : base(builder, parser, owner)
             {
             }

@@ -2,14 +2,15 @@
 
 namespace amulware.Graphics.Meshes
 {
-    partial class Mesh
+    partial class Mesh<TVertex>
+        where TVertex : struct
     {
         /// <summary>
         /// A mutable builder class to help construct immutable meshes.
         /// </summary>
         public class Builder
         {
-            private readonly List<MeshVertex> vertices;
+            private readonly List<TVertex> vertices;
             private readonly List<IndexTriangle> triangles;
 
             /// <summary>
@@ -19,16 +20,16 @@ namespace amulware.Graphics.Meshes
             /// </summary>
             public Builder(int vertexCapacity = 0, int triangleCapacity = 0)
             {
-                this.vertices = new List<MeshVertex>(vertexCapacity);
+                this.vertices = new List<TVertex>(vertexCapacity);
                 this.triangles = new List<IndexTriangle>(triangleCapacity);
             }
 
             /// <summary>
             /// Builds and return a mesh with the builder's data.
             /// </summary>
-            public Mesh Build()
+            public Mesh<TVertex> Build()
             {
-                return new Mesh(
+                return new Mesh<TVertex>(
                     this.vertices.ToArray(),
                     this.triangles.ToArray()
                     );
@@ -38,7 +39,7 @@ namespace amulware.Graphics.Meshes
             /// Adds a vertex to the builder.
             /// </summary>
             /// <returns>The index of the vertex for triangle creation.</returns>
-            public int AddVertex(MeshVertex v)
+            public int AddVertex(TVertex v)
             {
                 var i = this.vertices.Count;
                 this.vertices.Add(v);
@@ -51,7 +52,7 @@ namespace amulware.Graphics.Meshes
             /// </summary>
             /// <returns>The index of the first vertex for triangle creation.
             /// Indices for following vertices incrent by 1 each.</returns>
-            public int AddVertices(MeshVertex v0, MeshVertex v1)
+            public int AddVertices(TVertex v0, TVertex v1)
             {
                 var i = this.vertices.Count;
                 this.vertices.Add(v0);
@@ -63,7 +64,7 @@ namespace amulware.Graphics.Meshes
             /// </summary>
             /// <returns>The index of the first vertex for triangle creation.
             /// Indices for following vertices incrent by 1 each.</returns>
-            public int AddVertices(MeshVertex v0, MeshVertex v1, MeshVertex v2)
+            public int AddVertices(TVertex v0, TVertex v1, TVertex v2)
             {
                 var i = this.vertices.Count;
                 this.vertices.Add(v0);
@@ -76,7 +77,7 @@ namespace amulware.Graphics.Meshes
             /// </summary>
             /// <returns>The index of the first vertex for triangle creation.
             /// Indices for following vertices incrent by 1 each.</returns>
-            public int AddVertices(MeshVertex v0, MeshVertex v1, MeshVertex v2, MeshVertex v3)
+            public int AddVertices(TVertex v0, TVertex v1, TVertex v2, TVertex v3)
             {
                 var i = this.vertices.Count;
                 this.vertices.Add(v0);
@@ -90,7 +91,7 @@ namespace amulware.Graphics.Meshes
             /// </summary>
             /// <returns>The index of the first vertex for triangle creation.
             /// Indices for following vertices incrent by 1 each.</returns>
-            public int AddVertices(params MeshVertex[] vs)
+            public int AddVertices(params TVertex[] vs)
             {
                 var i = this.vertices.Count;
                 this.vertices.AddRange(vs);
@@ -101,7 +102,7 @@ namespace amulware.Graphics.Meshes
             /// </summary>
             /// <returns>The index of the first vertex for triangle creation.
             /// Indices for following vertices incrent by 1 each.</returns>
-            public int AddVertices(IEnumerable<MeshVertex> vs)
+            public int AddVertices(IEnumerable<TVertex> vs)
             {
                 var i = this.vertices.Count;
                 this.vertices.AddRange(vs);

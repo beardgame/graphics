@@ -5,12 +5,13 @@ namespace amulware.Graphics.Meshes
     /// <summary>
     /// Represents an immutable mesh of vertices and triangles.
     /// </summary>
-    public sealed partial class Mesh
+    public sealed partial class Mesh<TVertex>
+        where TVertex : struct
     {
-        private readonly MeshVertex[] vertices;
+        private readonly TVertex[] vertices;
         private readonly IndexTriangle[] triangles;
 
-        private Mesh(MeshVertex[] vertices, IndexTriangle[] triangles)
+        private Mesh(TVertex[] vertices, IndexTriangle[] triangles)
         {
             this.vertices = vertices;
             this.triangles = triangles;
@@ -20,11 +21,12 @@ namespace amulware.Graphics.Meshes
         /// Converts the mesh into a renderable indexed surface.
         /// </summary>
         /// <param name="transform">A function to apply to all the vertices.</param>
-        public IndexedSurface<MeshVertex> ToIndexedSurface(
-            Func<MeshVertex, MeshVertex> transform = null
+        public IndexedSurface<TVertexOut> ToIndexedSurface<TVertexOut>(
+            Func<TVertex, TVertexOut> transform = null
             )
+            where TVertexOut : struct, IVertexData
         {
-            var surface = new IndexedSurface<MeshVertex>();
+            var surface = new IndexedSurface<TVertexOut>();
 
             this.writeVertices(surface, transform);
             this.writeIndices(surface);
@@ -35,18 +37,20 @@ namespace amulware.Graphics.Meshes
         /// Converts the mesh into a renderable surface as a point cloud. Only vertices and no triangles are included.
         /// </summary>
         /// <param name="transform">A function to apply to all the vertices.</param>
-        public VertexSurface<MeshVertex> ToPointCloudSurface(
-            Func<MeshVertex, MeshVertex> transform = null
+        public VertexSurface<TVertexOut> ToPointCloudSurface<TVertexOut>(
+            Func<TVertex, TVertexOut> transform = null
             )
+            where TVertexOut : struct, IVertexData
         {
-            var surface = new VertexSurface<MeshVertex>();
+            var surface = new VertexSurface<TVertexOut>();
 
             this.writeVertices(surface, transform);
 
             return surface;
         }
 
-        private void writeIndices(IndexedSurface<MeshVertex> surface)
+        private void writeIndices<TVertexOut>(IndexedSurface<TVertexOut> surface)
+            where TVertexOut : struct, IVertexData
         {
             int iOffset;
             var indexArray = surface
@@ -70,10 +74,11 @@ namespace amulware.Graphics.Meshes
             }
         }
 
-        private void writeVertices(
-            VertexSurface<MeshVertex> surface,
-            Func<MeshVertex, MeshVertex> transform = null
+        private void writeVertices<TVertexOut>(
+            VertexSurface<TVertexOut> surface,
+            Func<TVertex, TVertexOut> transform = null
             )
+            where TVertexOut : struct, IVertexData
         {
             ushort vOffset;
             var vertexArray = surface
