@@ -399,7 +399,7 @@ namespace amulware.Graphics
                     var parameters = new EncoderParameters(1);
                     parameters.Param[0] = new EncoderParameter(Encoder.Quality, 100L);
 
-                    bitmap.Save(path + "/" + filename + ".jpg", encoder, parameters);
+                    bitmap.Save(path + "/" + filename, encoder, parameters);
                 }
             }
         }
