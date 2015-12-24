@@ -390,7 +390,7 @@ namespace amulware.Graphics
 
                 if (saveAsPng)
                 {
-                    bitmap.Save(filename, System.Drawing.Imaging.ImageFormat.Png);   
+                    bitmap.Save(path + "/" + filename, System.Drawing.Imaging.ImageFormat.Png);   
                 }
                 else
                 {
@@ -399,7 +399,7 @@ namespace amulware.Graphics
                     var parameters = new EncoderParameters(1);
                     parameters.Param[0] = new EncoderParameter(Encoder.Quality, 100L);
 
-                    bitmap.Save(filename + ".jpg", encoder, parameters);
+                    bitmap.Save(path + "/" + filename + ".jpg", encoder, parameters);
                 }
             }
         }
