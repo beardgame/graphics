@@ -213,6 +213,7 @@
     <Compile Include="Sprites\Simple\SimpleSpriteVertexData.cs" />
     <Compile Include="Sprites\Simple\UVColorVertexData.cs" />
     <Compile Include="Core\vertexdata\VertexData.cs" />
+    <Compile Include="Core\surfaces\settings\PolygonModeSetting.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">

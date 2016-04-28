@@ -1,7 +1,4 @@
-﻿using System;
-using OpenTK;
-using OpenTK.Graphics.OpenGL;
-
+﻿
 namespace amulware.Graphics
 {
     /// <summary>
@@ -9,10 +6,12 @@ namespace amulware.Graphics
     /// </summary>
     public abstract class SurfaceSetting
     {
+        private readonly bool needsUnsetting;
+
         /// <summary>
         /// Wether this setting needs to 'unset' itself after the draw call.
         /// </summary>
-        public readonly bool NeedsUnsetting = false;
+        public bool NeedsUnsetting { get { return this.needsUnsetting; } }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SurfaceSetting"/> class.
@@ -27,7 +26,7 @@ namespace amulware.Graphics
         /// <remarks>Make sure to set needsUnsetting to true, if this setting needs to be unset after the draw call.</remarks>
         protected SurfaceSetting(bool needsUnsetting)
         {
-            this.NeedsUnsetting = needsUnsetting;
+            this.needsUnsetting = needsUnsetting;
         }
 
         /// <summary>
