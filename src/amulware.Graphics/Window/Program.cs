@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading;
 using System.Diagnostics;
 using System.Collections.Generic;
-using Bearded.Utilities.Threading;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
@@ -14,6 +13,7 @@ using OpenTK.Input;
 using OpenTK.Platform;
 using Encoder = System.Drawing.Imaging.Encoder;
 using PixelFormat = OpenTK.Graphics.OpenGL.PixelFormat;
+using amulware.Graphics.Utilities;
 
 namespace amulware.Graphics
 {
@@ -221,7 +221,10 @@ namespace amulware.Graphics
 
         private readonly ManualActionQueue uiQueue = new ManualActionQueue();
 
-        public IActionQueue UIActionQueue { get { return this.uiQueue; } }
+        public void RunOnUIThread(Action action)
+        {
+            this.uiQueue.RunAndForget(action);
+        }
 
         private void eventHandleLoop()
         {

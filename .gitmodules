@@ -1,3 +1,0 @@
-[submodule "libs/utilities"]
-	path = libs/utilities
-	url = git@github.com:amulware/utilities.git

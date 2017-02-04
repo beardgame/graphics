@@ -214,29 +214,29 @@
     <Compile Include="Sprites\Simple\UVColorVertexData.cs" />
     <Compile Include="Core\vertexdata\VertexData.cs" />
     <Compile Include="Core\surfaces\settings\PolygonModeSetting.cs" />
+    <Compile Include="ShaderManagement\FileModifiedWatcher.cs" />
+    <Compile Include="Utilities\ManualActionQueue.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\libs\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenTK">
-      <HintPath>..\..\libs\utilities\libs\OpenTK.dll</HintPath>
+    <Reference Include="OpenTK, Version=2.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4">
+      <HintPath>..\packages\OpenTK.2.0.0\lib\net20\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Debug\" />
     <Folder Include="Utilities\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\libs\utilities\src\Bearded.Utilities.csproj">
-      <Project>{2f580b9d-6255-4427-8395-5ef236c9401c}</Project>
-      <Name>Bearded.Utilities</Name>
-    </ProjectReference>
+    <Compile Include="Meshes\Mesh.Solids.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Meshes\Mesh.Solids.cs" />
+    <Content Include="OpenTK.dll.config" />
+    <Content Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

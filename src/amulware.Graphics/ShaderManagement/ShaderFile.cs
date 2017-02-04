@@ -1,5 +1,4 @@
 using System.IO;
-using Bearded.Utilities.IO;
 using OpenTK.Graphics.OpenGL;
 
 namespace amulware.Graphics.ShaderManagement

@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using Bearded.Utilities.Math;
 using OpenTK;
 
 namespace amulware.Graphics.Meshes.ObjFile
@@ -74,7 +74,7 @@ namespace amulware.Graphics.Meshes.ObjFile
 
                     if (normalLength > 0)
                     {
-                        n = n / normalLength.Sqrted();
+                        n = n / (float)Math.Sqrt(normalLength);
                     }
 
                     return parser(p, uv, n);
