@@ -220,6 +220,7 @@ namespace amulware.Graphics
         }
 
         private readonly ManualActionQueue uiQueue = new ManualActionQueue();
+        public object UIEventProcessLock { get; } = new object();
 
         public void RunOnUIThread(Action action)
         {
@@ -230,7 +231,10 @@ namespace amulware.Graphics
         {
             while (this.Exists && !this.IsExiting)
             {
-                this.ProcessEvents();
+                lock (UIEventProcessLock)
+                {
+                    this.ProcessEvents();
+                }
                 this.uiQueue.ExecuteFor(TimeSpan.FromMilliseconds(2));
             }
         }
