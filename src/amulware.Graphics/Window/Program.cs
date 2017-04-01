@@ -219,25 +219,16 @@ namespace amulware.Graphics
             glThread.Abort();
         }
 
-        private readonly ManualActionQueue uiQueue = new ManualActionQueue();
-        public object UIEventProcessLock { get; } = new object();
-
-        public void RunOnUIThread(Action action)
-        {
-            this.uiQueue.RunAndForget(action);
-        }
-
         private void eventHandleLoop()
         {
             while (this.Exists && !this.IsExiting)
             {
-                lock (UIEventProcessLock)
-                {
-                    this.ProcessEvents();
-                }
-                this.uiQueue.ExecuteFor(TimeSpan.FromMilliseconds(2));
+                this.ProcessEvents();
+                OnUpdateUIThread();
             }
         }
+
+        protected virtual void OnUpdateUIThread() { }
 
         private void run(double targetUpdatesPerSecond, double targetDrawsPerSecond, double maximumFrameTimeFactor = 3, bool dontOverrideFps = false)
         {
