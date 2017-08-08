@@ -225,6 +225,7 @@ namespace amulware.Graphics
             {
                 this.ProcessEvents();
                 OnUpdateUIThread();
+                Thread.Sleep(1);
             }
         }
 
