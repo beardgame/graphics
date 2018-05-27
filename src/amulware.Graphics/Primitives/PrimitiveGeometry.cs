@@ -40,9 +40,9 @@ namespace amulware.Graphics
         /// </summary>
         /// <param name="xy">The coordinate of the rectangle's corner.</param>
         /// <param name="wh">The size of the rectangle.</param>
-        public void DrawRectangle(Vector2 xy, Vector2 wh)
+        public void DrawRectangle(Vector2 xy, Vector2 wh, bool filled = true)
         {
-            this.DrawRectangle(xy.X, xy.Y, 0, wh.X, wh.Y);
+            this.DrawRectangle(xy.X, xy.Y, 0, wh.X, wh.Y, filled);
         }
 
         /// <summary>
@@ -50,9 +50,9 @@ namespace amulware.Graphics
         /// </summary>
         /// <param name="xyz">The coordinate of the rectangle's corner.</param>
         /// <param name="wh">The size of the rectangle.</param>
-        public void DrawRectangle(Vector3 xyz, Vector2 wh)
+        public void DrawRectangle(Vector3 xyz, Vector2 wh, bool filled = true)
         {
-            this.DrawRectangle(xyz.X, xyz.Y, xyz.Z, wh.X, wh.Y);
+            this.DrawRectangle(xyz.X, xyz.Y, xyz.Z, wh.X, wh.Y, filled);
         }
 
         /// <summary>
@@ -62,9 +62,9 @@ namespace amulware.Graphics
         /// <param name="y">The y coordinate of the rectangle's corner.</param>
         /// <param name="w">The width of the rectangle.</param>
         /// <param name="h">The height of the rectangle.</param>
-        public void DrawRectangle(float x, float y, float w, float h)
+        public void DrawRectangle(float x, float y, float w, float h, bool filled = true)
         {
-            this.DrawRectangle(x, y, 0, w, h);
+            this.DrawRectangle(x, y, 0, w, h, filled);
         }
 
         /// <summary>
@@ -75,14 +75,29 @@ namespace amulware.Graphics
         /// <param name="z">The z coordinate of the rectangle's corner.</param>
         /// <param name="w">The width of the rectangle.</param>
         /// <param name="h">The height of the rectangle.</param>
-        public void DrawRectangle(float x, float y, float z, float w, float h)
+        public void DrawRectangle(float x, float y, float z, float w, float h, bool filled = true)
         {
-            this.surface.AddQuad(
-                new PrimitiveVertexData(x,      y,      z, this.Color),
-                new PrimitiveVertexData(x + w,  y,      z, this.Color),
-                new PrimitiveVertexData(x + w,  y + h,  z, this.Color),
-                new PrimitiveVertexData(x,      y + h,  z, this.Color)
-                );
+            var v0 = new PrimitiveVertexData(x, y, z, Color);
+            var v1 = new PrimitiveVertexData(x + w, y, z, Color);
+            var v2 = new PrimitiveVertexData(x + w, y + h, z, Color);
+            var v3 = new PrimitiveVertexData(x, y + h, z, Color);
+
+            if (filled || LineWidth * 2 > w || LineWidth * 2 > h)
+            {
+                surface.AddQuad(v0, v1, v2, v3);
+            }
+            else
+            {
+                var v0i = new PrimitiveVertexData(x + LineWidth, y + LineWidth, z, Color);
+                var v1i = new PrimitiveVertexData(x + w - LineWidth, y + LineWidth, z, Color);
+                var v2i = new PrimitiveVertexData(x + w - LineWidth, y + h - LineWidth, z, Color);
+                var v3i = new PrimitiveVertexData(x + LineWidth, y + h - LineWidth, z, Color);
+
+                surface.AddQuad(v0, v1, v1i, v0i);
+                surface.AddQuad(v1, v2, v2i, v1i);
+                surface.AddQuad(v2, v3, v3i, v2i);
+                surface.AddQuad(v3, v0, v0i, v3i);
+            }
         }
 
         #endregion
