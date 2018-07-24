@@ -64,7 +64,11 @@ namespace amulware.Graphics
             Width = width;
             Height = height;
 
+            Bind();
+
             copyFromArray(data);
+
+            Unbind();
         }
 
         public Texture(int width, int height, PixelInternalFormat pixelFormat = PixelInternalFormat.Rgba)
