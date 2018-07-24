@@ -1,260 +1,242 @@
 using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
+using System.Runtime.InteropServices;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
+using PixelFormat = OpenTK.Graphics.OpenGL.PixelFormat;
+using SystemPixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace amulware.Graphics
 {
-    /// <summary>
-    /// This class represents an OpenGL texture.
-    /// </summary>
-    sealed public class Texture : IDisposable
+    public sealed class Texture : IDisposable
     {
-        /// <summary>
-        /// Handle of te OpenGL texture.
-        /// </summary>
         public int Handle { get; private set; }
-
-        /// <summary>
-        /// Height of the texture.
-        /// </summary>
-        public int Height { get; private set; }
-
-        /// <summary>
-        /// Width of the texture.
-        /// </summary>
-        public int Width { get; private set; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Texture"/> class.
-        /// </summary>
-        public Texture()
-        {
-            int tex;
-            //GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
-
-            GL.GenTextures(1, out tex);
-
-            this.Handle = tex;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Texture"/> class.
-        /// </summary>
-        /// <param name="width">The texture's width.</param>
-        /// <param name="height">The texture's height.</param>
-        public Texture(int width, int height)
-        {
-            int tex;
-            //GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
-
-            GL.GenTextures(1, out tex);
-            GL.BindTexture(TextureTarget.Texture2D, tex);
-
-            // create empty texture
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, width, height, 0, PixelFormat.Rgba,
-                PixelType.UnsignedByte, IntPtr.Zero);
-
-
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter,
-                (int)TextureMinFilter.LinearMipmapLinear);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
-
-            GL.BindTexture(TextureTarget.Texture2D, 0);
-
-            this.Handle = tex;
-            this.Width = width;
-            this.Height = height;
-
-        }
         
-        public Texture(Stream stream, bool preMultiplyAlpha = false)
-            : this(new Bitmap(stream), preMultiplyAlpha, true)
+        public int Height { get; private set; }
+        
+        public int Width { get; private set; }
+        
+        public Texture(Stream bitmapFileStream, bool preMultiplyAlpha = false)
+            : this(new Bitmap(bitmapFileStream), preMultiplyAlpha, true)
         {
         }
 
+        public Texture(string imageFilePath, bool preMultiplyAlpha = false)
+            : this(new Bitmap(imageFilePath), preMultiplyAlpha, true)
+        {
+        }
 
         private Texture(Bitmap bitmap, bool preMultiplyAlpha = false, bool disposeBitmap = false)
+            : this()
         {
-            int tex;
-            //GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
+            Width = bitmap.Width;
+            Height = bitmap.Height;
 
-            GL.GenTextures(1, out tex);
-            GL.BindTexture(TextureTarget.Texture2D, tex);
+            Bind();
 
-            //int j = 1;
-            //GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.GenerateMipmap, ref j);
-            //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.GenerateMipmap, 1);
-
-            //glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP_SGIS, GL_TRUE);
-
-
-            this.Handle = tex;
-            this.Width = bitmap.Width;
-            this.Height = bitmap.Height;
-
-            System.Drawing.Imaging.BitmapData data =
-                bitmap.LockBits(new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height),
-                    System.Drawing.Imaging.ImageLockMode.ReadOnly,
-                    System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-
-            if (preMultiplyAlpha)
-            {
-                int size = data.Width * data.Height * 4;
-                byte[] array = new byte[size];
-                System.Runtime.InteropServices.Marshal.Copy(data.Scan0, array, 0, size);
-                for (int i = 0; i < size; i += 4)
-                {
-                    float alpha = array[i + 3] / 255f;
-                    array[i] = (byte)(array[i] * alpha);
-                    array[i + 1] = (byte)(array[i + 1] * alpha);
-                    array[i + 2] = (byte)(array[i + 2] * alpha);
-                }
-
-                GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, data.Width, data.Height, 0,
-                    OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, array);
-            }
-            else
-            {
-                GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, data.Width, data.Height, 0,
-                    OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
-            }
-
-            bitmap.UnlockBits(data);
+            copyFromBitmap(bitmap, preMultiplyAlpha);
 
             if (disposeBitmap)
                 bitmap.Dispose();
 
+            generateMipmap();
 
+            setDefaultParameters();
+
+            Unbind();
+        }
+
+        public Texture(byte[] data, int width, int height)
+            : this()
+        {
+            var expectedLength = width * height * 4;
+            if (data.Length != expectedLength)
+            {
+                throw new ArgumentException(
+                    "Array length does not equal width * height * 4." +
+                    "Data should be in Argb format, with four bytes per pixel."
+                );
+            }
+
+            Width = width;
+            Height = height;
+
+            copyFromArray(data);
+        }
+
+        public Texture(int width, int height, PixelInternalFormat pixelFormat = PixelInternalFormat.Rgba)
+            : this()
+        {
+            Bind();
+
+            resize(width, height, PixelInternalFormat.Rgba);
+            setDefaultParameters();
+
+            Unbind();
+        }
+
+        public Texture()
+        {
+            GL.GenTextures(1, out int handle);
+            Handle = handle;
+        }
+
+        private void copyFromBitmap(Bitmap bitmap, bool preMultiplyAlpha)
+        {
+            var data = bitmap.LockBits(
+                new Rectangle(0, 0, Width, Height),
+                ImageLockMode.ReadOnly,
+                SystemPixelFormat.Format32bppArgb
+            );
+
+            if (preMultiplyAlpha)
+            {
+                var size = data.Width * data.Height * 4;
+                var array = new byte[size];
+                Marshal.Copy(data.Scan0, array, 0, size);
+
+                bitmap.UnlockBits(data);
+
+                PreMultipleArgbArray(array);
+
+                copyFromArray(array);
+            }
+            else
+            {
+                copyFromPointer(data.Scan0);
+
+                bitmap.UnlockBits(data);
+            }
+        }
+
+        public static void PreMultipleArgbArray(byte[] data)
+        {
+            var size = data.Length;
+            for (var i = 0; i < size; i += 4)
+            {
+                var alpha = data[i + 3] / 255f;
+                data[i] = (byte)(data[i] * alpha);
+                data[i + 1] = (byte)(data[i + 1] * alpha);
+                data[i + 2] = (byte)(data[i + 2] * alpha);
+            }
+        }
+
+        private void copyFromArray(byte[] array)
+        {
+            GL.TexImage2D(
+                TextureTarget.Texture2D, 0,
+                PixelInternalFormat.Rgba, Width, Height, 0,
+                PixelFormat.Bgra, PixelType.UnsignedByte,
+                array
+            );
+        }
+
+        private void copyFromPointer(IntPtr pointer)
+        {
+            GL.TexImage2D(
+                TextureTarget.Texture2D, 0,
+                PixelInternalFormat.Rgba, Width, Height, 0,
+                PixelFormat.Bgra, PixelType.UnsignedByte,
+                pointer
+            );
+        }
+
+        public void Resize(int width, int height, PixelInternalFormat pixelFormat = PixelInternalFormat.Rgba)
+        {
+            Bind();
+
+            resize(width, height, pixelFormat);
+
+            Unbind();
+        }
+
+        private void resize(int width, int height, PixelInternalFormat pixelFormat)
+        {
+            GL.TexImage2D(TextureTarget.Texture2D, 0, pixelFormat, width, height, 0,
+                PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
+            Width = width;
+            Height = height;
+        }
+
+        public void GenerateMipmap()
+        {
+            Bind();
+
+            generateMipmap();
+
+            Unbind();
+        }
+
+        private static void generateMipmap()
+        {
             GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
-
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter,
-                (int)TextureMinFilter.LinearMipmapLinear);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter,
-                (int)TextureMagFilter.Linear);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
-
-            GL.BindTexture(TextureTarget.Texture2D, 0);
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Texture"/> class.
-        /// </summary>
-        /// <param name="path">The image file to load.</param>
-        /// <param name="preMultiplyAlpha">If true, the colour values of each pixel are multiplied by its alpha value.</param>
-        public Texture(string path, bool preMultiplyAlpha = false)
-            : this(new Bitmap(path), preMultiplyAlpha, true)
+        public void SetParameters(TextureMinFilter minFilter, TextureMagFilter magFilter, TextureWrapMode wrapS, TextureWrapMode wrapT)
         {
+            Bind();
+
+            setParameters(minFilter, magFilter, wrapS, wrapT);
+
+            Unbind();
         }
 
-        /// <summary>
-        /// Resizes the texture.
-        /// </summary>
-        /// <param name="width">The new width.</param>
-        /// <param name="height">The new height.</param>
-        /// <param name="internalFormat">The new <see cref="PixelInternalFormat"/>.</param>
-        public void Resize(int width, int height, PixelInternalFormat internalFormat = PixelInternalFormat.Rgba)
+        private static void setDefaultParameters()
         {
-            GL.BindTexture(TextureTarget.Texture2D, this.Handle);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, internalFormat, width, height, 0, PixelFormat.Rgba,
-                PixelType.UnsignedByte, IntPtr.Zero);
-            GL.BindTexture(TextureTarget.Texture2D, 0);
-            this.Width = width;
-            this.Height = height;
+            setParameters(
+                TextureMinFilter.LinearMipmapLinear, TextureMagFilter.Linear,
+                TextureWrapMode.Repeat, TextureWrapMode.Repeat
+            );
         }
 
-        /// <summary>
-        /// Sets the texture filtering parameters.
-        /// </summary>
-        /// <param name="minFilter">The <see cref="TextureMinFilter"/>.</param>
-        /// <param name="magFilter">The <see cref="TextureMagFilter"/>.</param>
-        /// <param name="wrapS">The horizontal <see cref="TextureWrapMode"/>.</param>
-        /// <param name="wrapT">The vertical <see cref="TextureWrapMode"/>.</param>
-        public void SetParameters(TextureMinFilter minFilter, TextureMagFilter magFilter, TextureWrapMode wrapS,
-            TextureWrapMode wrapT)
+        private static void setParameters(
+            TextureMinFilter minFilter, TextureMagFilter magFilter,
+            TextureWrapMode wrapS, TextureWrapMode wrapT)
         {
-            GL.BindTexture(TextureTarget.Texture2D, this.Handle);
-
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)minFilter);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)magFilter);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)wrapS);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)wrapT);
-
-            GL.BindTexture(TextureTarget.Texture2D, 0);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int) minFilter);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int) magFilter);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int) wrapS);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int) wrapT);
+        }
+        
+        public void Bind(TextureTarget target = TextureTarget.Texture2D)
+        {
+            GL.BindTexture(target, Handle);
         }
 
-        /// <summary>
-        /// Grabs a <see cref="UVRectangle"/> from the texture, given pixel coordinates.
-        /// </summary>
-        /// <param name="position">The starting corner of the rectangle, in pixels.</param>
-        /// <param name="size">The size of the rectangle in pixels.</param>
-        /// <returns></returns>
+        public static void Unbind(TextureTarget target = TextureTarget.Texture2D)
+        {
+            GL.BindTexture(target, 0);
+        }
+        
         public UVRectangle GrabUV(Vector2 position, Vector2 size)
-        {
-            return this.GrabUV(position.X, position.Y, size.X, size.Y);
-        }
+            => GrabUV(position.X, position.Y, size.X, size.Y);
 
-        /// <summary>
-        /// Grabs a <see cref="UVRectangle"/> from the texture, given pixel coordinates.
-        /// </summary>
-        /// <param name="x">The x coordinate of the rectangle's corner.</param>
-        /// <param name="y">The y coordinate of the rectangle's corner.</param>
-        /// <param name="w">The width of the rectangle.</param>
-        /// <param name="h">The height of the rectangle.</param>
-        /// <returns></returns>
         public UVRectangle GrabUV(float x, float y, float w, float h)
         {
             return new UVRectangle(
-                (float)x / this.Width,
-                (float)(x + w) / this.Width,
-                (float)y / this.Height,
-                (float)(y + h) / this.Height
-                );
+                x / Width,
+                (x + w) / Width,
+                y / Height,
+                (y + h) / Height
+            );
         }
 
-        /// <summary>
-        /// Casts the Texture to its OpenGL handle, for easy use with OpenGL functions.
-        /// </summary>
-        public static implicit operator int(Texture texture)
-        {
-            return texture.Handle;
-        }
-
-        #region Disposing
-
-        private bool disposed = false;
+        public static implicit operator int(Texture texture) => texture?.Handle ?? 0;
 
         public void Dispose()
         {
-            this.dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        private void dispose(bool disposing)
-        {
-            if (this.disposed)
+            if (Handle == 0)
                 return;
 
             if (GraphicsContext.CurrentContext == null || GraphicsContext.CurrentContext.IsDisposed)
                 return;
 
             GL.DeleteTexture(this);
-            this.Handle = 0;
-
-            this.disposed = true;
+            Handle = 0;
         }
-
-        ~Texture()
-        {
-            this.dispose(false);
-        }
-
-        #endregion
-
     }
 }
