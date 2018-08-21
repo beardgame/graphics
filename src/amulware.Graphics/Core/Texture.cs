@@ -67,6 +67,8 @@ namespace amulware.Graphics
             Bind();
 
             copyFromArray(data);
+            generateMipmap();
+            setDefaultParameters();
 
             Unbind();
         }
