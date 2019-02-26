@@ -3,37 +3,27 @@ using OpenTK.Graphics.OpenGL;
 
 namespace amulware.Graphics.ShaderManagement
 {
-    sealed public class ShaderFile : ShaderReloader
+    public sealed class ShaderFile : ShaderReloader
     {
         private readonly string filename;
-        private readonly string friendlyName;
         private readonly FileModifiedWatcher fileWatcher;
+        
+        public string FriendlyName { get; }
+        
+        public override bool ChangedSinceLastLoad => fileWatcher.WasModified(false);
 
         public ShaderFile(ShaderType type, string filename, string friendlyName)
             : base(type)
         {
             this.filename = filename;
-            this.friendlyName = friendlyName;
-            this.fileWatcher = new FileModifiedWatcher(filename);
+            FriendlyName = friendlyName;
+            fileWatcher = new FileModifiedWatcher(filename);
         }
         
-        public override bool ChangedSinceLastLoad
+        protected override string GetSource()
         {
-            get { return this.fileWatcher.WasModified(false); }
-        }
-
-        public string FriendlyName
-        {
-            get { return this.friendlyName; }
-        }
-
-        protected override string getSource()
-        {
-            this.fileWatcher.Reset();
-            using (var reader = new StreamReader(this.filename))
-            {
-                return reader.ReadToEnd();
-            }
+            fileWatcher.Reset();
+            return File.ReadAllText(filename);
         }
     }
 }

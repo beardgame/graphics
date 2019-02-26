@@ -3,23 +3,22 @@ using OpenTK.Graphics.OpenGL;
 
 namespace amulware.Graphics.ShaderManagement
 {
-    abstract public class ShaderReloader : IShaderReloader
+    public abstract class ShaderReloader : IShaderReloader
     {
-        private readonly ShaderType type;
-        public ShaderType Type { get { return this.type; } }
+        public ShaderType Type { get; }
 
         public abstract bool ChangedSinceLastLoad { get; }
 
         protected ShaderReloader(ShaderType type)
         {
-            this.type = type;
+            Type = type;
         }
 
         public Shader Load()
         {
-            var source = this.getSource();
+            var source = GetSource();
 
-            switch (this.type)
+            switch (Type)
             {
                 case ShaderType.FragmentShader:
                     return new FragmentShader(source);
@@ -32,6 +31,6 @@ namespace amulware.Graphics.ShaderManagement
             }
         }
 
-        protected abstract string getSource();
+        protected abstract string GetSource();
     }
 }

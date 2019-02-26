@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace amulware.Graphics.ShaderManagement
 {
-    sealed public class ReplaceableShaderProgram : ISurfaceShader
+    public sealed class ReplaceableShaderProgram : ISurfaceShader
     {
         private ShaderProgram program;
         private readonly List<Surface> surfaces = new List<Surface>();
@@ -12,22 +12,22 @@ namespace amulware.Graphics.ShaderManagement
             this.program = program;
         }
 
-        public void SetProgram(ShaderProgram program)
+        public void SetProgram(ShaderProgram newProgram)
         {
-            this.program = program;
-            foreach (var surface in this.surfaces)
-                surface.SetShaderProgram(program);
+            program = newProgram;
+            foreach (var surface in surfaces)
+                surface.SetShaderProgram(newProgram);
         }
 
         public void UseOnSurface(Surface surface)
         {
-            this.surfaces.Add(surface);
-            surface.SetShaderProgram(this.program);
+            surfaces.Add(surface);
+            surface.SetShaderProgram(program);
         }
 
         public void RemoveFromSurface(Surface surface)
         {
-            this.surfaces.Remove(surface);
+            surfaces.Remove(surface);
         }
     }
 }
