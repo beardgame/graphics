@@ -328,10 +328,10 @@ namespace amulware.Graphics
         /// <param name="argb">The unsigned integer representing the colour.</param>
         public Color(uint argb)
         {
-            this.a = (byte)((argb >> 24) & 255);
-            this.r = (byte)((argb >> 16) & 255);
-            this.g = (byte)((argb >> 8) & 255);
-            this.b = (byte)(argb & 255);
+            a = (byte)((argb >> 24) & 255);
+            r = (byte)((argb >> 16) & 255);
+            g = (byte)((argb >> 8) & 255);
+            b = (byte)(argb & 255);
         }
 
         /// <summary>
@@ -341,10 +341,10 @@ namespace amulware.Graphics
         /// <param name="newAlpha">The new alpha value.</param>
         public Color(Color color, byte newAlpha)
         {
-            this.r = color.r;
-            this.g = color.g;
-            this.b = color.b;
-            this.a = newAlpha;
+            r = color.r;
+            g = color.g;
+            b = color.b;
+            a = newAlpha;
         }
 
         #endregion
@@ -363,42 +363,42 @@ namespace amulware.Graphics
         /// <returns>The constructed colour.</returns>
         public static Color FromHSVA(float h, float s, float v, byte a = 255)
         {
-            float chroma = v * s;
+            var chroma = v * s;
             h /= MathHelper.PiOver3;
-            float x = chroma * (1 - Math.Abs((h % 2) - 1));
-            float m = v - chroma;
+            var x = chroma * (1 - Math.Abs(h % 2 - 1));
+            var m = v - chroma;
             float r, g, b;
-            if(h > 6 || h < 0)
+            if (h > 6 || h < 0)
             {
                 r = 0;
                 g = 0;
                 b = 0;
             }
-            else if(h < 1)
+            else if (h < 1)
             {
                 r = chroma;
                 g = x;
                 b = 0;
             }
-            else if(h < 2)
+            else if (h < 2)
             {
                 r = x;
                 g = chroma;
                 b = 0;
             }
-            else if(h < 3)
+            else if (h < 3)
             {
                 r = 0;
                 g = chroma;
                 b = x;
             }
-            else if(h < 4)
+            else if (h < 4)
             {
                 r = 0;
                 g = x;
                 b = chroma;
             }
-            else if(h < 5)
+            else if (h < 5)
             {
                 r = x;
                 g = 0;
@@ -410,7 +410,8 @@ namespace amulware.Graphics
                 g = 0;
                 b = x;
             }
-            return new Color((byte)((r + m) * 255), (byte)((g + m) * 255), (byte)((b + m) * 255), a);
+
+            return new Color((byte) ((r + m) * 255), (byte) ((g + m) * 255), (byte) ((b + m) * 255), a);
         }
 
         /// <summary>
@@ -442,13 +443,13 @@ namespace amulware.Graphics
             if (p >= 1)
                 return color1;
 
-            float q = 1 - p;
+            var q = 1 - p;
             return new Color(
-                (byte)(color0.r * q + color1.r * p),
-                (byte)(color0.g * q + color1.g * p),
-                (byte)(color0.b * q + color1.b * p),
-                (byte)(color0.a * q + color1.a * p)
-                );
+                (byte) (color0.r * q + color1.r * p),
+                (byte) (color0.g * q + color1.g * p),
+                (byte) (color0.b * q + color1.b * p),
+                (byte) (color0.a * q + color1.a * p)
+            );
         }
 
         #endregion
@@ -456,49 +457,45 @@ namespace amulware.Graphics
         #endregion
 
         #region Properties
+        
+        // ReSharper disable ConvertToAutoPropertyWhenPossible
+        // Disable converting to auto-properties because we want to ensure the correct sequential layout of this struct.
 
         /// <summary>
         /// The colour's red value
         /// </summary>
-        public byte R { get { return this.r; } }
+        public byte R => r;
+
         /// <summary>
         /// The colour's green value
         /// </summary>
-        public byte G { get { return this.g; } }
+        public byte G => g;
+
         /// <summary>
         /// The colour's blue value
         /// </summary>
-        public byte B { get { return this.b; } }
+        public byte B => b;
+
         /// <summary>
         /// The colour's alpha value (0 = fully transparent, 255 = fully opaque)
         /// </summary>
-        public byte A { get { return this.a; } }
+        public byte A => a;
 
+        // ReSharper restore ConvertToAutoPropertyWhenPossible
 
         /// <summary>
         /// The colour, represented as 32bit unsigned integer, with its colour components in the order ARGB.
         /// </summary>
-        public uint ARGB
-        {
-            get
-            {
-                return ((uint)this.a << 24)
-                    | ((uint)this.r << 16)
-                    | ((uint)this.g << 8)
-                    | this.b;
-            }
-        }
+        public uint ARGB =>
+            ((uint)a << 24)
+            | ((uint)r << 16)
+            | ((uint)g << 8)
+            | b;
 
         /// <summary>
         /// Returns the value (lightness) of the colour in the range 0 to 1.
         /// </summary>
-        public float Value
-        {
-            get
-            {
-                return Math.Max(this.r, Math.Max(this.g, this.b)) / 255f;
-            }
-        }
+        public float Value => Math.Max(r, Math.Max(g, b)) / 255f;
 
         /// <summary>
         /// Returns the saturation of the colour in the range 0 to 1.
@@ -507,11 +504,11 @@ namespace amulware.Graphics
         {
             get
             {
-                var max = Math.Max(this.r, Math.Max(this.g, this.b));
+                var max = Math.Max(r, Math.Max(g, b));
                 if (max == 0)
                     return 0;
 
-                var min = Math.Min(this.r, Math.Min(this.g, this.b));
+                var min = Math.Min(r, Math.Min(g, b));
 
                 return (float)(max - min) / max;
             }
@@ -524,25 +521,28 @@ namespace amulware.Graphics
         {
             get
             {
-                float r = this.r / 255f;
-                float g = this.g / 255f;
-                float b = this.b / 255f;
+                var floatR = r / 255f;
+                var floatG = g / 255f;
+                var floatB = b / 255f;
 
                 float h;
 
-                var max = Math.Max(r, Math.Max(g, b));
+                var max = Math.Max(floatR, Math.Max(floatG, floatB));
+                // ReSharper disable once CompareOfFloatsByEqualityOperator
                 if (max == 0)
                     return 0;
 
-                var min = Math.Min(r, Math.Min(g, b));
+                var min = Math.Min(floatR, Math.Min(floatG, floatB));
                 var delta = max - min;
 
-                if (r == max)
-                    h = (g - b) / delta;
-                else if (g == max)
-                    h = 2 + (b - r) / delta;
+                // ReSharper disable once CompareOfFloatsByEqualityOperator
+                if (floatR == max)
+                    h = (floatG - floatB) / delta;
+                // ReSharper disable once CompareOfFloatsByEqualityOperator
+                else if (floatG == max)
+                    h = 2 + (floatB - floatR) / delta;
                 else
-                    h = 4 + (r - g) / delta;
+                    h = 4 + (floatR - floatG) / delta;
 
                 h *= (float)(Math.PI / 3);
                 if (h < 0)
@@ -560,35 +560,38 @@ namespace amulware.Graphics
         {
             get
             {
-                float r = this.r / 255f;
-                float g = this.g / 255f;
-                float b = this.b / 255f;
-                float a = this.a / 255f;
+                var floatR = r / 255f;
+                var floatG = g / 255f;
+                var floatB = b / 255f;
+                var floatA = a / 255f;
 
-                var max = Math.Max(r, Math.Max(g, b));
+                var max = Math.Max(floatR, Math.Max(floatG, floatB));
+                // ReSharper disable once CompareOfFloatsByEqualityOperator
                 if (max == 0)
-                    return new Vector4(0, 0, 0, a);
+                    return new Vector4(0, 0, 0, floatA);
 
                 var v = max;
-                var min = Math.Min(r, Math.Min(g, b));
+                var min = Math.Min(floatR, Math.Min(floatG, floatB));
                 var delta = max - min;
 
                 var s = delta / max;
 
                 float h;
 
-                if (r == max)
-                    h = (g - b) / delta;
-                else if (g == max)
-                    h = 2 + (b - r) / delta;
+                // ReSharper disable once CompareOfFloatsByEqualityOperator
+                if (floatR == max)
+                    h = (floatG - floatB) / delta;
+                // ReSharper disable once CompareOfFloatsByEqualityOperator
+                else if (floatG == max)
+                    h = 2 + (floatB - floatR) / delta;
                 else
-                    h = 4 + (r - g) / delta;
+                    h = 4 + (floatR - floatG) / delta;
 
                 h *= (float)(Math.PI / 3);
                 if (h < 0)
                     h += (float)(Math.PI * 2);
 
-                return new Vector4(h, s, v, a);
+                return new Vector4(h, s, v, floatA);
             }
         }
 
@@ -596,18 +599,7 @@ namespace amulware.Graphics
         /// Converts the colour to a float vector with components RGBA in that order.
         /// The range of each component is 0 to 1.
         /// </summary>
-        public Vector4 AsRGBAVector
-        {
-            get
-            {
-                return new Vector4(
-                    this.r / 255f,
-                    this.g / 255f,
-                    this.b / 255f,
-                    this.a / 255f
-                    );
-            }
-        }
+        public Vector4 AsRGBAVector => new Vector4(r / 255f, g / 255f, b / 255f, a / 255f);
 
 
         /// <summary>
@@ -617,13 +609,12 @@ namespace amulware.Graphics
         {
             get
             {
-                float a = this.a / 255f;
+                var floatA = a / 255f;
                 return new Color(
-                    (byte)(this.r * a),
-                    (byte)(this.g * a),
-                    (byte)(this.b * a),
-                    this.a
-                    );
+                    (byte)(r * floatA),
+                    (byte)(g * floatA),
+                    (byte)(b * floatA),
+                    a);
             }
         }
 
@@ -635,10 +626,7 @@ namespace amulware.Graphics
         /// Returns a new colour with the same RGB values, but a different alpha value.
         /// </summary>
         /// <param name="alpha">The new alpha value (0-255).</param>
-        public Color WithAlpha(byte alpha = 0)
-        {
-            return new Color(this, alpha);
-        }
+        public Color WithAlpha(byte alpha = 0) => new Color(this, alpha);
 
         /// <summary>
         /// Returns a new colour with the same RGB values, but a different alpha value.
@@ -646,21 +634,16 @@ namespace amulware.Graphics
         /// <param name="alpha">The new alpha value (0-1).</param>
         /// <remarks>
         /// This expects alpha values in the range 0 to 1.
-        /// Values outside that range will result in overflow of the valid range and may lead to undesirable values.</remarks>
-        public Color WithAlpha(float alpha)
-        {
-            return this.WithAlpha((byte)(255 * alpha));
-        }
+        /// Values outside that range will result in overflow of the valid range and may lead to undesirable values.
+        /// </remarks>
+        public Color WithAlpha(float alpha) => WithAlpha((byte)(255 * alpha));
 
         #region Equals, GetHashCode, ToString
 
         /// <summary>
         /// Checks whether this colour is the same as another.
         /// </summary>
-        public bool Equals(Color other)
-        {
-            return this.r == other.r && this.g == other.g && this.b == other.b && this.a == other.a;
-        }
+        public bool Equals(Color other) => r == other.r && g == other.g && b == other.b && a == other.a;
 
         /// <summary>
         /// Checks whether this colour is the same as another.
@@ -668,7 +651,7 @@ namespace amulware.Graphics
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
-            return obj is Color && Equals((Color)obj);
+            return obj is Color color && Equals(color);
         }
 
         /// <summary>
@@ -678,10 +661,10 @@ namespace amulware.Graphics
         {
             unchecked
             {
-                int hashCode = this.r.GetHashCode();
-                hashCode = (hashCode * 397) ^ this.g.GetHashCode();
-                hashCode = (hashCode * 397) ^ this.b.GetHashCode();
-                hashCode = (hashCode * 397) ^ this.a.GetHashCode();
+                var hashCode = r.GetHashCode();
+                hashCode = (hashCode * 397) ^ g.GetHashCode();
+                hashCode = (hashCode * 397) ^ b.GetHashCode();
+                hashCode = (hashCode * 397) ^ a.GetHashCode();
                 return hashCode;
             }
         }
@@ -692,10 +675,8 @@ namespace amulware.Graphics
         /// <returns>
         /// A hexadecimal <see cref="System.String" /> that represents this color.
         /// </returns>
-        public override string ToString()
-        {
-            return "#" + this.ARGB.ToString("X8");
-        }
+        public override string ToString() => "#" + ARGB.ToString("X8");
+
         #endregion
 
         #endregion
@@ -707,48 +688,35 @@ namespace amulware.Graphics
         /// </summary>
         /// <param name="color">The color.</param>
         /// <returns><see cref="System.Drawing.Color"/></returns>
-        static public implicit operator System.Drawing.Color(Color color)
-        {
-            return System.Drawing.Color.FromArgb(color.a, color.r, color.g, color.b);
-        }
+        public static implicit operator System.Drawing.Color(Color color) =>
+            System.Drawing.Color.FromArgb(color.a, color.r, color.g, color.b);
 
         /// <summary>
         /// Compares two colours for equality.
         /// </summary>
-        static public bool operator ==(Color color1, Color color2)
-        {
-            return color1.Equals(color2);
-        }
+        public static bool operator ==(Color color1, Color color2) => color1.Equals(color2);
 
         /// <summary>
         /// Compares two colours for inequality.
         /// </summary>
-        public static bool operator !=(Color color1, Color color2)
-        {
-            return !(color1 == color2);
-        }
+        public static bool operator !=(Color color1, Color color2) => !(color1 == color2);
 
         /// <summary>
         /// Multiplies all components of the colour by a given scalar.
         /// Note that scalar values outside the range of 0 to 1 may result in overflow and cause unexpected results.
         /// </summary>
-        static public Color operator *(Color color, float scalar)
-        {
-            return new Color(
+        public static Color operator *(Color color, float scalar) =>
+            new Color(
                 (byte)(color.r * scalar),
                 (byte)(color.g * scalar),
                 (byte)(color.b * scalar),
                 (byte)(color.a * scalar));
-        }
 
         /// <summary>
         /// Multiplies all components of the colour by a given scalar.
         /// Note that scalar values outside the range of 0 to 1 may result in overflow and cause unexpected results.
         /// </summary>
-        static public Color operator *(float scalar, Color color)
-        {
-            return color * scalar;
-        }
+        public static Color operator *(float scalar, Color color) => color * scalar;
 
         #endregion
 
