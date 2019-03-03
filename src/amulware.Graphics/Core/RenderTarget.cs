@@ -57,7 +57,9 @@ namespace amulware.Graphics
         /// <param name="texture">The texture.</param>
         /// <param name="target">Texture target of the attachment.</param>
         public void Attach(
-            FramebufferAttachment attachment, Texture texture, TextureTarget target = TextureTarget.Texture2D)
+            FramebufferAttachment attachment,
+            Texture texture,
+            TextureTarget target = TextureTarget.Texture2D)
         {
             GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, handle);
             GL.FramebufferTexture2D(FramebufferTarget.DrawFramebuffer, attachment, target, texture, 0);
@@ -96,7 +98,7 @@ namespace amulware.Graphics
                 return;
 
             if (GraphicsContext.CurrentContext == null || GraphicsContext.CurrentContext.IsDisposed)
-                return; 
+                return;
 
             var handleCopy = Handle;
             GL.DeleteFramebuffers(1, ref handleCopy);

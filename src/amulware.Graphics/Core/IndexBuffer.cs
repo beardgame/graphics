@@ -90,7 +90,7 @@ namespace amulware.Graphics
             indices[Count + 1] = index1;
             Count = newCount;
         }
-        
+
         /// <summary>
         /// Adds indices.
         /// </summary>
@@ -183,7 +183,7 @@ namespace amulware.Graphics
             BufferTarget target = BufferTarget.ElementArrayBuffer,
             BufferUsageHint usageHint = BufferUsageHint.StreamDraw)
         {
-            GL.BufferData(target, (IntPtr)(sizeof(ushort) * Count), indices, usageHint);
+            GL.BufferData(target, (IntPtr) (sizeof(ushort) * Count), indices, usageHint);
         }
 
         #endregion
@@ -220,7 +220,7 @@ namespace amulware.Graphics
                 return;
 
             if (GraphicsContext.CurrentContext == null || GraphicsContext.CurrentContext.IsDisposed)
-                return; 
+                return;
 
             GL.DeleteBuffer(this);
 
@@ -233,6 +233,5 @@ namespace amulware.Graphics
         }
 
         #endregion
-
     }
 }

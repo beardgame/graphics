@@ -97,7 +97,7 @@ namespace amulware.Graphics
             var oldCount = Count;
             var newCount = oldCount + 2;
             ensureCapacity(newCount);
-            Count = (ushort)newCount;
+            Count = (ushort) newCount;
 
             vertices[oldCount] = vertex0;
             vertices[oldCount + 1] = vertex1;
@@ -114,7 +114,7 @@ namespace amulware.Graphics
             var oldCount = Count;
             var newCount = oldCount + 3;
             ensureCapacity(newCount);
-            Count = (ushort)newCount;
+            Count = (ushort) newCount;
 
             vertices[oldCount] = vertex0;
             vertices[oldCount + 1] = vertex1;
@@ -132,7 +132,7 @@ namespace amulware.Graphics
             var oldCount = Count;
             var newCount = oldCount + 4;
             ensureCapacity(newCount);
-            Count = (ushort)newCount;
+            Count = (ushort) newCount;
 
             vertices[oldCount] = vertex0;
             vertices[oldCount + 1] = vertex1;
@@ -153,7 +153,7 @@ namespace amulware.Graphics
             var newCount = oldCount + newVertices.Length;
             ensureCapacity(newCount);
             Array.Copy(newVertices, 0, vertices, Count, newVertices.Length);
-            Count = (ushort)newCount;
+            Count = (ushort) newCount;
             return oldCount;
         }
 
@@ -177,7 +177,7 @@ namespace amulware.Graphics
 
             ensureCapacity(newCount);
 
-            Count = (ushort)newCount;
+            Count = (ushort) newCount;
 
             offset = oldCount;
             return vertices;
@@ -192,8 +192,8 @@ namespace amulware.Graphics
         /// </summary>
         public void RemoveVertices(int count) =>
             Count = count > Count
-                ? (ushort)0
-                : (ushort)(Count - count);
+                ? (ushort) 0
+                : (ushort) (Count - count);
 
         /// <summary>
         /// Clears the vertex buffer.
@@ -224,9 +224,10 @@ namespace amulware.Graphics
         /// <param name="target">The target.</param>
         /// <param name="usageHint">The usage hint.</param>
         public void BufferData(
-            BufferTarget target = BufferTarget.ArrayBuffer, BufferUsageHint usageHint = BufferUsageHint.StreamDraw)
+            BufferTarget target = BufferTarget.ArrayBuffer,
+            BufferUsageHint usageHint = BufferUsageHint.StreamDraw)
         {
-            GL.BufferData(target, (IntPtr)(VertexSize * Count), vertices, usageHint);
+            GL.BufferData(target, (IntPtr) (VertexSize * Count), vertices, usageHint);
         }
 
         /// <summary>
@@ -245,9 +246,9 @@ namespace amulware.Graphics
             BufferUsageHint usageHint = BufferUsageHint.StreamDraw,
             bool setVertexCount = false)
         {
-            GL.BufferData(target, (IntPtr)(VertexSize * vertexCount), IntPtr.Zero, usageHint);
+            GL.BufferData(target, (IntPtr) (VertexSize * vertexCount), IntPtr.Zero, usageHint);
             if (setVertexCount)
-                Count = (ushort)vertexCount;
+                Count = (ushort) vertexCount;
         }
 
         #endregion
