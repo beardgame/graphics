@@ -11,6 +11,7 @@ namespace amulware.Graphics.Utilities
     /// However, actions can also be executed by multiple threads.
     /// If only one thread is used to execute, the actions are guaranteed to be executed in the order they were scheduled.
     /// </summary>
+    [Obsolete("Use ManualActionQueue from Bearded.Utilities instead.")]
     sealed class ManualActionQueue
     {
         private readonly BlockingCollection<Action> actions = new BlockingCollection<Action>();
