@@ -498,49 +498,49 @@ namespace amulware.Graphics
         /// <summary>
         /// Creates a colour from hue, saturation and value.
         /// </summary>
-        /// <param name="h">Hue of the colour (0-2pi).</param>
-        /// <param name="s">Saturation of the colour (0-1).</param>
-        /// <param name="v">Value of the colour (0-1).</param>
-        /// <param name="a">Alpha of the colour.</param>
+        /// <param name="hue">Hue of the colour (0-2pi).</param>
+        /// <param name="saturation">Saturation of the colour (0-1).</param>
+        /// <param name="value">Value of the colour (0-1).</param>
+        /// <param name="alpha">Alpha of the colour.</param>
         /// <returns>The constructed colour.</returns>
-        public static Color FromHSVA(float h, float s, float v, byte a = 255)
+        public static Color FromHSVA(float hue, float saturation, float value, byte alpha = 255)
         {
-            var chroma = v * s;
-            h /= MathHelper.PiOver3;
-            var x = chroma * (1 - Math.Abs((h % 2) - 1));
-            var m = v - chroma;
+            var chroma = value * saturation;
+            hue /= MathHelper.PiOver3;
+            var x = chroma * (1 - Math.Abs((hue % 2) - 1));
+            var m = value - chroma;
             float r, g, b;
-            if (h > 6 || h < 0)
+            if (hue > 6 || hue < 0)
             {
                 r = 0;
                 g = 0;
                 b = 0;
             }
-            else if (h < 1)
+            else if (hue < 1)
             {
                 r = chroma;
                 g = x;
                 b = 0;
             }
-            else if (h < 2)
+            else if (hue < 2)
             {
                 r = x;
                 g = chroma;
                 b = 0;
             }
-            else if (h < 3)
+            else if (hue < 3)
             {
                 r = 0;
                 g = chroma;
                 b = x;
             }
-            else if (h < 4)
+            else if (hue < 4)
             {
                 r = 0;
                 g = x;
                 b = chroma;
             }
-            else if (h < 5)
+            else if (hue < 5)
             {
                 r = x;
                 g = 0;
@@ -553,7 +553,7 @@ namespace amulware.Graphics
                 b = x;
             }
 
-            return new Color((byte) ((r + m) * 255), (byte) ((g + m) * 255), (byte) ((b + m) * 255), a);
+            return new Color((byte) ((r + m) * 255), (byte) ((g + m) * 255), (byte) ((b + m) * 255), alpha);
         }
 
         /// <summary>
@@ -669,22 +669,21 @@ namespace amulware.Graphics
 
                 float h;
 
+                // ReSharper disable CompareOfFloatsByEqualityOperator
                 var max = Math.Max(floatR, Math.Max(floatG, floatB));
-                // ReSharper disable once CompareOfFloatsByEqualityOperator
                 if (max == 0)
                     return 0;
 
                 var min = Math.Min(floatR, Math.Min(floatG, floatB));
                 var delta = max - min;
 
-                // ReSharper disable once CompareOfFloatsByEqualityOperator
                 if (floatR == max)
                     h = (floatG - floatB) / delta;
-                // ReSharper disable once CompareOfFloatsByEqualityOperator
                 else if (floatG == max)
                     h = 2 + (floatB - floatR) / delta;
                 else
                     h = 4 + (floatR - floatG) / delta;
+                // ReSharper restore CompareOfFloatsByEqualityOperator
 
                 h *= (float) (Math.PI / 3);
                 if (h < 0)
@@ -707,8 +706,8 @@ namespace amulware.Graphics
                 var floatB = b / 255f;
                 var floatA = a / 255f;
 
+                // ReSharper disable CompareOfFloatsByEqualityOperator
                 var max = Math.Max(floatR, Math.Max(floatG, floatB));
-                // ReSharper disable once CompareOfFloatsByEqualityOperator
                 if (max == 0)
                     return new Vector4(0, 0, 0, floatA);
 
@@ -720,14 +719,13 @@ namespace amulware.Graphics
 
                 float h;
 
-                // ReSharper disable once CompareOfFloatsByEqualityOperator
                 if (floatR == max)
                     h = (floatG - floatB) / delta;
-                // ReSharper disable once CompareOfFloatsByEqualityOperator
                 else if (floatG == max)
                     h = 2 + (floatB - floatR) / delta;
                 else
                     h = 4 + (floatR - floatG) / delta;
+                // ReSharper restore CompareOfFloatsByEqualityOperator
 
                 h *= (float) (Math.PI / 3);
                 if (h < 0)
@@ -790,11 +788,7 @@ namespace amulware.Graphics
         /// <summary>
         /// Checks whether this colour is the same as another.
         /// </summary>
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            return obj is Color color && Equals(color);
-        }
+        public override bool Equals(object obj) => obj is Color color && Equals(color);
 
         /// <summary>
         /// Returns the hash code for this instance.
