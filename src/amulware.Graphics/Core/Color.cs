@@ -507,7 +507,7 @@ namespace amulware.Graphics
         {
             var chroma = v * s;
             h /= MathHelper.PiOver3;
-            var x = chroma * (1 - Math.Abs(h % 2 - 1));
+            var x = chroma * (1 - Math.Abs((h % 2) - 1));
             var m = v - chroma;
             float r, g, b;
             if (h > 6 || h < 0)
