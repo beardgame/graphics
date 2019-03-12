@@ -92,8 +92,17 @@ namespace amulware.Graphics
 
         private void copyFromBitmap(Bitmap bitmap, bool preMultiplyAlpha)
         {
+            CopyDataFromBitmap(bitmap, preMultiplyAlpha, copyFromPointer, copyFromArray);
+        }
+
+        internal static void CopyDataFromBitmap(
+            Bitmap bitmap, bool preMultiplyAlpha,
+            Action<IntPtr> writeDataFromPointer,
+            Action<byte[]> writeDataFromArray
+            )
+        {
             var data = bitmap.LockBits(
-                new Rectangle(0, 0, Width, Height),
+                new Rectangle(0, 0, bitmap.Width, bitmap.Height),
                 ImageLockMode.ReadOnly,
                 SystemPixelFormat.Format32bppArgb
             );
@@ -108,11 +117,11 @@ namespace amulware.Graphics
 
                 PreMultipleArgbArray(array);
 
-                copyFromArray(array);
+                writeDataFromArray(array);
             }
             else
             {
-                copyFromPointer(data.Scan0);
+                writeDataFromPointer(data.Scan0);
 
                 bitmap.UnlockBits(data);
             }
