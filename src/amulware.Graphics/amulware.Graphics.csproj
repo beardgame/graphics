@@ -128,6 +128,7 @@
     <Compile Include="Charts\RegularDiscreteFunction2D.cs" />
     <Compile Include="Charts\StackingBarChart2D.cs" />
     <Compile Include="Core\ArrayTexture.cs" />
+    <Compile Include="Core\surfaces\settings\ArrayTextureUniform.cs" />
     <Compile Include="Meshes\MeshSurfaceInstance.cs" />
     <Compile Include="Meshes\Mesh.cs" />
     <Compile Include="Meshes\Mesh.Builder.cs" />
