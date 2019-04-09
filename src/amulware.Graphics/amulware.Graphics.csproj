@@ -146,7 +146,10 @@
     <Compile Include="ShaderManagement\ShaderFile.cs" />
     <Compile Include="ShaderManagement\ShaderFileLoader.cs" />
     <Compile Include="ShaderManagement\ShaderManager.cs" />
+    <Compile Include="ShaderManagement\ShaderManager.ProgramBuilder.cs" />
+    <Compile Include="ShaderManagement\ShaderManager.Reloading.cs" />
     <Compile Include="ShaderManagement\ShaderReloader.cs" />
+    <Compile Include="ShaderManagement\ShaderReloadReport.cs" />
     <Compile Include="ShaderManagement\ShaderSource.cs" />
     <Compile Include="Sprites\ISpriteSet.cs" />
     <Compile Include="Sprites\Sprite.cs" />
