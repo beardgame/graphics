@@ -7,18 +7,13 @@ namespace amulware.Graphics
     /// <summary>
     /// This class represents and OpenGL vertex buffer object.
     /// </summary>
-    /// <remarks>Note that this object can hold no more than 2^16 vertices.</remarks>
+    /// <remarks>This object can hold no more than 2^16 vertices.</remarks>
     /// <typeparam name="TVertexData">The type of vertex in the buffer.</typeparam>
-    sealed public class VertexBuffer<TVertexData> : IDisposable where TVertexData : struct, IVertexData
+    public sealed class VertexBuffer<TVertexData> : IDisposable where TVertexData : struct, IVertexData
     {
         #region Fields
 
-        private readonly int handle;
-        private readonly int vertexSize;
-
         private TVertexData[] vertices;
-
-        private ushort count;
 
         #endregion
 
@@ -27,23 +22,23 @@ namespace amulware.Graphics
         /// <summary>
         /// The OpenGL vertex buffer object handle.
         /// </summary>
-        public int Handle { get { return this.handle; } }
+        public int Handle { get; }
 
         /// <summary>
         /// The size of a vertex in bytes.
         /// </summary>
-        public int VertexSize { get { return this.vertexSize; } }
+        public int VertexSize { get; }
 
         /// <summary>
         /// The number of vertices in this VertexBuffer.
         /// </summary>
-        public ushort Count { get { return this.count; } }
+        public ushort Count { get; private set; }
 
         /// <summary>
         /// The size of the underlying array of vertices.
         /// The array resizes automatically, when more vertices are added.
         /// </summary>
-        public int Capacity { get { return this.vertices.Length; } }
+        public int Capacity => vertices.Length;
 
         #endregion
 
@@ -55,11 +50,11 @@ namespace amulware.Graphics
         /// <param name="capacity">The initial capacity of the buffer.</param>
         public VertexBuffer(int capacity = 0)
         {
-            this.vertexSize = VertexData.SizeOf<TVertexData>();
+            VertexSize = VertexData.SizeOf<TVertexData>();
 
-            this.vertices = new TVertexData[capacity > 0 ? capacity : 4];
+            vertices = new TVertexData[capacity > 0 ? capacity : 4];
 
-            this.handle = GL.GenBuffer();
+            Handle = GL.GenBuffer();
         }
 
         #endregion
@@ -70,8 +65,8 @@ namespace amulware.Graphics
 
         private void ensureCapacity(int minCapacity)
         {
-            if (this.vertices.Length <= minCapacity)
-                Array.Resize(ref this.vertices, Math.Max(this.vertices.Length * 2, minCapacity));
+            if (vertices.Length <= minCapacity)
+                Array.Resize(ref vertices, Math.Max(vertices.Length * 2, minCapacity));
         }
 
         #endregion
@@ -87,10 +82,10 @@ namespace amulware.Graphics
         /// <returns>Index of the vertex in vertex buffer.</returns>
         public ushort AddVertex(TVertexData vertex)
         {
-            if (this.vertices.Length == this.count)
-                Array.Resize(ref this.vertices, this.vertices.Length * 2);
-            this.vertices[this.count] = vertex;
-            return this.count++;
+            if (vertices.Length == Count)
+                Array.Resize(ref vertices, vertices.Length * 2);
+            vertices[Count] = vertex;
+            return Count++;
         }
 
         /// <summary>
@@ -99,13 +94,13 @@ namespace amulware.Graphics
         /// <returns>Index of first new vertex in vertex buffer.</returns>
         public ushort AddVertices(TVertexData vertex0, TVertexData vertex1)
         {
-            ushort oldCount = this.count;
-            int newCount = oldCount + 2;
-            this.ensureCapacity(newCount);
-            this.count = (ushort)newCount;
+            var oldCount = Count;
+            var newCount = oldCount + 2;
+            ensureCapacity(newCount);
+            Count = (ushort) newCount;
 
-            this.vertices[oldCount] = vertex0;
-            this.vertices[oldCount + 1] = vertex1;
+            vertices[oldCount] = vertex0;
+            vertices[oldCount + 1] = vertex1;
 
             return oldCount;
         }
@@ -116,14 +111,14 @@ namespace amulware.Graphics
         /// <returns>Index of first new vertex in vertex buffer.</returns>
         public ushort AddVertices(TVertexData vertex0, TVertexData vertex1, TVertexData vertex2)
         {
-            ushort oldCount = this.count;
-            int newCount = oldCount + 3;
-            this.ensureCapacity(newCount);
-            this.count = (ushort)newCount;
+            var oldCount = Count;
+            var newCount = oldCount + 3;
+            ensureCapacity(newCount);
+            Count = (ushort) newCount;
 
-            this.vertices[oldCount] = vertex0;
-            this.vertices[oldCount + 1] = vertex1;
-            this.vertices[oldCount + 2] = vertex2;
+            vertices[oldCount] = vertex0;
+            vertices[oldCount + 1] = vertex1;
+            vertices[oldCount + 2] = vertex2;
 
             return oldCount;
         }
@@ -134,15 +129,15 @@ namespace amulware.Graphics
         /// <returns>Index of first new vertex in vertex buffer.</returns>
         public ushort AddVertices(TVertexData vertex0, TVertexData vertex1, TVertexData vertex2, TVertexData vertex3)
         {
-            ushort oldCount = this.count;
-            int newCount = oldCount + 4;
-            this.ensureCapacity(newCount);
-            this.count = (ushort)newCount;
+            var oldCount = Count;
+            var newCount = oldCount + 4;
+            ensureCapacity(newCount);
+            Count = (ushort) newCount;
 
-            this.vertices[oldCount] = vertex0;
-            this.vertices[oldCount + 1] = vertex1;
-            this.vertices[oldCount + 2] = vertex2;
-            this.vertices[oldCount + 3] = vertex3;
+            vertices[oldCount] = vertex0;
+            vertices[oldCount + 1] = vertex1;
+            vertices[oldCount + 2] = vertex2;
+            vertices[oldCount + 3] = vertex3;
 
             return oldCount;
         }
@@ -150,15 +145,15 @@ namespace amulware.Graphics
         /// <summary>
         /// Adds vertices.
         /// </summary>
-        /// <param name="vertices">The vertices.</param>
+        /// <param name="newVertices">The vertices.</param>
         /// <returns>Index of first new vertex in vertex buffer.</returns>
-        public ushort AddVertices(params TVertexData[] vertices)
+        public ushort AddVertices(params TVertexData[] newVertices)
         {
-            ushort oldCount = this.count;
-            int newCount = oldCount + vertices.Length;
-            this.ensureCapacity(newCount);
-            Array.Copy(vertices, 0, this.vertices, this.count, vertices.Length);
-            this.count = (ushort)newCount;
+            var oldCount = Count;
+            var newCount = oldCount + newVertices.Length;
+            ensureCapacity(newCount);
+            Array.Copy(newVertices, 0, vertices, Count, newVertices.Length);
+            Count = (ushort) newCount;
             return oldCount;
         }
 
@@ -177,15 +172,15 @@ namespace amulware.Graphics
         /// To copy more vertices, call this method again and use the new return value.</returns>
         public TVertexData[] WriteVerticesDirectly(int count, out ushort offset)
         {
-            ushort oldCount = this.count;
-            int newCount = oldCount + count;
+            var oldCount = Count;
+            var newCount = oldCount + count;
 
-            this.ensureCapacity(newCount);
+            ensureCapacity(newCount);
 
-            this.count = (ushort)newCount;
+            Count = (ushort) newCount;
 
             offset = oldCount;
-            return this.vertices;
+            return vertices;
         }
 
         #endregion
@@ -195,19 +190,17 @@ namespace amulware.Graphics
         /// <summary>
         /// Removes a the last <paramref name="count"/> vertices added.
         /// </summary>
-        public void RemoveVertices(int count)
-        {
-            this.count = count > this.count
-                ? (ushort)0
-                : (ushort)(this.count - count);
-        }
+        public void RemoveVertices(int count) =>
+            Count = count > Count
+                ? (ushort) 0
+                : (ushort) (Count - count);
 
         /// <summary>
         /// Clears the vertex buffer.
         /// </summary>
         public void Clear()
         {
-            this.count = 0;
+            Count = 0;
         }
 
         #endregion
@@ -230,9 +223,11 @@ namespace amulware.Graphics
         /// </summary>
         /// <param name="target">The target.</param>
         /// <param name="usageHint">The usage hint.</param>
-        public void BufferData(BufferTarget target = BufferTarget.ArrayBuffer, BufferUsageHint usageHint = BufferUsageHint.StreamDraw)
+        public void BufferData(
+            BufferTarget target = BufferTarget.ArrayBuffer,
+            BufferUsageHint usageHint = BufferUsageHint.StreamDraw)
         {
-            GL.BufferData(target, (IntPtr)(this.vertexSize * this.count), this.vertices, usageHint);
+            GL.BufferData(target, (IntPtr) (VertexSize * Count), vertices, usageHint);
         }
 
         /// <summary>
@@ -245,12 +240,15 @@ namespace amulware.Graphics
         /// <param name="target">The target.</param>
         /// <param name="usageHint">The usage hin.t</param>
         /// <param name="setVertexCount">Whether to set the given vertex count as size of this vertex buffer.</param>
-        public void BufferNoData(int vertexCount, BufferTarget target = BufferTarget.ArrayBuffer,
-            BufferUsageHint usageHint = BufferUsageHint.StreamDraw, bool setVertexCount = false)
+        public void BufferNoData(
+            int vertexCount,
+            BufferTarget target = BufferTarget.ArrayBuffer,
+            BufferUsageHint usageHint = BufferUsageHint.StreamDraw,
+            bool setVertexCount = false)
         {
-            GL.BufferData(target, (IntPtr)(this.vertexSize * vertexCount), IntPtr.Zero, usageHint);
+            GL.BufferData(target, (IntPtr) (VertexSize * vertexCount), IntPtr.Zero, usageHint);
             if (setVertexCount)
-                this.count = (ushort)vertexCount;
+                Count = (ushort) vertexCount;
         }
 
         #endregion
@@ -262,10 +260,7 @@ namespace amulware.Graphics
         /// <summary>
         /// Implicit cast to easily use vertex buffers in GL functions expecting an integer handle.
         /// </summary>
-        static public implicit operator int(VertexBuffer<TVertexData> buffer)
-        {
-            return buffer.handle;
-        }
+        public static implicit operator int(VertexBuffer<TVertexData> buffer) => buffer.Handle;
 
         #endregion
 
@@ -278,13 +273,13 @@ namespace amulware.Graphics
         /// </summary>
         public void Dispose()
         {
-            this.dispose();
+            dispose();
             GC.SuppressFinalize(this);
         }
 
         private void dispose()
         {
-            if (this.disposed)
+            if (disposed)
                 return;
 
             if (GraphicsContext.CurrentContext == null || GraphicsContext.CurrentContext.IsDisposed)
@@ -292,12 +287,12 @@ namespace amulware.Graphics
 
             GL.DeleteBuffer(this);
 
-            this.disposed = true;
+            disposed = true;
         }
 
         ~VertexBuffer()
         {
-            this.dispose();
+            dispose();
         }
 
         #endregion

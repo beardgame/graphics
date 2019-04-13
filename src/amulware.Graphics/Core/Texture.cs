@@ -14,20 +14,16 @@ namespace amulware.Graphics
     public sealed class Texture : IDisposable
     {
         public int Handle { get; private set; }
-        
+
         public int Height { get; private set; }
-        
+
         public int Width { get; private set; }
-        
+
         public Texture(Stream bitmapFileStream, bool preMultiplyAlpha = false)
-            : this(new Bitmap(bitmapFileStream), preMultiplyAlpha, true)
-        {
-        }
+            : this(new Bitmap(bitmapFileStream), preMultiplyAlpha, true) { }
 
         public Texture(string imageFilePath, bool preMultiplyAlpha = false)
-            : this(new Bitmap(imageFilePath), preMultiplyAlpha, true)
-        {
-        }
+            : this(new Bitmap(imageFilePath), preMultiplyAlpha, true) { }
 
         private Texture(Bitmap bitmap, bool preMultiplyAlpha = false, bool disposeBitmap = false)
             : this()
@@ -92,8 +88,17 @@ namespace amulware.Graphics
 
         private void copyFromBitmap(Bitmap bitmap, bool preMultiplyAlpha)
         {
+            CopyDataFromBitmap(bitmap, preMultiplyAlpha, copyFromPointer, copyFromArray);
+        }
+
+        internal static void CopyDataFromBitmap(
+            Bitmap bitmap, bool preMultiplyAlpha,
+            Action<IntPtr> writeDataFromPointer,
+            Action<byte[]> writeDataFromArray
+            )
+        {
             var data = bitmap.LockBits(
-                new Rectangle(0, 0, Width, Height),
+                new Rectangle(0, 0, bitmap.Width, bitmap.Height),
                 ImageLockMode.ReadOnly,
                 SystemPixelFormat.Format32bppArgb
             );
@@ -108,11 +113,11 @@ namespace amulware.Graphics
 
                 PreMultipleArgbArray(array);
 
-                copyFromArray(array);
+                writeDataFromArray(array);
             }
             else
             {
-                copyFromPointer(data.Scan0);
+                writeDataFromPointer(data.Scan0);
 
                 bitmap.UnlockBits(data);
             }
@@ -124,9 +129,9 @@ namespace amulware.Graphics
             for (var i = 0; i < size; i += 4)
             {
                 var alpha = data[i + 3] / 255f;
-                data[i] = (byte)(data[i] * alpha);
-                data[i + 1] = (byte)(data[i + 1] * alpha);
-                data[i + 2] = (byte)(data[i + 2] * alpha);
+                data[i] = (byte) (data[i] * alpha);
+                data[i + 1] = (byte) (data[i + 1] * alpha);
+                data[i + 2] = (byte) (data[i + 2] * alpha);
             }
         }
 
@@ -181,7 +186,11 @@ namespace amulware.Graphics
             GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
         }
 
-        public void SetParameters(TextureMinFilter minFilter, TextureMagFilter magFilter, TextureWrapMode wrapS, TextureWrapMode wrapT)
+        public void SetParameters(
+            TextureMinFilter minFilter,
+            TextureMagFilter magFilter,
+            TextureWrapMode wrapS,
+            TextureWrapMode wrapT)
         {
             Bind();
 
@@ -199,15 +208,17 @@ namespace amulware.Graphics
         }
 
         private static void setParameters(
-            TextureMinFilter minFilter, TextureMagFilter magFilter,
-            TextureWrapMode wrapS, TextureWrapMode wrapT)
+            TextureMinFilter minFilter,
+            TextureMagFilter magFilter,
+            TextureWrapMode wrapS,
+            TextureWrapMode wrapT)
         {
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int) minFilter);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int) magFilter);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int) wrapS);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int) wrapT);
         }
-        
+
         public void Bind(TextureTarget target = TextureTarget.Texture2D)
         {
             GL.BindTexture(target, Handle);
@@ -217,7 +228,7 @@ namespace amulware.Graphics
         {
             GL.BindTexture(target, 0);
         }
-        
+
         public UVRectangle GrabUV(Vector2 position, Vector2 size)
             => GrabUV(position.X, position.Y, size.X, size.Y);
 
