@@ -102,5 +102,9 @@ namespace amulware.Graphics
             this.staticBufferUploaded = false;
         }
 
+        public override void Dispose()
+        {
+            vertexBuffer.Dispose();
+        }
     }
 }

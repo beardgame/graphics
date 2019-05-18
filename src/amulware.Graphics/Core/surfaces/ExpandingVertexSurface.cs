@@ -191,5 +191,18 @@ namespace amulware.Graphics
             this.vertexBuffers.Add(this.activeVertexBuffer = new VertexBuffer<TVertexData>(i));
             this.vertexArrays.Add(new VertexArray<TVertexData>(this.activeVertexBuffer));
         }
+
+        public override void Dispose()
+        {
+            foreach (var array in vertexArrays)
+            {
+                array.Dispose();
+            }
+
+            foreach (var buffer in vertexBuffers)
+            {
+                buffer.Dispose();
+            }
+        }
     }
 }

@@ -121,5 +121,10 @@ namespace amulware.Graphics
         }
         
         public static implicit operator int(ArrayTexture texture) => texture?.Handle ?? 0;
+
+        public void Dispose()
+        {
+            GL.DeleteTexture(Handle);
+        }
     }
 }

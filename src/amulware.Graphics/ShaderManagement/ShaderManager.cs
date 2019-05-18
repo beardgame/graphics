@@ -33,6 +33,14 @@ namespace amulware.Graphics.ShaderManagement
             }
         }
 
+        public bool Contains(ShaderType type, string name)
+        {
+            if (shaders.TryGetValue(type, out var shadersOfType))
+                return shadersOfType.ContainsKey(name);
+            
+            throw new ArgumentException($"ShaderType {type} is not supported.");
+        }
+
         public void Add(ReloadableShaderProgram shaderProgram, string name)
         {
             if (programs.ContainsKey(name))

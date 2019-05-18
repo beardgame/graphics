@@ -186,5 +186,11 @@ namespace amulware.Graphics
         {
             return this.indexBuffer.WriteIndicesDirectly(count, out offset);
         }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            indexBuffer.Dispose();
+        }
     }
 }

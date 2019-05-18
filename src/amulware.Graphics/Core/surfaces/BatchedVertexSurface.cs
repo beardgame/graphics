@@ -259,5 +259,23 @@ namespace amulware.Graphics
                 batchContainer.Delete();
             }
         }
+
+        public override void Dispose()
+        {
+            foreach (var container in this.activeBatches)
+            {
+                container.Delete();
+            }
+
+            foreach (var container in this.inactiveBatches)
+            {
+                container.Delete();
+            }
+
+            foreach (var container in this.unusedBatches)
+            {
+                container.Delete();
+            }
+        }
     }
 }

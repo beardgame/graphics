@@ -105,5 +105,7 @@ namespace amulware.Graphics
         /// Is called after the surface's shader program and its settings have been set. Implement this to add sub class specific render behaviour.
         /// </summary>
         abstract protected void render();
+
+        public abstract void Dispose();
     }
 }
