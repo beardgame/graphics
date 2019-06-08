@@ -1,0 +1,28 @@
+# Declare the different kinds of text files, and make sure they always have the same line endings on checkout (unix)
+*.txt text eol=lf
+*.md text eol=lf
+*.cs text eol=lf
+*.js text eol=lf
+*.ts text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.scss text eol=lf
+*.cshtml text eol=lf
+*.csproj text eol=lf
+*.csproj.DotSettings text eol=lf
+*.aspx text eol=lf
+*.ascx text eol=lf
+*.vm text eol=lf
+*.Master text eol=lf
+*.xprojtext eol=lf
+*.xproj.DotSettings text eol=lf
+*.xproj.user text eol=lf
+*.json text eol=lf
+*.xml text eol=lf
+*.config text eol=lf
+*.config.template text eol=lf
+*.msbuild text eol=lf
+
+*.sln text eol=lf
+*.vcproj text eol=lf
+*.vcxproj text eol=lf
