@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace amulware.Graphics
 {
@@ -48,6 +48,17 @@ namespace amulware.Graphics
             this.ElapsedTimeInSf = (float)this.ElapsedTimeInS;
 
             this.TimeInS = currentTimeInSeconds;
+        }
+
+        /// <summary>
+        /// Initializes a new instance by copying from the given <see cref="UpdateEventArgs"/> class.
+        /// </summary>
+        /// <param name="updateEventArgs">The <see cref="UpdateEventArgs"/> instance to copy.</param>
+        public UpdateEventArgs(UpdateEventArgs updateEventArgs) {
+            this.Frame = updateEventArgs.Frame;
+            this.ElapsedTimeInS = updateEventArgs.ElapsedTimeInS;
+            this.ElapsedTimeInSf = updateEventArgs.ElapsedTimeInSf;
+            this.TimeInS = updateEventArgs.TimeInS;
         }
     }
 }
