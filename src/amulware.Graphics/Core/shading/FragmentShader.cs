@@ -6,7 +6,7 @@ namespace amulware.Graphics
     /// <summary>
     /// This class represents a GLSL fragment shader
     /// </summary>
-    sealed public class FragmentShader : Shader
+    public sealed class FragmentShader : Shader
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="FragmentShader"/> class from source code.
@@ -22,7 +22,7 @@ namespace amulware.Graphics
         {
             using (var streamReader = new StreamReader(filename))
             {
-                string code = streamReader.ReadToEnd();
+                var code = streamReader.ReadToEnd();
                 return new FragmentShader(code);
             }
         }
