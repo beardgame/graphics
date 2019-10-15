@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Runtime.InteropServices;
 using OpenTK;
@@ -16,10 +17,7 @@ namespace amulware.Graphics
         /// Returns the size in bytes of a given type.
         /// </summary>
         /// <typeparam name="T">The type to return the size of.</typeparam>
-        public static int SizeOf<T>()
-        {
-            return Marshal.SizeOf(typeof(T));
-        }
+        public static int SizeOf<T>() => Marshal.SizeOf(typeof(T));
 
         #region MakeAttributeArray()
         /// <summary>
@@ -32,7 +30,7 @@ namespace amulware.Graphics
             var stride = attributes.Sum(a => a.Bytes);
             var array = new VertexAttribute[attributes.Count];
             var offset = 0;
-            for (int i = 0; i < attributes.Count; i++)
+            for (var i = 0; i < attributes.Count; i++)
             {
                 var template = attributes[i];
                 array[i] = template.ToAttribute(offset, stride);
@@ -46,58 +44,55 @@ namespace amulware.Graphics
         /// Offset and stride are calculated automatically, assuming zero padding.
         /// </summary>
         /// <param name="attributes">The attribute templates.</param>
-        public static VertexAttribute[] MakeAttributeArray(params IAttributeTemplate[] attributes)
-        {
-            return MakeAttributeArray((IList<IAttributeTemplate>)attributes);
-        }
+        public static VertexAttribute[] MakeAttributeArray(params IAttributeTemplate[] attributes) =>
+            MakeAttributeArray((IList<IAttributeTemplate>) attributes);
 
         /// <summary>
         /// Creates a <see cref="VertexAttribute"/> array from a list of attribute templates.
         /// Offset and stride are calculated automatically, assuming zero padding.
         /// </summary>
         /// <param name="attributes">The attribute templates.</param>
-        public static VertexAttribute[] MakeAttributeArray(IEnumerable<IAttributeTemplate> attributes)
-        {
-            return MakeAttributeArray(attributes.ToList());
-        }
+        public static VertexAttribute[] MakeAttributeArray(IEnumerable<IAttributeTemplate> attributes) =>
+            MakeAttributeArray(attributes.ToList());
+
         #endregion
 
         #region Dictionaries
-        private static readonly Dictionary<Type, AttributeTypeInfo> knownTypes
+        private static readonly ImmutableDictionary<Type, AttributeTypeInfo> knownTypes
         #region init
-            = new Dictionary<Type, AttributeTypeInfo>
+            = ImmutableDictionary.CreateRange(new Dictionary<Type, AttributeTypeInfo>
             {
-                { typeof(float), toInfo(VertexAttribPointerType.Float, 1, false) },
-                { typeof(Vector2), toInfo(VertexAttribPointerType.Float, 2, false) },
-                { typeof(Vector3), toInfo(VertexAttribPointerType.Float, 3, false) },
-                { typeof(Vector4), toInfo(VertexAttribPointerType.Float, 4, false) },
+                { typeof(float), toInfo(VertexAttribPointerType.Float, 1, defaultNormalize: false) },
+                { typeof(Vector2), toInfo(VertexAttribPointerType.Float, 2, defaultNormalize: false) },
+                { typeof(Vector3), toInfo(VertexAttribPointerType.Float, 3, defaultNormalize: false) },
+                { typeof(Vector4), toInfo(VertexAttribPointerType.Float, 4, defaultNormalize: false) },
 
-                { typeof(Half), toInfo(VertexAttribPointerType.HalfFloat, 1, false) },
-                { typeof(Vector2h), toInfo(VertexAttribPointerType.HalfFloat, 2, false) },
-                { typeof(Vector3h), toInfo(VertexAttribPointerType.HalfFloat, 3, false) },
-                { typeof(Vector4h), toInfo(VertexAttribPointerType.HalfFloat, 4, false) },
-                
-                { typeof(double), toInfo(VertexAttribPointerType.Double, 1, false) },
-                { typeof(Vector2d), toInfo(VertexAttribPointerType.HalfFloat, 2, false) },
-                { typeof(Vector3d), toInfo(VertexAttribPointerType.HalfFloat, 3, false) },
-                { typeof(Vector4d), toInfo(VertexAttribPointerType.HalfFloat, 4, false) },
+                { typeof(Half), toInfo(VertexAttribPointerType.HalfFloat, 1, defaultNormalize: false) },
+                { typeof(Vector2h), toInfo(VertexAttribPointerType.HalfFloat, 2, defaultNormalize: false) },
+                { typeof(Vector3h), toInfo(VertexAttribPointerType.HalfFloat, 3, defaultNormalize: false) },
+                { typeof(Vector4h), toInfo(VertexAttribPointerType.HalfFloat, 4, defaultNormalize: false) },
 
-                { typeof(byte), toInfo(VertexAttribPointerType.UnsignedByte, 1, true) },
-                { typeof(sbyte), toInfo(VertexAttribPointerType.Byte, 1, true) },
-                
-                { typeof(short), toInfo(VertexAttribPointerType.Short, 1, false) },
-                { typeof(ushort), toInfo(VertexAttribPointerType.UnsignedShort, 1, false) },
+                { typeof(double), toInfo(VertexAttribPointerType.Double, 1, defaultNormalize: false) },
+                { typeof(Vector2d), toInfo(VertexAttribPointerType.HalfFloat, 2, defaultNormalize: false) },
+                { typeof(Vector3d), toInfo(VertexAttribPointerType.HalfFloat, 3, defaultNormalize: false) },
+                { typeof(Vector4d), toInfo(VertexAttribPointerType.HalfFloat, 4, defaultNormalize: false) },
 
-                { typeof(int), toInfo(VertexAttribPointerType.Int, 1, false) },
-                { typeof(uint), toInfo(VertexAttribPointerType.UnsignedInt, 1, false) },
+                { typeof(byte), toInfo(VertexAttribPointerType.UnsignedByte, 1, defaultNormalize: true) },
+                { typeof(sbyte), toInfo(VertexAttribPointerType.Byte, 1, defaultNormalize: true) },
 
-                { typeof(Color), toInfo(VertexAttribPointerType.UnsignedByte, 4, true) },
-            };
+                { typeof(short), toInfo(VertexAttribPointerType.Short, 1, defaultNormalize: false) },
+                { typeof(ushort), toInfo(VertexAttribPointerType.UnsignedShort, 1, defaultNormalize: false) },
+
+                { typeof(int), toInfo(VertexAttribPointerType.Int, 1, defaultNormalize: false) },
+                { typeof(uint), toInfo(VertexAttribPointerType.UnsignedInt, 1, defaultNormalize: false) },
+
+                { typeof(Color), toInfo(VertexAttribPointerType.UnsignedByte, 4, defaultNormalize: true) },
+            });
         #endregion
 
-        private static readonly Dictionary<VertexAttribPointerType, int> attribByteSizes
+        private static readonly ImmutableDictionary<VertexAttribPointerType, int> attribByteSizes
         #region init
-            = new Dictionary<VertexAttribPointerType, int>
+            = ImmutableDictionary.CreateRange(new Dictionary<VertexAttribPointerType, int>
             {
                 { VertexAttribPointerType.Byte, 1 },
                 { VertexAttribPointerType.UnsignedByte, 1 },
@@ -108,7 +103,7 @@ namespace amulware.Graphics
                 { VertexAttribPointerType.UnsignedInt, 4 },
                 { VertexAttribPointerType.Float, 4 },
                 { VertexAttribPointerType.Double, 8 },
-            };
+            });
         #endregion
 
         #endregion
@@ -129,10 +124,8 @@ namespace amulware.Graphics
         /// three and four dimensional vectors of all three floating point types, and <see cref="Color"/>.
         /// </typeparam>
         /// <exception cref="ArgumentException">The given type is not supported.</exception>
-        public static IAttributeTemplate MakeAttributeTemplate<T>(string name, bool? normalize = null)
-        {
-            return MakeAttributeTemplate(name, typeof (T), normalize);
-        }
+        public static IAttributeTemplate MakeAttributeTemplate<T>(string name, bool? normalize = null) =>
+            MakeAttributeTemplate(name, typeof (T), normalize);
 
         /// <summary>
         /// Creates a vertex attribute template of a given basic type with and a given name.
@@ -151,9 +144,8 @@ namespace amulware.Graphics
         /// <exception cref="ArgumentException">The given type is not supported.</exception>
         public static IAttributeTemplate MakeAttributeTemplate(string name, Type type, bool? normalize = null)
         {
-            AttributeTypeInfo info;
-            if(!knownTypes.TryGetValue(type, out info))
-                throw new ArgumentException(string.Format("Unknown type: {0}", type.Name));
+            if(!knownTypes.TryGetValue(type, out var info))
+                throw new ArgumentException($"Unknown type: {type.Name}");
 
             return MakeAttributeTemplate(name, info.Type, info.Count, normalize ?? info.DefaultNormalize);
         }
@@ -165,11 +157,10 @@ namespace amulware.Graphics
         /// <param name="type">The <see cref="VertexAttribPointerType"/> of the attribute.</param>
         /// <param name="numberOfType">Number of components of the given type in this attribute.</param>
         /// <param name="normalize">Whether to normalize the attribute.</param>
-        public static IAttributeTemplate MakeAttributeTemplate(string name, VertexAttribPointerType type,
-            int numberOfType, bool normalize = false)
-        {
-            return new AttributeTemplate(name, numberOfType, type, normalize);
-        }
+        public static IAttributeTemplate MakeAttributeTemplate(
+                string name, VertexAttribPointerType type, int numberOfType, bool normalize = false) =>
+            new AttributeTemplate(name, numberOfType, type, normalize);
+
         #endregion
 
         #region Types
@@ -196,50 +187,45 @@ namespace amulware.Graphics
 
         private struct AttributeTypeInfo
         {
+            public VertexAttribPointerType Type { get; }
+            public int Count { get; }
+            public bool DefaultNormalize { get; }
+
             public AttributeTypeInfo(VertexAttribPointerType type, int count, bool defaultNormalize)
                 : this()
             {
-                this.Type = type;
-                this.Count = count;
-                this.DefaultNormalize = defaultNormalize;
+                Type = type;
+                Count = count;
+                DefaultNormalize = defaultNormalize;
             }
-
-            public VertexAttribPointerType Type { get; private set; }
-            public int Count { get; private set; }
-            public bool DefaultNormalize { get; private set; }
         }
 
-        private static AttributeTypeInfo toInfo(VertexAttribPointerType type, int count, bool defaultNormalize)
-        {
-            return new AttributeTypeInfo(type, count, defaultNormalize);
-        }
+        private static AttributeTypeInfo toInfo(VertexAttribPointerType type, int count, bool defaultNormalize) =>
+            new AttributeTypeInfo(type, count, defaultNormalize);
 
         private sealed class AttributeTemplate : IAttributeTemplate
         {
-            private readonly int bytes;
             private readonly string name;
             private readonly int size;
             private readonly VertexAttribPointerType type;
             private readonly bool normalize;
 
+            public int Bytes { get; }
+
             public AttributeTemplate(string name, int size, VertexAttribPointerType type, bool normalize)
             {
-                int bytes;
-                if (!attribByteSizes.TryGetValue(type, out bytes))
-                    throw new ArgumentException(string.Format("Unknown VertexAttribPointerType: {0}", type));
-                this.bytes = bytes * size;
+                if (!attribByteSizes.TryGetValue(type, out var bytes))
+                    throw new ArgumentException($"Unknown VertexAttribPointerType: {type}");
+
+                Bytes = bytes * size;
                 this.name = name;
                 this.size = size;
                 this.type = type;
                 this.normalize = normalize;
             }
 
-            public int Bytes { get { return this.bytes; } }
-
-            public VertexAttribute ToAttribute(int offset, int stride)
-            {
-                return new VertexAttribute(this.name, this.size, this.type, stride, offset, this.normalize);
-            }
+            public VertexAttribute ToAttribute(int offset, int stride) =>
+                new VertexAttribute(name, size, type, stride, offset, normalize);
         }
         #endregion
     }
