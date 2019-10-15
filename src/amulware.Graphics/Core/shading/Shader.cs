@@ -1,6 +1,4 @@
 using System;
-using System.IO;
-using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 
@@ -11,31 +9,25 @@ namespace amulware.Graphics
     /// </summary>
     public abstract class Shader : IDisposable
     {
-        private readonly ShaderType type;
-
         /// <summary>
         /// The GLSL shader object handle.
         /// </summary>
-        public readonly int Handle;
+        public int Handle { get; }
 
-        public Shader(ShaderType type, string code)
+        protected Shader(ShaderType type, string code)
         {
-            this.type = type;
-            this.Handle = GL.CreateShader(type);
+            Handle = GL.CreateShader(type);
 
             GL.ShaderSource(this, code);
             GL.CompileShader(this);
 
             // throw exception if compile failed
-            int statusCode;
-            GL.GetShader(this, ShaderParameter.CompileStatus, out statusCode);
+            GL.GetShader(this, ShaderParameter.CompileStatus, out var statusCode);
 
-            if (statusCode != 1)
-            {
-                string info;
-                GL.GetShaderInfoLog(this, out info);
-                throw new ApplicationException(string.Format("Could not load shader: {0}", info));
-            }
+            if (statusCode == StatusCode.Ok) return;
+
+            GL.GetShaderInfoLog(this, out var info);
+            throw new ApplicationException($"Could not load shader: {info}");
 
         }
 
@@ -44,37 +36,34 @@ namespace amulware.Graphics
         /// </summary>
         /// <param name="shader">The shader.</param>
         /// <returns>GLSL shader object handle.</returns>
-        static public implicit operator int(Shader shader)
-        {
-            return shader.Handle;
-        }
+        public static implicit operator int(Shader shader) => shader.Handle;
 
         #region Disposing
 
-        private bool disposed = false;
+        private bool disposed;
 
         public void Dispose()
         {
-            this.dispose(true);
+            Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        protected virtual void dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
-            if (this.disposed)
+            if (disposed)
                 return;
 
             if (GraphicsContext.CurrentContext == null || GraphicsContext.CurrentContext.IsDisposed)
-                return; 
-            
+                return;
+
             GL.DeleteShader(this);
 
-            this.disposed = true;
+            disposed = true;
         }
 
         ~Shader()
         {
-            this.dispose(false);
+            Dispose(false);
         }
 
         #endregion

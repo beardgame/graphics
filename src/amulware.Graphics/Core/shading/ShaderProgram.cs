@@ -14,38 +14,29 @@ namespace amulware.Graphics
         /// <summary>
         /// The GLSL shader program handle
         /// </summary>
-        public readonly int Handle;
+        public int Handle { get; }
 
         private readonly Dictionary<string, int> attributeLocations = new Dictionary<string, int>();
         private readonly Dictionary<string, int> uniformLocations = new Dictionary<string, int>();
 
-        public static ShaderProgram FromFiles(string vertexShaderPath, string fragmentShaderPath)
-        {
-            return new ShaderProgram(VertexShader.FromFile(vertexShaderPath), FragmentShader.FromFile(fragmentShaderPath));
-        }
+        public static ShaderProgram FromFiles(string vertexShaderPath, string fragmentShaderPath) =>
+            new ShaderProgram(VertexShader.FromFile(vertexShaderPath), FragmentShader.FromFile(fragmentShaderPath));
 
-        public static ShaderProgram FromCode(string vertexShaderCode, string fragmentShaderCode)
-        {
-            return new ShaderProgram(new VertexShader(vertexShaderCode), new FragmentShader(fragmentShaderCode));
-        }
+        public static ShaderProgram FromCode(string vertexShaderCode, string fragmentShaderCode) =>
+            new ShaderProgram(new VertexShader(vertexShaderCode), new FragmentShader(fragmentShaderCode));
 
         /// <summary>
         /// Creates a new shader program.
         /// </summary>
         /// <param name="shaders">The different shaders of the program.</param>
         public ShaderProgram(params Shader[] shaders)
-            :this(null, (IEnumerable<Shader>)shaders)
-        {
-        }
+            : this(null, (IEnumerable<Shader>)shaders) {}
+
         public ShaderProgram(IEnumerable<Shader> shaders)
-            : this(null, shaders)
-        {
-        }
+            : this(null, shaders) {}
 
         public ShaderProgram(Action<ShaderProgram> preLinkAction, params Shader[] shaders)
-            : this(preLinkAction, (IEnumerable<Shader>)shaders)
-        {
-        }
+            : this(preLinkAction, (IEnumerable<Shader>)shaders) {}
 
         /// <summary>
         /// Creates a new shader program.
@@ -54,44 +45,40 @@ namespace amulware.Graphics
         /// <param name="shaders">The different shaders of the program.</param>
         public ShaderProgram(Action<ShaderProgram> preLinkAction, IEnumerable<Shader> shaders)
         {
-            this.Handle = GL.CreateProgram();
+            Handle = GL.CreateProgram();
 
-            var enumerable = shaders as IList<Shader> ?? shaders.ToList();
+            var shaderList = shaders as IList<Shader> ?? shaders.ToList();
 
-            foreach (var shader in enumerable)
+            foreach (var shader in shaderList)
             {
                 GL.AttachShader(this, shader);
             }
 
-            if (preLinkAction != null)
-                preLinkAction(this);
+            preLinkAction?.Invoke(this);
 
             GL.LinkProgram(this);
-            foreach (var shader in enumerable)
+            foreach (var shader in shaderList)
             {
                 GL.DetachShader(this, shader);
             }
 
             // throw exception if linking failed
-            int statusCode;
-            GL.GetProgram(this, GetProgramParameterName.LinkStatus, out statusCode);
+            GL.GetProgram(this, GetProgramParameterName.LinkStatus, out var statusCode);
 
-            if (statusCode != 1)
-            {
-                string info;
-                GL.GetProgramInfoLog(this, out info);
-                throw new ApplicationException(string.Format("Could not link shader: {0}", info));
-            }
+            if (statusCode == StatusCode.Ok) return;
+
+            GL.GetProgramInfoLog(this, out var info);
+            throw new ApplicationException($"Could not link shader: {info}");
         }
 
         /// <summary>
         /// Sets the vertex attributes.
         /// </summary>
         /// <param name="vertexAttributes">The vertex attributes to set.</param>
-        public void SetVertexAttributes(VertexAttribute[] vertexAttributes)
+        public void SetVertexAttributes(IEnumerable<VertexAttribute> vertexAttributes)
         {
-            for (int i = 0; i < vertexAttributes.Length; i++)
-                vertexAttributes[i].setAttribute(this);
+            foreach (var t in vertexAttributes)
+                t.SetAttribute(this);
         }
 
         /// <summary>
@@ -101,12 +88,10 @@ namespace amulware.Graphics
         /// <returns>The attribute's location, or -1 if not found.</returns>
         public int GetAttributeLocation(string name)
         {
-            int i;
-            if (!this.attributeLocations.TryGetValue(name, out i))
-            {
-                i = GL.GetAttribLocation(this, name);
-                this.attributeLocations.Add(name, i);
-            }
+            if (attributeLocations.TryGetValue(name, out var i)) return i;
+
+            i = GL.GetAttribLocation(this, name);
+            attributeLocations.Add(name, i);
             return i;
         }
 
@@ -117,25 +102,28 @@ namespace amulware.Graphics
         /// <returns>The uniform's location, or -1 if not found.</returns>
         public int GetUniformLocation(string name)
         {
-            int i;
-            if (!this.uniformLocations.TryGetValue(name, out i))
-            {
-                i = GL.GetUniformLocation(this, name);
-                this.uniformLocations.Add(name, i);
-            }
+            if (uniformLocations.TryGetValue(name, out var i)) return i;
+
+            i = GL.GetUniformLocation(this, name);
+            uniformLocations.Add(name, i);
             return i;
         }
 
+        /// <summary>
+        /// Sets the surface's shader program to this.
+        /// </summary>
+        /// <param name="surface">The surface to update the shader program on.</param>
+        public void UseOnSurface(Surface surface)
+        {
+            surface.SetShaderProgram(this);
+        }
 
         /// <summary>
         /// Casts the shader program object to its GLSL program object handle, for easy use with OpenGL functions.
         /// </summary>
         /// <param name="program">The program.</param>
         /// <returns>GLSL program object handle.</returns>
-        static public implicit operator int(ShaderProgram program)
-        {
-            return program.Handle;
-        }
+        public static implicit operator int(ShaderProgram program) => program.Handle;
 
         #region Disposing
 
@@ -143,31 +131,26 @@ namespace amulware.Graphics
 
         public void Dispose()
         {
-            this.dispose(true);
+            Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        protected virtual void dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
-            if (this.disposed)
+            if (disposed)
                 return;
 
             if (GraphicsContext.CurrentContext == null || GraphicsContext.CurrentContext.IsDisposed)
                 return;
-            
+
             GL.DeleteProgram(this);
 
-            this.disposed = true;
+            disposed = true;
         }
 
         ~ShaderProgram()
         {
-            this.dispose(false);
-        }
-
-        public void UseOnSurface(Surface surface)
-        {
-            surface.SetShaderProgram(this);
+            Dispose(false);
         }
 
         #endregion
