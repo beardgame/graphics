@@ -125,34 +125,12 @@ namespace amulware.Graphics
         /// <returns>GLSL program object handle.</returns>
         public static implicit operator int(ShaderProgram program) => program.Handle;
 
-        #region Disposing
-
-        private bool disposed;
-
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposed)
-                return;
-
             if (GraphicsContext.CurrentContext == null || GraphicsContext.CurrentContext.IsDisposed)
                 return;
 
             GL.DeleteProgram(this);
-
-            disposed = true;
         }
-
-        ~ShaderProgram()
-        {
-            Dispose(false);
-        }
-
-        #endregion
     }
 }
