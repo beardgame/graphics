@@ -21,14 +21,17 @@ namespace amulware.Graphics
             GL.ShaderSource(this, code);
             GL.CompileShader(this);
 
-            // throw exception if compile failed
+            throwIfCompilingFailed();
+        }
+
+        private void throwIfCompilingFailed()
+        {
             GL.GetShader(this, ShaderParameter.CompileStatus, out var statusCode);
 
             if (statusCode == StatusCode.Ok) return;
 
             GL.GetShaderInfoLog(this, out var info);
             throw new ApplicationException($"Could not load shader: {info}");
-
         }
 
         /// <summary>

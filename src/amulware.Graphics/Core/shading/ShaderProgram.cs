@@ -62,7 +62,11 @@ namespace amulware.Graphics
                 GL.DetachShader(this, shader);
             }
 
-            // throw exception if linking failed
+            throwIfLinkingFailed();
+        }
+
+        private void throwIfLinkingFailed()
+        {
             GL.GetProgram(this, GetProgramParameterName.LinkStatus, out var statusCode);
 
             if (statusCode == StatusCode.Ok) return;
