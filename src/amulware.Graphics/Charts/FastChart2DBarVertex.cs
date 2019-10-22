@@ -16,8 +16,7 @@ namespace amulware.Graphics
                 VertexData.MakeAttributeTemplate<Color>("v_color")
                 );
         }
-
-        private static readonly int bytesize = VertexData.SizeOf<FastChart2DBarVertex>();
+        
         private static VertexAttribute[] attributes;
 
         public FastChart2DBarVertex(Vector2 position, Vector2 size, Color color)
@@ -30,11 +29,6 @@ namespace amulware.Graphics
         public VertexAttribute[] VertexAttributes()
         {
             return attributes ?? (attributes = makeAttributes());
-        }
-
-        public int Size()
-        {
-            return bytesize;
         }
     }
 }

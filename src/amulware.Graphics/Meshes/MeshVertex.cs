@@ -40,7 +40,6 @@ namespace amulware.Graphics.Meshes
 
         #region IVertexData
 
-        private static readonly int size = VertexData.SizeOf<MeshVertex>();
         private static VertexAttribute[] vertexArray;
 
         public VertexAttribute[] VertexAttributes()
@@ -54,11 +53,6 @@ namespace amulware.Graphics.Meshes
                 VertexData.MakeAttributeTemplate<Vector3>("v_position"),
                 VertexData.MakeAttributeTemplate<Vector3>("v_normal")
                 );
-        }
-
-        public int Size()
-        {
-            return size;
         }
 
         #endregion
