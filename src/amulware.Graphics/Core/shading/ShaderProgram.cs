@@ -16,8 +16,8 @@ namespace amulware.Graphics
         /// </summary>
         public int Handle { get; }
 
-        private readonly Dictionary<string, int> attributeLocations = new Dictionary<string, int>();
-        private readonly Dictionary<string, int> uniformLocations = new Dictionary<string, int>();
+        private readonly CachedVariableLocator attributeLocations;
+        private readonly CachedVariableLocator uniformLocations;
 
         public static ShaderProgram FromFiles(string vertexShaderPath, string fragmentShaderPath) =>
             new ShaderProgram(VertexShader.FromFile(vertexShaderPath), FragmentShader.FromFile(fragmentShaderPath));
@@ -63,6 +63,9 @@ namespace amulware.Graphics
             }
 
             throwIfLinkingFailed();
+            
+            attributeLocations = new CachedVariableLocator(name => GL.GetAttribLocation(Handle, name));
+            uniformLocations = new CachedVariableLocator(name => GL.GetUniformLocation(Handle, name));
         }
 
         private void throwIfLinkingFailed()
@@ -90,28 +93,14 @@ namespace amulware.Graphics
         /// </summary>
         /// <param name="name">The name of the attribute.</param>
         /// <returns>The attribute's location, or -1 if not found.</returns>
-        public int GetAttributeLocation(string name)
-        {
-            if (attributeLocations.TryGetValue(name, out var i)) return i;
-
-            i = GL.GetAttribLocation(this, name);
-            attributeLocations.Add(name, i);
-            return i;
-        }
+        public int GetAttributeLocation(string name) => attributeLocations.GetVariableLocation(name);
 
         /// <summary>
         /// Gets a uniform's location.
         /// </summary>
         /// <param name="name">The name of the uniform.</param>
         /// <returns>The uniform's location, or -1 if not found.</returns>
-        public int GetUniformLocation(string name)
-        {
-            if (uniformLocations.TryGetValue(name, out var i)) return i;
-
-            i = GL.GetUniformLocation(this, name);
-            uniformLocations.Add(name, i);
-            return i;
-        }
+        public int GetUniformLocation(string name) => uniformLocations.GetVariableLocation(name);
 
         /// <summary>
         /// Sets the surface's shader program to this.
