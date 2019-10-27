@@ -43,13 +43,12 @@ namespace amulware.Graphics.Examples.Basics
 
             // Initialize a reasonable view matrix.
             viewMatrix.Matrix = Matrix4.LookAt(new Vector3(0, 0, -2), Vector3.Zero, Vector3.UnitY);
-
-            // Trigger OnResize to initialize the projection matrix correctly.
-            OnResize(e);
         }
 
         protected override void OnResize(EventArgs e)
         {
+            // OnResize is also called when the window is initially opened, so it is safe to initialize matrices here.
+
             // Use the simplest possible projection matrix: an orthographic projection.
             projectionMatrix.Matrix = Matrix4.CreateOrthographic(Width, Height, .1f, 100f);
 
