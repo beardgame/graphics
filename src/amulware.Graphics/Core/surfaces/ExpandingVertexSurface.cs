@@ -22,7 +22,11 @@ namespace amulware.Graphics
         /// Wether to clear vertex buffer after drawing.
         /// </summary>
         public bool ClearOnRender { get; set; }
-        
+
+        public bool IsStatic { get; set; }
+
+        private bool uploadedBuffers;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ExpandingVertexSurface{TVertexData}"/> class.
         /// </summary>
@@ -75,7 +79,9 @@ namespace amulware.Graphics
                 GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBuffer);
 
                 vertexArray.SetVertexData();
-                vertexBuffer.BufferData();
+
+                if (uploadedBuffers == false || IsStatic == false)
+                    vertexBuffer.BufferData();
 
                 GL.DrawArrays(this.primitiveType, 0, vertexBuffer.Count);
 
@@ -84,6 +90,8 @@ namespace amulware.Graphics
             }
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+
+            uploadedBuffers = true;
 
             if (this.ClearOnRender)
                 this.Clear();
@@ -101,6 +109,8 @@ namespace amulware.Graphics
             {
                 vertexBuffer.Clear();
             }
+
+            uploadedBuffers = false;
         }
 
 
@@ -189,7 +199,9 @@ namespace amulware.Graphics
             }
 
             this.vertexBuffers.Add(this.activeVertexBuffer = new VertexBuffer<TVertexData>(i));
-            this.vertexArrays.Add(new VertexArray<TVertexData>(this.activeVertexBuffer));
+            var vertexArray = new VertexArray<TVertexData>(this.activeVertexBuffer);
+            this.vertexArrays.Add(vertexArray);
+            vertexArray.SetShaderProgram(this.program);
         }
 
         public override void Dispose()
