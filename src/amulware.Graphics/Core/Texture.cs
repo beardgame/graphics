@@ -74,7 +74,7 @@ namespace amulware.Graphics
         {
             Bind();
 
-            resize(width, height, PixelInternalFormat.Rgba);
+            resize(width, height, pixelFormat);
             setDefaultParameters();
 
             Unbind();
