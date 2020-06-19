@@ -53,9 +53,7 @@ namespace amulware.Graphics.Examples.Basics
             // OnResize is also called when the window is initially opened, so it is safe to initialize matrices here.
 
             // Use the simplest possible projection matrix: an orthographic projection.
-            projectionMatrix.Matrix = Matrix4.CreateOrthographic(Size.X, Size.Y, .1f, 100f);
-
-            base.OnResize(e);
+            projectionMatrix.Matrix = Matrix4.CreateOrthographic(e.Width, e.Height, .1f, 100f);
         }
 
         protected override void OnUpdate()
