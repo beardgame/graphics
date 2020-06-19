@@ -56,11 +56,11 @@ namespace amulware.Graphics.Examples.Basics
             projectionMatrix.Matrix = Matrix4.CreateOrthographic(e.Width, e.Height, .1f, 100f);
         }
 
-        protected override void OnUpdate()
+        protected override void OnUpdate(UpdateEventArgs e)
         {
         }
 
-        protected override void OnRender()
+        protected override void OnRender(UpdateEventArgs e)
         {
             prepareForFrame();
 
