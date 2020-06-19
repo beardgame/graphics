@@ -1,6 +1,5 @@
 using System;
-using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL;
+using OpenToolkit.Graphics.OpenGL;
 
 namespace amulware.Graphics
 {
@@ -95,9 +94,6 @@ namespace amulware.Graphics
         private void dispose()
         {
             if (disposed)
-                return;
-
-            if (GraphicsContext.CurrentContext == null || GraphicsContext.CurrentContext.IsDisposed)
                 return;
 
             var handleCopy = Handle;

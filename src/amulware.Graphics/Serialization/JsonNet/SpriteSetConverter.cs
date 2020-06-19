@@ -1,9 +1,8 @@
 using Newtonsoft.Json;
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.IO;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace amulware.Graphics.Serialization.JsonNet
 {
@@ -58,7 +57,7 @@ namespace amulware.Graphics.Serialization.JsonNet
                         serializer.Converters.Remove(texConverter);
                         textures.ForEach(
                             t => set.Surface.AddSetting(new TextureUniform(t.Item1, this.textureProvider(t.Item2),
-                                OpenTK.Graphics.OpenGL.TextureUnit.Texture0 + textureCount++))
+                                OpenToolkit.Graphics.OpenGL.TextureUnit.Texture0 + textureCount++))
                                 );
                         break;
                     case "uvSize":

@@ -1,6 +1,5 @@
 using System;
-using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL;
+using OpenToolkit.Graphics.OpenGL;
 
 namespace amulware.Graphics
 {
@@ -43,9 +42,6 @@ namespace amulware.Graphics
 
         public void Dispose()
         {
-            if (GraphicsContext.CurrentContext == null || GraphicsContext.CurrentContext.IsDisposed)
-                return;
-
             GL.DeleteShader(this);
         }
     }

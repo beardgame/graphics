@@ -1,5 +1,4 @@
-﻿using OpenTK;
-using System;
+﻿using OpenToolkit.Mathematics;
 
 namespace amulware.Graphics
 {
@@ -32,7 +31,7 @@ namespace amulware.Graphics
         protected float expandX;
         protected float expandY;
 
-        public IndexedSurface<TVertexData> Surface { get; private set; } 
+        public IndexedSurface<TVertexData> Surface { get; private set; }
 
         /// <summary>
         /// The <see cref="UVRectangle"/> used to map the sprite with. Obtain from <see cref="Texture.GrabUV"/>
@@ -192,7 +191,7 @@ namespace amulware.Graphics
         /// <param name="y2">The y coordinate of the second point.</param>
         /// <param name="z2">The z coordinate of the second point.</param>
         public abstract void DrawLine(float x1, float y1, float z1, float x2, float y2, float z2);
-        
+
         #region DrawLine Overloads /// @name DrawLine Overloads
 
         /// <summary>

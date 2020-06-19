@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using Newtonsoft.Json;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace amulware.Graphics.Serialization.JsonNet
 {

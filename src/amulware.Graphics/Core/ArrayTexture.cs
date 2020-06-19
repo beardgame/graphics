@@ -2,19 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using OpenTK.Graphics.OpenGL;
-using PixelFormat = OpenTK.Graphics.OpenGL.PixelFormat;
+using OpenToolkit.Graphics.OpenGL;
+using PixelFormat = OpenToolkit.Graphics.OpenGL.PixelFormat;
 
 namespace amulware.Graphics
 {
     public sealed class ArrayTexture
     {
         public int Handle { get; }
-        
+
         public int Width { get; }
-        
+
         public int Height { get; }
-        
+
         public int LayerCount { get; }
 
         public ArrayTexture(IList<Bitmap> layers, bool preMultiplyAlpha = false)
@@ -22,13 +22,13 @@ namespace amulware.Graphics
             Width = layers[0].Width;
             Height = layers[0].Height;
             LayerCount = layers.Count;
-            
+
             if (layers.Any(b => b.Width != Width || b.Height != Height))
                 throw new ArgumentException("All layers must have the same dimensions.");
-            
+
             GL.GenTextures(1, out int handle);
             Handle = handle;
-            
+
             Bind();
 
             allocateStorage(Width, Height, LayerCount);
@@ -37,10 +37,10 @@ namespace amulware.Graphics
             {
                 copyFromBitmap(bitmap, layer, preMultiplyAlpha);
             }
-            
+
             generateMipmap();
             setDefaultParameters();
-            
+
             Unbind();
         }
 
@@ -62,7 +62,7 @@ namespace amulware.Graphics
                 array
             );
         }
-        
+
         private void copyFromPointer(IntPtr pointer, int layer)
         {
             GL.TexSubImage3D(
@@ -72,7 +72,7 @@ namespace amulware.Graphics
                 pointer
             );
         }
-        
+
         private void allocateStorage(int width, int height, int layerCount)
         {
             GL.TexImage3D(
@@ -87,7 +87,7 @@ namespace amulware.Graphics
         {
             GL.GenerateMipmap(GenerateMipmapTarget.Texture2DArray);
         }
-        
+
         private static void setDefaultParameters()
         {
             setParameters(
@@ -109,7 +109,7 @@ namespace amulware.Graphics
             GL.TexParameter(TextureTarget.Texture2DArray, TextureParameterName.TextureWrapS, (int) wrapS);
             GL.TexParameter(TextureTarget.Texture2DArray, TextureParameterName.TextureWrapT, (int) wrapT);
         }
-        
+
         public void Bind(TextureTarget target = TextureTarget.Texture2DArray)
         {
             GL.BindTexture(target, Handle);
@@ -119,7 +119,7 @@ namespace amulware.Graphics
         {
             GL.BindTexture(target, 0);
         }
-        
+
         public static implicit operator int(ArrayTexture texture) => texture?.Handle ?? 0;
 
         public void Dispose()

@@ -1,5 +1,4 @@
-﻿using OpenTK;
-using OpenTK.Graphics.OpenGL;
+﻿using OpenToolkit.Mathematics;
 
 namespace amulware.Graphics.Charts
 {
@@ -11,7 +10,7 @@ namespace amulware.Graphics.Charts
         private readonly IndexedSurface<UVColorVertexData> surface;
         private readonly UVRectangle quadUV;
 
-        private readonly VertexSurface<FastChart2DBarVertex> fastBarSurface; 
+        private readonly VertexSurface<FastChart2DBarVertex> fastBarSurface;
 
         public float ThinLineWidth { get; set; }
         public float ThickLineWidth { get; set; }

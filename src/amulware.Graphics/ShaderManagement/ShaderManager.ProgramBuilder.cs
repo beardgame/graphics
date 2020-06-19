@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using OpenTK.Graphics.OpenGL;
+using OpenToolkit.Graphics.OpenGL;
 
 namespace amulware.Graphics.ShaderManagement
 {
@@ -13,7 +13,7 @@ namespace amulware.Graphics.ShaderManagement
 
         public ProgramBuilder BuildShaderProgram()
             => new ProgramBuilder(this);
-        
+
         public sealed class ProgramBuilder
         {
             private readonly ShaderManager manager;
@@ -54,13 +54,13 @@ namespace amulware.Graphics.ShaderManagement
                 var shader = manager.getShader(type, shaderName);
                 if (shader == null)
                     return this;
-                
+
                 succeeded = true;
                 With(shader);
 
                 return this;
             }
-            
+
             public ProgramBuilder With(ReloadableShader shader)
             {
                 shaders.Add(shader);

@@ -1,7 +1,5 @@
-
 using System;
-using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL;
+using OpenToolkit.Graphics.OpenGL;
 
 namespace amulware.Graphics
 {
@@ -45,7 +43,7 @@ namespace amulware.Graphics
             GL.BindVertexArray(0);
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
         }
-        
+
         #region Disposing
 
         private bool disposed = false;
@@ -59,9 +57,6 @@ namespace amulware.Graphics
         private void dispose(bool disposing)
         {
             if (this.disposed)
-                return;
-
-            if (GraphicsContext.CurrentContext == null || GraphicsContext.CurrentContext.IsDisposed)
                 return;
 
             if (this.vertexArrayGenerated)

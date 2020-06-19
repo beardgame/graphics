@@ -1,4 +1,4 @@
-﻿using OpenTK;
+﻿using OpenToolkit.Mathematics;
 
 namespace amulware.Graphics
 {
@@ -16,7 +16,7 @@ namespace amulware.Graphics
                 VertexData.MakeAttributeTemplate<Color>("v_color")
                 );
         }
-        
+
         private static VertexAttribute[] attributes;
 
         public FastChart2DBarVertex(Vector2 position, Vector2 size, Color color)

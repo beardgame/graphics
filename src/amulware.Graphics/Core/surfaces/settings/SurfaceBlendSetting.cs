@@ -1,7 +1,6 @@
-using System;
-using System.Collections.Generic;
-using OpenTK;
-using OpenTK.Graphics.OpenGL;
+using OpenToolkit.Graphics.OpenGL;
+using static OpenToolkit.Graphics.OpenGL.BlendEquationMode;
+using static OpenToolkit.Graphics.OpenGL.BlendingFactor;
 
 namespace amulware.Graphics
 {
@@ -10,24 +9,24 @@ namespace amulware.Graphics
     /// </summary>
     public class SurfaceBlendSetting : SurfaceSetting
     {
-        private readonly BlendingFactorSrc srcBlend;
-        private readonly BlendingFactorDest destBlend;
+        private readonly BlendingFactor srcBlend;
+        private readonly BlendingFactor destBlend;
         private readonly BlendEquationMode equation;
 
         /// <summary>Default 'Alpha' blend function</summary>
-        public static readonly SurfaceBlendSetting Alpha = new SurfaceBlendSetting(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha, BlendEquationMode.FuncAdd);
+        public static readonly SurfaceBlendSetting Alpha = new SurfaceBlendSetting(SrcAlpha, OneMinusSrcAlpha, FuncAdd);
         /// <summary>Default 'Pre-multiplied Alpha' blend function</summary>
-        public static readonly SurfaceBlendSetting PremultipliedAlpha = new SurfaceBlendSetting(BlendingFactorSrc.One, BlendingFactorDest.OneMinusSrcAlpha, BlendEquationMode.FuncAdd);
+        public static readonly SurfaceBlendSetting PremultipliedAlpha = new SurfaceBlendSetting(One, OneMinusSrcAlpha, FuncAdd);
         /// <summary>Default 'Add' blend function</summary>
-        public static readonly SurfaceBlendSetting Add = new SurfaceBlendSetting(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.One, BlendEquationMode.FuncAdd);
+        public static readonly SurfaceBlendSetting Add = new SurfaceBlendSetting(SrcAlpha, One, FuncAdd);
         /// <summary>Default 'Substract' blend function</summary>
-        public static readonly SurfaceBlendSetting Substract = new SurfaceBlendSetting(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.One, BlendEquationMode.FuncReverseSubtract);
+        public static readonly SurfaceBlendSetting Substract = new SurfaceBlendSetting(SrcAlpha, One, FuncReverseSubtract);
         /// <summary>Default 'Multiply' blend function</summary>
-        public static readonly SurfaceBlendSetting Multiply = new SurfaceBlendSetting(BlendingFactorSrc.Zero, BlendingFactorDest.SrcColor, BlendEquationMode.FuncAdd);
+        public static readonly SurfaceBlendSetting Multiply = new SurfaceBlendSetting(Zero, SrcColor, FuncAdd);
         /// <summary>Default 'Minimum' blend function</summary>
-        public static readonly SurfaceBlendSetting Min = new SurfaceBlendSetting(BlendingFactorSrc.One, BlendingFactorDest.One, BlendEquationMode.Min);
+        public static readonly SurfaceBlendSetting Min = new SurfaceBlendSetting(One, One, BlendEquationMode.Min);
         /// <summary>Default 'Maximum' blend function</summary>
-        public static readonly SurfaceBlendSetting Max = new SurfaceBlendSetting(BlendingFactorSrc.One, BlendingFactorDest.One, BlendEquationMode.Max);
+        public static readonly SurfaceBlendSetting Max = new SurfaceBlendSetting(One, One, BlendEquationMode.Max);
 
         /// <summary>
         /// Initializes a new custom instance of the <see cref="SurfaceBlendSetting"/> class.
@@ -35,7 +34,7 @@ namespace amulware.Graphics
         /// <param name="src">The <see cref="BlendingFactorSrc"/>.</param>
         /// <param name="dest">The <see cref="BlendingFactorDest"/>.</param>
         /// <param name="equation">The <see cref="BlendEquationMode"/>.</param>
-        public SurfaceBlendSetting(BlendingFactorSrc src, BlendingFactorDest dest, BlendEquationMode equation)
+        public SurfaceBlendSetting(BlendingFactor src, BlendingFactor dest, BlendEquationMode equation)
             : base(true)
         {
             this.srcBlend = src;

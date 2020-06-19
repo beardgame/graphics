@@ -1,7 +1,5 @@
 using Newtonsoft.Json;
-using OpenTK;
 using System;
-using System.Linq;
 using System.IO;
 
 namespace amulware.Graphics.Serialization.JsonNet

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Runtime.InteropServices;
-using OpenTK;
-using OpenTK.Graphics.OpenGL;
+using OpenToolkit.Mathematics;
+using OpenToolkit.Graphics.OpenGL;
 
 namespace amulware.Graphics
 {

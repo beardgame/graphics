@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using OpenTK.Graphics.OpenGL;
+using OpenToolkit.Graphics.OpenGL;
 
 namespace amulware.Graphics
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace amulware.Graphics.Meshes.ObjFile
 {

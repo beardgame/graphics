@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace amulware.Graphics.Charts
 {
@@ -11,7 +11,7 @@ namespace amulware.Graphics.Charts
         public StackingBarChart2D(params Color[] colors)
             : this(colors.AsEnumerable())
         {
-            
+
         }
 
         public StackingBarChart2D(IEnumerable<Color> colors)
@@ -51,7 +51,7 @@ namespace amulware.Graphics.Charts
                 var i = 0;
 
                 var drawY = baseDrawY;
-                
+
                 ushort vOffset;
                 var vertexArray = sprites.DrawFastBars(bars.Value.Count, out vOffset);
 

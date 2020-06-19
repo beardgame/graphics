@@ -1,11 +1,8 @@
 ﻿using System;
 using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using OpenTK;
 using amulware.Graphics.Serialization.JsonNet;
 using Newtonsoft.Json;
+using OpenToolkit.Mathematics;
 
 namespace amulware.Graphics
 {

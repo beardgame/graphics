@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL;
+using OpenToolkit.Graphics.OpenGL;
 
 namespace amulware.Graphics
 {
@@ -24,9 +23,9 @@ namespace amulware.Graphics
 
         public static ShaderProgram FromCode(string vertexShaderCode, string fragmentShaderCode) =>
             FromShaders(VertexShader.FromCode(vertexShaderCode), VertexShader.FromCode(fragmentShaderCode));
-        
+
         public static ShaderProgram FromShaders(params Shader[] shaders) => new ShaderProgram(shaders);
-        
+
         public static ShaderProgram FromShaders(IEnumerable<Shader> shaders) => new ShaderProgram(shaders);
 
         /// <summary>
@@ -51,7 +50,7 @@ namespace amulware.Graphics
             }
 
             throwIfLinkingFailed();
-            
+
             attributeLocations = new CachedVariableLocator(name => GL.GetAttribLocation(Handle, name));
             uniformLocations = new CachedVariableLocator(name => GL.GetUniformLocation(Handle, name));
         }
@@ -108,9 +107,6 @@ namespace amulware.Graphics
 
         public void Dispose()
         {
-            if (GraphicsContext.CurrentContext == null || GraphicsContext.CurrentContext.IsDisposed)
-                return;
-
             GL.DeleteProgram(this);
         }
     }

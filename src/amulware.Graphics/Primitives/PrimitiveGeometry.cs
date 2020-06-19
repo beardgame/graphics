@@ -1,6 +1,5 @@
 ﻿using System;
-using OpenTK;
-using OpenTK.Graphics.OpenGL;
+using OpenToolkit.Mathematics;
 
 namespace amulware.Graphics
 {
@@ -22,7 +21,7 @@ namespace amulware.Graphics
         /// </summary>
         public float LineWidth = 1;
 
-        private IndexedSurface<PrimitiveVertexData> surface; 
+        private IndexedSurface<PrimitiveVertexData> surface;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PrimitiveGeometry"/> class.

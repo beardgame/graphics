@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace amulware.Graphics.Charts
 {
@@ -17,7 +17,7 @@ namespace amulware.Graphics.Charts
         protected RegularDiscreteFunction2D()
             : this(Enumerable.Empty<TValue>())
         {
-            
+
         }
 
         protected RegularDiscreteFunction2D(IEnumerable<TValue> values)

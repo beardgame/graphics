@@ -1,7 +1,6 @@
-using OpenTK;
-using System;
 using System.Linq;
 using System.Collections.Generic;
+using OpenToolkit.Mathematics;
 
 namespace amulware.Graphics
 {
@@ -81,7 +80,7 @@ namespace amulware.Graphics
 
         override public float AnimationTime
         {
-            set 
+            set
             {
                 this.AnimationFrame = (int)(value / this.Duration * this.uvFrames.Length);
             }

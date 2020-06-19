@@ -1,11 +1,13 @@
 using System;
-using OpenTK;
-using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL;
+using amulware.Graphics.Windowing;
+using OpenToolkit.Graphics.OpenGL;
+using OpenToolkit.Mathematics;
+using OpenToolkit.Windowing.Common;
+using OpenToolkit.Windowing.Desktop;
 
 namespace amulware.Graphics.Examples.Basics
 {
-    sealed class GameWindow : Program
+    sealed class GameWindow : Window
     {
         private IndexedSurface<PrimitiveVertexData> surface;
         private Matrix4Uniform viewMatrix;
@@ -13,20 +15,21 @@ namespace amulware.Graphics.Examples.Basics
 
         public GameWindow()
             : base(
-                1280, 720,
-                GraphicsMode.Default,
-                "Basic example",
-                GameWindowFlags.Default,
-                DisplayDevice.Default,
-                3, 2,
-                GraphicsContextFlags.Default)
+                new NativeWindowSettings
+                    {
+                        API = ContextAPI.OpenGL,
+                        APIVersion = new Version(3, 2),
+                        Title = "Basic example",
+                        WindowState = WindowState.Normal,
+                        Size = new Vector2i(1280, 720)
+                    }
+                )
         {
         }
 
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
 
+        protected override void OnLoad()
+        {
             // A surface is a vertex buffer wrapper.
             // We use an indexed one, which is the most commonly used in amulware.Graphics.
             surface = new IndexedSurface<PrimitiveVertexData>();
@@ -45,17 +48,21 @@ namespace amulware.Graphics.Examples.Basics
             viewMatrix.Matrix = Matrix4.LookAt(new Vector3(0, 0, -2), Vector3.Zero, Vector3.UnitY);
         }
 
-        protected override void OnResize(EventArgs e)
+        protected override void OnResize(ResizeEventArgs e)
         {
             // OnResize is also called when the window is initially opened, so it is safe to initialize matrices here.
 
             // Use the simplest possible projection matrix: an orthographic projection.
-            projectionMatrix.Matrix = Matrix4.CreateOrthographic(Width, Height, .1f, 100f);
+            projectionMatrix.Matrix = Matrix4.CreateOrthographic(Size.X, Size.Y, .1f, 100f);
 
             base.OnResize(e);
         }
 
-        protected override void OnRender(UpdateEventArgs e)
+        protected override void OnUpdate()
+        {
+        }
+
+        protected override void OnRender()
         {
             prepareForFrame();
 

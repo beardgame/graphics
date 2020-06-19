@@ -1,6 +1,6 @@
 using System.ComponentModel;
 using Newtonsoft.Json;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace amulware.Graphics.Animation
 {

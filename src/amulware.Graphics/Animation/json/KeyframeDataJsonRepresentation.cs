@@ -1,5 +1,3 @@
-using OpenTK;
-
 namespace amulware.Graphics.Animation
 {
     internal class KeyframeDataJsonRepresentation<TKeyframeParameters>

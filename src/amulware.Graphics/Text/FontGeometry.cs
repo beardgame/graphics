@@ -1,6 +1,4 @@
-using System;
-using OpenTK;
-using OpenTK.Graphics.OpenGL;
+using OpenToolkit.Mathematics;
 
 namespace amulware.Graphics
 {
@@ -66,7 +64,7 @@ namespace amulware.Graphics
         /// <param name="accountForSizeCoefficient">if set to <c>true</c> multiplies result with the set vertical size coefficient</param>
         /// <param name="accountForSymbolWidth">if set to <c>true</c> multiplies result with the default symbol width</param>
         /// <returns>Width of the string</returns>
-        public float StringWidth(string s, bool accountForFontHeight = true, 
+        public float StringWidth(string s, bool accountForFontHeight = true,
             bool accountForSizeCoefficient = true, bool accountForSymbolWidth = true)
         {
             float w;
@@ -183,7 +181,7 @@ namespace amulware.Graphics
             bool monospaced = this.Font.Monospaced;
 
             float wRatio = charSize.X  * 16;
-            
+
             Vector3 yOffset = charSize.Y * this.UnitY;
 
             for (int i = 0; i < l; i++)

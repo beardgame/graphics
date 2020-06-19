@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using OpenTK.Graphics.OpenGL;
+using OpenToolkit.Graphics.OpenGL;
 
 namespace amulware.Graphics.ShaderManagement
 {
@@ -48,7 +48,7 @@ namespace amulware.Graphics.ShaderManagement
             var path = Path.Combine(this.pathPrefix, fileName);
             if (this.appendExtensionsForSingleFiles)
                 path = this.appendExtension(path, shaderType);
-            
+
             return new ShaderFile(shaderType, path, fileName);
         }
 

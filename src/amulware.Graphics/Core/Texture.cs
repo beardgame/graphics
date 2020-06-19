@@ -3,10 +3,9 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
-using OpenTK;
-using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL;
-using PixelFormat = OpenTK.Graphics.OpenGL.PixelFormat;
+using OpenToolkit.Graphics.OpenGL;
+using OpenToolkit.Mathematics;
+using PixelFormat = OpenToolkit.Graphics.OpenGL.PixelFormat;
 using SystemPixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace amulware.Graphics
@@ -247,9 +246,6 @@ namespace amulware.Graphics
         public void Dispose()
         {
             if (Handle == 0)
-                return;
-
-            if (GraphicsContext.CurrentContext == null || GraphicsContext.CurrentContext.IsDisposed)
                 return;
 
             GL.DeleteTexture(this);

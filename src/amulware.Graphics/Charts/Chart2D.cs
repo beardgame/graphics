@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace amulware.Graphics.Charts
 {

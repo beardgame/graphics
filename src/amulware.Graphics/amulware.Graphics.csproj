@@ -5,12 +5,16 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <LangVersion>8</LangVersion>
     <Nullable>annotations</Nullable>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
-    <PackageReference Include="OpenTK" Version="2.0.0" />
+    <PackageReference Include="OpenToolkit.Graphics" Version="4.0.0-pre9.1" />
+    <PackageReference Include="OpenToolkit.Windowing.Common" Version="4.0.0-pre9.1" />
+    <PackageReference Include="OpenToolkit.Windowing.Desktop" Version="4.0.0-pre9.1" />
+    <PackageReference Include="OpenToolkit.Windowing.GraphicsLibraryFramework" Version="4.0.0-pre9.1" />
     <PackageReference Include="System.Collections.Immutable" Version="1.5.0" />
     <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />

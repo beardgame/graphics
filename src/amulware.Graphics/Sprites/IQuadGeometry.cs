@@ -1,5 +1,4 @@
-﻿using OpenTK;
-using System;
+﻿using OpenToolkit.Mathematics;
 
 namespace amulware.Graphics
 {

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using OpenTK.Graphics.OpenGL;
+using OpenToolkit.Graphics.OpenGL;
 
 namespace amulware.Graphics.ShaderManagement
 {
@@ -37,7 +37,7 @@ namespace amulware.Graphics.ShaderManagement
         {
             if (shaders.TryGetValue(type, out var shadersOfType))
                 return shadersOfType.ContainsKey(name);
-            
+
             throw new ArgumentException($"ShaderType {type} is not supported.");
         }
 
@@ -45,7 +45,7 @@ namespace amulware.Graphics.ShaderManagement
         {
             if (programs.ContainsKey(name))
                throw new ArgumentException($"Tried adding shader program with name '{name} which is already taken.");
-            
+
             // make sure all shaders can be added so in case of error our internal state stays valid
             var shadersToAdd = getUnknownShadersOfProgramAndFailOnNameCollision(shaderProgram, name);
 
@@ -56,7 +56,7 @@ namespace amulware.Graphics.ShaderManagement
             }
 
             programs.Add(name, shaderProgram);
-            
+
             registerProgramForItsShaders(shaderProgram);
         }
 

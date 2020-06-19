@@ -1,4 +1,4 @@
-﻿using OpenTK;
+﻿using OpenToolkit.Mathematics;
 
 namespace amulware.Graphics.Meshes
 {
@@ -83,7 +83,7 @@ namespace amulware.Graphics.Meshes
                     new MeshVertex(new Vector3(u, -u, -u)),
                     new MeshVertex(new Vector3(u, u, -u)),
                     new MeshVertex(new Vector3(-u, u, -u)),
-                    
+
                     new MeshVertex(new Vector3(-u, -u, u)),
                     new MeshVertex(new Vector3(u, -u, u)),
                     new MeshVertex(new Vector3(u, u, u)),

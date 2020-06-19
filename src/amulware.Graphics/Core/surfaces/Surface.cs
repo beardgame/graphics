@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using OpenTK.Graphics.OpenGL;
+using OpenToolkit.Graphics.OpenGL;
 using System.Collections.ObjectModel;
 
 namespace amulware.Graphics

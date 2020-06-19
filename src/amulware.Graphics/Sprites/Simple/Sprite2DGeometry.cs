@@ -1,6 +1,5 @@
-﻿using OpenTK;
-using OpenTK.Graphics.OpenGL;
-using System;
+﻿using System;
+using OpenToolkit.Mathematics;
 
 namespace amulware.Graphics
 {
@@ -13,7 +12,7 @@ namespace amulware.Graphics
         /// The color to draw with
         /// </summary>
         public Color Color = Color.White;
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Sprite2DGeometry"/> class.
         /// </summary>

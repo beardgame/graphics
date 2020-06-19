@@ -1,5 +1,4 @@
-﻿using System;
-using OpenTK;
+﻿using OpenToolkit.Mathematics;
 
 namespace amulware.Graphics.Serialization.JsonNet
 {

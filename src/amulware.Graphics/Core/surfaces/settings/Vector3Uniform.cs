@@ -1,6 +1,5 @@
-﻿using System;
-using OpenTK;
-using OpenTK.Graphics.OpenGL;
+﻿using OpenToolkit.Graphics.OpenGL;
+using OpenToolkit.Mathematics;
 
 namespace amulware.Graphics
 {

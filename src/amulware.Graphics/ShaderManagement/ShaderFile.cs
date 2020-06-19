@@ -1,5 +1,5 @@
 using System.IO;
-using OpenTK.Graphics.OpenGL;
+using OpenToolkit.Graphics.OpenGL;
 
 namespace amulware.Graphics.ShaderManagement
 {
@@ -7,9 +7,9 @@ namespace amulware.Graphics.ShaderManagement
     {
         private readonly string filename;
         private readonly FileModifiedWatcher fileWatcher;
-        
+
         public string FriendlyName { get; }
-        
+
         public override bool ChangedSinceLastLoad => fileWatcher.WasModified(false);
 
         public ShaderFile(ShaderType type, string filename, string friendlyName)
@@ -19,7 +19,7 @@ namespace amulware.Graphics.ShaderManagement
             FriendlyName = friendlyName;
             fileWatcher = new FileModifiedWatcher(filename);
         }
-        
+
         protected override string GetSource()
         {
             fileWatcher.Reset();

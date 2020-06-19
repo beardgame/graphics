@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace amulware.Graphics
+﻿namespace amulware.Graphics
 {
     public interface ISpriteSet<TVertexData>
         where TVertexData : struct, IVertexData
