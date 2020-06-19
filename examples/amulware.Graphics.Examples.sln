@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "amulware.Graphics.Examples.Basics", "Basics\amulware.Graphics.Examples.Basics.csproj", "{0B034B46-4E76-449B-8BB4-6C41614678DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "amulware.Graphics", "..\src\amulware.Graphics\amulware.Graphics.csproj", "{5C5A78A0-F12F-431C-9607-67EA4ADF5732}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0B034B46-4E76-449B-8BB4-6C41614678DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B034B46-4E76-449B-8BB4-6C41614678DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B034B46-4E76-449B-8BB4-6C41614678DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B034B46-4E76-449B-8BB4-6C41614678DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C5A78A0-F12F-431C-9607-67EA4ADF5732}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C5A78A0-F12F-431C-9607-67EA4ADF5732}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C5A78A0-F12F-431C-9607-67EA4ADF5732}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C5A78A0-F12F-431C-9607-67EA4ADF5732}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

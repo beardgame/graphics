@@ -1,5 +1,3 @@
-using System;
-using System.Runtime.Remoting.Messaging;
 using OpenTK.Graphics.OpenGL;
 
 namespace amulware.Graphics
@@ -96,7 +94,7 @@ namespace amulware.Graphics
         }
 
         /// <summary>
-        /// Adds a quad of vertices and automatically adds the correct indices.
+        /// Adds a triangle of vertices and automatically adds the correct indices.
         /// </summary>
         /// <param name="v0">The first vertex.</param>
         /// <param name="v1">The second vertex.</param>
