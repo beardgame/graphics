@@ -9,12 +9,6 @@ namespace amulware.Graphics
     public sealed class VertexShader : Shader
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="VertexShader"/> class from source code.
-        /// </summary>
-        /// <param name="code">The file to load the shader from.</param>
-        public VertexShader(string code) : base(ShaderType.VertexShader, code) { }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="VertexShader"/> class from a source file.
         /// </summary>
         /// <param name="filename">Path to the source file.</param>
@@ -26,5 +20,13 @@ namespace amulware.Graphics
                 return new VertexShader(code);
             }
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="VertexShader"/> class from source code.
+        /// </summary>
+        /// <param name="sourceCode">Source code of the shader.</param>
+        public static VertexShader FromCode(string sourceCode) => new VertexShader(sourceCode);
+        
+        private VertexShader(string code) : base(ShaderType.VertexShader, code) { }
     }
 }

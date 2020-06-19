@@ -9,12 +9,6 @@ namespace amulware.Graphics
     public sealed class FragmentShader : Shader
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="FragmentShader"/> class from source code.
-        /// </summary>
-        /// <param name="code">The file to load the shader from.</param>
-        public FragmentShader(string code) : base(ShaderType.FragmentShader, code) { }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="FragmentShader"/> class from a source file.
         /// </summary>
         /// <param name="filename">Path to the source file.</param>
@@ -26,5 +20,13 @@ namespace amulware.Graphics
                 return new FragmentShader(code);
             }
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FragmentShader"/> class from source code.
+        /// </summary>
+        /// <param name="sourceCode">Source code of the shader.</param>
+        public static FragmentShader FromCode(string sourceCode) => new FragmentShader(sourceCode);
+        
+        private FragmentShader(string code) : base(ShaderType.FragmentShader, code) { }
     }
 }

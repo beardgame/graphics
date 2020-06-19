@@ -23,7 +23,7 @@ namespace amulware.Graphics.ShaderManagement
         
         public void Reload()
         {
-            var newProgram = new ShaderProgram(Shaders.Select(s => s.Shader));
+            var newProgram = ShaderProgram.FromShaders(Shaders.Select(s => s.Shader));
             program.SetProgram(newProgram);
         }
 

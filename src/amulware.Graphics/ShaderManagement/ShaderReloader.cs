@@ -21,11 +21,11 @@ namespace amulware.Graphics.ShaderManagement
             switch (Type)
             {
                 case ShaderType.FragmentShader:
-                    return new FragmentShader(source);
+                    return FragmentShader.FromCode(source);
                 case ShaderType.VertexShader:
-                    return new VertexShader(source);
+                    return VertexShader.FromCode(source);
                 case ShaderType.GeometryShader:
-                    return new GeometryShader(source);
+                    return GeometryShader.FromCode(source);
                 default:
                     throw new ArgumentOutOfRangeException();
             }
