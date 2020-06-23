@@ -14,9 +14,9 @@ namespace amulware.Graphics
     [StructLayout(LayoutKind.Sequential)]
     public struct Color : IEquatable<Color>
     {
-        #region Static W3C Colours /// @name Default static W3C colours
+        /// Default static W3C colours
 
-        /// <summary>Default transparent color.</summary>
+        /// <summary>Default transparent color with all channels at 0.</summary>
         public static readonly Color Transparent = new Color(0x00000000);
 
         /// <summary>Default 'Pink' W3C color (FF C0 CB) / (255, 192, 203).</summary>
@@ -439,23 +439,11 @@ namespace amulware.Graphics
         /// <summary>Default 'Black' W3C color (00 00 00) / (0, 0, 0).</summary>
         public static readonly Color Black = new Color(0xFF000000);
 
-        #endregion
-
-        #region Fields
-
         private readonly byte r, g, b, a;
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Constructs a colour from a red, green, blue and alpha value.
         /// </summary>
-        /// <param name="r">The red value.</param>
-        /// <param name="g">The green value.</param>
-        /// <param name="b">The blue value.</param>
-        /// <param name="a">The alpha value.</param>
         public Color(byte r, byte g, byte b, byte a = 255)
         {
             this.r = r;
@@ -467,7 +455,6 @@ namespace amulware.Graphics
         /// <summary>
         /// Constructs a colour from a 32bit unsigned integer including the colour components in the order ARGB.
         /// </summary>
-        /// <param name="argb">The unsigned integer representing the colour.</param>
         public Color(uint argb)
         {
             a = (byte) ((argb >> 24) & 255);
@@ -477,32 +464,12 @@ namespace amulware.Graphics
         }
 
         /// <summary>
-        /// Constructs a colour from another colour and a new alpha value.
-        /// </summary>
-        /// <param name="color">The template colour.</param>
-        /// <param name="newAlpha">The new alpha value.</param>
-        public Color(Color color, byte newAlpha)
-        {
-            r = color.r;
-            g = color.g;
-            b = color.b;
-            a = newAlpha;
-        }
-
-        #endregion
-
-        #region Static Methods
-
-        #region Construction
-
-        /// <summary>
         /// Creates a colour from hue, saturation and value.
         /// </summary>
         /// <param name="hue">Hue of the colour (0-2pi).</param>
         /// <param name="saturation">Saturation of the colour (0-1).</param>
         /// <param name="value">Value of the colour (0-1).</param>
         /// <param name="alpha">Alpha of the colour.</param>
-        /// <returns>The constructed colour.</returns>
         public static Color FromHSVA(float hue, float saturation, float value, byte alpha = 255)
         {
             var chroma = value * saturation;
@@ -567,10 +534,6 @@ namespace amulware.Graphics
             return new Color(value, value, value, alpha);
         }
 
-        #endregion
-
-        #region Other
-
         /// <summary>
         /// Linearly interpolates between two colours and returns the result.
         /// </summary>
@@ -593,12 +556,6 @@ namespace amulware.Graphics
                 (byte) (color0.a * q + color1.a * p)
             );
         }
-
-        #endregion
-
-        #endregion
-
-        #region Properties
 
         // ReSharper disable ConvertToAutoPropertyWhenPossible
         // Disable converting to auto-properties because we want to ensure the correct sequential layout of this struct.
@@ -637,7 +594,7 @@ namespace amulware.Graphics
         /// <summary>
         /// Returns the value (lightness) of the colour in the range 0 to 1.
         /// </summary>
-        public float Value => Math.Max(r, Math.Max(g, b)) / 255f;
+        public float Value => Math.Max(r, Math.Max(g, b)) * (1 / 255f);
 
         /// <summary>
         /// Returns the saturation of the colour in the range 0 to 1.
@@ -749,7 +706,7 @@ namespace amulware.Graphics
         {
             get
             {
-                var floatA = a / 255f;
+                var floatA = a * (1 / 255f);
                 return new Color(
                     (byte) (r * floatA),
                     (byte) (g * floatA),
@@ -758,15 +715,10 @@ namespace amulware.Graphics
             }
         }
 
-        #endregion
-
-        #region Methods
-
         /// <summary>
         /// Returns a new colour with the same RGB values, but a different alpha value.
         /// </summary>
-        /// <param name="alpha">The new alpha value (0-255).</param>
-        public Color WithAlpha(byte alpha = 0) => new Color(this, alpha);
+        public Color WithAlpha(byte alpha = 0) => new Color(r, g, b, alpha);
 
         /// <summary>
         /// Returns a new colour with the same RGB values, but a different alpha value.
@@ -778,21 +730,10 @@ namespace amulware.Graphics
         /// </remarks>
         public Color WithAlpha(float alpha) => WithAlpha((byte) (255 * alpha));
 
-        #region Equals, GetHashCode, ToString
-
-        /// <summary>
-        /// Checks whether this colour is the same as another.
-        /// </summary>
         public bool Equals(Color other) => r == other.r && g == other.g && b == other.b && a == other.a;
 
-        /// <summary>
-        /// Checks whether this colour is the same as another.
-        /// </summary>
         public override bool Equals(object obj) => obj is Color color && Equals(color);
 
-        /// <summary>
-        /// Returns the hash code for this instance.
-        /// </summary>
         public override int GetHashCode()
         {
             unchecked
@@ -808,33 +749,13 @@ namespace amulware.Graphics
         /// <summary>
         /// Returns a hexadecimal <see cref="System.String" /> that represents this color.
         /// </summary>
-        /// <returns>
-        /// A hexadecimal <see cref="System.String" /> that represents this color.
-        /// </returns>
         public override string ToString() => "#" + ARGB.ToString("X8");
 
-        #endregion
-
-        #endregion
-
-        #region Operators
-
-        /// <summary>
-        /// Casts the color to equivalent <see cref="System.Drawing.Color"/>
-        /// </summary>
-        /// <param name="color">The color.</param>
-        /// <returns><see cref="System.Drawing.Color"/></returns>
         public static implicit operator System.Drawing.Color(Color color) =>
             System.Drawing.Color.FromArgb(color.a, color.r, color.g, color.b);
 
-        /// <summary>
-        /// Compares two colours for equality.
-        /// </summary>
         public static bool operator ==(Color color1, Color color2) => color1.Equals(color2);
 
-        /// <summary>
-        /// Compares two colours for inequality.
-        /// </summary>
         public static bool operator !=(Color color1, Color color2) => !(color1 == color2);
 
         /// <summary>
@@ -853,7 +774,5 @@ namespace amulware.Graphics
         /// Note that scalar values outside the range of 0 to 1 may result in overflow and cause unexpected results.
         /// </summary>
         public static Color operator *(float scalar, Color color) => color * scalar;
-
-        #endregion
     }
 }
