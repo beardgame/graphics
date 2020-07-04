@@ -3,73 +3,44 @@ using OpenToolkit.Graphics.OpenGL;
 
 namespace amulware.Graphics
 {
-    internal class VertexArray<TVertexData>
-        : IVertexAttributeProvider<TVertexData>, IDisposable
-        where TVertexData : struct, IVertexData
+    public sealed class VertexArray : IDisposable
     {
-        private readonly VertexBuffer<TVertexData> vertexBuffer;
-        private int handle;
-        private bool vertexArrayGenerated;
+        private readonly int handle;
 
-        public VertexArray(VertexBuffer<TVertexData> vertexBuffer)
+        public static VertexArray ForRenderable(IRenderable renderable, ShaderProgram program)
         {
-            this.vertexBuffer = vertexBuffer;
+            return new VertexArray(renderable, program);
         }
 
-        public void SetVertexData()
+        private VertexArray(IRenderable renderable, ShaderProgram program)
         {
-            GL.BindVertexArray(this.handle);
+            GL.GenVertexArrays(1, out handle);
+            using (Bind())
+            {
+                renderable.ConfigureBoundVertexArray(program);
+            }
         }
 
-        public void UnSetVertexData()
+        public Bound Bind()
         {
-            GL.BindVertexArray(0);
+            return new Bound(in handle);
         }
 
-        public void SetShaderProgram(ShaderProgram program)
+        public struct Bound : IDisposable
         {
-            if (this.vertexArrayGenerated)
-                GL.DeleteVertexArrays(1, ref this.handle);
+            internal Bound(in int handle)
+            {
+                GL.BindVertexArray(handle);
+            }
 
-            GL.GenVertexArrays(1, out this.handle);
-            this.vertexArrayGenerated = true;
-
-            GL.BindVertexArray(this.handle);
-
-            GL.BindBuffer(BufferTarget.ArrayBuffer, this.vertexBuffer);
-
-            program.SetVertexAttributes(new TVertexData().VertexAttributes());
-
-            GL.BindVertexArray(0);
-            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+            public void Dispose()
+            {
+                GL.BindVertexArray(0);
+            }
         }
-
-        #region Disposing
-
-        private bool disposed = false;
-
         public void Dispose()
         {
-            this.dispose(true);
-            GC.SuppressFinalize(this);
+            GL.DeleteVertexArray(handle);
         }
-
-        private void dispose(bool disposing)
-        {
-            if (this.disposed)
-                return;
-
-            if (this.vertexArrayGenerated)
-                GL.DeleteVertexArray(this.handle);
-
-            this.disposed = true;
-        }
-
-        ~VertexArray()
-        {
-            this.dispose(false);
-        }
-
-        #endregion
     }
 }

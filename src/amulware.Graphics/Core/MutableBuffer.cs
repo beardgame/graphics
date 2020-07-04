@@ -12,6 +12,7 @@ namespace amulware.Graphics
 
         public int Capacity => data.Length;
         public int Count { get; private set; }
+        public bool NeedsUpload => isDirty;
 
         public MutableBuffer(int capacity = 0)
         {

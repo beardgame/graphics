@@ -13,7 +13,7 @@ namespace amulware.Graphics
         /// <summary>
         /// The GLSL shader program handle
         /// </summary>
-        public int Handle { get; }
+        private int handle;
 
         private readonly CachedVariableLocator attributeLocations;
         private readonly CachedVariableLocator uniformLocations;
@@ -34,34 +34,34 @@ namespace amulware.Graphics
         /// <param name="shaders">The different shaders of the program.</param>
         private ShaderProgram(IEnumerable<Shader> shaders)
         {
-            Handle = GL.CreateProgram();
+            handle = GL.CreateProgram();
 
             var shaderList = shaders as IList<Shader> ?? shaders.ToList();
 
             foreach (var shader in shaderList)
             {
-                GL.AttachShader(this, shader);
+                GL.AttachShader(handle, shader);
             }
 
-            GL.LinkProgram(this);
+            GL.LinkProgram(handle);
             foreach (var shader in shaderList)
             {
-                GL.DetachShader(this, shader);
+                GL.DetachShader(handle, shader);
             }
 
             throwIfLinkingFailed();
 
-            attributeLocations = new CachedVariableLocator(name => GL.GetAttribLocation(Handle, name));
-            uniformLocations = new CachedVariableLocator(name => GL.GetUniformLocation(Handle, name));
+            attributeLocations = new CachedVariableLocator(name => GL.GetAttribLocation(handle, name));
+            uniformLocations = new CachedVariableLocator(name => GL.GetUniformLocation(handle, name));
         }
 
         private void throwIfLinkingFailed()
         {
-            GL.GetProgram(this, GetProgramParameterName.LinkStatus, out var statusCode);
+            GL.GetProgram(handle, GetProgramParameterName.LinkStatus, out var statusCode);
 
             if (statusCode == StatusCode.Ok) return;
 
-            GL.GetProgramInfoLog(this, out var info);
+            GL.GetProgramInfoLog(handle, out var info);
             throw new ApplicationException($"Could not link shader: {info}");
         }
 
@@ -98,16 +98,27 @@ namespace amulware.Graphics
             surface.SetShaderProgram(this);
         }
 
-        /// <summary>
-        /// Casts the shader program object to its GLSL program object handle, for easy use with OpenGL functions.
-        /// </summary>
-        /// <param name="program">The program.</param>
-        /// <returns>GLSL program object handle.</returns>
-        public static implicit operator int(ShaderProgram program) => program.Handle;
+        public Using Use()
+        {
+            return new Using(in handle);
+        }
+
+        public struct Using : IDisposable
+        {
+            public Using(in int handle)
+            {
+                GL.UseProgram(handle);
+            }
+
+            public void Dispose()
+            {
+                GL.UseProgram(0);
+            }
+        }
 
         public void Dispose()
         {
-            GL.DeleteProgram(this);
+            GL.DeleteProgram(handle);
         }
     }
 }
