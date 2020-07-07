@@ -20,27 +20,19 @@ namespace amulware.Graphics
         public static IRenderable ForVerticesAndIndices<T>(Buffer<T> vertexBuffer, Buffer<byte> indexBuffer, PrimitiveType primitiveType)
             where T : struct, IVertexData
         {
-            return withVerticesAndIndices(vertexBuffer, indexBuffer, primitiveType);
+            return new WithVerticesAndIndices<T, byte>(vertexBuffer, indexBuffer, primitiveType);
         }
 
         public static IRenderable ForVerticesAndIndices<T>(Buffer<T> vertexBuffer, Buffer<uint> indexBuffer, PrimitiveType primitiveType)
             where T : struct, IVertexData
         {
-            return withVerticesAndIndices(vertexBuffer, indexBuffer, primitiveType);
+            return new WithVerticesAndIndices<T, uint>(vertexBuffer, indexBuffer, primitiveType);
         }
 
         public static IRenderable ForVerticesAndIndices<T>(Buffer<T> vertexBuffer, Buffer<ushort> indexBuffer, PrimitiveType primitiveType)
             where T : struct, IVertexData
         {
-            return withVerticesAndIndices(vertexBuffer, indexBuffer, primitiveType);
-        }
-
-        private static WithVerticesAndIndices<TVertex, TIndex> withVerticesAndIndices<TVertex, TIndex>(
-            Buffer<TVertex> vertexBuffer, Buffer<TIndex> indexBuffer, PrimitiveType primitiveType)
-            where TVertex : struct, IVertexData
-            where TIndex : struct
-        {
-            return new WithVerticesAndIndices<TVertex, TIndex>(vertexBuffer, indexBuffer, primitiveType);
+            return new WithVerticesAndIndices<T, ushort>(vertexBuffer, indexBuffer, primitiveType);
         }
 
         private class WithVertices<TVertex> : IRenderable
@@ -96,7 +88,8 @@ namespace amulware.Graphics
             {
                 vertexBuffer.Bind(BufferTarget.ArrayBuffer);
                 VertexData.SetAttributes<TVertex>(program);
-                // todo: bind index buffer
+
+                indexBuffer.Bind(BufferTarget.ElementArrayBuffer);
             }
 
             public void Render()

@@ -20,7 +20,7 @@ namespace amulware.Graphics
             data = new T[capacity > 0 ? capacity : 4];
         }
 
-        public Target Bind(BufferTarget target = BufferTarget.ElementArrayBuffer)
+        public Target Bind(BufferTarget target)
         {
             return new Target(this, target);
         }
