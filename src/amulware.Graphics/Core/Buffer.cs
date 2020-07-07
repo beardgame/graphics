@@ -53,38 +53,6 @@ namespace amulware.Graphics
                 bufferData(data, count, target, usageHint);
             }
 
-            public void DownloadInto(T[] data)
-            {
-                getBufferData(data, 0, data.Length);
-            }
-
-            public void DownloadInto(T[] data, Range range)
-            {
-                var (offset, count) = range.GetOffsetAndLength(data.Length);
-
-                DownloadInto(data, offset, count);
-            }
-
-            public void DownloadInto(T[] data, int offset, int count)
-            {
-                if (offset < 0 || offset >= data.Length)
-                    throw new ArgumentOutOfRangeException(nameof(offset));
-                if (count < 0 || (count + offset) > data.Length)
-                    throw new ArgumentOutOfRangeException(nameof(count));
-
-                getBufferData(data, offset, count);
-            }
-
-            public void DownloadInto(Span<T> data)
-            {
-                GL.GetBufferSubData(target, IntPtr.Zero, itemSize * data.Length, ref data.GetPinnableReference());
-            }
-
-            private void getBufferData(T[] data, in int offset, in int count)
-            {
-                GL.GetBufferSubData(target, (IntPtr) (itemSize * offset), itemSize * count, data);
-            }
-
             private void bufferData(T[]? data, int count, BufferTarget target, BufferUsageHint usageHint)
             {
                 GL.BufferData(target, itemSize * count, data, usageHint);
