@@ -13,6 +13,20 @@ namespace amulware.Graphics
     /// </summary>
     public static class VertexData
     {
+        public static void SetAttributes<TVertex>(ShaderProgram program)
+            where TVertex : struct, IVertexData
+        {
+            SetAttributes(default(TVertex).VertexAttributes(), program);
+        }
+
+        public static void SetAttributes(VertexAttribute[] attributes, ShaderProgram program)
+        {
+            foreach (var attribute in attributes)
+            {
+                attribute.SetAttribute(program);
+            }
+        }
+
         /// <summary>
         /// Returns the size in bytes of a given type.
         /// </summary>

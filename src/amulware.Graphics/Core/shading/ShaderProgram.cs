@@ -5,14 +5,8 @@ using OpenToolkit.Graphics.OpenGL;
 
 namespace amulware.Graphics
 {
-    /// <summary>
-    /// This class represents a GLSL shader program.
-    /// </summary>
     public class ShaderProgram : IDisposable, ISurfaceShader
     {
-        /// <summary>
-        /// The GLSL shader program handle
-        /// </summary>
         private int handle;
 
         private readonly CachedVariableLocator attributeLocations;
@@ -28,10 +22,6 @@ namespace amulware.Graphics
 
         public static ShaderProgram FromShaders(IEnumerable<Shader> shaders) => new ShaderProgram(shaders);
 
-        /// <summary>
-        /// Creates a new shader program.
-        /// </summary>
-        /// <param name="shaders">The different shaders of the program.</param>
         private ShaderProgram(IEnumerable<Shader> shaders)
         {
             handle = GL.CreateProgram();
@@ -63,16 +53,6 @@ namespace amulware.Graphics
 
             GL.GetProgramInfoLog(handle, out var info);
             throw new ApplicationException($"Could not link shader: {info}");
-        }
-
-        /// <summary>
-        /// Sets the vertex attributes.
-        /// </summary>
-        /// <param name="vertexAttributes">The vertex attributes to set.</param>
-        public void SetVertexAttributes(IEnumerable<VertexAttribute> vertexAttributes)
-        {
-            foreach (var t in vertexAttributes)
-                t.SetAttribute(this);
         }
 
         /// <summary>

@@ -64,7 +64,7 @@ namespace amulware.Graphics
             public void ConfigureBoundVertexArray(ShaderProgram program)
             {
                 vertexBuffer.Bind(BufferTarget.ArrayBuffer);
-                program.SetVertexAttributes(default(TVertex).VertexAttributes());
+                VertexData.SetAttributes<TVertex>(program);
             }
 
             public void Render()
@@ -92,7 +92,7 @@ namespace amulware.Graphics
             public void ConfigureBoundVertexArray(ShaderProgram program)
             {
                 vertexBuffer.Bind(BufferTarget.ArrayBuffer);
-                program.SetVertexAttributes(default(TVertex).VertexAttributes());
+                VertexData.SetAttributes<TVertex>(program);
                 // todo: bind index buffer
             }
 
