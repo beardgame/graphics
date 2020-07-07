@@ -15,18 +15,15 @@ namespace amulware.Graphics
         {
             this.renderable = renderable;
             this.shaderProgram = shaderProgram;
-            vertexArray = VertexArray.ForRenderable(renderable, shaderProgram);
+            vertexArray = VertexArray.For(renderable, shaderProgram);
         }
 
         public void Render()
         {
-            // TODO: all this code could be in the vertex array, or a separate RenderState class
-            // - but should it be?
             // TODO: figure out where shader program replacing mutability comes in
             using (shaderProgram.Use())
-            using (vertexArray.Bind())
             {
-                renderable.Render();
+                vertexArray.Render();
             }
         }
     }
