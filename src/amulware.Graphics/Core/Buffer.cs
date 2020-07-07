@@ -7,29 +7,33 @@ namespace amulware.Graphics
     {
         private static readonly int itemSize = VertexData.SizeOf<T>();
 
-        public int Handle { get; }
+        private int handle { get; }
+
+        public int Count { get; private set; }
 
         public Buffer()
         {
-            Handle = GL.GenBuffer();
+            handle = GL.GenBuffer();
         }
 
         public Target Bind(BufferTarget target = BufferTarget.ElementArrayBuffer)
         {
-            return new Target(Handle, target);
+            return new Target(this, target);
         }
 
         public readonly struct Target : IDisposable
         {
             private const BufferUsageHint defaultUsageHint = BufferUsageHint.StreamDraw;
 
+            private readonly Buffer<T> buffer;
             private readonly BufferTarget target;
 
-            internal Target(int handle, BufferTarget target)
+            internal Target(Buffer<T> buffer, BufferTarget target)
             {
+                this.buffer = buffer;
                 this.target = target;
 
-                GL.BindBuffer(target, handle);
+                GL.BindBuffer(target, buffer.handle);
             }
 
             public void Reserve(int count, BufferUsageHint usageHint = defaultUsageHint)
@@ -55,6 +59,7 @@ namespace amulware.Graphics
 
             private void bufferData(T[]? data, int count, BufferTarget target, BufferUsageHint usageHint)
             {
+                buffer.Count = count;
                 GL.BufferData(target, itemSize * count, data, usageHint);
             }
 
@@ -66,7 +71,7 @@ namespace amulware.Graphics
 
         public void Dispose()
         {
-            GL.DeleteBuffer(Handle);
+            GL.DeleteBuffer(handle);
         }
     }
 }
