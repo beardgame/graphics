@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using System.Runtime.InteropServices;
 using OpenToolkit.Mathematics;
 using OpenToolkit.Graphics.OpenGL;
 
@@ -16,7 +15,7 @@ namespace amulware.Graphics
         public static void SetAttributes<TVertex>(ShaderProgram program)
             where TVertex : struct, IVertexData
         {
-            SetAttributes(default(TVertex).VertexAttributes(), program);
+            SetAttributes(default(TVertex).VertexAttributes, program);
         }
 
         public static void SetAttributes(VertexAttribute[] attributes, ShaderProgram program)
@@ -26,12 +25,6 @@ namespace amulware.Graphics
                 attribute.SetAttribute(program);
             }
         }
-
-        /// <summary>
-        /// Returns the size in bytes of a given type.
-        /// </summary>
-        /// <typeparam name="T">The type to return the size of.</typeparam>
-        public static int SizeOf<T>() => Marshal.SizeOf(typeof(T));
 
         /// <summary>
         /// Creates a <see cref="VertexAttribute"/> array from a list of attribute templates.

@@ -1,11 +1,12 @@
 using System;
+using System.Runtime.InteropServices;
 using OpenToolkit.Graphics.OpenGL;
 
 namespace amulware.Graphics
 {
     public class Buffer<T> : IDisposable where T : struct
     {
-        private static readonly int itemSize = VertexData.SizeOf<T>();
+        private static readonly int itemSize = Marshal.SizeOf(typeof(T));
 
         private int handle { get; }
 

@@ -10,6 +10,6 @@ namespace amulware.Graphics
         /// Returns the vertex' <see cref="VertexAttributes"/>
         /// </summary>
         /// <returns>Array of <see cref="VertexAttribute"/></returns>
-        VertexAttribute[] VertexAttributes();
+        VertexAttribute[] VertexAttributes { get; }
     }
 }

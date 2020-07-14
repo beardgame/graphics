@@ -2,7 +2,7 @@
 
 namespace amulware.Graphics
 {
-    public readonly struct VertexAttribute
+    public sealed class VertexAttribute
     {
         private readonly string name;
         private readonly int size;
