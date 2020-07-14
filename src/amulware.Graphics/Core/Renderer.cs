@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace amulware.Graphics
 {
+    // TODO: create replacement for batched vertex surface
+    // TODO: create replacement for expanding vertex surface
+
     public class Renderer
     {
         private readonly IRenderable renderable;

@@ -49,6 +49,7 @@ namespace amulware.Graphics
                 GL.BindVertexArray(0);
             }
         }
+
         public void Dispose()
         {
             GL.DeleteVertexArray(handle);

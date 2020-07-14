@@ -35,7 +35,7 @@ namespace amulware.Graphics
             return new WithVerticesAndIndices<T, ushort>(vertexBuffer, indexBuffer, primitiveType);
         }
 
-        private class WithVertices<TVertex> : IRenderable
+        private sealed class WithVertices<TVertex> : IRenderable
             where TVertex : struct, IVertexData
         {
             private readonly Buffer<TVertex> vertexBuffer;
@@ -59,7 +59,7 @@ namespace amulware.Graphics
             }
         }
 
-        private class WithVerticesAndIndices<TVertex, TIndex> : IRenderable
+        private sealed class WithVerticesAndIndices<TVertex, TIndex> : IRenderable
             where TVertex : struct, IVertexData
             where TIndex : struct
         {
@@ -95,6 +95,8 @@ namespace amulware.Graphics
             public void Render()
             {
                 GL.DrawElements(primitiveType, indexBuffer.Count, drawElementsType, 0);
+
+                // TODO: Do we need to implement clearing after rendering for streaming?
             }
         }
     }
