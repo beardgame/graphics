@@ -64,11 +64,10 @@ namespace amulware.Graphics
             this.renderable = renderable;
             this.settings = settings.ToImmutableArray();
 
-            setShaderProgram(shaderProgram);
+            SetShaderProgram(shaderProgram);
         }
 
-        // TODO: figure out where shader program replacing mutability comes in
-        private void setShaderProgram(ShaderProgram program)
+        public void SetShaderProgram(ShaderProgram program)
         {
             shaderProgram = program;
             vertexArray = VertexArray.For(renderable, program);

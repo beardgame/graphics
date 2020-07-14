@@ -5,18 +5,12 @@ using OpenToolkit.Graphics.OpenGL;
 
 namespace amulware.Graphics
 {
-    public class ShaderProgram : IDisposable, ISurfaceShader
+    public sealed class ShaderProgram : IDisposable
     {
-        private int handle;
+        private readonly int handle;
 
         private readonly CachedVariableLocator attributeLocations;
         private readonly CachedVariableLocator uniformLocations;
-
-        public static ShaderProgram FromFiles(string vertexShaderPath, string fragmentShaderPath) =>
-            FromShaders(VertexShader.FromFile(vertexShaderPath), FragmentShader.FromFile(fragmentShaderPath));
-
-        public static ShaderProgram FromCode(string vertexShaderCode, string fragmentShaderCode) =>
-            FromShaders(VertexShader.FromCode(vertexShaderCode), VertexShader.FromCode(fragmentShaderCode));
 
         public static ShaderProgram FromShaders(params Shader[] shaders) => new ShaderProgram(shaders);
 
@@ -30,13 +24,13 @@ namespace amulware.Graphics
 
             foreach (var shader in shaderList)
             {
-                GL.AttachShader(handle, shader);
+                GL.AttachShader(handle, shader.Handle);
             }
 
             GL.LinkProgram(handle);
             foreach (var shader in shaderList)
             {
-                GL.DetachShader(handle, shader);
+                GL.DetachShader(handle, shader.Handle);
             }
 
             throwIfLinkingFailed();
@@ -68,15 +62,6 @@ namespace amulware.Graphics
         /// <param name="name">The name of the uniform.</param>
         /// <returns>The uniform's location, or -1 if not found.</returns>
         public int GetUniformLocation(string name) => uniformLocations.GetVariableLocation(name);
-
-        /// <summary>
-        /// Sets the surface's shader program to this.
-        /// </summary>
-        /// <param name="surface">The surface to update the shader program on.</param>
-        public void UseOnSurface(Surface surface)
-        {
-            surface.SetShaderProgram(this);
-        }
 
         public Using Use()
         {
