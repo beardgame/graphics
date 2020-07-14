@@ -2,26 +2,21 @@ using OpenToolkit.Graphics.OpenGL;
 
 namespace amulware.Graphics
 {
-    public class ArrayTextureUniform : SurfaceSetting
+    public sealed class ArrayTextureUniform : Uniform<ArrayTexture>
     {
-        public string Name { get; }
-        
-        public ArrayTexture Texture { get; set; }
+        public TextureUnit Target { get; }
 
-        public TextureUnit Target { get; set; }
-
-        public ArrayTextureUniform(string name, ArrayTexture texture, TextureUnit target = TextureUnit.Texture0)
+        public ArrayTextureUniform(string name, TextureUnit target, ArrayTexture texture)
+            : base(name, texture)
         {
-            Name = name;
-            Texture = texture;
             Target = target;
         }
 
-        public override void Set(ShaderProgram program)
+        protected override void SetAtLocation(int location)
         {
             GL.ActiveTexture(Target);
-            GL.BindTexture(TextureTarget.Texture2DArray, Texture);
-            GL.Uniform1(program.GetUniformLocation(Name), Target - TextureUnit.Texture0);
+            GL.BindTexture(TextureTarget.Texture2DArray, Value);
+            GL.Uniform1(location, Target - TextureUnit.Texture0);
         }
     }
 }

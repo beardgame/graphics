@@ -2,50 +2,21 @@
 
 namespace amulware.Graphics
 {
-    /// <summary>
-    /// This class represents a GLSL sampler uniform
-    /// </summary>
-    public class TextureUniform : SurfaceSetting
+    public sealed class TextureUniform : Uniform<Texture>
     {
-        /// <summary>
-        /// The <see cref="Texture"/> value of this uniform
-        /// </summary>
-        public Texture Texture;
+        public TextureUnit Target { get; }
 
-        /// <summary>
-        /// The <see cref="TextureUnit"/> used by this uniform
-        /// </summary>
-        public TextureUnit Target;
-
-        /// <summary>
-        /// The name of this uniform
-        /// </summary>
-        private string name;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TextureUniform"/> class.
-        /// </summary>
-        /// <param name="name">The name of this uniform.</param>
-        /// <param name="texture">The initial <see cref="Texture"/> value of this uniform.</param>
-        /// <param name="target">The initial <see cref="TextureUnit"/> used by this uniform.</param>
-        public TextureUniform(string name, Texture texture, TextureUnit target = TextureUnit.Texture0)
+        public TextureUniform(string name, TextureUnit target, Texture value)
+            : base(name, value)
         {
-            this.name = name;
-            this.Target = target;
-            this.Texture = texture;
+            Target = target;
         }
 
-        /// <summary>
-        /// Binds the uniform's <see cref="Texture"/> to the specified <see cref="TextureUnit"/> for a shader program. Is called before the draw call.
-        /// </summary>
-        /// <param name="program">The program.</param>
-        public override void Set(ShaderProgram program)
+        protected override void SetAtLocation(int location)
         {
-            // for explanation on how textures are set, review: http://www.opentk.com/node/2559
-            GL.ActiveTexture(this.Target);
-            GL.BindTexture(TextureTarget.Texture2D, this.Texture);
-            GL.Uniform1(program.GetUniformLocation(this.name), this.Target - TextureUnit.Texture0);
+            GL.ActiveTexture(Target);
+            Value.Bind();
+            GL.Uniform1(location, Target - TextureUnit.Texture0);
         }
-
     }
 }
