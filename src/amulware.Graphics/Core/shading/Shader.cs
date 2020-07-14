@@ -3,46 +3,38 @@ using OpenToolkit.Graphics.OpenGL;
 
 namespace amulware.Graphics
 {
-    /// <summary>
-    /// This class represents a GLSL shader.
-    /// </summary>
-    public abstract class Shader : IDisposable
+    public sealed class Shader : IDisposable
     {
-        /// <summary>
-        /// The GLSL shader object handle.
-        /// </summary>
         public int Handle { get; }
 
-        protected Shader(ShaderType type, string code)
+        public static Shader Create(ShaderType type, string sourceCode)
+        {
+            return new Shader(type, sourceCode);
+        }
+
+        private Shader(ShaderType type, string code)
         {
             Handle = GL.CreateShader(type);
 
-            GL.ShaderSource(this, code);
-            GL.CompileShader(this);
+            GL.ShaderSource(Handle, code);
+            GL.CompileShader(Handle);
 
             throwIfCompilingFailed();
         }
 
         private void throwIfCompilingFailed()
         {
-            GL.GetShader(this, ShaderParameter.CompileStatus, out var statusCode);
+            GL.GetShader(Handle, ShaderParameter.CompileStatus, out var statusCode);
 
             if (statusCode == StatusCode.Ok) return;
 
-            GL.GetShaderInfoLog(this, out var info);
+            GL.GetShaderInfoLog(Handle, out var info);
             throw new ApplicationException($"Could not load shader: {info}");
         }
 
-        /// <summary>
-        /// Casts the shader object to its GLSL shader object handle, for easy use with OpenGL functions.
-        /// </summary>
-        /// <param name="shader">The shader.</param>
-        /// <returns>GLSL shader object handle.</returns>
-        public static implicit operator int(Shader shader) => shader.Handle;
-
         public void Dispose()
         {
-            GL.DeleteShader(this);
+            GL.DeleteShader(Handle);
         }
     }
 }

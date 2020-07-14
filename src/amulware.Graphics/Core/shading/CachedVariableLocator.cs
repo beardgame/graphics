@@ -12,7 +12,7 @@ namespace amulware.Graphics
         {
             this.locateVariable = locateVariable;
         }
-        
+
         public int GetVariableLocation(string name)
         {
             if (!variableLocations.TryGetValue(name, out var i))
