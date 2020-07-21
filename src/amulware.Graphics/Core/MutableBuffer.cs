@@ -3,6 +3,7 @@ using OpenToolkit.Graphics.OpenGL;
 
 namespace amulware.Graphics
 {
+    // TODO: Rename to MirroredBuffer?
     public class MutableBuffer<T> : IDisposable where T : struct
     {
         private readonly Buffer<T> buffer;
@@ -51,6 +52,7 @@ namespace amulware.Graphics
             }
         }
 
+        // TODO: measure performance impact of using 'in' keyword
         public void Add(T item)
         {
             var newCount = Count + 1;

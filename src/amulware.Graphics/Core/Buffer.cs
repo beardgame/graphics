@@ -17,7 +17,7 @@ namespace amulware.Graphics
             handle = GL.GenBuffer();
         }
 
-        public Target Bind(BufferTarget target)
+        public Target Bind(BufferTarget target = BufferTarget.ArrayBuffer)
         {
             return new Target(this, target);
         }
