@@ -1,126 +1,116 @@
 using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
 using OpenToolkit.Graphics.OpenGL;
-using PixelFormat = OpenToolkit.Graphics.OpenGL.PixelFormat;
 
 namespace amulware.Graphics
 {
-    public sealed class ArrayTexture
+    public sealed class ArrayTexture : IDisposable
     {
+        private PixelInternalFormat pixelInternalFormat;
+
         public int Handle { get; }
 
-        public int Width { get; }
+        public int Width { get; private set; }
 
-        public int Height { get; }
+        public int Height { get; private set; }
 
-        public int LayerCount { get; }
+        public int LayerCount { get; private set; }
 
-        public ArrayTexture(IList<Bitmap> layers, bool preMultiplyAlpha = false)
+        public static ArrayTexture Empty(
+            int width, int height, int layerCount, PixelInternalFormat pixelFormat = PixelInternalFormat.Rgba)
         {
-            Width = layers[0].Width;
-            Height = layers[0].Height;
-            LayerCount = layers.Count;
+            var arrayTexture = new ArrayTexture();
 
-            if (layers.Any(b => b.Width != Width || b.Height != Height))
-                throw new ArgumentException("All layers must have the same dimensions.");
+            using var target = arrayTexture.Bind();
+            target.Resize(width, height, layerCount, pixelFormat);
+            target.SetFilterMode(TextureMinFilter.LinearMipmapLinear, TextureMagFilter.Linear);
+            target.SetWrapMode(TextureWrapMode.Repeat, TextureWrapMode.Repeat);
 
+            return arrayTexture;
+        }
+
+        public ArrayTexture()
+        {
             GL.GenTextures(1, out int handle);
             Handle = handle;
+        }
 
-            Bind();
+        public Target Bind(TextureTarget target = TextureTarget.Texture2DArray)
+        {
+            return new Target(this, target);
+        }
 
-            allocateStorage(Width, Height, LayerCount);
+        public readonly struct Target : IDisposable
+        {
+            private readonly ArrayTexture arrayTexture;
+            private readonly TextureTarget target;
 
-            foreach (var (bitmap, layer) in layers.Select((b, i) => (b, i)))
+            internal Target(ArrayTexture arrayTexture, TextureTarget target)
             {
-                copyFromBitmap(bitmap, layer, preMultiplyAlpha);
+                this.arrayTexture = arrayTexture;
+                this.target = target;
+                GL.BindTexture(target, arrayTexture.Handle);
             }
 
-            generateMipmap();
-            setDefaultParameters();
+            public void GenerateMipmap()
+            {
+                GL.GenerateMipmap((GenerateMipmapTarget)target);
+            }
 
-            Unbind();
+            public void Dispose()
+            {
+                GL.BindTexture(target, 0);
+            }
+
+            public void Resize(int width, int height)
+            {
+                Resize(width, height, arrayTexture.LayerCount, arrayTexture.pixelInternalFormat);
+            }
+
+            public void Resize(int width, int height, int layerCount)
+            {
+                Resize(width, height, layerCount, arrayTexture.pixelInternalFormat);
+            }
+
+            public void Resize(int width, int height, int layerCount, PixelInternalFormat pixelFormat)
+            {
+                UploadData(IntPtr.Zero, 0, 0, width, height, layerCount, pixelFormat);
+            }
+
+            public void UploadData(IntPtr ptr, PixelFormat pixelFormat, PixelType pixelType, int width, int height, int layerCount, PixelInternalFormat pixelInternalFormat)
+            {
+                GL.TexImage3D(
+                    target, 0,
+                    pixelInternalFormat, width, height, layerCount, 0,
+                    pixelFormat, pixelType,
+                    ptr);
+                arrayTexture.Width = width;
+                arrayTexture.Height = height;
+                arrayTexture.LayerCount = layerCount;
+                arrayTexture.pixelInternalFormat = pixelInternalFormat;
+            }
+
+            public void UploadLayer(IntPtr ptr, PixelFormat pixelFormat, PixelType pixelType, int layer)
+            {
+                GL.TexSubImage3D(
+                    target, 0,
+                    0, 0, layer,
+                    arrayTexture.Width, arrayTexture.Height, 1,
+                    pixelFormat, pixelType,
+                    ptr);
+            }
+
+            public void SetFilterMode(TextureMinFilter minFilter, TextureMagFilter magFilter)
+            {
+                GL.TexParameter(target, TextureParameterName.TextureMinFilter, (int) minFilter);
+                GL.TexParameter(target, TextureParameterName.TextureMagFilter, (int) magFilter);
+            }
+
+            public void SetWrapMode(TextureWrapMode wrapHorizontal, TextureWrapMode wrapVertical)
+            {
+                GL.TexParameter(target, TextureParameterName.TextureWrapS, (int) wrapHorizontal);
+                GL.TexParameter(target, TextureParameterName.TextureWrapT, (int) wrapVertical);
+            }
         }
-
-        private void copyFromBitmap(Bitmap bitmap, int layer, bool preMultiplyAlpha)
-        {
-            Texture.CopyDataFromBitmap(
-                bitmap, preMultiplyAlpha,
-                pointer => copyFromPointer(pointer, layer),
-                array => copyFromArray(array, layer)
-                );
-        }
-
-        private void copyFromArray(byte[] array, int layer)
-        {
-            GL.TexSubImage3D(
-                TextureTarget.Texture2DArray, 0,
-                0, 0, layer, Width, Height, 1,
-                PixelFormat.Bgra, PixelType.UnsignedByte,
-                array
-            );
-        }
-
-        private void copyFromPointer(IntPtr pointer, int layer)
-        {
-            GL.TexSubImage3D(
-                TextureTarget.Texture2DArray, 0,
-                0, 0, layer, Width, Height, 1,
-                PixelFormat.Bgra, PixelType.UnsignedByte,
-                pointer
-            );
-        }
-
-        private void allocateStorage(int width, int height, int layerCount)
-        {
-            GL.TexImage3D(
-                TextureTarget.Texture2DArray, 0, PixelInternalFormat.Rgba,
-                Width, Height, layerCount,
-                0, PixelFormat.Bgra, PixelType.UnsignedByte,
-                IntPtr.Zero
-                );
-        }
-
-        private static void generateMipmap()
-        {
-            GL.GenerateMipmap(GenerateMipmapTarget.Texture2DArray);
-        }
-
-        private static void setDefaultParameters()
-        {
-            setParameters(
-                TextureMinFilter.LinearMipmapLinear,
-                TextureMagFilter.Linear,
-                TextureWrapMode.Repeat,
-                TextureWrapMode.Repeat
-            );
-        }
-
-        private static void setParameters(
-            TextureMinFilter minFilter,
-            TextureMagFilter magFilter,
-            TextureWrapMode wrapS,
-            TextureWrapMode wrapT)
-        {
-            GL.TexParameter(TextureTarget.Texture2DArray, TextureParameterName.TextureMinFilter, (int) minFilter);
-            GL.TexParameter(TextureTarget.Texture2DArray, TextureParameterName.TextureMagFilter, (int) magFilter);
-            GL.TexParameter(TextureTarget.Texture2DArray, TextureParameterName.TextureWrapS, (int) wrapS);
-            GL.TexParameter(TextureTarget.Texture2DArray, TextureParameterName.TextureWrapT, (int) wrapT);
-        }
-
-        public void Bind(TextureTarget target = TextureTarget.Texture2DArray)
-        {
-            GL.BindTexture(target, Handle);
-        }
-
-        public static void Unbind(TextureTarget target = TextureTarget.Texture2DArray)
-        {
-            GL.BindTexture(target, 0);
-        }
-
-        public static implicit operator int(ArrayTexture texture) => texture?.Handle ?? 0;
 
         public void Dispose()
         {

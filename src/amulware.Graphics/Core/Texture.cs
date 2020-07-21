@@ -5,6 +5,8 @@ namespace amulware.Graphics
 {
     public sealed class Texture : IDisposable
     {
+        private PixelInternalFormat pixelInternalFormat;
+
         public int Handle { get; }
 
         public int Height { get; private set; }
@@ -17,10 +19,8 @@ namespace amulware.Graphics
 
             using var target = texture.Bind();
             target.Resize(width, height, pixelFormat);
-            target.SetParameters(
-                TextureMinFilter.LinearMipmapLinear, TextureMagFilter.Linear,
-                TextureWrapMode.Repeat, TextureWrapMode.Repeat
-            );
+            target.SetFilterMode(TextureMinFilter.LinearMipmapLinear, TextureMagFilter.Linear);
+            target.SetWrapMode(TextureWrapMode.Repeat, TextureWrapMode.Repeat);
 
             return texture;
         }
@@ -41,7 +41,7 @@ namespace amulware.Graphics
             private readonly Texture texture;
             private readonly TextureTarget target;
 
-            public Target(Texture texture, TextureTarget target)
+            internal Target(Texture texture, TextureTarget target)
             {
                 this.texture = texture;
                 this.target = target;
@@ -53,32 +53,38 @@ namespace amulware.Graphics
                 GL.GenerateMipmap((GenerateMipmapTarget)target);
             }
 
-            public void Resize(int width, int height, PixelInternalFormat pixelFormat)
+            public void Resize(int width, int height)
             {
-                UploadData(IntPtr.Zero, width, height, pixelFormat);
+                Resize(width, height, texture.pixelInternalFormat);
             }
 
-            public void UploadData(IntPtr ptr, int width, int height, PixelInternalFormat pixelFormat)
+            public void Resize(int width, int height, PixelInternalFormat pixelInternalFormat)
+            {
+                UploadData(IntPtr.Zero, 0, 0, width, height, pixelInternalFormat);
+            }
+
+            public void UploadData(IntPtr ptr, PixelFormat pixelFormat, PixelType pixelType, int width, int height, PixelInternalFormat pixelInternalFormat)
             {
                 GL.TexImage2D(
                     target, 0,
-                    pixelFormat, width, height, 0,
-                    PixelFormat.Bgra, PixelType.UnsignedByte,
+                    pixelInternalFormat, width, height, 0,
+                    pixelFormat, pixelType,
                     ptr);
                 texture.Width = width;
                 texture.Height = height;
+                texture.pixelInternalFormat = pixelInternalFormat;
             }
 
-            public void SetParameters(
-                TextureMinFilter minFilter,
-                TextureMagFilter magFilter,
-                TextureWrapMode wrapS,
-                TextureWrapMode wrapT)
+            public void SetFilterMode(TextureMinFilter minFilter, TextureMagFilter magFilter)
             {
                 GL.TexParameter(target, TextureParameterName.TextureMinFilter, (int) minFilter);
                 GL.TexParameter(target, TextureParameterName.TextureMagFilter, (int) magFilter);
-                GL.TexParameter(target, TextureParameterName.TextureWrapS, (int) wrapS);
-                GL.TexParameter(target, TextureParameterName.TextureWrapT, (int) wrapT);
+            }
+
+            public void SetWrapMode(TextureWrapMode wrapHorizontal, TextureWrapMode wrapVertical)
+            {
+                GL.TexParameter(target, TextureParameterName.TextureWrapS, (int) wrapHorizontal);
+                GL.TexParameter(target, TextureParameterName.TextureWrapT, (int) wrapVertical);
             }
 
             public void Dispose()

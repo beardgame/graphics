@@ -5,13 +5,11 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 using OpenToolkit.Graphics.OpenGL;
+using PixelFormat = OpenToolkit.Graphics.OpenGL.PixelFormat;
 using SystemPixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace amulware.Graphics
 {
-    // For next week
-    // Why do we want to do this?
-    // Because we want to do the transformations on a different thread
     public abstract class TextureData
     {
         // TODO: some of these construction methods could probably be improved
@@ -76,9 +74,9 @@ namespace amulware.Graphics
             }
         }
 
-        protected abstract int Width { get; }
+        public abstract int Width { get; }
 
-        protected abstract int Height { get; }
+        public abstract int Height { get; }
 
         public void PopulateTexture(Texture texture)
         {
@@ -87,13 +85,29 @@ namespace amulware.Graphics
             {
                 // ReSharper disable once AccessToDisposedClosure
                 // we trust the implementation to behave
-                target.UploadData(ptr, Width, Height, PixelInternalFormat.Rgba);
+                target.UploadData(
+                    ptr, PixelFormat.Bgra, PixelType.UnsignedByte, Width, Height, PixelInternalFormat.Rgba);
             });
         }
 
-        public void PopulateArrayTexture(ArrayTexture texture, int layer)
+        public void FillArrayTextureLayer(ArrayTexture texture, int layer)
         {
-            throw new NotImplementedException();
+            if (texture.Width != Width || texture.Height != Height)
+            {
+                throw new ArgumentException("Texture data does not have same dimensions as array texture.");
+            }
+            if (layer < 0 || layer >= texture.LayerCount)
+            {
+                throw new ArgumentOutOfRangeException(nameof(layer));
+            }
+
+            using var target = texture.Bind();
+            Visit(ptr =>
+            {
+                // ReSharper disable once AccessToDisposedClosure
+                // we trust the implementation to behave
+                target.UploadLayer(ptr, PixelFormat.Bgra, PixelType.UnsignedByte, layer);
+            });
         }
 
         protected abstract void Visit(Action<IntPtr> action);
@@ -102,8 +116,8 @@ namespace amulware.Graphics
         {
             private readonly byte[] data;
 
-            protected override int Width { get; }
-            protected override int Height { get; }
+            public override int Width { get; }
+            public override int Height { get; }
 
             public RawTextureData(byte[] data, int width, int height)
             {
@@ -127,8 +141,8 @@ namespace amulware.Graphics
         {
             private readonly Bitmap bitmap;
 
-            protected override int Width { get; }
-            protected override int Height { get; }
+            public override int Width { get; }
+            public override int Height { get; }
 
             public BitmapTextureData(Bitmap bitmap)
             {

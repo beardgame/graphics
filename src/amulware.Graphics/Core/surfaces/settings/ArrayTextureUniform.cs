@@ -15,7 +15,7 @@ namespace amulware.Graphics
         protected override void SetAtLocation(int location)
         {
             GL.ActiveTexture(Target);
-            GL.BindTexture(TextureTarget.Texture2DArray, Value);
+            using var _ = Value.Bind();
             GL.Uniform1(location, Target - TextureUnit.Texture0);
         }
     }
