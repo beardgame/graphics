@@ -3,53 +3,40 @@ using OpenToolkit.Graphics.OpenGL;
 
 namespace amulware.Graphics
 {
-    // TODO: Rename to MirroredBuffer?
-    public class MutableBuffer<T> : IDisposable where T : struct
+    public class BufferStream<T> : IDisposable where T : struct
     {
-        private readonly Buffer<T> buffer;
+        public Buffer<T> Buffer { get; }
 
         private T[] data;
-        private bool isDirty;
 
         public int Capacity => data.Length;
         public int Count { get; private set; }
-        public bool NeedsUpload => isDirty;
+        public bool IsDirty { get; private set; }
 
-        public MutableBuffer(int capacity = 0)
+        public static BufferStream<T> WithEmptyBuffer(int capacity = 0)
         {
-            buffer = new Buffer<T>();
+            return new BufferStream<T>(new Buffer<T>(), capacity);
+        }
+
+        public BufferStream(Buffer<T> buffer, int capacity = 0)
+        {
+            Buffer = buffer;
             data = new T[capacity > 0 ? capacity : 4];
         }
 
-        public Target Bind(BufferTarget target)
+        public void UploadIfDirty(BufferTarget target = BufferTarget.ArrayBuffer)
         {
-            return new Target(this, target);
+            if (!IsDirty)
+                return;
+
+            Upload(target);
         }
 
-        public readonly struct Target : IDisposable
+        public void Upload(BufferTarget target)
         {
-            private readonly MutableBuffer<T> buffer;
-            private readonly Buffer<T>.Target bufferTarget;
-
-            internal Target(MutableBuffer<T> self, BufferTarget target)
-            {
-                buffer = self;
-                bufferTarget = self.buffer.Bind(target);
-            }
-
-            public void UploadIfNeeded()
-            {
-                if (!buffer.isDirty)
-                    return;
-
-                bufferTarget.Upload(buffer.data, buffer.Count);
-                buffer.isDirty = false;
-            }
-
-            public void Dispose()
-            {
-                bufferTarget.Dispose();
-            }
+            using var t = Buffer.Bind(target);
+            t.Upload(data, Count);
+            IsDirty = false;
         }
 
         // TODO: measure performance impact of using 'in' keyword
@@ -59,7 +46,7 @@ namespace amulware.Graphics
             ensureCapacity(newCount);
             data[Count] = item;
             Count = newCount;
-            isDirty = true;
+            IsDirty = true;
         }
 
         public void Add(T item0, T item1)
@@ -69,7 +56,7 @@ namespace amulware.Graphics
             data[Count] = item0;
             data[Count + 1] = item1;
             Count = newCount;
-            isDirty = true;
+            IsDirty = true;
         }
 
         public void Add(T item0, T item1, T item2)
@@ -80,7 +67,7 @@ namespace amulware.Graphics
             data[Count + 1] = item1;
             data[Count + 2] = item2;
             Count = newCount;
-            isDirty = true;
+            IsDirty = true;
         }
 
         public void Add(T item0, T item1, T item2, T item3)
@@ -92,16 +79,16 @@ namespace amulware.Graphics
             data[Count + 2] = item2;
             data[Count + 3] = item3;
             Count = newCount;
-            isDirty = true;
+            IsDirty = true;
         }
 
-        public void Add(params T[] items)
+        public void Add(T[] items)
         {
             var newCount = Count + items.Length;
             ensureCapacity(newCount);
             Array.Copy(items, 0, data, Count, items.Length);
             Count = newCount;
-            isDirty = true;
+            IsDirty = true;
         }
 
         public Span<T> AddRange(int count)
@@ -110,7 +97,7 @@ namespace amulware.Graphics
             ensureCapacity(newCount);
             var span = data.AsSpan(Count, count);
             Count = newCount;
-            isDirty = true;
+            IsDirty = true;
             return span;
         }
 
@@ -123,12 +110,12 @@ namespace amulware.Graphics
         public void Clear()
         {
             Count = 0;
-            isDirty = true;
+            IsDirty = true;
         }
 
         public void Dispose()
         {
-            buffer.Dispose();
+            Buffer.Dispose();
         }
     }
 }

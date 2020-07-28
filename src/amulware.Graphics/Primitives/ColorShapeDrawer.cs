@@ -7,13 +7,13 @@ namespace amulware.Graphics
     public sealed class MeshBuilder<TVertex> : IIndexedMeshBuilder<TVertex, ushort>
         where TVertex : struct, IVertexData
     {
-        private readonly MutableBuffer<TVertex> vertices;
-        private readonly MutableBuffer<ushort> indices;
+        private readonly BufferStream<TVertex> vertices;
+        private readonly BufferStream<ushort> indices;
 
         public MeshBuilder()
         {
-            vertices = new MutableBuffer<TVertex>();
-            indices = new MutableBuffer<ushort>();
+            vertices = BufferStream<TVertex>.WithEmptyBuffer();
+            indices = BufferStream<ushort>.WithEmptyBuffer();
         }
 
         public void Add(
