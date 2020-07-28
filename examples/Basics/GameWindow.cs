@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using amulware.Graphics.Windowing;
 using OpenToolkit.Graphics.OpenGL;
 using OpenToolkit.Mathematics;
@@ -15,7 +16,9 @@ namespace amulware.Graphics.Examples.Basics
         private readonly Matrix4Uniform viewMatrix = new Matrix4Uniform("view", Matrix4.Identity);
         private readonly Matrix4Uniform projectionMatrix = new Matrix4Uniform("projection", Matrix4.Identity);
 
-        private Renderer? renderer;
+        private Buffer<ColorVertexData> buffer = null!;
+        private ShaderProgram shaderProgram = null!;
+        private Renderer renderer = null!;
 
         public GameWindow()
             : base(
@@ -33,15 +36,15 @@ namespace amulware.Graphics.Examples.Basics
 
         protected override void OnLoad()
         {
-            // ...
-            var buffer = new Buffer<ColorVertexData>();
+            // Create a buffer which will contain the vertices that we will render.
+            buffer = new Buffer<ColorVertexData>();
             addTriangle(buffer);
 
             // ...
             var renderable = Renderable.ForVertices(buffer, PrimitiveType.Triangles);
 
             // The shader program contains the vertex and fragment shaders. It is assigned to a renderer.
-            var shaderProgram = ShaderProgram.FromShaders(
+            shaderProgram = ShaderProgram.FromShaders(
                 ShaderFactory.Geometry.FromFile("geometry.vs"), ShaderFactory.Fragment.FromFile("geometry.fs"));
 
             // ...
@@ -56,7 +59,7 @@ namespace amulware.Graphics.Examples.Basics
             // OnResize is also called when the window is initially opened, so it is safe to initialize matrices here.
 
             // Use the simplest possible projection matrix: an orthographic projection.
-            projectionMatrix!.Value = Matrix4.CreateOrthographic(e.Width, e.Height, .1f, 100f);
+            projectionMatrix.Value = Matrix4.CreateOrthographic(e.Width, e.Height, .1f, 100f);
         }
 
         protected override void OnUpdate(UpdateEventArgs e)
@@ -68,14 +71,25 @@ namespace amulware.Graphics.Examples.Basics
             prepareForFrame();
 
             // Renders the geometry to the current render target.
-            renderer!.Render();
+            renderer.Render();
 
             // Since we do double-buffered rendering, we swap the two buffers when we're done rendering our current
             // frame.
             SwapBuffers();
         }
 
-        private void prepareForFrame()
+        protected override void OnClosing(CancelEventArgs obj)
+        {
+            // Disposing isn't really necessary, but if you stop using an object midway through your application run, it
+            // prevents memory leaks.
+            renderer.Dispose();
+            shaderProgram.Dispose();
+            buffer.Dispose();
+
+            base.OnClosing(obj);
+        }
+
+        private static void prepareForFrame()
         {
             // Clear the entire render target, using black as clear color.
             var argb = Color.Black;
@@ -83,7 +97,7 @@ namespace amulware.Graphics.Examples.Basics
             GL.Clear(ClearBufferMask.ColorBufferBit);
         }
 
-        private void addTriangle(Buffer<ColorVertexData> buffer)
+        private static void addTriangle(Buffer<ColorVertexData> buffer)
         {
             // You would often use a mesh builder or other helper class to draw shapes, such as rectangles, lines, and
             // even fonts or textures. However, for this example we add vertices to the buffer directly.

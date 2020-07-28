@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -7,13 +8,13 @@ namespace amulware.Graphics
     // TODO: create replacement for batched vertex surface
     // TODO: create replacement for expanding vertex surface
 
-    public class Renderer
+    public class Renderer : IDisposable
     {
         private readonly IRenderable renderable;
         private readonly ImmutableArray<IRenderSetting> settings;
 
-        private ShaderProgram shaderProgram;
-        private VertexArray vertexArray;
+        private ShaderProgram shaderProgram = null!;
+        private VertexArray vertexArray = null!;
         private ImmutableArray<IProgramRenderSetting> settingsForProgram;
 
         public static Builder NewBuilder(IRenderable renderable, ShaderProgram shaderProgram)
@@ -70,6 +71,7 @@ namespace amulware.Graphics
         public void SetShaderProgram(ShaderProgram program)
         {
             shaderProgram = program;
+            vertexArray?.Dispose();
             vertexArray = VertexArray.For(renderable, program);
             settingsForProgram = settings.Select(s => s.ForProgram(program)).ToImmutableArray();
         }
@@ -88,6 +90,11 @@ namespace amulware.Graphics
                 // TODO: do we have to undo any settings? maybe we shouldn't have any like that
                 // - texture samplers can behave funny though...
             }
+        }
+
+        public void Dispose()
+        {
+            vertexArray.Dispose();
         }
     }
 }
