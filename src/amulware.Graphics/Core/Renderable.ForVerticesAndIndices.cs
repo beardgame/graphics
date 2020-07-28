@@ -72,8 +72,8 @@ namespace amulware.Graphics
 
             public void Render()
             {
-                vertexBufferStream.UploadIfDirty();
-                indexBufferStream.UploadIfDirty();
+                vertexBufferStream.FlushIfDirty();
+                indexBufferStream.FlushIfDirty();
                 bufferRenderable.Render();
             }
         }

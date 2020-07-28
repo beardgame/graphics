@@ -35,7 +35,7 @@ namespace amulware.Graphics
 
             public void Render()
             {
-                vertexBufferStream.UploadIfDirty();
+                vertexBufferStream.FlushIfDirty();
                 bufferRenderable.Render();
             }
         }

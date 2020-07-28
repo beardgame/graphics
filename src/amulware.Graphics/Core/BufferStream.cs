@@ -3,7 +3,7 @@ using OpenToolkit.Graphics.OpenGL;
 
 namespace amulware.Graphics
 {
-    public class BufferStream<T> : IDisposable where T : struct
+    public class BufferStream<T> where T : struct
     {
         public Buffer<T> Buffer { get; }
 
@@ -13,26 +13,21 @@ namespace amulware.Graphics
         public int Count { get; private set; }
         public bool IsDirty { get; private set; }
 
-        public static BufferStream<T> WithEmptyBuffer(int capacity = 0)
-        {
-            return new BufferStream<T>(new Buffer<T>(), capacity);
-        }
-
         public BufferStream(Buffer<T> buffer, int capacity = 0)
         {
             Buffer = buffer;
             data = new T[capacity > 0 ? capacity : 4];
         }
 
-        public void UploadIfDirty(BufferTarget target = BufferTarget.ArrayBuffer)
+        public void FlushIfDirty(BufferTarget target = BufferTarget.ArrayBuffer)
         {
             if (!IsDirty)
                 return;
 
-            Upload(target);
+            Flush(target);
         }
 
-        public void Upload(BufferTarget target)
+        public void Flush(BufferTarget target)
         {
             using var t = Buffer.Bind(target);
             t.Upload(data, Count);
@@ -109,13 +104,11 @@ namespace amulware.Graphics
 
         public void Clear()
         {
+            if (Count == 0)
+                return;
+
             Count = 0;
             IsDirty = true;
-        }
-
-        public void Dispose()
-        {
-            Buffer.Dispose();
         }
     }
 }

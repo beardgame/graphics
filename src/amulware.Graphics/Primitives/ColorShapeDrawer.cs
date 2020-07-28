@@ -1,80 +1,8 @@
 ﻿using System;
-using OpenToolkit.Graphics.OpenGL;
 using OpenToolkit.Mathematics;
 
 namespace amulware.Graphics
 {
-    public sealed class MeshBuilder<TVertex> : IIndexedMeshBuilder<TVertex, ushort>
-        where TVertex : struct, IVertexData
-    {
-        private readonly BufferStream<TVertex> vertices;
-        private readonly BufferStream<ushort> indices;
-
-        public MeshBuilder()
-        {
-            vertices = BufferStream<TVertex>.WithEmptyBuffer();
-            indices = BufferStream<ushort>.WithEmptyBuffer();
-        }
-
-        public void Add(
-            int vertexCount, int indexCount,
-            out Span<TVertex> vertices, out Span<ushort> indices, out ushort indexOffset)
-        {
-            indexOffset = (ushort) this.vertices.Count;
-            vertices = this.vertices.AddRange(vertexCount);
-            indices = this.indices.AddRange(indexCount);
-        }
-
-        public IRenderable ToRenderable()
-        {
-            return Renderable.ForVerticesAndIndices(vertices, indices, PrimitiveType.Triangles);
-        }
-    }
-
-    public interface IIndexedMeshBuilder<TVertex, TIndex>
-    {
-        void Add(
-            int vertexCount, int indexCount,
-            out Span<TVertex> vertices, out Span<TIndex> indices, out TIndex indexOffset);
-    }
-
-    public static class IndexedMeshBuilderExtensions
-    {
-        public static void AddTriangle<TVertex>(
-            this IIndexedMeshBuilder<TVertex, ushort> meshBuilder, in TVertex v0, in TVertex v1, in TVertex v2)
-        {
-            meshBuilder.Add(3, 3, out var vertices, out var indices, out var indexOffset);
-
-            vertices[0] = v0;
-            vertices[1] = v1;
-            vertices[2] = v2;
-
-            indices[0] = indexOffset;
-            indices[1] = (ushort) (indexOffset + 1);
-            indices[2] = (ushort) (indexOffset + 2);
-        }
-
-        public static void AddQuad<TVertex>(
-            this IIndexedMeshBuilder<TVertex, ushort> meshBuilder,
-            in TVertex v0, in TVertex v1, in TVertex v2, in TVertex v3)
-        {
-            meshBuilder.Add(4, 6, out var vertices, out var indices, out var indexOffset);
-
-            vertices[0] = v0;
-            vertices[1] = v1;
-            vertices[2] = v2;
-            vertices[3] = v3;
-
-            indices[0] = indexOffset;
-            indices[1] = (ushort) (indexOffset + 1);
-            indices[2] = (ushort) (indexOffset + 2);
-
-            indices[3] = indexOffset;
-            indices[4] = (ushort) (indexOffset + 2);
-            indices[5] = (ushort) (indexOffset + 3);
-        }
-    }
-
     public sealed class ColorShapeDrawer
     {
         private readonly IIndexedMeshBuilder<ColorVertexData, ushort> meshBuilder;
