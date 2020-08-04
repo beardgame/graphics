@@ -66,8 +66,7 @@ namespace amulware.Graphics.ShaderManagement
         {
             foreach (var shader in rendererShader.Shaders)
             {
-                programsByShader.TryGetValue(shader, out var programs);
-                if (programs == null)
+                if (!programsByShader.TryGetValue(shader, out var programs))
                 {
                     programs = new List<ReloadableRendererShader>();
                     programsByShader.Add(shader, programs);
