@@ -4,8 +4,8 @@ namespace amulware.Graphics.ShaderManagement
 {
     public interface IShaderReloader
     {
-        bool ChangedSinceLastLoad { get; }
         ShaderType Type { get; }
+        bool ChangedSinceLastLoad { get; }
         Shader Load();
     }
 }

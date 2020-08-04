@@ -28,6 +28,7 @@ namespace amulware.Graphics
             }
 
             GL.LinkProgram(handle);
+
             foreach (var shader in shaderList)
             {
                 GL.DetachShader(handle, shader.Handle);

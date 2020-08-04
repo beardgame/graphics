@@ -4,27 +4,22 @@ using System.Linq;
 
 namespace amulware.Graphics.ShaderManagement
 {
-    public sealed class ReloadableShaderProgram : ISurfaceShader
+    public sealed class ReloadableShaderProgram : IRendererShader
     {
-        private readonly ReplaceableShaderProgram program = new ReplaceableShaderProgram(null);
-
-        public ReloadableShaderProgram(params ReloadableShader[] shaders)
-            : this((IEnumerable<ReloadableShader>)shaders)
-        {
-        }
+        private readonly ReplaceableShaderProgram program = ReplaceableShaderProgram.CreateUninitialised();
 
         public ReadOnlyCollection<ReloadableShader> Shaders { get; }
 
-        public ReloadableShaderProgram(IEnumerable<ReloadableShader> shaders)
+        public static ReloadableShaderProgram LoadFrom(IEnumerable<ReloadableShader> shaders)
+            => new ReloadableShaderProgram(shaders);
+
+        public static ReloadableShaderProgram LoadFrom(params ReloadableShader[] shaders)
+            => new ReloadableShaderProgram(shaders);
+
+        private ReloadableShaderProgram(IEnumerable<ReloadableShader> shaders)
         {
             Shaders = shaders.ToList().AsReadOnly();
             Reload();
-        }
-        
-        public void Reload()
-        {
-            var newProgram = ShaderProgram.FromShaders(Shaders.Select(s => s.Shader));
-            program.SetProgram(newProgram);
         }
 
         public bool ReloadIfContains(ReloadableShader shader)
@@ -45,14 +40,20 @@ namespace amulware.Graphics.ShaderManagement
             return reload;
         }
 
-        public void UseOnSurface(Surface surface)
+        public void Reload()
         {
-            program.UseOnSurface(surface);
+            var newProgram = ShaderProgram.FromShaders(Shaders.Select(s => s.Shader));
+            program.SetProgram(newProgram);
         }
 
-        public void RemoveFromSurface(Surface surface)
+        public void UseOnRenderer(Renderer renderer)
         {
-            program.RemoveFromSurface(surface);
+            program.UseOnRenderer(renderer);
+        }
+
+        public void RemoveFromRenderer(Renderer renderer)
+        {
+            program.RemoveFromRenderer(renderer);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace amulware.Graphics.ShaderManagement
             var reloadedShaders = new HashSet<ReloadableShader>(
                 shaders.Values
                     .SelectMany(shadersForType => shadersForType.Values)
-                    .Where(shader => succeedsWithoutError(shader.TryReload))
+                    .Where(shader => succeedsWithoutError(shader.ReloadIfNeeded))
                 );
 
             if (reloadedShaders.Count == 0)

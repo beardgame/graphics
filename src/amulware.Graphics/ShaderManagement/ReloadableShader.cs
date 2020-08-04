@@ -1,38 +1,37 @@
-
 using OpenToolkit.Graphics.OpenGL;
 
 namespace amulware.Graphics.ShaderManagement
 {
-    sealed public class ReloadableShader
+    public sealed class ReloadableShader
     {
         private readonly IShaderReloader reloader;
 
-        private Shader shader;
+        public ShaderType Type => reloader.Type;
 
-        public ReloadableShader(IShaderReloader reloader)
+        public Shader Shader { get; private set; }
+
+        public static ReloadableShader LoadFrom(IShaderReloader reloader) => new ReloadableShader(reloader);
+
+        private ReloadableShader(IShaderReloader reloader)
         {
             this.reloader = reloader;
-            this.shader = reloader.Load();
+            Shader = reloader.Load();
         }
 
-        public ShaderType Type
+        public bool ReloadIfNeeded()
         {
-            get { return this.reloader.Type; }
+            if (reloader.ChangedSinceLastLoad)
+            {
+                Shader = reloader.Load();
+                return true;
+            }
+
+            return false;
         }
 
-        public Shader Shader
+        public void Reload()
         {
-            get { return this.shader; }
+            Shader = reloader.Load();
         }
-
-        public bool TryReload()
-        {
-            if (!this.reloader.ChangedSinceLastLoad)
-                return false;
-
-            this.shader = this.reloader.Load();
-            return true;
-        }
-
     }
 }

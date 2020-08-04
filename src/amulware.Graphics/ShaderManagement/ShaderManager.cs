@@ -24,7 +24,7 @@ namespace amulware.Graphics.ShaderManagement
         private readonly Dictionary<ReloadableShader, List<ReloadableShaderProgram>> programsByShader
             = new Dictionary<ReloadableShader, List<ReloadableShaderProgram>>();
 
-        public ISurfaceShader this[string shaderProgramName]
+        public IRendererShader this[string shaderProgramName]
         {
             get
             {
@@ -113,7 +113,7 @@ namespace amulware.Graphics.ShaderManagement
 
         public void Add(IShaderReloader shader, string name)
         {
-            Add(new ReloadableShader(shader), name);
+            Add(ReloadableShader.LoadFrom(shader), name);
         }
 
         public void Add(ReloadableShader shader, string name)

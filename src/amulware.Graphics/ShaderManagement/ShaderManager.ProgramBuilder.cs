@@ -6,7 +6,7 @@ namespace amulware.Graphics.ShaderManagement
 {
     public sealed partial class ShaderManager
     {
-        public ISurfaceShader MakeShaderProgram(string shaderName, string programName = null)
+        public IRendererShader MakeShaderProgram(string shaderName, string programName = null)
             => BuildShaderProgram()
                 .TryAll(shaderName)
                 .As(programName ?? shaderName);
@@ -67,9 +67,9 @@ namespace amulware.Graphics.ShaderManagement
                 return this;
             }
 
-            public ISurfaceShader As(string programName)
+            public IRendererShader As(string programName)
             {
-                var program = new ReloadableShaderProgram(shaders);
+                var program = ReloadableShaderProgram.LoadFrom(shaders);
                 manager.Add(program, programName);
                 return program;
             }
