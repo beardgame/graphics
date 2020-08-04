@@ -4,30 +4,30 @@ using System.Linq;
 
 namespace amulware.Graphics.ShaderManagement
 {
-    public sealed class ReloadableShaderProgram : IRendererShader
+    public sealed class ReloadableRendererShader : IRendererShader
     {
-        private readonly ReplaceableShaderProgram program = ReplaceableShaderProgram.CreateUninitialised();
+        private readonly ReplaceableRendererShader program = ReplaceableRendererShader.CreateUninitialised();
 
-        public ReadOnlyCollection<ReloadableShader> Shaders { get; }
+        public ReadOnlyCollection<IShaderProvider> Shaders { get; }
 
-        public static ReloadableShaderProgram LoadFrom(IEnumerable<ReloadableShader> shaders)
-            => new ReloadableShaderProgram(shaders);
+        public static ReloadableRendererShader LoadFrom(IEnumerable<IShaderProvider> shaders)
+            => new ReloadableRendererShader(shaders);
 
-        public static ReloadableShaderProgram LoadFrom(params ReloadableShader[] shaders)
-            => new ReloadableShaderProgram(shaders);
+        public static ReloadableRendererShader LoadFrom(params IShaderProvider[] shaders)
+            => new ReloadableRendererShader(shaders);
 
-        private ReloadableShaderProgram(IEnumerable<ReloadableShader> shaders)
+        private ReloadableRendererShader(IEnumerable<IShaderProvider> shaders)
         {
             Shaders = shaders.ToList().AsReadOnly();
             Reload();
         }
 
-        public bool ReloadIfContains(ReloadableShader shader)
+        public bool ReloadIfContains(IShaderProvider shader)
         {
             return reloadIf(Shaders.Contains(shader));
         }
 
-        public bool ReloadIfContainsAny(HashSet<ReloadableShader> shaders)
+        public bool ReloadIfContainsAny(ICollection<IShaderProvider> shaders)
         {
             return reloadIf(Shaders.Any(shaders.Contains));
         }

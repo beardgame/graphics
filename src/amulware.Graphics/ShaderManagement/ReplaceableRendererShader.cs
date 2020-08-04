@@ -2,14 +2,14 @@ using System.Collections.Generic;
 
 namespace amulware.Graphics.ShaderManagement
 {
-    public sealed class ReplaceableShaderProgram : IRendererShader
+    public sealed class ReplaceableRendererShader : IRendererShader
     {
         private ShaderProgram program;
         private readonly List<Renderer> renderers = new List<Renderer>();
 
-        public static ReplaceableShaderProgram CreateUninitialised() => new ReplaceableShaderProgram(null!);
+        public static ReplaceableRendererShader CreateUninitialised() => new ReplaceableRendererShader(null!);
 
-        public ReplaceableShaderProgram(ShaderProgram program)
+        public ReplaceableRendererShader(ShaderProgram program)
         {
             this.program = program;
         }

@@ -2,7 +2,7 @@ using OpenToolkit.Graphics.OpenGL;
 
 namespace amulware.Graphics.ShaderManagement
 {
-    public sealed class ReloadableShader
+    public sealed class ReloadableShader : IShaderProvider
     {
         private readonly IShaderReloader reloader;
 

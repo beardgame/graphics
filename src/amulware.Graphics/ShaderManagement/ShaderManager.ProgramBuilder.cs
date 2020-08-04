@@ -69,7 +69,7 @@ namespace amulware.Graphics.ShaderManagement
 
             public IRendererShader As(string programName)
             {
-                var program = ReloadableShaderProgram.LoadFrom(shaders);
+                var program = ReloadableRendererShader.LoadFrom(shaders);
                 manager.Add(program, programName);
                 return program;
             }

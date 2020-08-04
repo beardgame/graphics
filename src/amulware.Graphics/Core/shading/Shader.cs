@@ -5,6 +5,7 @@ namespace amulware.Graphics
 {
     public sealed class Shader : IDisposable
     {
+        public ShaderType Type { get; }
         public int Handle { get; }
 
         public static Shader Create(ShaderType type, string sourceCode)
@@ -14,6 +15,7 @@ namespace amulware.Graphics
 
         private Shader(ShaderType type, string code)
         {
+            Type = type;
             Handle = GL.CreateShader(type);
 
             GL.ShaderSource(Handle, code);
