@@ -45,7 +45,7 @@ namespace amulware.Graphics.Examples.Basics
 
             // The shader program contains the vertex and fragment shaders. It is assigned to a renderer.
             shaderProgram = ShaderProgram.FromShaders(
-                ShaderFactory.Geometry.FromFile("geometry.vs"), ShaderFactory.Fragment.FromFile("geometry.fs"));
+                ShaderFactory.Vertex.FromFile("geometry.vs"), ShaderFactory.Fragment.FromFile("geometry.fs"));
 
             // ...
             renderer = Renderer.From(renderable, shaderProgram, viewMatrix, projectionMatrix);
