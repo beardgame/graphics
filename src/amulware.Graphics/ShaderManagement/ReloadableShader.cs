@@ -1,8 +1,9 @@
+using System;
 using OpenToolkit.Graphics.OpenGL;
 
 namespace amulware.Graphics.ShaderManagement
 {
-    public sealed class ReloadableShader : IShaderProvider
+    public sealed class ReloadableShader : IShaderProvider, IDisposable
     {
         private readonly IShaderReloader reloader;
 
@@ -22,6 +23,7 @@ namespace amulware.Graphics.ShaderManagement
         {
             if (reloader.ChangedSinceLastLoad)
             {
+                Shader?.Dispose();
                 Shader = reloader.Load();
                 return true;
             }
@@ -32,6 +34,11 @@ namespace amulware.Graphics.ShaderManagement
         public void Reload()
         {
             Shader = reloader.Load();
+        }
+
+        public void Dispose()
+        {
+            Shader.Dispose();
         }
     }
 }

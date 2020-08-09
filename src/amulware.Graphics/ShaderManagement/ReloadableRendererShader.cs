@@ -1,14 +1,15 @@
+using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.Collections.Immutable;
 using System.Linq;
 
 namespace amulware.Graphics.ShaderManagement
 {
-    public sealed class ReloadableRendererShader : IRendererShader
+    public sealed class ReloadableRendererShader : IRendererShader, IDisposable
     {
         private readonly ReplaceableRendererShader program = ReplaceableRendererShader.CreateUninitialised();
 
-        public ReadOnlyCollection<IShaderProvider> Shaders { get; }
+        public ImmutableArray<IShaderProvider> Shaders { get; }
 
         public static ReloadableRendererShader LoadFrom(IEnumerable<IShaderProvider> shaders)
             => new ReloadableRendererShader(shaders);
@@ -18,7 +19,7 @@ namespace amulware.Graphics.ShaderManagement
 
         private ReloadableRendererShader(IEnumerable<IShaderProvider> shaders)
         {
-            Shaders = shaders.ToList().AsReadOnly();
+            Shaders = shaders.ToImmutableArray();
             Reload();
         }
 
@@ -43,7 +44,7 @@ namespace amulware.Graphics.ShaderManagement
         public void Reload()
         {
             var newProgram = ShaderProgram.FromShaders(Shaders.Select(s => s.Shader));
-            program.SetProgram(newProgram);
+            program.SetProgram(newProgram, true);
         }
 
         public void UseOnRenderer(Renderer renderer)
@@ -54,6 +55,11 @@ namespace amulware.Graphics.ShaderManagement
         public void RemoveFromRenderer(Renderer renderer)
         {
             program.RemoveFromRenderer(renderer);
+        }
+
+        public void Dispose()
+        {
+            program.Dispose();
         }
     }
 }

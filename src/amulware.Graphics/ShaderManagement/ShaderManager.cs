@@ -9,13 +9,14 @@ namespace amulware.Graphics.ShaderManagement
 {
     using ReloadableShaderByName = Dictionary<string, ReloadableShader>;
 
-    public sealed partial class ShaderManager
+    public sealed partial class ShaderManager : IDisposable
     {
         private readonly Dictionary<IShaderProvider, string> shaderNames
             = new Dictionary<IShaderProvider, string>();
 
         private readonly ImmutableDictionary<ShaderType, ReloadableShaderByName> shaders
-            = new[] { ComputeShader, FragmentShader, GeometryShader, VertexShader, TessControlShader, TessEvaluationShader }
+            = new[] { ComputeShader, FragmentShader, GeometryShader,
+                    VertexShader, TessControlShader, TessEvaluationShader }
                 .ToImmutableDictionary(k => k, _ => new ReloadableShaderByName());
 
         private readonly Dictionary<string, ReloadableRendererShader> programs
@@ -39,27 +40,6 @@ namespace amulware.Graphics.ShaderManagement
                 return shadersOfType.ContainsKey(name);
 
             throw new ArgumentException($"ShaderType {type} is not supported.");
-        }
-
-        public void Add(ReloadableRendererShader rendererShader, string name)
-        {
-            if (programs.ContainsKey(name))
-               throw new ArgumentException($"Tried adding shader program with name '{name} which is already taken.");
-
-            throwIfAnyShadersAreNotKnown(rendererShader, name);
-
-            programs.Add(name, rendererShader);
-
-            registerProgramForItsShaders(rendererShader);
-        }
-
-        // ReSharper disable once ParameterOnlyUsedForPreconditionCheck.Local
-        private void throwIfAnyShadersAreNotKnown(ReloadableRendererShader rendererShader, string name)
-        {
-            if (rendererShader.Shaders.FirstOrDefault(s => !shaderNames.ContainsKey(s)) is { } shader)
-                throw new InvalidOperationException(
-                    $"Tried adding shader program with unknown {shader.Shader.Type} under name '{name}." +
-                    " All shaders must be added first.");
         }
 
         private void registerProgramForItsShaders(ReloadableRendererShader rendererShader)
@@ -105,10 +85,17 @@ namespace amulware.Graphics.ShaderManagement
             shaderNames.Add(shader, name);
         }
 
-        private ReloadableShader getShader(ShaderType type, string shaderName)
+        public void Dispose()
         {
-            shaders[type].TryGetValue(shaderName, out var shader);
-            return shader;
+            foreach (var program in programs.Values)
+            {
+                program.Dispose();
+            }
+
+            foreach (var shader in shaders.Values.SelectMany(s => s.Values))
+            {
+                shader.Dispose();
+            }
         }
     }
 }

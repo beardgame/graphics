@@ -1,8 +1,9 @@
+using System;
 using System.Collections.Generic;
 
 namespace amulware.Graphics.ShaderManagement
 {
-    public sealed class ReplaceableRendererShader : IRendererShader
+    public sealed class ReplaceableRendererShader : IRendererShader, IDisposable
     {
         private ShaderProgram program;
         private readonly List<Renderer> renderers = new List<Renderer>();
@@ -14,8 +15,10 @@ namespace amulware.Graphics.ShaderManagement
             this.program = program;
         }
 
-        public void SetProgram(ShaderProgram newProgram)
+        public void SetProgram(ShaderProgram newProgram, bool disposePrevious = false)
         {
+            if (disposePrevious)
+                program?.Dispose();
             program = newProgram;
             foreach (var renderer in renderers)
                 renderer.SetShaderProgram(newProgram);
@@ -31,6 +34,11 @@ namespace amulware.Graphics.ShaderManagement
         public void RemoveFromRenderer(Renderer renderer)
         {
             renderers.Remove(renderer);
+        }
+
+        public void Dispose()
+        {
+            program.Dispose();
         }
     }
 }
