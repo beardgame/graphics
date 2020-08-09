@@ -9,7 +9,7 @@ namespace amulware.Graphics.ShaderManagement
         public IRendererShader MakeShaderProgram(string shaderName, string programName = null)
             => BuildShaderProgram()
                 .TryAll(shaderName)
-                .As(programName ?? shaderName);
+                .BuildAs(programName ?? shaderName);
 
         public ProgramBuilder BuildShaderProgram()
             => new ProgramBuilder(this);
@@ -67,7 +67,7 @@ namespace amulware.Graphics.ShaderManagement
                 return this;
             }
 
-            public IRendererShader As(string programName)
+            public IRendererShader BuildAs(string programName)
             {
                 var program = ReloadableRendererShader.LoadFrom(shaders);
                 manager.Add(program, programName);

@@ -76,7 +76,7 @@ namespace amulware.Graphics.ShaderManagement
             }
         }
 
-        public void Add(IEnumerable<ShaderFile> shaderFiles)
+        public void AddRange(IEnumerable<ShaderFile> shaderFiles)
         {
             foreach (var file in shaderFiles)
             {
