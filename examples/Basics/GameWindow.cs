@@ -10,9 +10,9 @@ namespace amulware.Graphics.Examples.Basics
 {
     sealed class GameWindow : Window
     {
-        // Matrix4Uniform (and similarly other _Uniform classes) represent an input for the shaders.
-        // When a uniform is linked to a renderer, it will automatically assign the values of the uniform to the
-        // respective uniform in the vertex shader (see geometry.vs for the corresponding inputs).
+        // Matrix4Uniform (and similarly other _Uniform classes) represent static input for the shaders.
+        // When a uniform is added to a renderer, it will automatically assign the values of the uniform to the
+        // respective uniform in the shader (see geometry.vs for the corresponding inputs) when rendering.
         private readonly Matrix4Uniform viewMatrix = new Matrix4Uniform("view", Matrix4.Identity);
         private readonly Matrix4Uniform projectionMatrix = new Matrix4Uniform("projection", Matrix4.Identity);
 
@@ -40,14 +40,14 @@ namespace amulware.Graphics.Examples.Basics
             buffer = new Buffer<ColorVertexData>();
             addTriangle(buffer);
 
-            // ...
+            // Create a renderable wrapper for our buffer, interpreting it as a triangle list of vertices.
             var renderable = Renderable.ForVertices(buffer, PrimitiveType.Triangles);
 
             // The shader program contains the vertex and fragment shaders. It is assigned to a renderer.
             shaderProgram = ShaderProgram.FromShaders(
                 ShaderFactory.Vertex.FromFile("geometry.vs"), ShaderFactory.Fragment.FromFile("geometry.fs"));
 
-            // ...
+            // Create a renderer to draw the renderable content with the given shader and settings like uniforms.
             renderer = Renderer.From(renderable, shaderProgram, viewMatrix, projectionMatrix);
 
             // Initialize a reasonable view matrix.
@@ -70,7 +70,7 @@ namespace amulware.Graphics.Examples.Basics
         {
             prepareForFrame();
 
-            // Renders the geometry to the current render target.
+            // Renders the renderable to the current render target.
             renderer.Render();
 
             // Since we do double-buffered rendering, we swap the two buffers when we're done rendering our current
@@ -100,7 +100,9 @@ namespace amulware.Graphics.Examples.Basics
         private static void addTriangle(Buffer<ColorVertexData> buffer)
         {
             // You would often use a mesh builder or other helper class to draw shapes, such as rectangles, lines, and
-            // even fonts or textures. However, for this example we add vertices to the buffer directly.
+            // even fonts or textured sprites. However, for this example we add vertices to the buffer directly.
+            // The `using (var target = x.Bind())` pattern is a common one used to interface with low level OpenGL
+            // functionality. Other, higher levels of abstractions hide these calls in an efficient manner.
             using var target = buffer.Bind();
 
             // We draw a triangle by specifying the three corners and using the AddTriangle helper on the mesh builder
