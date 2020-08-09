@@ -1,7 +1,7 @@
 using System;
 using OpenToolkit.Graphics.OpenGL;
 
-namespace amulware.Graphics
+namespace amulware.Graphics.Textures
 {
     public sealed class Texture : IDisposable
     {

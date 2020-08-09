@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using amulware.Graphics.Textures;
 using OpenToolkit.Graphics.OpenGL;
 
 namespace amulware.Graphics

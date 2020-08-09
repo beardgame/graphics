@@ -1,4 +1,4 @@
-namespace amulware.Graphics
+namespace amulware.Graphics.RenderSettings
 {
     public abstract class Uniform<T> : IRenderSetting
     {

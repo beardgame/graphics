@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using amulware.Graphics.RenderSettings;
 
 namespace amulware.Graphics
 {

@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using OpenToolkit.Graphics.OpenGL;
 
-namespace amulware.Graphics
+namespace amulware.Graphics.Textures
 {
     public sealed class ArrayTextureData
     {

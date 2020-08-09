@@ -1,7 +1,7 @@
-﻿using OpenToolkit.Mathematics;
-using OpenToolkit.Graphics.OpenGL;
+﻿using OpenToolkit.Graphics.OpenGL;
+using OpenToolkit.Mathematics;
 
-namespace amulware.Graphics
+namespace amulware.Graphics.RenderSettings
 {
     public sealed class Matrix4Uniform : Uniform<Matrix4>
     {

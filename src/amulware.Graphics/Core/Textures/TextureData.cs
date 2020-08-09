@@ -8,7 +8,7 @@ using OpenToolkit.Graphics.OpenGL;
 using PixelFormat = OpenToolkit.Graphics.OpenGL.PixelFormat;
 using SystemPixelFormat = System.Drawing.Imaging.PixelFormat;
 
-namespace amulware.Graphics
+namespace amulware.Graphics.Textures
 {
     public abstract class TextureData
     {

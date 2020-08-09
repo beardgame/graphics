@@ -1,6 +1,6 @@
 ﻿using OpenToolkit.Graphics.OpenGL;
 
-namespace amulware.Graphics
+namespace amulware.Graphics.RenderSettings
 {
     public sealed class FloatUniform : Uniform<float>
     {

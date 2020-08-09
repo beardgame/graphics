@@ -1,7 +1,7 @@
 ﻿using OpenToolkit.Graphics.OpenGL;
 using OpenToolkit.Mathematics;
 
-namespace amulware.Graphics
+namespace amulware.Graphics.RenderSettings
 {
     public sealed class Vector3Uniform : Uniform<Vector3>
     {
