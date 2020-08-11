@@ -4,7 +4,7 @@ using OpenToolkit.Graphics.OpenGL;
 
 namespace amulware.Graphics
 {
-    public class Buffer<T> : IDisposable where T : struct
+    public sealed class Buffer<T> : IDisposable where T : struct
     {
         private static readonly int itemSize = Marshal.SizeOf(typeof(T));
 

@@ -3,7 +3,7 @@ using OpenToolkit.Graphics.OpenGL;
 
 namespace amulware.Graphics
 {
-    public class BufferStream<T> where T : struct
+    public sealed class BufferStream<T> where T : struct
     {
         public Buffer<T> Buffer { get; }
 

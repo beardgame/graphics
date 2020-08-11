@@ -6,10 +6,7 @@ using amulware.Graphics.RenderSettings;
 
 namespace amulware.Graphics
 {
-    // TODO: create replacement for batched vertex surface
-    // TODO: create replacement for expanding vertex surface
-
-    public class Renderer : IDisposable
+    public sealed class Renderer : IDisposable
     {
         private readonly IRenderable renderable;
         private readonly ImmutableArray<IRenderSetting> settings;
