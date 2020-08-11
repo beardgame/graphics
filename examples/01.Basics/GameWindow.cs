@@ -61,6 +61,9 @@ namespace amulware.Graphics.Examples.Basics
 
             // Use the simplest possible projection matrix: an orthographic projection.
             projectionMatrix.Value = Matrix4.CreateOrthographic(e.Width, e.Height, .1f, 100f);
+
+            // We need to make sure we render to the full size of the window.
+            GL.Viewport(0, 0, e.Width, e.Height);
         }
 
         protected override void OnUpdate(UpdateEventArgs e)
