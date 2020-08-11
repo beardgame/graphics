@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "amulware.Graphics.Examples.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "amulware.Graphics", "src\amulware.Graphics\amulware.Graphics.csproj", "{5C5A78A0-F12F-431C-9607-67EA4ADF5732}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "amulware.Graphics.Examples.02.IndexBuffer", "examples\02.IndexBuffer\amulware.Graphics.Examples.02.IndexBuffer.csproj", "{BEF46AAE-12A3-43C6-95BF-0F1DB2D3D4D2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{5C5A78A0-F12F-431C-9607-67EA4ADF5732}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C5A78A0-F12F-431C-9607-67EA4ADF5732}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C5A78A0-F12F-431C-9607-67EA4ADF5732}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEF46AAE-12A3-43C6-95BF-0F1DB2D3D4D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEF46AAE-12A3-43C6-95BF-0F1DB2D3D4D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEF46AAE-12A3-43C6-95BF-0F1DB2D3D4D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEF46AAE-12A3-43C6-95BF-0F1DB2D3D4D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
