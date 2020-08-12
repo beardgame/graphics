@@ -44,7 +44,8 @@ namespace amulware.Graphics.Examples.IndexBuffer
             // call below.
             uploadQuadIndices(indexBuffer);
 
-            // When creating our renderable, the PrimitiveType defines
+            // When creating our renderable, the PrimitiveType defines how the indices are interpreted and translated
+            // into geometry.
             var renderable = Renderable.ForVerticesAndIndices(vertexBuffer, indexBuffer, PrimitiveType.Triangles);
 
             shaderProgram = ShaderProgram.FromShaders(
