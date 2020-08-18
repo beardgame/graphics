@@ -1,7 +1,7 @@
 using System.IO;
 using OpenToolkit.Graphics.OpenGL;
 
-namespace amulware.Graphics
+namespace amulware.Graphics.Shading
 {
     public sealed class ShaderFactory
     {

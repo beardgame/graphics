@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace amulware.Graphics
+namespace amulware.Graphics.Shading
 {
     internal class CachedVariableLocator
     {

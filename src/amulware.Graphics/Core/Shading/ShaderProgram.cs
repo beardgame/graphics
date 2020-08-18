@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using OpenToolkit.Graphics.OpenGL;
 
-namespace amulware.Graphics
+namespace amulware.Graphics.Shading
 {
     public sealed class ShaderProgram : IDisposable
     {

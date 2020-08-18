@@ -1,7 +1,7 @@
 using System;
 using OpenToolkit.Graphics.OpenGL;
 
-namespace amulware.Graphics
+namespace amulware.Graphics.Shading
 {
     public sealed class Shader : IDisposable
     {
