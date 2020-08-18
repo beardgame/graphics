@@ -3,7 +3,7 @@ using amulware.Graphics.Vertices;
 using OpenToolkit.Mathematics;
 using static amulware.Graphics.Vertices.VertexData;
 
-namespace amulware.Graphics
+namespace amulware.Graphics.Shapes
 {
     [StructLayout(LayoutKind.Sequential)]
     public readonly struct ColorVertexData : IVertexData

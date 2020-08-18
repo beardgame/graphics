@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using amulware.Graphics.Rendering;
 using amulware.Graphics.Shading;
+using amulware.Graphics.Shapes;
 using amulware.Graphics.Windowing;
 using OpenToolkit.Graphics.OpenGL;
 using OpenToolkit.Mathematics;

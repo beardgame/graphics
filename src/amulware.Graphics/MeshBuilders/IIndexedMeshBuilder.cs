@@ -1,6 +1,6 @@
 using System;
 
-namespace amulware.Graphics
+namespace amulware.Graphics.MeshBuilders
 {
     public interface IIndexedMeshBuilder<TVertex, TIndex>
     {

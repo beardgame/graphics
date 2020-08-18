@@ -1,4 +1,4 @@
-namespace amulware.Graphics
+namespace amulware.Graphics.MeshBuilders
 {
     public static class IndexedMeshBuilderExtensions
     {

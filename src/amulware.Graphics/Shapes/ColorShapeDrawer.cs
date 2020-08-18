@@ -1,7 +1,8 @@
 ﻿using System;
+using amulware.Graphics.MeshBuilders;
 using OpenToolkit.Mathematics;
 
-namespace amulware.Graphics
+namespace amulware.Graphics.Shapes
 {
     public sealed class ColorShapeDrawer
     {
@@ -188,7 +189,7 @@ namespace amulware.Graphics
 
             for (var i = 1; i < edges; i++)
             {
-                xy = rotation.Times(xy);
+                xy = rotation * xy;
 
                 vertices[i] = new ColorVertexData(
                     centerX + xy.X * halfWidth, centerY + xy.Y * halfHeight, centerZ, color);
@@ -227,7 +228,7 @@ namespace amulware.Graphics
 
             for (var i = 1; i < edges; i++)
             {
-                xy = rotation.Times(xy);
+                xy = rotation * xy;
 
                 vertices[2 * i] = new ColorVertexData(
                     centerX + xy.X * halfWidth, centerY + xy.Y * halfHeight, centerZ, color);

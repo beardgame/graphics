@@ -4,15 +4,15 @@ using amulware.Graphics.Shading;
 using amulware.Graphics.Vertices;
 using OpenToolkit.Graphics.OpenGL;
 
-namespace amulware.Graphics
+namespace amulware.Graphics.MeshBuilders
 {
-    public sealed class MeshBuilder<TVertex> : IIndexedMeshBuilder<TVertex, ushort>, IDisposable
+    public sealed class IndexedMeshBuilder<TVertex> : IIndexedMeshBuilder<TVertex, ushort>, IDisposable
         where TVertex : struct, IVertexData
     {
         private readonly BufferStream<TVertex> vertices;
         private readonly BufferStream<ushort> indices;
 
-        public MeshBuilder()
+        public IndexedMeshBuilder()
         {
             vertices = new BufferStream<TVertex>(new Buffer<TVertex>());
             indices = new BufferStream<ushort>(new Buffer<ushort>());
@@ -52,9 +52,9 @@ namespace amulware.Graphics
         private sealed class ClearingRenderable : IRenderable
         {
             private readonly IRenderable baseRenderer;
-            private readonly MeshBuilder<TVertex> builder;
+            private readonly IndexedMeshBuilder<TVertex> builder;
 
-            public ClearingRenderable(IRenderable baseRenderer, MeshBuilder<TVertex> builder)
+            public ClearingRenderable(IRenderable baseRenderer, IndexedMeshBuilder<TVertex> builder)
             {
                 this.baseRenderer = baseRenderer;
                 this.builder = builder;
