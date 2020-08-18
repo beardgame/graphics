@@ -1,3 +1,4 @@
+using amulware.Graphics.Shading;
 using OpenToolkit.Graphics.OpenGL;
 
 namespace amulware.Graphics.ShaderManagement

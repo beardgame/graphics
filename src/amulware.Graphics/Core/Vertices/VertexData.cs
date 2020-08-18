@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using OpenToolkit.Mathematics;
+using amulware.Graphics.Shading;
 using OpenToolkit.Graphics.OpenGL;
+using OpenToolkit.Mathematics;
 
-namespace amulware.Graphics
+namespace amulware.Graphics.Vertices
 {
     /// <summary>
     /// This class contains helper types and methods to easily create vertex attribute layouts.

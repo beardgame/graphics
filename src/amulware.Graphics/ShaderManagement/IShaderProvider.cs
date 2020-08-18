@@ -1,3 +1,5 @@
+using amulware.Graphics.Shading;
+
 namespace amulware.Graphics.ShaderManagement
 {
     public interface IShaderProvider

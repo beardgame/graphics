@@ -1,6 +1,7 @@
-﻿using OpenToolkit.Graphics.OpenGL;
+﻿using amulware.Graphics.Shading;
+using OpenToolkit.Graphics.OpenGL;
 
-namespace amulware.Graphics
+namespace amulware.Graphics.Vertices
 {
     public sealed class VertexAttribute
     {

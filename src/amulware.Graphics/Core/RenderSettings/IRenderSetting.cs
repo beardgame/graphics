@@ -1,3 +1,5 @@
+using amulware.Graphics.Shading;
+
 namespace amulware.Graphics.RenderSettings
 {
     public interface IRenderSetting

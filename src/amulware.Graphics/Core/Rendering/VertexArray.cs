@@ -1,7 +1,8 @@
 using System;
+using amulware.Graphics.Shading;
 using OpenToolkit.Graphics.OpenGL;
 
-namespace amulware.Graphics
+namespace amulware.Graphics.Rendering
 {
     public sealed class VertexArray : IDisposable
     {

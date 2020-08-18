@@ -1,6 +1,8 @@
+using amulware.Graphics.Shading;
+using amulware.Graphics.Vertices;
 using OpenToolkit.Graphics.OpenGL;
 
-namespace amulware.Graphics
+namespace amulware.Graphics.Rendering
 {
     public static partial class Renderable
     {

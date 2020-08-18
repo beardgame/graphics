@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using amulware.Graphics.Rendering;
+using amulware.Graphics.Shading;
 
 namespace amulware.Graphics.ShaderManagement
 {

@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using amulware.Graphics.Rendering;
+using amulware.Graphics.Shading;
 
 namespace amulware.Graphics.ShaderManagement
 {

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using amulware.Graphics.RenderSettings;
+using amulware.Graphics.Shading;
 
-namespace amulware.Graphics
+namespace amulware.Graphics.Rendering
 {
     public sealed class Renderer : IDisposable
     {

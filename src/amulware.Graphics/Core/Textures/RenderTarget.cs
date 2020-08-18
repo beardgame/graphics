@@ -1,9 +1,8 @@
 using System;
 using System.Linq;
-using amulware.Graphics.Textures;
 using OpenToolkit.Graphics.OpenGL;
 
-namespace amulware.Graphics
+namespace amulware.Graphics.Textures
 {
     public sealed class RenderTarget : IDisposable
     {
