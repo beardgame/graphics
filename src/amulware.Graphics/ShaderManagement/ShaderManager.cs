@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using OpenToolkit.Graphics.OpenGL;
 using static OpenToolkit.Graphics.OpenGL.ShaderType;
@@ -25,13 +26,12 @@ namespace amulware.Graphics.ShaderManagement
         private readonly Dictionary<IShaderProvider, List<ReloadableRendererShader>> programsByShader
             = new Dictionary<IShaderProvider, List<ReloadableRendererShader>>();
 
-        public IRendererShader? this[string shaderProgramName]
+        public bool TryGetRendererShader(string shaderProgramName,
+            [NotNullWhen(returnValue: true)] out IRendererShader? shaderProgram)
         {
-            get
-            {
-                programs.TryGetValue(shaderProgramName, out var program);
-                return program;
-            }
+            var found = programs.TryGetValue(shaderProgramName, out var program);
+            shaderProgram = program;
+            return found;
         }
 
         public bool Contains(ShaderType type, string name)

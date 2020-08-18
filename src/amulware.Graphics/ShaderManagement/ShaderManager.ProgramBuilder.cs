@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using OpenToolkit.Graphics.OpenGL;
 using static OpenToolkit.Graphics.OpenGL.ShaderType;
 
@@ -9,25 +7,42 @@ namespace amulware.Graphics.ShaderManagement
 {
     public sealed partial class ShaderManager
     {
-        public IRendererShader MakeShaderProgram(string shaderName, string programName = null)
-            => BuildShaderProgram()
-                .TryAll(shaderName)
-                .BuildAs(programName ?? shaderName);
+        public IRendererShader RegisterRendererShaderFromAllShadersWithName(string shaderName, string? name = null)
+            => RegisterRendererShader(b => b.TryAll(shaderName), name ?? shaderName);
 
-        public ProgramBuilder BuildShaderProgram()
-            => new ProgramBuilder(this);
+        public IRendererShader RegisterRendererShader(Action<RendererShaderBuilder> build, string name)
+        {
+            var builder = new RendererShaderBuilder(this);
+            build(builder);
 
-        public sealed class ProgramBuilder
+            throwIfShaderProgramNameAlreadyTaken(name);
+
+            var program = ReloadableRendererShader.LoadFrom(builder.Shaders);
+            programs.Add(name, program);
+            registerProgramForItsShaders(program);
+
+            return program;
+        }
+
+        private void throwIfShaderProgramNameAlreadyTaken(string name)
+        {
+            if (programs.ContainsKey(name))
+                throw new ArgumentException($"Tried adding shader program with name '{name} which is already taken.");
+        }
+
+        public sealed class RendererShaderBuilder
         {
             private readonly ShaderManager manager;
             private readonly List<ReloadableShader> shaders = new List<ReloadableShader>();
 
-            public ProgramBuilder(ShaderManager manager)
+            internal IEnumerable<ReloadableShader> Shaders => shaders;
+
+            internal RendererShaderBuilder(ShaderManager manager)
             {
                 this.manager = manager;
             }
 
-            public ProgramBuilder TryAll(string shaderName)
+            public RendererShaderBuilder TryAll(string shaderName)
             {
                 TryWith(ComputeShader, shaderName);
                 TryWith(FragmentShader, shaderName);
@@ -38,13 +53,7 @@ namespace amulware.Graphics.ShaderManagement
                 return this;
             }
 
-            public ProgramBuilder WithVertexShader(string shaderName) => With(VertexShader, shaderName);
-
-            public ProgramBuilder WithFragmentShader(string shaderName) => With(FragmentShader, shaderName);
-
-            public ProgramBuilder WithGeometryShader(string shaderName) => With(GeometryShader, shaderName);
-
-            public ProgramBuilder With(ShaderType type, string shaderName)
+            public RendererShaderBuilder With(ShaderType type, string shaderName)
             {
                 TryWith(type, shaderName, out var succeeded);
                 if (!succeeded)
@@ -52,9 +61,9 @@ namespace amulware.Graphics.ShaderManagement
                 return this;
             }
 
-            public ProgramBuilder TryWith(ShaderType type, string shaderName) => TryWith(type, shaderName, out _);
+            public RendererShaderBuilder TryWith(ShaderType type, string shaderName) => TryWith(type, shaderName, out _);
 
-            public ProgramBuilder TryWith(ShaderType type, string shaderName, out bool succeeded)
+            public RendererShaderBuilder TryWith(ShaderType type, string shaderName, out bool succeeded)
             {
                 succeeded = false;
                 var shader = manager.getShader(type, shaderName);
@@ -67,45 +76,11 @@ namespace amulware.Graphics.ShaderManagement
                 return this;
             }
 
-            public ProgramBuilder With(ReloadableShader shader)
+            public RendererShaderBuilder With(ReloadableShader shader)
             {
                 shaders.Add(shader);
                 return this;
             }
-
-            public IRendererShader BuildAs(string programName)
-            {
-                manager.throwIfShaderProgramNameAlreadyTaken(programName);
-                var program = ReloadableRendererShader.LoadFrom(shaders);
-                manager.addProgram(program, programName);
-                return program;
-            }
-        }
-
-        private void addProgram(ReloadableRendererShader rendererShader, string name)
-        {
-            throwIfAnyShadersAreNotKnown(rendererShader, name);
-
-            programs.Add(name, rendererShader);
-
-            registerProgramForItsShaders(rendererShader);
-        }
-
-        // ReSharper disable once ParameterOnlyUsedForPreconditionCheck.Local
-        [Conditional("DEBUG")]
-        private void throwIfAnyShadersAreNotKnown(ReloadableRendererShader rendererShader, string name)
-        {
-            if (rendererShader.Shaders.FirstOrDefault(s => !shaderNames.ContainsKey(s)) is { } shader)
-                throw new InvalidOperationException(
-                    $"Tried adding shader program with unknown {shader.Shader.Type} under name '{name}." +
-                    " All shaders must be added first.");
-        }
-
-        private void throwIfShaderProgramNameAlreadyTaken(string name)
-        {
-            if (programs.ContainsKey(name))
-                throw new ArgumentException($"Tried adding shader program with name '{name} which is already taken.");
-
         }
 
         private ReloadableShader? getShader(ShaderType type, string shaderName)

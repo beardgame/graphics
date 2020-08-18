@@ -9,7 +9,7 @@ namespace amulware.Graphics.ShaderManagement
     {
         public ShaderReloadReport TryReloadAll()
         {
-            var errors = new List<Exception>();
+            var errors = ImmutableList<Exception>.Empty;
 
             var reloadedShaders = new HashSet<IShaderProvider>(
                 shaders.Values
@@ -48,7 +48,7 @@ namespace amulware.Graphics.ShaderManagement
                 }
                 catch (Exception e)
                 {
-                    errors.Add(e);
+                    errors = errors.Add(e);
                 }
 
                 return false;

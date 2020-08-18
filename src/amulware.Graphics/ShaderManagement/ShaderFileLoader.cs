@@ -7,7 +7,7 @@ using OpenToolkit.Graphics.OpenGL;
 
 namespace amulware.Graphics.ShaderManagement
 {
-    sealed public class ShaderFileLoader
+    public sealed class ShaderFileLoader
     {
         private readonly string pathPrefix;
         private readonly string vsExtension;
@@ -34,30 +34,28 @@ namespace amulware.Graphics.ShaderManagement
             this.gsExtension = gsExtension;
             this.appendExtensionsForSingleFiles = appendExtensionsForSingleFiles;
 
-            this.canBlindlyLoadVS = this.vsExtension != this.fsExtension && this.vsExtension != this.gsExtension;
-            this.canBlindlyLoadFS = this.fsExtension != this.vsExtension && this.fsExtension != this.gsExtension;
-            this.canBlindlyLoadGS = this.gsExtension != this.fsExtension && this.gsExtension != this.vsExtension;
+            canBlindlyLoadVS = this.vsExtension != this.fsExtension && this.vsExtension != this.gsExtension;
+            canBlindlyLoadFS = this.fsExtension != this.vsExtension && this.fsExtension != this.gsExtension;
+            canBlindlyLoadGS = this.gsExtension != this.fsExtension && this.gsExtension != this.vsExtension;
 
-            this.canBlindlyLoadAnything = this.canBlindlyLoadFS || this.canBlindlyLoadVS || this.canBlindlyLoadGS;
+            canBlindlyLoadAnything = canBlindlyLoadFS || canBlindlyLoadVS || canBlindlyLoadGS;
         }
-
-        #region Load()
 
         public ShaderFile Load(string fileName, ShaderType shaderType)
         {
-            var path = Path.Combine(this.pathPrefix, fileName);
-            if (this.appendExtensionsForSingleFiles)
-                path = this.appendExtension(path, shaderType);
+            var path = Path.Combine(pathPrefix, fileName);
+            if (appendExtensionsForSingleFiles)
+                path = appendExtension(path, shaderType);
 
             return new ShaderFile(shaderType, path, fileName);
         }
 
         public IEnumerable<ShaderFile> Load(string path, string searchPattern = "*", bool searchRecursive = true)
         {
-            if (!this.canBlindlyLoadAnything)
+            if (!canBlindlyLoadAnything)
                 return Enumerable.Empty<ShaderFile>();
 
-            var searchPath = Path.Combine(this.pathPrefix, path).Replace(@"\", "/");
+            var searchPath = Path.Combine(pathPrefix, path).Replace(@"\", "/");
             if (searchPath[searchPath.Length - 1] != '/')
                 searchPath += "/";
 
@@ -65,35 +63,31 @@ namespace amulware.Graphics.ShaderManagement
 
             var searchOption = searchRecursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
 
-            if (this.canBlindlyLoadVS)
+            if (canBlindlyLoadVS)
             {
-                shaders.AddRange(this.load(ShaderType.VertexShader,
-                    searchPath, searchPattern + this.vsExtension, searchOption));
+                shaders.AddRange(load(ShaderType.VertexShader,
+                    searchPath, searchPattern + vsExtension, searchOption));
             }
-            if (this.canBlindlyLoadFS)
+            if (canBlindlyLoadFS)
             {
-                shaders.AddRange(this.load(ShaderType.FragmentShader,
-                    searchPath, searchPattern + this.fsExtension, searchOption));
+                shaders.AddRange(load(ShaderType.FragmentShader,
+                    searchPath, searchPattern + fsExtension, searchOption));
             }
-            if (this.canBlindlyLoadGS)
+            if (canBlindlyLoadGS)
             {
-                shaders.AddRange(this.load(ShaderType.GeometryShader,
-                    searchPath, searchPattern + this.gsExtension, searchOption));
+                shaders.AddRange(load(ShaderType.GeometryShader,
+                    searchPath, searchPattern + gsExtension, searchOption));
             }
 
             return shaders;
         }
-
-        #endregion
-
-        #region private methods
 
         private IEnumerable<ShaderFile> load(ShaderType type, string searchPath,
             string searchPattern, SearchOption searchOption)
         {
             return Directory.EnumerateFiles(searchPath, searchPattern, searchOption)
                 .Select(
-                    f => new ShaderFile(type, f, this.getFriendlyName(searchPath, f))
+                    f => new ShaderFile(type, f, getFriendlyName(searchPath, f))
                 );
         }
 
@@ -107,19 +101,15 @@ namespace amulware.Graphics.ShaderManagement
             switch (shaderType)
             {
                 case ShaderType.FragmentShader:
-                    return path + this.fsExtension;
+                    return path + fsExtension;
                 case ShaderType.VertexShader:
-                    return path + this.vsExtension;
+                    return path + vsExtension;
                 case ShaderType.GeometryShader:
-                    return path + this.gsExtension;
+                    return path + gsExtension;
                 default:
                     throw new ArgumentOutOfRangeException("shaderType");
             }
         }
-
-        #endregion
-
-        #region Building
 
         public static ShaderFileLoader CreateDefault(string pathPrefix = "")
         {
@@ -137,40 +127,38 @@ namespace amulware.Graphics.ShaderManagement
 
             public Builder(string pathPrefix = "")
             {
-                this.PathPrefix = pathPrefix;
-                this.VertexShaderFileExtension = ".vs";
-                this.FragmentShaderFileExtension = ".fs";
-                this.GeometryShaderFileExtension = ".gs";
-                this.AppendExtensionForSingleFiles = true;
+                PathPrefix = pathPrefix;
+                VertexShaderFileExtension = ".vs";
+                FragmentShaderFileExtension = ".fs";
+                GeometryShaderFileExtension = ".gs";
+                AppendExtensionForSingleFiles = true;
             }
 
             public Builder DontAppendExtensionsForSingleFile()
             {
-                this.AppendExtensionForSingleFiles = false;
+                AppendExtensionForSingleFiles = false;
                 return this;
             }
 
             public Builder WithExtensions(string vertexShaderFileExtension = null,
                 string fragmentShaderFileExtension = null, string geometryShaderFileExtension = null)
             {
-                this.VertexShaderFileExtension = vertexShaderFileExtension ?? this.VertexShaderFileExtension;
-                this.FragmentShaderFileExtension = fragmentShaderFileExtension ?? this.FragmentShaderFileExtension;
-                this.GeometryShaderFileExtension = geometryShaderFileExtension ?? this.GeometryShaderFileExtension;
+                VertexShaderFileExtension = vertexShaderFileExtension ?? VertexShaderFileExtension;
+                FragmentShaderFileExtension = fragmentShaderFileExtension ?? FragmentShaderFileExtension;
+                GeometryShaderFileExtension = geometryShaderFileExtension ?? GeometryShaderFileExtension;
                 return this;
             }
 
             public ShaderFileLoader Build()
             {
                 return new ShaderFileLoader(
-                    this.PathPrefix ?? "",
-                    this.VertexShaderFileExtension ?? "",
-                    this.FragmentShaderFileExtension ?? "",
-                    this.GeometryShaderFileExtension ?? "",
-                    this.AppendExtensionForSingleFiles
+                    PathPrefix ?? "",
+                    VertexShaderFileExtension ?? "",
+                    FragmentShaderFileExtension ?? "",
+                    GeometryShaderFileExtension ?? "",
+                    AppendExtensionForSingleFiles
                     );
             }
         }
-
-        #endregion
     }
 }
