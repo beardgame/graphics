@@ -13,7 +13,7 @@ namespace amulware.Graphics.Rendering
         private readonly ImmutableArray<IRenderSetting> settings;
 
         private ShaderProgram shaderProgram = null!;
-        private VertexArray vertexArray = null!;
+        private DrawCall drawCall = null!;
         private ImmutableArray<IProgramRenderSetting> settingsForProgram;
 
         public static Builder NewBuilder(IRenderable renderable, ShaderProgram shaderProgram)
@@ -70,8 +70,8 @@ namespace amulware.Graphics.Rendering
         public void SetShaderProgram(ShaderProgram program)
         {
             shaderProgram = program;
-            vertexArray?.Dispose();
-            vertexArray = VertexArray.For(renderable, program);
+            drawCall?.Dispose();
+            drawCall = DrawCall.For(renderable, program);
             settingsForProgram = settings.Select(s => s.ForProgram(program)).ToImmutableArray();
         }
 
@@ -84,7 +84,7 @@ namespace amulware.Graphics.Rendering
                     setting.Set();
                 }
 
-                vertexArray.Render();
+                drawCall.Invoke();
 
                 // TODO: do we have to undo any settings? maybe we shouldn't have any like that
                 // - texture samplers can behave funny though...
@@ -93,7 +93,7 @@ namespace amulware.Graphics.Rendering
 
         public void Dispose()
         {
-            vertexArray.Dispose();
+            drawCall.Dispose();
         }
     }
 }

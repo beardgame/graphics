@@ -1,6 +1,5 @@
 using System;
 using amulware.Graphics.Rendering;
-using amulware.Graphics.Shading;
 using amulware.Graphics.Vertices;
 using OpenToolkit.Graphics.OpenGL;
 
@@ -27,13 +26,9 @@ namespace amulware.Graphics.MeshBuilders
             indices = this.indices.AddRange(indexCount);
         }
 
-        public IRenderable ToClearingRenderable()
-        {
-            return new ClearingRenderable(ToRenderable(), this);
-        }
-
         public IRenderable ToRenderable()
         {
+            // TODO: does this have to be a triangle list? can it be anything else? Should the class name reflect this?
             return Renderable.ForVerticesAndIndices(vertices, indices, PrimitiveType.Triangles);
         }
 
@@ -48,29 +43,5 @@ namespace amulware.Graphics.MeshBuilders
             vertices.Buffer.Dispose();
             indices.Buffer.Dispose();
         }
-
-        private sealed class ClearingRenderable : IRenderable
-        {
-            private readonly IRenderable baseRenderer;
-            private readonly IndexedMeshBuilder<TVertex> builder;
-
-            public ClearingRenderable(IRenderable baseRenderer, IndexedMeshBuilder<TVertex> builder)
-            {
-                this.baseRenderer = baseRenderer;
-                this.builder = builder;
-            }
-
-            public void ConfigureBoundVertexArray(ShaderProgram program)
-            {
-                baseRenderer.ConfigureBoundVertexArray(program);
-            }
-
-            public void Render()
-            {
-                baseRenderer.Render();
-                builder.Clear();
-            }
-        }
-
     }
 }

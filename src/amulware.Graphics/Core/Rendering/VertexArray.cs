@@ -1,5 +1,4 @@
 using System;
-using amulware.Graphics.Shading;
 using OpenToolkit.Graphics.OpenGL;
 
 namespace amulware.Graphics.Rendering
@@ -7,30 +6,10 @@ namespace amulware.Graphics.Rendering
     public sealed class VertexArray : IDisposable
     {
         private readonly int handle;
-        private readonly IRenderable renderable;
 
-        public static VertexArray For(IRenderable renderable, ShaderProgram program)
+        public VertexArray()
         {
-            return new VertexArray(renderable, program);
-        }
-
-        private VertexArray(IRenderable renderable, ShaderProgram program)
-        {
-            this.renderable = renderable;
             GL.GenVertexArrays(1, out handle);
-            using (Bind())
-            {
-                renderable.ConfigureBoundVertexArray(program);
-            }
-        }
-
-        // TODO: should this be in a separate RenderState class?
-        public void Render()
-        {
-            using (Bind())
-            {
-                renderable.Render();
-            }
         }
 
         public Bound Bind()
