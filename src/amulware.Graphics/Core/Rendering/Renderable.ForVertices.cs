@@ -18,31 +18,25 @@ namespace amulware.Graphics.Rendering
             return new WithVerticesStreaming<T>(vertexBufferStream, primitiveType);
         }
 
-        private sealed class WithVerticesStreaming<TVertex> : IRenderable
+        private sealed class WithVerticesStreaming<TVertex> : WithVertices<TVertex>
             where TVertex : struct, IVertexData
         {
             private readonly BufferStream<TVertex> vertexBufferStream;
-            private readonly WithVertices<TVertex> bufferRenderable;
 
             public WithVerticesStreaming(BufferStream<TVertex> vertexBufferStream, PrimitiveType primitiveType)
+                : base(vertexBufferStream.Buffer, primitiveType)
             {
                 this.vertexBufferStream = vertexBufferStream;
-                bufferRenderable = new WithVertices<TVertex>(vertexBufferStream.Buffer, primitiveType);
             }
 
-            public void ConfigureBoundVertexArray(ShaderProgram program)
-            {
-                bufferRenderable.ConfigureBoundVertexArray(program);
-            }
-
-            public void Render()
+            protected override void Render()
             {
                 vertexBufferStream.FlushIfDirty();
-                bufferRenderable.Render();
+                base.Render();
             }
         }
 
-        private sealed class WithVertices<TVertex> : IRenderable
+        private class WithVertices<TVertex> : BaseRenderable
             where TVertex : struct, IVertexData
         {
             private readonly Buffer<TVertex> vertexBuffer;
@@ -54,16 +48,28 @@ namespace amulware.Graphics.Rendering
                 this.primitiveType = primitiveType;
             }
 
-            public void ConfigureBoundVertexArray(ShaderProgram program)
+            protected override void ConfigureBoundVertexArray(ShaderProgram program)
             {
                 using var _ = vertexBuffer.Bind(BufferTarget.ArrayBuffer);
                 VertexData.SetAttributes<TVertex>(program);
             }
 
-            public void Render()
+            protected override void Render()
             {
                 GL.DrawArrays(primitiveType, 0, vertexBuffer.Count);
             }
+        }
+
+        private abstract class BaseRenderable : IRenderable
+        {
+            public DrawCall MakeDrawCallFor(ShaderProgram program)
+            {
+                return DrawCall.With(() => ConfigureBoundVertexArray(program), Render);
+            }
+
+            protected abstract void ConfigureBoundVertexArray(ShaderProgram program);
+
+            protected abstract void Render();
         }
     }
 }

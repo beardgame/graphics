@@ -49,38 +49,31 @@ namespace amulware.Graphics.Rendering
             return new WithVerticesAndIndicesStreaming<T, ushort>(vertexBuffer, indexBuffer, primitiveType);
         }
 
-        private sealed class WithVerticesAndIndicesStreaming<TVertex, TIndex> : IRenderable
+        private sealed class WithVerticesAndIndicesStreaming<TVertex, TIndex> : WithVerticesAndIndices<TVertex, TIndex>
             where TVertex : struct, IVertexData
             where TIndex : struct
         {
             private readonly BufferStream<TVertex> vertexBufferStream;
             private readonly BufferStream<TIndex> indexBufferStream;
-            private readonly WithVerticesAndIndices<TVertex, TIndex> bufferRenderable;
 
             public WithVerticesAndIndicesStreaming(BufferStream<TVertex> vertexBufferStream,
                 BufferStream<TIndex> indexBufferStream,
                 PrimitiveType primitiveType)
+                : base(vertexBufferStream.Buffer, indexBufferStream.Buffer, primitiveType)
             {
                 this.vertexBufferStream = vertexBufferStream;
                 this.indexBufferStream = indexBufferStream;
-                bufferRenderable = new WithVerticesAndIndices<TVertex, TIndex>(
-                    vertexBufferStream.Buffer, indexBufferStream.Buffer, primitiveType);
             }
 
-            public void ConfigureBoundVertexArray(ShaderProgram program)
-            {
-                bufferRenderable.ConfigureBoundVertexArray(program);
-            }
-
-            public void Render()
+            protected override void Render()
             {
                 vertexBufferStream.FlushIfDirty();
                 indexBufferStream.FlushIfDirty();
-                bufferRenderable.Render();
+                base.Render();
             }
         }
 
-        private sealed class WithVerticesAndIndices<TVertex, TIndex> : IRenderable
+        private class WithVerticesAndIndices<TVertex, TIndex> : BaseRenderable
             where TVertex : struct, IVertexData
             where TIndex : struct
         {
@@ -105,18 +98,17 @@ namespace amulware.Graphics.Rendering
                 this.primitiveType = primitiveType;
             }
 
-            public void ConfigureBoundVertexArray(ShaderProgram program)
+            protected override void ConfigureBoundVertexArray(ShaderProgram program)
             {
                 using (vertexBuffer.Bind(BufferTarget.ArrayBuffer))
                 {
                     VertexData.SetAttributes<TVertex>(program);
                 }
 
-                // TODO: is this right? can we unbind it somewhere?
                 indexBuffer.Bind(BufferTarget.ElementArrayBuffer);
             }
 
-            public void Render()
+            protected override void Render()
             {
                 GL.DrawElements(primitiveType, indexBuffer.Count, drawElementsType, 0);
             }

@@ -1,5 +1,4 @@
 using System;
-using amulware.Graphics.Shading;
 
 namespace amulware.Graphics.Rendering
 {
@@ -8,16 +7,16 @@ namespace amulware.Graphics.Rendering
         private readonly VertexArray vertexArray;
         private readonly Action drawCall;
 
-        public static DrawCall For(IRenderable renderable, ShaderProgram program)
+        public static DrawCall With(Action configureBoundVertexArray, Action drawCall)
         {
             var vertexArray = new VertexArray();
 
             using (vertexArray.Bind())
             {
-                renderable.ConfigureBoundVertexArray(program);
+                configureBoundVertexArray();
             }
 
-            return new DrawCall(vertexArray, renderable.Render);
+            return new DrawCall(vertexArray, drawCall);
         }
 
         public DrawCall(VertexArray vertexArray, Action drawCall)

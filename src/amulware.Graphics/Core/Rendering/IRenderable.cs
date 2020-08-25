@@ -4,7 +4,6 @@ namespace amulware.Graphics.Rendering
 {
     public interface IRenderable
     {
-        void ConfigureBoundVertexArray(ShaderProgram program);
-        void Render();
+        DrawCall MakeDrawCallFor(ShaderProgram program);
     }
 }

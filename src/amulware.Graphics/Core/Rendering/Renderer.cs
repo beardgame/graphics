@@ -71,7 +71,7 @@ namespace amulware.Graphics.Rendering
         {
             shaderProgram = program;
             drawCall?.Dispose();
-            drawCall = DrawCall.For(renderable, program);
+            drawCall = renderable.MakeDrawCallFor(program);
             settingsForProgram = settings.Select(s => s.ForProgram(program)).ToImmutableArray();
         }
 

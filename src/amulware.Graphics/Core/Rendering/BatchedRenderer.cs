@@ -31,9 +31,9 @@ namespace amulware.Graphics.Rendering
 
         private void onBatchActivated(IRenderable batch)
         {
-            if (inactiveDrawCalls.ContainsKey(batch))
+            if (inactiveDrawCalls.TryGetValue(batch, out var drawCall))
             {
-                activeDrawCalls[batch] = inactiveDrawCalls[batch];
+                activeDrawCalls[batch] = drawCall;
                 inactiveDrawCalls.Remove(batch);
             }
             else
@@ -44,9 +44,9 @@ namespace amulware.Graphics.Rendering
 
         private void onBatchDeactivated(IRenderable batch)
         {
-            if (activeDrawCalls.ContainsKey(batch))
+            if (activeDrawCalls.TryGetValue(batch, out var drawCall))
             {
-                inactiveDrawCalls[batch] = activeDrawCalls[batch];
+                inactiveDrawCalls[batch] = drawCall;
                 activeDrawCalls.Remove(batch);
             }
             else
@@ -89,8 +89,12 @@ namespace amulware.Graphics.Rendering
                     setting.Set();
                 }
 
+                // TODO: these are not sorted, which can lead to out of order rendering of batches
+                // could be fixed with sorted dictionary(?) or separate list
                 foreach (var (_, drawCall) in activeDrawCalls)
+                {
                     drawCall.Invoke();
+                }
             }
         }
 
@@ -98,7 +102,7 @@ namespace amulware.Graphics.Rendering
         {
             foreach (var batch in activeBatchesWithoutDrawCall)
             {
-                activeDrawCalls[batch] = DrawCall.For(batch, shaderProgram);
+                activeDrawCalls[batch] = batch.MakeDrawCallFor(shaderProgram);
             }
             activeBatchesWithoutDrawCall.Clear();
         }
