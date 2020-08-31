@@ -5,19 +5,19 @@ namespace amulware.Graphics.RenderSettings
 {
     public sealed class TextureUniform : Uniform<Texture>
     {
-        public TextureUnit Target { get; }
+        public TextureUnit Unit { get; }
 
-        public TextureUniform(string name, TextureUnit target, Texture value)
+        public TextureUniform(string name, TextureUnit unit, Texture value)
             : base(name, value)
         {
-            Target = target;
+            Unit = unit;
         }
 
         protected override void SetAtLocation(int location)
         {
-            GL.ActiveTexture(Target);
-            using var _ = Value.Bind();
-            GL.Uniform1(location, Target - TextureUnit.Texture0);
+            GL.ActiveTexture(Unit);
+            Value.Bind();
+            GL.Uniform1(location, Unit - TextureUnit.Texture0);
         }
     }
 }
