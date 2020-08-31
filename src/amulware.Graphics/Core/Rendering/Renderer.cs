@@ -85,9 +85,6 @@ namespace amulware.Graphics.Rendering
                 }
 
                 drawCall.Invoke();
-
-                // TODO: do we have to undo any settings? maybe we shouldn't have any like that
-                // - texture samplers can behave funny though...
             }
         }
 

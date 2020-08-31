@@ -12,7 +12,6 @@ namespace amulware.Graphics.Textures
 {
     public abstract class TextureData
     {
-        // TODO: some of these construction methods could probably be improved
         public static TextureData From(byte[] data, int width, int height)
         {
             validateExpectedLength(data, width, height);

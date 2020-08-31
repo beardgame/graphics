@@ -34,7 +34,7 @@ namespace amulware.Graphics
             IsDirty = false;
         }
 
-        // TODO: measure performance impact of using 'in' keyword
+        // TODO(#24): measure performance impact of using 'in' keyword
         public void Add(T item)
         {
             var newCount = Count + 1;

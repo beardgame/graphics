@@ -47,7 +47,7 @@ namespace amulware.Graphics.MeshBuilders
             int vertexCount, int indexCount,
             out Span<TVertex> vertices, out Span<ushort> indices, out ushort indexOffset)
         {
-            // TODO: note that due to this potentially allocating new buffers, Add has to be called on the GL thread
+            // TODO(#25): due to this potentially allocating new buffers, Add has to be called on the GL thread
             // a possible solution would be to wrap BufferStream into a LazyBufferStream that only creates buffers
             // on the first upload
             ensureCapacity(vertexCount);
