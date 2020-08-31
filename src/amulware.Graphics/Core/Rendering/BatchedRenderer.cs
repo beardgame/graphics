@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -6,7 +7,7 @@ using amulware.Graphics.Shading;
 
 namespace amulware.Graphics.Rendering
 {
-    public sealed class BatchedRenderer
+    public sealed class BatchedRenderer : IRenderer, IDisposable
     {
         private readonly IBatchedRenderable renderable;
         private readonly ImmutableArray<IRenderSetting> settings;
@@ -64,16 +65,6 @@ namespace amulware.Graphics.Rendering
             settingsForProgram = settings.Select(s => s.ForProgram(program)).ToImmutableArray();
         }
 
-        private void disposeAndClear(Dictionary<IRenderable, LinkedListNode<DrawCall>> drawCalls)
-        {
-            foreach (var (_, vertexArray) in drawCalls)
-            {
-                vertexArray.Value.Dispose();
-            }
-
-            drawCalls.Clear();
-        }
-
         public void Render()
         {
             activateQueuedDrawCalls();
@@ -109,6 +100,22 @@ namespace amulware.Graphics.Rendering
                 activeDrawCallsInOrder.AddLast(node);
             }
             batchesWaitingForActivation.Clear();
+        }
+
+        public void Dispose()
+        {
+            disposeAndClear(activeDrawCalls);
+            disposeAndClear(inactiveDrawCalls);
+        }
+
+        private void disposeAndClear(Dictionary<IRenderable, LinkedListNode<DrawCall>> drawCalls)
+        {
+            foreach (var (_, drawCall) in drawCalls)
+            {
+                drawCall.Value.Dispose();
+            }
+
+            drawCalls.Clear();
         }
     }
 }

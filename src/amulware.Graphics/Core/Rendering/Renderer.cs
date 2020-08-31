@@ -7,7 +7,7 @@ using amulware.Graphics.Shading;
 
 namespace amulware.Graphics.Rendering
 {
-    public sealed class Renderer : IDisposable
+    public sealed class Renderer : IRenderer, IDisposable
     {
         private readonly IRenderable renderable;
         private readonly ImmutableArray<IRenderSetting> settings;
