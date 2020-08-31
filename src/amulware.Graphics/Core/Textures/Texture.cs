@@ -19,7 +19,7 @@ namespace amulware.Graphics.Textures
 
             using var target = texture.Bind();
             target.Resize(width, height, pixelFormat);
-            target.SetFilterMode(TextureMinFilter.LinearMipmapLinear, TextureMagFilter.Linear);
+            target.SetFilterMode(TextureMinFilter.Linear, TextureMagFilter.Linear);
             target.SetWrapMode(TextureWrapMode.Repeat, TextureWrapMode.Repeat);
 
             return texture;
@@ -60,7 +60,7 @@ namespace amulware.Graphics.Textures
 
             public void Resize(int width, int height, PixelInternalFormat pixelInternalFormat)
             {
-                UploadData(IntPtr.Zero, 0, 0, width, height, pixelInternalFormat);
+                UploadData(IntPtr.Zero, PixelFormat.Rgba, PixelType.UnsignedByte, width, height, pixelInternalFormat);
             }
 
             public void UploadData(IntPtr ptr, PixelFormat pixelFormat, PixelType pixelType, int width, int height, PixelInternalFormat pixelInternalFormat)
