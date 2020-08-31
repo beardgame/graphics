@@ -4,11 +4,11 @@ using OpenToolkit.Mathematics;
 
 namespace amulware.Graphics.Shapes
 {
-    public sealed class ColorShapeDrawer
+    public sealed class ColorShapeDrawer2
     {
         private readonly IIndexedMeshBuilder<ColorVertexData, ushort> meshBuilder;
 
-        public ColorShapeDrawer(IIndexedMeshBuilder<ColorVertexData, ushort> meshBuilder)
+        public ColorShapeDrawer2(IIndexedMeshBuilder<ColorVertexData, ushort> meshBuilder)
         {
             this.meshBuilder = meshBuilder;
         }
