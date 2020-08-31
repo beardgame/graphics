@@ -7,6 +7,7 @@ using OpenToolkit.Graphics.OpenGL;
 
 namespace amulware.Graphics.ShaderManagement
 {
+    // TODO: fix this up
     public sealed class ShaderFileLoader
     {
         private readonly string pathPrefix;
