@@ -10,9 +10,11 @@ namespace amulware.Graphics.Rendering
     {
         private readonly IBatchedRenderable renderable;
         private readonly ImmutableArray<IRenderSetting> settings;
-        private readonly Dictionary<IRenderable, DrawCall> activeDrawCalls = new Dictionary<IRenderable, DrawCall>();
-        private readonly Dictionary<IRenderable, DrawCall> inactiveDrawCalls = new Dictionary<IRenderable, DrawCall>();
-        private readonly List<IRenderable> activeBatchesWithoutDrawCall = new List<IRenderable>();
+
+        private readonly LinkedList<DrawCall> activeDrawCallsInOrder = new LinkedList<DrawCall>();
+        private readonly Dictionary<IRenderable, LinkedListNode<DrawCall>> activeDrawCalls = new Dictionary<IRenderable, LinkedListNode<DrawCall>>();
+        private readonly Dictionary<IRenderable, LinkedListNode<DrawCall>> inactiveDrawCalls = new Dictionary<IRenderable, LinkedListNode<DrawCall>>();
+        private readonly List<IRenderable> batchesWaitingForActivation = new List<IRenderable>();
 
         private ShaderProgram shaderProgram = null!;
         private ImmutableArray<IProgramRenderSetting> settingsForProgram;
@@ -31,27 +33,20 @@ namespace amulware.Graphics.Rendering
 
         private void onBatchActivated(IRenderable batch)
         {
-            if (inactiveDrawCalls.TryGetValue(batch, out var drawCall))
-            {
-                activeDrawCalls[batch] = drawCall;
-                inactiveDrawCalls.Remove(batch);
-            }
-            else
-            {
-                activeBatchesWithoutDrawCall.Add(batch);
-            }
+            batchesWaitingForActivation.Add(batch);
         }
 
         private void onBatchDeactivated(IRenderable batch)
         {
             if (activeDrawCalls.TryGetValue(batch, out var drawCall))
             {
+                activeDrawCallsInOrder.Remove(drawCall);
                 inactiveDrawCalls[batch] = drawCall;
                 activeDrawCalls.Remove(batch);
             }
             else
             {
-                activeBatchesWithoutDrawCall.Remove(batch);
+                batchesWaitingForActivation.Remove(batch);
             }
         }
 
@@ -59,20 +54,21 @@ namespace amulware.Graphics.Rendering
         {
             shaderProgram = program;
 
+            activeDrawCallsInOrder.Clear();
             disposeAndClear(activeDrawCalls);
             disposeAndClear(inactiveDrawCalls);
 
-            activeBatchesWithoutDrawCall.Clear();
-            activeBatchesWithoutDrawCall.AddRange(renderable.GetActiveBatches());
+            batchesWaitingForActivation.Clear();
+            batchesWaitingForActivation.AddRange(renderable.GetActiveBatches());
 
             settingsForProgram = settings.Select(s => s.ForProgram(program)).ToImmutableArray();
         }
 
-        private void disposeAndClear(Dictionary<IRenderable, DrawCall> drawCalls)
+        private void disposeAndClear(Dictionary<IRenderable, LinkedListNode<DrawCall>> drawCalls)
         {
             foreach (var (_, vertexArray) in drawCalls)
             {
-                vertexArray.Dispose();
+                vertexArray.Value.Dispose();
             }
 
             drawCalls.Clear();
@@ -80,7 +76,7 @@ namespace amulware.Graphics.Rendering
 
         public void Render()
         {
-            createMissingDrawCalls();
+            activateQueuedDrawCalls();
 
             using (shaderProgram.Use())
             {
@@ -89,22 +85,30 @@ namespace amulware.Graphics.Rendering
                     setting.Set();
                 }
 
-                // TODO: these are not sorted, which can lead to out of order rendering of batches
-                // could be fixed with sorted dictionary(?) or separate list
-                foreach (var (_, drawCall) in activeDrawCalls)
+                foreach (var drawCall in activeDrawCallsInOrder)
                 {
                     drawCall.Invoke();
                 }
             }
         }
 
-        private void createMissingDrawCalls()
+        private void activateQueuedDrawCalls()
         {
-            foreach (var batch in activeBatchesWithoutDrawCall)
+            foreach (var batch in batchesWaitingForActivation)
             {
-                activeDrawCalls[batch] = batch.MakeDrawCallFor(shaderProgram);
+                if (inactiveDrawCalls.TryGetValue(batch, out var node))
+                {
+                    inactiveDrawCalls.Remove(batch);
+                }
+                else
+                {
+                    var drawCall = batch.MakeDrawCallFor(shaderProgram);
+                    node = new LinkedListNode<DrawCall>(drawCall);
+                }
+                activeDrawCalls[batch] = node;
+                activeDrawCallsInOrder.AddLast(node);
             }
-            activeBatchesWithoutDrawCall.Clear();
+            batchesWaitingForActivation.Clear();
         }
     }
 }
