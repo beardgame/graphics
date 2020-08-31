@@ -86,7 +86,7 @@ namespace amulware.Graphics.Shapes
             vertices[0] = new ColorVertexData(x, y, z, color);
             vertices[1] = new ColorVertexData(x + w, y, z, color);
             vertices[2] = new ColorVertexData(x + w, y + h, z, color);
-            vertices[3] = new ColorVertexData(x, y + y, z, color);
+            vertices[3] = new ColorVertexData(x, y + h, z, color);
 
             vertices[4] = new ColorVertexData(x, y, z + d, color);
             vertices[5] = new ColorVertexData(x + w, y, z + d, color);
