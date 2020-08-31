@@ -1,9 +1,9 @@
 namespace amulware.Graphics.MeshBuilders
 {
-    public static class IndexedMeshBuilderExtensions
+    public static class IndexedTrianglesMeshBuilderExtensions
     {
         public static void AddTriangle<TVertex>(
-            this IIndexedMeshBuilder<TVertex, ushort> meshBuilder, in TVertex v0, in TVertex v1, in TVertex v2)
+            this IIndexedTrianglesMeshBuilder<TVertex, ushort> meshBuilder, in TVertex v0, in TVertex v1, in TVertex v2)
         {
             meshBuilder.Add(3, 3, out var vertices, out var indices, out var indexOffset);
 
@@ -17,7 +17,7 @@ namespace amulware.Graphics.MeshBuilders
         }
 
         public static void AddQuad<TVertex>(
-            this IIndexedMeshBuilder<TVertex, ushort> meshBuilder,
+            this IIndexedTrianglesMeshBuilder<TVertex, ushort> meshBuilder,
             in TVertex v0, in TVertex v1, in TVertex v2, in TVertex v3)
         {
             meshBuilder.Add(4, 6, out var vertices, out var indices, out var indexOffset);

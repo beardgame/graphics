@@ -28,7 +28,7 @@ namespace amulware.Graphics.Examples.PostProcessing
         private ShaderProgram postProcessShader = null!;
         private PostProcessor postProcessor = null!;
 
-        private IndexedMeshBuilder<ColorVertexData> meshBuilder = null!;
+        private IndexedTrianglesMeshBuilder<ColorVertexData> meshBuilder = null!;
         private readonly Vector2Uniform pixelSizeUniform = new Vector2Uniform("pixelSize", Vector2.Zero);
 
         private bool resizeNeeded;
@@ -63,7 +63,7 @@ namespace amulware.Graphics.Examples.PostProcessing
             shapeShaderProgram = ShaderProgram.FromShaders(
                 ShaderFactory.Vertex.FromFile("geometry.vs"), ShaderFactory.Fragment.FromFile("geometry.fs"));
 
-            meshBuilder = new IndexedMeshBuilder<ColorVertexData>();
+            meshBuilder = new IndexedTrianglesMeshBuilder<ColorVertexData>();
 
             var shapeDrawer = new ColorShapeDrawer3(meshBuilder);
             shapeDrawer.DrawCube(Vector3.Zero, 1f, Color.Aqua);

@@ -5,7 +5,7 @@ using OpenToolkit.Graphics.OpenGL;
 
 namespace amulware.Graphics.MeshBuilders
 {
-    public sealed class ExpandingIndexedMeshBuilder<TVertex> : IIndexedMeshBuilder<TVertex, ushort>, IDisposable
+    public sealed class ExpandingIndexedTrianglesMeshBuilder<TVertex> : IIndexedTrianglesMeshBuilder<TVertex, ushort>, IDisposable
         where TVertex : struct, IVertexData
     {
         private readonly Batcher<Streams> batcher;
@@ -37,7 +37,7 @@ namespace amulware.Graphics.MeshBuilders
             }
         }
 
-        public ExpandingIndexedMeshBuilder()
+        public ExpandingIndexedTrianglesMeshBuilder()
         {
             batcher = new Batcher<Streams>(Streams.Create);
             currentStreams = batcher.AllocateBatch().Data;

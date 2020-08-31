@@ -7,10 +7,9 @@ namespace amulware.Graphics.Shapes
 {
     public sealed class ColorShapeDrawer3
     {
-        // TODO: we are assuming this will render as triangles - bad naming? do we need to change the abstraction?
-        private readonly IIndexedMeshBuilder<ColorVertexData, ushort> meshBuilder;
+        private readonly IIndexedTrianglesMeshBuilder<ColorVertexData, ushort> meshBuilder;
 
-        public ColorShapeDrawer3(IIndexedMeshBuilder<ColorVertexData, ushort> meshBuilder)
+        public ColorShapeDrawer3(IIndexedTrianglesMeshBuilder<ColorVertexData, ushort> meshBuilder)
         {
             this.meshBuilder = meshBuilder;
         }

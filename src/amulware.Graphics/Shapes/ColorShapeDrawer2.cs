@@ -6,9 +6,9 @@ namespace amulware.Graphics.Shapes
 {
     public sealed class ColorShapeDrawer2
     {
-        private readonly IIndexedMeshBuilder<ColorVertexData, ushort> meshBuilder;
+        private readonly IIndexedTrianglesMeshBuilder<ColorVertexData, ushort> meshBuilder;
 
-        public ColorShapeDrawer2(IIndexedMeshBuilder<ColorVertexData, ushort> meshBuilder)
+        public ColorShapeDrawer2(IIndexedTrianglesMeshBuilder<ColorVertexData, ushort> meshBuilder)
         {
             this.meshBuilder = meshBuilder;
         }

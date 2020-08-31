@@ -5,13 +5,13 @@ using OpenToolkit.Graphics.OpenGL;
 
 namespace amulware.Graphics.MeshBuilders
 {
-    public sealed class IndexedMeshBuilder<TVertex> : IIndexedMeshBuilder<TVertex, ushort>, IDisposable
+    public sealed class IndexedTrianglesMeshBuilder<TVertex> : IIndexedTrianglesMeshBuilder<TVertex, ushort>, IDisposable
         where TVertex : struct, IVertexData
     {
         private readonly BufferStream<TVertex> vertices;
         private readonly BufferStream<ushort> indices;
 
-        public IndexedMeshBuilder()
+        public IndexedTrianglesMeshBuilder()
         {
             vertices = new BufferStream<TVertex>(new Buffer<TVertex>());
             indices = new BufferStream<ushort>(new Buffer<ushort>());
@@ -28,7 +28,6 @@ namespace amulware.Graphics.MeshBuilders
 
         public IRenderable ToRenderable()
         {
-            // TODO: does this have to be a triangle list? can it be anything else? Should the class name reflect this?
             return Renderable.ForVerticesAndIndices(vertices, indices, PrimitiveType.Triangles);
         }
 
