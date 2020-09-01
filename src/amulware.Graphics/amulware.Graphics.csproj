@@ -11,6 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Bearded.Utilities" Version="0.2.0.318-dev" />
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
     <PackageReference Include="OpenToolkit.Graphics" Version="4.0.0-pre9.1" />
     <PackageReference Include="OpenToolkit.Windowing.Common" Version="4.0.0-pre9.1" />
