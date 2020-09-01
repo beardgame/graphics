@@ -59,9 +59,9 @@ namespace amulware.Graphics.Examples.Text
             renderer = BatchedRenderer.From(renderable, shaderProgram,
                 new TextureUniform("fontTexture", TextureUnit.Texture0, fontTexture));
 
-            var textBrush = textDrawer.WithUnits(Vector3.UnitX * 2 / 1280, -Vector3.UnitY * 2 / 720);
+            var orientedTextDrawer = textDrawer.WithUnits(Vector3.UnitX * 2 / 1280, -Vector3.UnitY * 2 / 720);
 
-            textBrush.DrawLine(Vector3.Zero, "Hello World!", 64, 0.5f, 0.5f);
+            orientedTextDrawer.DrawLine(Vector3.Zero, "Hello World!", 64, 0.5f, 0.5f);
         }
 
         protected override void OnResize(ResizeEventArgs e)

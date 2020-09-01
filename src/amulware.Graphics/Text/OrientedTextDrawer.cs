@@ -2,7 +2,7 @@ using OpenToolkit.Mathematics;
 
 namespace amulware.Graphics.Text
 {
-    public class OrientedTextDrawer
+    public sealed class OrientedTextDrawer
     {
         private readonly ITextDrawer drawer;
         private readonly Vector3 unitRightDp;
