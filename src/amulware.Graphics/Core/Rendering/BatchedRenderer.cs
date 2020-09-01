@@ -20,6 +20,23 @@ namespace amulware.Graphics.Rendering
         private ShaderProgram shaderProgram = null!;
         private ImmutableArray<IProgramRenderSetting> settingsForProgram;
 
+        public static BatchedRenderer From(IBatchedRenderable renderable, ShaderProgram shaderProgram)
+        {
+            return From(renderable, shaderProgram, Enumerable.Empty<IRenderSetting>());
+        }
+
+        public static BatchedRenderer From(
+            IBatchedRenderable renderable, ShaderProgram shaderProgram, params IRenderSetting[] settings)
+        {
+            return From(renderable, shaderProgram, settings.AsEnumerable());
+        }
+
+        public static BatchedRenderer From(
+            IBatchedRenderable renderable, ShaderProgram shaderProgram, IEnumerable<IRenderSetting> settings)
+        {
+            return new BatchedRenderer(renderable, shaderProgram, settings);
+        }
+
         private BatchedRenderer(
             IBatchedRenderable renderable, ShaderProgram shaderProgram, IEnumerable<IRenderSetting> settings)
         {
