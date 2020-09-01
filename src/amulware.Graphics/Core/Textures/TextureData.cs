@@ -77,6 +77,21 @@ namespace amulware.Graphics.Textures
 
         public abstract int Height { get; }
 
+        public Texture ToTexture(Action<Texture.Target> configure)
+        {
+            var texture = ToTexture();
+            using var target = texture.Bind();
+            configure(target);
+            return texture;
+        }
+
+        public Texture ToTexture()
+        {
+            var texture = new Texture();
+            PopulateTexture(texture);
+            return texture;
+        }
+
         public void PopulateTexture(Texture texture)
         {
             using var target = texture.Bind();

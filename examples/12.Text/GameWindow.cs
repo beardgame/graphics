@@ -43,13 +43,11 @@ namespace amulware.Graphics.Examples.Text
         {
             var systemFont = new System.Drawing.Font(FontFamily.GenericSansSerif, 64, GraphicsUnit.Pixel);
             var (textureData, font) = FontFactory.From(systemFont, 1);
-            fontTexture = new Texture();
-            textureData.PopulateTexture(fontTexture);
-            using(var target = fontTexture.Bind())
+            fontTexture = textureData.ToTexture(t =>
             {
-                target.SetFilterMode(TextureMinFilter.LinearMipmapLinear, TextureMagFilter.Nearest);
-                target.GenerateMipmap();
-            }
+                t.SetFilterMode(TextureMinFilter.LinearMipmapLinear, TextureMagFilter.Nearest);
+                t.GenerateMipmap();
+            });
 
             textDrawer = new TextDrawer<UVVertexData>(font, (p, uv) => new UVVertexData(p, uv));
 
