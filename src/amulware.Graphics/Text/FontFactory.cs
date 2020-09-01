@@ -14,7 +14,7 @@ using OpenToolkit.Mathematics;
 
 namespace amulware.Graphics.Text
 {
-    public sealed class FontFactory
+    public static class FontFactory
     {
         public static (TextureData, Font) From(System.Drawing.Font font, int paddingPixels = 0)
         {
@@ -199,6 +199,14 @@ namespace amulware.Graphics.Text
                 measureBitmapDataHandle.Free();
             }
 
+            private static void applyGraphicsSettings(System.Drawing.Graphics g)
+            {
+                g.SmoothingMode = SmoothingMode.AntiAlias;
+                g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                g.TextRenderingHint = TextRenderingHint.AntiAlias;
+            }
+
             private sealed class MutableCharacterInfo
             {
                 public Vector2i Size { get; set; }
@@ -207,14 +215,6 @@ namespace amulware.Graphics.Text
                 public float SpacingWidth { get; set; }
 
                 public Vector2i TopLeft { get; set; }
-            }
-
-            private static void applyGraphicsSettings(System.Drawing.Graphics g)
-            {
-                g.SmoothingMode = SmoothingMode.AntiAlias;
-                g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                g.TextRenderingHint = TextRenderingHint.AntiAlias;
             }
         }
     }
