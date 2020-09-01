@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "amulware.Graphics.Examples.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "amulware.Graphics.Examples.08.PostProcessing", "examples\08.PostProcessing\amulware.Graphics.Examples.08.PostProcessing.csproj", "{9DE12724-B969-4FD2-AF36-53CF3F0B0002}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "amulware.Graphics.Examples.12.Text", "examples\12.Text\amulware.Graphics.Examples.12.Text.csproj", "{CD216E8B-8D00-4CDA-8325-908906520E0B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{9DE12724-B969-4FD2-AF36-53CF3F0B0002}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9DE12724-B969-4FD2-AF36-53CF3F0B0002}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9DE12724-B969-4FD2-AF36-53CF3F0B0002}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD216E8B-8D00-4CDA-8325-908906520E0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD216E8B-8D00-4CDA-8325-908906520E0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD216E8B-8D00-4CDA-8325-908906520E0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD216E8B-8D00-4CDA-8325-908906520E0B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
