@@ -14,6 +14,7 @@ namespace amulware.Graphics.Text
 
         private readonly Font font;
         private readonly CreateTextVertex createTextVertex;
+        // TODO: should this be injected? So that we can use the non-extending one as well
         private readonly ExpandingIndexedTrianglesMeshBuilder<TVertex> meshBuilder;
 
         public TextDrawer(Font font, CreateTextVertex createTextVertex)
@@ -23,6 +24,7 @@ namespace amulware.Graphics.Text
             meshBuilder = new ExpandingIndexedTrianglesMeshBuilder<TVertex>();
         }
 
+        // TODO: this does a lot of linear algebra, should we have a version that draws axis aligned for most use cases?
         public void DrawLine(Vector3 xyz, string text, float fontHeight, float alignHorizontal, float alignVertical,
             Vector3 unitRightDp, Vector3 unitDownDp)
         {
