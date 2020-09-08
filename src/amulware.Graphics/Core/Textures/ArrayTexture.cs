@@ -73,7 +73,7 @@ namespace amulware.Graphics.Textures
 
             public void Resize(int width, int height, int layerCount, PixelInternalFormat pixelFormat)
             {
-                UploadData(IntPtr.Zero, 0, 0, width, height, layerCount, pixelFormat);
+                UploadData(IntPtr.Zero, PixelFormat.Rgba, PixelType.UnsignedByte, width, height, layerCount, pixelFormat);
             }
 
             public void UploadData(IntPtr ptr, PixelFormat pixelFormat, PixelType pixelType, int width, int height, int layerCount, PixelInternalFormat pixelInternalFormat)
