@@ -4,6 +4,10 @@ namespace amulware.Graphics.RenderSettings
 {
     public sealed class ColorUniform : Uniform<Color>
     {
+        public ColorUniform(string name) : this(name, Color.White)
+        {
+        }
+
         public ColorUniform(string name, Color value) : base(name, value)
         {
         }

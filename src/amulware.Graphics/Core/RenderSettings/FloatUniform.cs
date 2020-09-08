@@ -4,7 +4,7 @@ namespace amulware.Graphics.RenderSettings
 {
     public sealed class FloatUniform : Uniform<float>
     {
-        public FloatUniform(string name, float value) : base(name, value)
+        public FloatUniform(string name, float value = 0) : base(name, value)
         {
         }
 

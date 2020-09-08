@@ -5,6 +5,10 @@ namespace amulware.Graphics.RenderSettings
 {
     public sealed class Vector4Uniform : Uniform<Vector4>
     {
+        public Vector4Uniform(string name) : this(name, Vector4.Zero)
+        {
+        }
+
         public Vector4Uniform(string name, Vector4 value) : base(name, value)
         {
         }
