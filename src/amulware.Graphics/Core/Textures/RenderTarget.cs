@@ -8,6 +8,15 @@ namespace amulware.Graphics.Textures
     {
         private readonly int handle;
 
+        public static RenderTarget WithColorAttachments(params Texture[] textures)
+        {
+            var rt = new RenderTarget();
+            using var target = rt.Bind();
+            target.SetColorAttachments(textures);
+
+            return rt;
+        }
+
         public RenderTarget()
         {
             GL.GenFramebuffers(1, out handle);

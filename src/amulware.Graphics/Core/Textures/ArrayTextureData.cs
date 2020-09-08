@@ -82,6 +82,21 @@ namespace amulware.Graphics.Textures
             this.textureData = textureData;
         }
 
+        public ArrayTexture ToTexture(Action<ArrayTexture.Target> configure)
+        {
+            var texture = ToTexture();
+            using var target = texture.Bind();
+            configure(target);
+            return texture;
+        }
+
+        public ArrayTexture ToTexture()
+        {
+            var texture = new ArrayTexture();
+            PopulateTexture(texture);
+            return texture;
+        }
+
         public void PopulateTexture(ArrayTexture texture)
         {
             using var target = texture.Bind();
