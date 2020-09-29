@@ -6,7 +6,7 @@ namespace amulware.Graphics.Textures
 {
     public sealed class RenderTarget : IDisposable
     {
-        private readonly int handle;
+        public int Handle { get; }
 
         public static RenderTarget WithColorAttachments(params Texture[] textures)
         {
@@ -19,7 +19,8 @@ namespace amulware.Graphics.Textures
 
         public RenderTarget()
         {
-            GL.GenFramebuffers(1, out handle);
+            GL.GenFramebuffers(1, out int handle);
+            Handle = handle;
         }
 
         public Target Bind(FramebufferTarget target = FramebufferTarget.DrawFramebuffer)
@@ -34,7 +35,7 @@ namespace amulware.Graphics.Textures
             internal Target(RenderTarget renderTarget, FramebufferTarget target)
             {
                 this.target = target;
-                GL.BindFramebuffer(target, renderTarget.handle);
+                GL.BindFramebuffer(target, renderTarget.Handle);
             }
 
             public void SetColorAttachments(params Texture[] textures)
@@ -64,7 +65,7 @@ namespace amulware.Graphics.Textures
 
         public void Dispose()
         {
-            GL.DeleteFramebuffer(handle);
+            GL.DeleteFramebuffer(Handle);
         }
     }
 }
