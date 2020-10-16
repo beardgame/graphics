@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using amulware.Graphics.Rendering;
 using amulware.Graphics.RenderSettings;
 using amulware.Graphics.Shading;
@@ -8,22 +8,43 @@ using OpenToolkit.Mathematics;
 
 namespace amulware.Graphics.PostProcessing
 {
-    public sealed class PostProcessor : IRenderer, IDisposable
+    public sealed class PostProcessor : IRenderer
     {
         private readonly Renderer internalRenderer;
         private readonly Buffer<PostProcessingVertexData> vertices;
 
+        public static PostProcessor From(params IRenderSetting[] settings)
+            => From(settings.AsEnumerable());
+
+        public static PostProcessor From(IEnumerable<IRenderSetting> settings)
+        {
+            var (renderable, vertices) = makeRenderable();
+
+            var renderer = Renderer.From(renderable, settings);
+
+            return new PostProcessor(renderer, vertices);
+        }
+
         public static PostProcessor From(ShaderProgram shaderProgram, params IRenderSetting[] settings)
-            => From(shaderProgram, (IEnumerable<IRenderSetting>) settings);
+            => From(shaderProgram, settings.AsEnumerable());
 
         public static PostProcessor From(ShaderProgram shaderProgram, IEnumerable<IRenderSetting> settings)
+        {
+            var (renderable, vertices) = makeRenderable();
+
+            var renderer = Renderer.From(renderable, shaderProgram, settings);
+
+            return new PostProcessor(renderer, vertices);
+        }
+
+        private static (IRenderable, Buffer<PostProcessingVertexData>) makeRenderable()
         {
             var vertices = new Buffer<PostProcessingVertexData>();
 
             using (var target = vertices.Bind())
             {
                 target.Upload(
-                    new []
+                    new[]
                     {
                         new PostProcessingVertexData(new Vector2(-1, -1)),
                         new PostProcessingVertexData(new Vector2(1, -1)),
@@ -34,9 +55,7 @@ namespace amulware.Graphics.PostProcessing
 
             var renderable = Renderable.ForVertices(vertices, PrimitiveType.TriangleStrip);
 
-            var renderer = Renderer.From(renderable, shaderProgram, settings);
-
-            return new PostProcessor(renderer, vertices);
+            return (renderable, vertices);
         }
 
         private PostProcessor(Renderer internalRenderer, Buffer<PostProcessingVertexData> vertices)

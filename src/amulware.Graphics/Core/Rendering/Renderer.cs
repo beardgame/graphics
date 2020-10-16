@@ -7,41 +7,27 @@ using amulware.Graphics.Shading;
 
 namespace amulware.Graphics.Rendering
 {
-    public sealed class Renderer : IRenderer, IDisposable
+    public sealed class Renderer : IRenderer
     {
         private readonly IRenderable renderable;
         private readonly ImmutableArray<IRenderSetting> settings;
 
-        private ShaderProgram shaderProgram = null!;
-        private DrawCall drawCall = null!;
+        private (ShaderProgram Program, DrawCall DrawCall)? shader;
         private ImmutableArray<IProgramRenderSetting> settingsForProgram;
 
-        public static Builder NewBuilder(IRenderable renderable, ShaderProgram shaderProgram)
+        public static Renderer From(IRenderable renderable)
         {
-            return new Builder(renderable, shaderProgram);
+            return From(renderable, Enumerable.Empty<IRenderSetting>());
         }
 
-        public sealed class Builder
+        public static Renderer From(IRenderable renderable, params IRenderSetting[] settings)
         {
-            private readonly IRenderable renderable;
-            private readonly ShaderProgram shaderProgram;
-            private readonly List<IRenderSetting> settings = new List<IRenderSetting>();
+            return From(renderable, settings.AsEnumerable());
+        }
 
-            public Builder(IRenderable renderable, ShaderProgram shaderProgram)
-            {
-                this.renderable = renderable;
-                this.shaderProgram = shaderProgram;
-            }
-
-            public void Add(IRenderSetting setting)
-            {
-                settings.Add(setting);
-            }
-
-            public Renderer Build()
-            {
-                return new Renderer(renderable, shaderProgram, settings);
-            }
+        public static Renderer From(IRenderable renderable, IEnumerable<IRenderSetting> settings)
+        {
+            return new Renderer(renderable, null, settings);
         }
 
         public static Renderer From(IRenderable renderable, ShaderProgram shaderProgram)
@@ -59,25 +45,31 @@ namespace amulware.Graphics.Rendering
             return new Renderer(renderable, shaderProgram, settings);
         }
 
-        private Renderer(IRenderable renderable, ShaderProgram shaderProgram, IEnumerable<IRenderSetting> settings)
+        private Renderer(IRenderable renderable, ShaderProgram? shaderProgram, IEnumerable<IRenderSetting> settings)
         {
             this.renderable = renderable;
             this.settings = settings.ToImmutableArray();
 
-            SetShaderProgram(shaderProgram);
+            if(shaderProgram != null)
+                SetShaderProgram(shaderProgram);
         }
 
         public void SetShaderProgram(ShaderProgram program)
         {
-            shaderProgram = program;
-            drawCall?.Dispose();
-            drawCall = renderable.MakeDrawCallFor(program);
+            shader?.DrawCall.Dispose();
+            var drawCall = renderable.MakeDrawCallFor(program);
+            shader = (program, drawCall);
             settingsForProgram = settings.Select(s => s.ForProgram(program)).ToImmutableArray();
         }
 
         public void Render()
         {
-            using (shaderProgram.Use())
+            if (shader == null)
+                throw new InvalidOperationException("Must set renderer shader program before rendering.");
+
+            var (program, drawCall) = shader.Value;
+
+            using (program.Use())
             {
                 foreach (var setting in settingsForProgram)
                 {
@@ -90,7 +82,7 @@ namespace amulware.Graphics.Rendering
 
         public void Dispose()
         {
-            drawCall.Dispose();
+            shader?.DrawCall.Dispose();
         }
     }
 }

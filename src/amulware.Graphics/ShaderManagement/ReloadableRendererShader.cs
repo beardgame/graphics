@@ -49,12 +49,12 @@ namespace amulware.Graphics.ShaderManagement
             program.SetProgram(newProgram, true);
         }
 
-        public void UseOnRenderer(Renderer renderer)
+        public void UseOnRenderer(IRenderer renderer)
         {
             program.UseOnRenderer(renderer);
         }
 
-        public void RemoveFromRenderer(Renderer renderer)
+        public void RemoveFromRenderer(IRenderer renderer)
         {
             program.RemoveFromRenderer(renderer);
         }

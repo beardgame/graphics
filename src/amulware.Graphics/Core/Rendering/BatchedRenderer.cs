@@ -7,7 +7,7 @@ using amulware.Graphics.Shading;
 
 namespace amulware.Graphics.Rendering
 {
-    public sealed class BatchedRenderer : IRenderer, IDisposable
+    public sealed class BatchedRenderer : IRenderer
     {
         private readonly IBatchedRenderable renderable;
         private readonly ImmutableArray<IRenderSetting> settings;
@@ -17,8 +17,23 @@ namespace amulware.Graphics.Rendering
         private readonly Dictionary<IRenderable, LinkedListNode<DrawCall>> inactiveDrawCalls = new Dictionary<IRenderable, LinkedListNode<DrawCall>>();
         private readonly List<IRenderable> batchesWaitingForActivation = new List<IRenderable>();
 
-        private ShaderProgram shaderProgram = null!;
+        private ShaderProgram? shaderProgram;
         private ImmutableArray<IProgramRenderSetting> settingsForProgram;
+
+        public static BatchedRenderer From(IBatchedRenderable renderable)
+        {
+            return From(renderable, Enumerable.Empty<IRenderSetting>());
+        }
+
+        public static BatchedRenderer From(IBatchedRenderable renderable, params IRenderSetting[] settings)
+        {
+            return From(renderable, settings.AsEnumerable());
+        }
+
+        public static BatchedRenderer From(IBatchedRenderable renderable, IEnumerable<IRenderSetting> settings)
+        {
+            return new BatchedRenderer(renderable, null, settings);
+        }
 
         public static BatchedRenderer From(IBatchedRenderable renderable, ShaderProgram shaderProgram)
         {
@@ -38,7 +53,7 @@ namespace amulware.Graphics.Rendering
         }
 
         private BatchedRenderer(
-            IBatchedRenderable renderable, ShaderProgram shaderProgram, IEnumerable<IRenderSetting> settings)
+            IBatchedRenderable renderable, ShaderProgram? shaderProgram, IEnumerable<IRenderSetting> settings)
         {
             this.renderable = renderable;
             this.settings = settings.ToImmutableArray();
@@ -46,7 +61,8 @@ namespace amulware.Graphics.Rendering
             renderable.BatchActivated += onBatchActivated;
             renderable.BatchDeactivated += onBatchDeactivated;
 
-            SetShaderProgram(shaderProgram);
+            if (shaderProgram != null)
+                SetShaderProgram(shaderProgram);
         }
 
         private void onBatchActivated(IRenderable batch)
@@ -84,7 +100,10 @@ namespace amulware.Graphics.Rendering
 
         public void Render()
         {
-            activateQueuedDrawCalls();
+            if (shaderProgram == null)
+                throw new InvalidOperationException("Must set renderer shader program before rendering.");
+
+            activateQueuedDrawCallsFor(shaderProgram);
 
             using (shaderProgram.Use())
             {
@@ -100,7 +119,7 @@ namespace amulware.Graphics.Rendering
             }
         }
 
-        private void activateQueuedDrawCalls()
+        private void activateQueuedDrawCallsFor(ShaderProgram program)
         {
             foreach (var batch in batchesWaitingForActivation)
             {
@@ -110,7 +129,7 @@ namespace amulware.Graphics.Rendering
                 }
                 else
                 {
-                    var drawCall = batch.MakeDrawCallFor(shaderProgram);
+                    var drawCall = batch.MakeDrawCallFor(program);
                     node = new LinkedListNode<DrawCall>(drawCall);
                 }
                 activeDrawCalls[batch] = node;
@@ -125,7 +144,7 @@ namespace amulware.Graphics.Rendering
             disposeAndClear(inactiveDrawCalls);
         }
 
-        private void disposeAndClear(Dictionary<IRenderable, LinkedListNode<DrawCall>> drawCalls)
+        private static void disposeAndClear(Dictionary<IRenderable, LinkedListNode<DrawCall>> drawCalls)
         {
             foreach (var (_, drawCall) in drawCalls)
             {

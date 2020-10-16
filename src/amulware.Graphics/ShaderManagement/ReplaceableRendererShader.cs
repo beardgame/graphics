@@ -7,12 +7,12 @@ namespace amulware.Graphics.ShaderManagement
 {
     public sealed class ReplaceableRendererShader : IRendererShader, IDisposable
     {
-        private ShaderProgram program;
-        private readonly List<Renderer> renderers = new List<Renderer>();
+        private ShaderProgram? program;
+        private readonly List<IRenderer> renderers = new List<IRenderer>();
 
         public static ReplaceableRendererShader CreateUninitialised() => new ReplaceableRendererShader(null!);
 
-        public ReplaceableRendererShader(ShaderProgram program)
+        public ReplaceableRendererShader(ShaderProgram? program)
         {
             this.program = program;
         }
@@ -26,21 +26,21 @@ namespace amulware.Graphics.ShaderManagement
                 renderer.SetShaderProgram(newProgram);
         }
 
-        public void UseOnRenderer(Renderer renderer)
+        public void UseOnRenderer(IRenderer renderer)
         {
             renderers.Add(renderer);
             if (program != null)
                 renderer.SetShaderProgram(program);
         }
 
-        public void RemoveFromRenderer(Renderer renderer)
+        public void RemoveFromRenderer(IRenderer renderer)
         {
             renderers.Remove(renderer);
         }
 
         public void Dispose()
         {
-            program.Dispose();
+            program?.Dispose();
         }
     }
 }

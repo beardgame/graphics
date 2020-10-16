@@ -4,7 +4,7 @@ namespace amulware.Graphics.ShaderManagement
 {
     public interface IRendererShader
     {
-        void UseOnRenderer(Renderer renderer);
-        void RemoveFromRenderer(Renderer renderer);
+        void UseOnRenderer(IRenderer renderer);
+        void RemoveFromRenderer(IRenderer renderer);
     }
 }
