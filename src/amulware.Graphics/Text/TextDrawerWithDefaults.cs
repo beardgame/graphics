@@ -65,18 +65,18 @@ namespace amulware.Graphics.Text
         }
 
         public (Vector3 Width, Vector3 Height) StringSize(
-            string text, float? fontHeight, Vector3? unitRightDP, Vector3? unitDownDP)
+            string text, float? fontHeight = null, Vector3? unitRightDP = null, Vector3? unitDownDP = null)
         {
             return drawer.StringSize(
                 text, fontHeight ?? this.fontHeight, unitRightDP ?? this.unitRightDP, unitDownDP ?? this.unitDownDP);
         }
 
-        public Vector3 StringWidth(string text, float? fontHeight, Vector3? unitRightDP)
+        public Vector3 StringWidth(string text, float? fontHeight = null, Vector3? unitRightDP = null)
         {
             return drawer.StringWidth(text, fontHeight ?? this.fontHeight, unitRightDP ?? this.unitRightDP);
         }
 
-        public Vector3 StringHeight(float? fontHeight, Vector3? unitDownDP)
+        public Vector3 StringHeight(float? fontHeight = null, Vector3? unitDownDP = null)
         {
             return drawer.StringHeight(fontHeight ?? this.fontHeight, unitDownDP ?? this.unitDownDP);
         }
