@@ -1,32 +1,29 @@
-using System;
 using System.Runtime.CompilerServices;
 using amulware.Graphics.MeshBuilders;
-using amulware.Graphics.Rendering;
 using amulware.Graphics.Vertices;
 using OpenToolkit.Mathematics;
 
 namespace amulware.Graphics.Text
 {
-    public sealed class TextDrawer<TVertex> : ITextDrawer, IDisposable
+    public sealed class TextDrawer<TVertex, TVertexParameters> : ITextDrawer<TVertexParameters>
         where TVertex : struct, IVertexData
     {
-        public delegate TVertex CreateTextVertex(Vector3 xyz, Vector2 uv);
+        public delegate TVertex CreateTextVertex(Vector3 xyz, Vector2 uv, TVertexParameters parameters);
 
         private readonly Font font;
+        private readonly IIndexedTrianglesMeshBuilder<TVertex, ushort> meshBuilder;
         private readonly CreateTextVertex createTextVertex;
-        // TODO: should this be injected? So that we can use the non-extending one as well
-        private readonly ExpandingIndexedTrianglesMeshBuilder<TVertex> meshBuilder;
 
-        public TextDrawer(Font font, CreateTextVertex createTextVertex)
+        public TextDrawer(Font font, IIndexedTrianglesMeshBuilder<TVertex, ushort> meshBuilder, CreateTextVertex createTextVertex)
         {
             this.font = font;
+            this.meshBuilder = meshBuilder;
             this.createTextVertex = createTextVertex;
-            meshBuilder = new ExpandingIndexedTrianglesMeshBuilder<TVertex>();
         }
 
         // TODO: this does a lot of linear algebra, should we have a version that draws axis aligned for most use cases?
         public void DrawLine(Vector3 xyz, string text, float fontHeight, float alignHorizontal, float alignVertical,
-            Vector3 unitRightDp, Vector3 unitDownDp)
+            Vector3 unitRightDp, Vector3 unitDownDp, TVertexParameters parameters)
         {
             var fontHeightAdjustedUnitX = unitRightDp * fontHeight;
             var fontHeightAdjustedUnitY = unitDownDp * fontHeight;
@@ -54,10 +51,10 @@ namespace amulware.Graphics.Text
                 var uv0 = charInfo.TopLeftUV;
                 var uv1 = charInfo.BottomRightUV;
 
-                vertices[vI] = createTextVertex(characterTopLeft, uv0);
-                vertices[vI + 1] = createTextVertex(characterTopLeft + stepRight, new Vector2(uv1.X, uv0.Y));
-                vertices[vI + 2] = createTextVertex(characterTopLeft + stepDown, new Vector2(uv0.X, uv1.Y));
-                vertices[vI + 3] = createTextVertex(characterTopLeft + stepRight + stepDown, uv1);
+                vertices[vI] = createTextVertex(characterTopLeft, uv0, parameters);
+                vertices[vI + 1] = createTextVertex(characterTopLeft + stepRight, new Vector2(uv1.X, uv0.Y), parameters);
+                vertices[vI + 2] = createTextVertex(characterTopLeft + stepDown, new Vector2(uv0.X, uv1.Y), parameters);
+                vertices[vI + 3] = createTextVertex(characterTopLeft + stepRight + stepDown, uv1, parameters);
 
                 indices[iI] = (ushort)(indexOffset + vI);
                 indices[iI + 1] = (ushort)(indexOffset + vI + 1);
@@ -76,21 +73,6 @@ namespace amulware.Graphics.Text
         private static Vector3 transform(Vector2 v, Vector3 unitX, Vector3 unitY)
         {
             return v.X * unitX + v.Y * unitY;
-        }
-
-        public void Clear()
-        {
-            meshBuilder.Clear();
-        }
-
-        public IBatchedRenderable ToRenderable()
-        {
-            return meshBuilder.ToRenderable();
-        }
-
-        public void Dispose()
-        {
-            meshBuilder.Dispose();
         }
     }
 }
