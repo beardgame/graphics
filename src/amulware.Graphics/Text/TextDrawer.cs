@@ -69,6 +69,22 @@ namespace amulware.Graphics.Text
             }
         }
 
+        public (Vector3 Width, Vector3 Height) StringSize(
+            string text, float fontHeight, Vector3 unitRightDP, Vector3 unitDownDP)
+        {
+            return (StringWidth(text, fontHeight, unitRightDP), StringHeight(fontHeight, unitDownDP));
+        }
+
+        public Vector3 StringWidth(string text, float fontHeight, Vector3 unitRightDP)
+        {
+            return font.StringWidth(text) * fontHeight * unitRightDP;
+        }
+
+        public Vector3 StringHeight(float fontHeight, Vector3 unitDownDP)
+        {
+            return fontHeight * unitDownDP;
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static Vector3 transform(Vector2 v, Vector3 unitX, Vector3 unitY)
         {
