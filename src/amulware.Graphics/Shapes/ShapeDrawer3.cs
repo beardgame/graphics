@@ -2,6 +2,7 @@ using System;
 using System.Runtime.CompilerServices;
 using amulware.Graphics.MeshBuilders;
 using amulware.Graphics.Vertices;
+using Bearded.Utilities;
 using OpenToolkit.Mathematics;
 
 namespace amulware.Graphics.Shapes
@@ -222,6 +223,50 @@ namespace amulware.Graphics.Shapes
             };
 
             copyIndices(localIndices, indices, indexOffset);
+        }
+
+        public void DrawCone(
+            Vector3 baseCenter, Vector3 baseToApex, float baseRadius, TVertexParameters parameters, int edges = 32)
+        {
+            if (edges < 3)
+                throw new ArgumentException("Cone must have at least three edges");
+
+            var baseToApexNormalized = baseToApex.NormalizedSafe();
+
+            var stepAngle = MathHelper.TwoPi / edges;
+            var stepRotation = Matrix3.CreateFromAxisAngle(baseToApex, stepAngle);
+
+            var unitX = baseToApexNormalized == Vector3.UnitZ
+                ? Vector3.UnitX
+                : Vector3.Cross(baseToApexNormalized, Vector3.UnitZ);
+
+            var vertexCount = edges + 1;
+            var indexCount = (edges + edges - 2) * 3;
+
+            var baseVertexOffset = unitX * baseRadius;
+
+            meshBuilder.Add(vertexCount, indexCount, out var vertices, out var indices, out var indexOffset);
+
+            for (var i = 0; i < edges; i++)
+            {
+                vertices[i] = createVertex(baseCenter + baseVertexOffset, parameters);
+                baseVertexOffset *= stepRotation;
+
+                indices[i * 3] = (ushort)(indexOffset + edges);
+                indices[i * 3 + 1] = (ushort)(indexOffset + i);
+                indices[i * 3 + 2] = (ushort)(indexOffset + (i + 1) % edges);
+            }
+
+            vertices[edges] = createVertex(baseCenter + baseToApex, parameters);
+
+            var o = edges * 3;
+            for (var i = 0; i < edges - 2; i++)
+            {
+                o += 3;
+                indices[o] = indexOffset;
+                indices[o + 1] = (ushort)(indexOffset + i + 1);
+                indices[o + 2] = (ushort)(indexOffset + i + 2);
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
