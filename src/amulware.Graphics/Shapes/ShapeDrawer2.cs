@@ -11,22 +11,22 @@ namespace amulware.Graphics.Shapes
         public delegate TVertex CreateShapeVertex(Vector3 xyz, TVertexParameters parameters);
 
         private readonly IIndexedTrianglesMeshBuilder<TVertex, ushort> meshBuilder;
-        private readonly CreateShapeVertex createShapeVertex;
+        private readonly CreateShapeVertex createVertex;
 
         public ShapeDrawer2(
-            IIndexedTrianglesMeshBuilder<TVertex, ushort> meshBuilder, CreateShapeVertex createShapeVertex)
+            IIndexedTrianglesMeshBuilder<TVertex, ushort> meshBuilder, CreateShapeVertex createVertex)
         {
             this.meshBuilder = meshBuilder;
-            this.createShapeVertex = createShapeVertex;
+            this.createVertex = createVertex;
         }
 
         public void FillRectangle(float x, float y, float z, float w, float h, TVertexParameters parameters)
         {
             meshBuilder.AddQuad(
-                createShapeVertex(new Vector3(x, y, z), parameters),
-                createShapeVertex(new Vector3(x + w, y, z), parameters),
-                createShapeVertex(new Vector3(x + w, y + h, z), parameters),
-                createShapeVertex(new Vector3(x, y + h, z), parameters)
+                createVertex(new Vector3(x, y, z), parameters),
+                createVertex(new Vector3(x + w, y, z), parameters),
+                createVertex(new Vector3(x + w, y + h, z), parameters),
+                createVertex(new Vector3(x, y + h, z), parameters)
             );
         }
 
@@ -36,16 +36,16 @@ namespace amulware.Graphics.Shapes
             meshBuilder.Add(8, 24, out var vertices, out var indices, out var indexOffset);
 
             // outer
-            vertices[0] = createShapeVertex(new Vector3(x, y, z), parameters);
-            vertices[1] = createShapeVertex(new Vector3(x + w, y, z), parameters);
-            vertices[2] = createShapeVertex(new Vector3(x + w, y + h, z), parameters);
-            vertices[3] = createShapeVertex(new Vector3(x, y + h, z), parameters);
+            vertices[0] = createVertex(new Vector3(x, y, z), parameters);
+            vertices[1] = createVertex(new Vector3(x + w, y, z), parameters);
+            vertices[2] = createVertex(new Vector3(x + w, y + h, z), parameters);
+            vertices[3] = createVertex(new Vector3(x, y + h, z), parameters);
 
             // inner
-            vertices[4] = createShapeVertex(new Vector3(x + lineWidth, y + lineWidth, z), parameters);
-            vertices[5] = createShapeVertex(new Vector3(x + w - lineWidth, y + lineWidth, z), parameters);
-            vertices[6] = createShapeVertex(new Vector3(x + w - lineWidth, y + h - lineWidth, z), parameters);
-            vertices[7] = createShapeVertex(new Vector3(x + lineWidth, y + h - lineWidth, z), parameters);
+            vertices[4] = createVertex(new Vector3(x + lineWidth, y + lineWidth, z), parameters);
+            vertices[5] = createVertex(new Vector3(x + w - lineWidth, y + lineWidth, z), parameters);
+            vertices[6] = createVertex(new Vector3(x + w - lineWidth, y + h - lineWidth, z), parameters);
+            vertices[7] = createVertex(new Vector3(x + lineWidth, y + h - lineWidth, z), parameters);
 
             var indicesIndex = 0;
             for (var i = 0; i < 4; i++)
@@ -73,14 +73,14 @@ namespace amulware.Graphics.Shapes
 
             var xy = new Vector2(0, -1);
 
-            vertices[0] = createShapeVertex(new Vector3(
+            vertices[0] = createVertex(new Vector3(
                 centerX + xy.X * radiusX, centerY + xy.Y * radiusY, centerZ), parameters);
 
             for (var i = 1; i < edges; i++)
             {
                 xy = rotation * xy;
 
-                vertices[i] = createShapeVertex(new Vector3(
+                vertices[i] = createVertex(new Vector3(
                     centerX + xy.X * radiusX, centerY + xy.Y * radiusY, centerZ), parameters);
             }
 
@@ -109,20 +109,20 @@ namespace amulware.Graphics.Shapes
             var innerW = radiusX - lineWidth;
             var innerH = radiusY - lineWidth;
 
-            vertices[0] = createShapeVertex(new Vector3(
+            vertices[0] = createVertex(new Vector3(
                 centerX + xy.X * radiusX, centerY + xy.Y * radiusY, centerZ), parameters);
 
-            vertices[1] = createShapeVertex(new Vector3(
+            vertices[1] = createVertex(new Vector3(
                 centerX + xy.X * innerW, centerY + xy.Y * innerH, centerZ), parameters);
 
             for (var i = 1; i < edges; i++)
             {
                 xy = rotation * xy;
 
-                vertices[2 * i] = createShapeVertex(new Vector3(
+                vertices[2 * i] = createVertex(new Vector3(
                     centerX + xy.X * radiusX, centerY + xy.Y * radiusY, centerZ), parameters);
 
-                vertices[2 * i + 1] = createShapeVertex(new Vector3(
+                vertices[2 * i + 1] = createVertex(new Vector3(
                     centerX + xy.X * innerW, centerY + xy.Y * innerH, centerZ), parameters);
             }
 
@@ -159,10 +159,10 @@ namespace amulware.Graphics.Shapes
             var nx = vy * ilxy;
             var ny = vx * ilxy;
             meshBuilder.AddQuad(
-                createShapeVertex(new Vector3(x1 + nx, y1 + ny, z1), parameters),
-                createShapeVertex(new Vector3(x1 - nx, y1 - ny, z1), parameters),
-                createShapeVertex(new Vector3(x2 - nx, y2 - ny, z2), parameters),
-                createShapeVertex(new Vector3(x2 + nx, y2 + ny, z2), parameters)
+                createVertex(new Vector3(x1 + nx, y1 + ny, z1), parameters),
+                createVertex(new Vector3(x1 - nx, y1 - ny, z1), parameters),
+                createVertex(new Vector3(x2 - nx, y2 - ny, z2), parameters),
+                createVertex(new Vector3(x2 + nx, y2 + ny, z2), parameters)
                 );
         }
     }
