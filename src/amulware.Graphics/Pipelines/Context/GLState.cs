@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using OpenToolkit.Graphics.OpenGL;
 using static OpenToolkit.Graphics.OpenGL.BlendEquationMode;
 using static OpenToolkit.Graphics.OpenGL.BlendingFactor;
@@ -74,6 +75,14 @@ namespace amulware.Graphics.Pipelines.Context
 
             GL.BlendFunc(src, dst);
             GL.BlendEquation(equation);
+        }
+
+        public static Rectangle Viewport { get; private set; }
+
+        public static void SetViewport(Rectangle viewport)
+        {
+            Viewport = viewport;
+            GL.Viewport(viewport);
         }
     }
 }

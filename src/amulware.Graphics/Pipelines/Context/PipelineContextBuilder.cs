@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Drawing;
 using amulware.Graphics.Pipelines.Context;
 
 namespace amulware.Graphics.Pipelines
@@ -23,6 +25,12 @@ namespace amulware.Graphics.Pipelines
         public PipelineContextBuilder SetBlendMode(BlendMode blendMode)
         {
             contextChanges.Add(new BlendModeChange(blendMode));
+            return this;
+        }
+
+        public PipelineContextBuilder SetViewport(Func<Rectangle> getViewport)
+        {
+            contextChanges.Add(new Viewport(getViewport));
             return this;
         }
 
