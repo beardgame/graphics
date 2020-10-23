@@ -3,30 +3,30 @@ using System.Collections.Immutable;
 
 namespace amulware.Graphics.Pipelines.Steps
 {
-    sealed class Composite : IPipeline
+    sealed class Composite<TState> : IPipeline<TState>
     {
         private bool flattened;
-        private ImmutableArray<IPipeline> steps;
+        private ImmutableArray<IPipeline<TState>> steps;
 
-        public Composite(params IPipeline[] steps)
+        public Composite(params IPipeline<TState>[] steps)
         {
             this.steps = steps.ToImmutableArray();
         }
 
-        public void Execute()
+        public void Execute(TState state)
         {
             if (!flattened)
                 flatten();
 
             foreach (var step in steps)
             {
-                step.Execute();
+                step.Execute(state);
             }
         }
 
         private void flatten()
         {
-            var builder = ImmutableArray.CreateBuilder<IPipeline>(steps.Length);
+            var builder = ImmutableArray.CreateBuilder<IPipeline<TState>>(steps.Length);
 
             builder.AddRange(enumerateSteps());
 
@@ -34,11 +34,11 @@ namespace amulware.Graphics.Pipelines.Steps
             flattened = true;
         }
 
-        private IEnumerable<IPipeline> enumerateSteps()
+        private IEnumerable<IPipeline<TState>> enumerateSteps()
         {
             foreach (var step in steps)
             {
-                if (step is Composite composite)
+                if (step is Composite<TState> composite)
                 {
                     foreach (var s in composite.enumerateSteps())
                     {

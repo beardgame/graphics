@@ -2,21 +2,16 @@ using amulware.Graphics.Pipelines.Steps;
 
 namespace amulware.Graphics.Pipelines
 {
-    public static partial class Pipeline
+    public static partial class Pipeline<TState>
     {
-        public static IPipeline Do(System.Action action)
+        public static IPipeline<TState> Do(System.Action<TState> action)
         {
-            return new Action(action);
+            return new Action<TState>(action);
         }
 
-        public static IPipeline Then(this IPipeline basePipeline, IPipeline continuation)
+        public static IPipeline<TState> InOrder(params IPipeline<TState>[] steps)
         {
-            return new Composite(basePipeline, continuation);
-        }
-
-        public static IPipeline InOrder(params IPipeline[] steps)
-        {
-            return new Composite(steps);
+            return new Composite<TState>(steps);
         }
     }
 }

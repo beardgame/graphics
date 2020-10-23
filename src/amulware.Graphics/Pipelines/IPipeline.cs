@@ -1,9 +1,8 @@
-using System;
 
 namespace amulware.Graphics.Pipelines
 {
-    public interface IPipeline
+    public interface IPipeline<in TState>
     {
-        void Execute();
+        void Execute(TState state);
     }
 }

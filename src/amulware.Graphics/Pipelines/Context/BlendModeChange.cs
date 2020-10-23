@@ -1,6 +1,6 @@
 namespace amulware.Graphics.Pipelines.Context
 {
-    sealed class BlendModeChange : ContextChange<BlendMode>
+    sealed class BlendModeChange<TState> : ContextChange<TState, BlendMode>
     {
         public BlendModeChange(BlendMode newValue) : base(newValue)
         {

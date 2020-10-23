@@ -2,28 +2,28 @@ using System;
 
 namespace amulware.Graphics.Pipelines.Context
 {
-    abstract class ContextChange<T> : IContextChange
+    abstract class ContextChange<TState, T> : IContextChange<TState>
     {
-        private readonly Func<T> getNewValue;
+        private readonly Func<TState, T> getNewValue;
         // We force the default value here because
         // this should always be set in StoreCurrentValueAndApplyChange
         // before it is used in RestoreToStoredValue
         private T previousValue = default!;
 
-        protected ContextChange(Func<T> getNewValue)
+        protected ContextChange(Func<TState, T> getNewValue)
         {
             this.getNewValue = getNewValue;
         }
 
         protected ContextChange(T newValue)
         {
-            getNewValue = () => newValue;
+            getNewValue = _ => newValue;
         }
 
-        public void StoreCurrentValueAndApplyChange()
+        public void StoreCurrentValueAndApplyChange(TState state)
         {
             previousValue = GetCurrent();
-            Set(getNewValue());
+            Set(getNewValue(state));
         }
 
         public void RestoreToStoredValue()

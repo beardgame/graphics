@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Immutable;
+using amulware.Graphics.Pipelines.Context;
 using amulware.Graphics.Pipelines.Steps;
 using amulware.Graphics.PostProcessing;
 using amulware.Graphics.Rendering;
@@ -11,45 +12,45 @@ using static OpenToolkit.Graphics.OpenGL.ClearBufferMask;
 
 namespace amulware.Graphics.Pipelines
 {
-    public static partial class Pipeline
+    public static partial class Pipeline<TState>
     {
-        public static IPipeline ClearColor(Color color = default)
+        public static IPipeline<TState> ClearColor(Color color = default)
         {
             return clear(ColorBufferBit, GL.ClearColor, (System.Drawing.Color) color);
         }
 
-        public static IPipeline ClearDepth(double depth = 1)
+        public static IPipeline<TState> ClearDepth(double depth = 1)
         {
             return clear(DepthBufferBit, GL.ClearDepth, depth);
         }
 
-        private static Clear<T> clear<T>(ClearBufferMask mask, Action<T> set, T value)
-            => new Clear<T>(mask, set, value);
+        private static IPipeline<TState> clear<T>(ClearBufferMask mask, System.Action<T> set, T value)
+            => new Clear<TState, T>(mask, set, value);
 
-        public static IPipeline WithContext(Action<PipelineContextBuilder> setup, IPipeline step)
-        {
-            var builder = new PipelineContextBuilder();
-            setup(builder);
-            return new WithContext(builder.Build(), step);
-        }
-
-        public static IPipeline Resize(Func<Vector2i> getSize, params PipelineTextureBase[] textures)
-        {
-            return new Resize(getSize, textures.ToImmutableArray());
-        }
-
-        public static IPipeline PostProcess(IRendererShader shaderProgram, out IDisposable disposable,
+        public static IPipeline<TState> PostProcess(IRendererShader shaderProgram, out IDisposable disposable,
             params IRenderSetting[] renderSettings)
         {
             var postProcessor = PostProcessor.From(renderSettings);
             shaderProgram.UseOnRenderer(postProcessor);
             disposable = postProcessor;
-            return new PostProcess(postProcessor);
+            return new PostProcess<TState>(postProcessor);
         }
 
-        public static IPipeline Render(IRenderer renderer)
+        public static IPipeline<TState> Render(IRenderer renderer)
         {
-            return new Render(renderer);
+            return new Render<TState>(renderer);
+        }
+
+        public static IPipeline<TState> WithContext(System.Action<PipelineContextBuilder<TState>> setup, IPipeline<TState> step)
+        {
+            var builder = new PipelineContextBuilder<TState>();
+            setup(builder);
+            return new WithContext<TState>(builder.Build(), step);
+        }
+
+        public static IPipeline<TState> Resize(Func<TState, Vector2i> getSize, params PipelineTextureBase[] textures)
+        {
+            return new Resize<TState>(getSize, textures.ToImmutableArray());
         }
     }
 }

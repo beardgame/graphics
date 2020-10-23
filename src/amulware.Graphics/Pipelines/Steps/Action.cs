@@ -1,18 +1,18 @@
 
 namespace amulware.Graphics.Pipelines.Steps
 {
-    sealed class Action : IPipeline
+    sealed class Action<TState> : IPipeline<TState>
     {
-        private readonly System.Action action;
+        private readonly System.Action<TState> action;
 
-        public Action(System.Action action)
+        public Action(System.Action<TState> action)
         {
             this.action = action;
         }
 
-        public void Execute()
+        public void Execute(TState state)
         {
-            action();
+            action(state);
         }
     }
 }

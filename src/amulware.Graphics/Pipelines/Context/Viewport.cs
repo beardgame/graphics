@@ -3,9 +3,9 @@ using System.Drawing;
 
 namespace amulware.Graphics.Pipelines.Context
 {
-    sealed class Viewport : ContextChange<Rectangle>
+    sealed class Viewport<TState> : ContextChange<TState, Rectangle>
     {
-        public Viewport(Func<Rectangle> getViewport)
+        public Viewport(Func<TState, Rectangle> getViewport)
             : base(getViewport)
         {
         }

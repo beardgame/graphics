@@ -2,7 +2,7 @@ using amulware.Graphics.Rendering;
 
 namespace amulware.Graphics.Pipelines.Steps
 {
-    class Render : IPipeline
+    class Render<TState> : IPipeline<TState>
     {
         private readonly IRenderer renderer;
 
@@ -11,7 +11,7 @@ namespace amulware.Graphics.Pipelines.Steps
             this.renderer = renderer;
         }
 
-        public void Execute()
+        public void Execute(TState state)
         {
             renderer.Render();
         }

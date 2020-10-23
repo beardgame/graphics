@@ -1,6 +1,6 @@
 namespace amulware.Graphics.Pipelines.Context
 {
-    sealed class DepthModeChange : ContextChange<DepthMode>
+    sealed class DepthModeChange<TState> : ContextChange<TState, DepthMode>
     {
         public DepthModeChange(DepthMode newValue) : base(newValue)
         {

@@ -1,8 +1,8 @@
 namespace amulware.Graphics.Pipelines.Context
 {
-    public interface IContextChange
+    public interface IContextChange<in TState>
     {
-        void StoreCurrentValueAndApplyChange();
+        void StoreCurrentValueAndApplyChange(TState state);
         void RestoreToStoredValue();
     }
 }

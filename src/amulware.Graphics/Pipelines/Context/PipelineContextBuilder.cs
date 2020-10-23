@@ -2,38 +2,44 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Drawing;
-using amulware.Graphics.Pipelines.Context;
+using amulware.Graphics.Textures;
 
-namespace amulware.Graphics.Pipelines
+namespace amulware.Graphics.Pipelines.Context
 {
-    public class PipelineContextBuilder
+    public class PipelineContextBuilder<TState>
     {
-        private readonly List<IContextChange> contextChanges = new List<IContextChange>();
+        private readonly List<IContextChange<TState>> contextChanges = new List<IContextChange<TState>>();
 
-        public PipelineContextBuilder BindRenderTarget(PipelineRenderTarget renderTarget)
+        public PipelineContextBuilder<TState> BindRenderTarget(PipelineRenderTarget renderTarget)
         {
-            contextChanges.Add(new FramebufferContextChange(renderTarget));
+            contextChanges.Add(new FramebufferContextChange<TState>(renderTarget));
             return this;
         }
 
-        public PipelineContextBuilder SetDepthMode(DepthMode depthMode)
+        public PipelineContextBuilder<TState> BindRenderTarget(Func<TState, RenderTarget> renderTarget)
         {
-            contextChanges.Add(new DepthModeChange(depthMode));
+            contextChanges.Add(new FramebufferContextChange<TState>(renderTarget));
             return this;
         }
 
-        public PipelineContextBuilder SetBlendMode(BlendMode blendMode)
+        public PipelineContextBuilder<TState> SetDepthMode(DepthMode depthMode)
         {
-            contextChanges.Add(new BlendModeChange(blendMode));
+            contextChanges.Add(new DepthModeChange<TState>(depthMode));
             return this;
         }
 
-        public PipelineContextBuilder SetViewport(Func<Rectangle> getViewport)
+        public PipelineContextBuilder<TState> SetBlendMode(BlendMode blendMode)
         {
-            contextChanges.Add(new Viewport(getViewport));
+            contextChanges.Add(new BlendModeChange<TState>(blendMode));
             return this;
         }
 
-        public ImmutableArray<IContextChange> Build() => contextChanges.ToImmutableArray();
+        public PipelineContextBuilder<TState> SetViewport(Func<TState, Rectangle> getViewport)
+        {
+            contextChanges.Add(new Viewport<TState>(getViewport));
+            return this;
+        }
+
+        public ImmutableArray<IContextChange<TState>> Build() => contextChanges.ToImmutableArray();
     }
 }

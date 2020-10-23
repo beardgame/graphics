@@ -6,6 +6,8 @@ namespace amulware.Graphics.Textures
 {
     public sealed class RenderTarget : IDisposable
     {
+        public static RenderTarget BackBuffer { get; } = new RenderTarget(0);
+
         public int Handle { get; }
 
         public static RenderTarget WithColorAttachments(params Texture[] textures)
@@ -20,6 +22,11 @@ namespace amulware.Graphics.Textures
         public RenderTarget()
         {
             GL.GenFramebuffers(1, out int handle);
+            Handle = handle;
+        }
+
+        private RenderTarget(int handle)
+        {
             Handle = handle;
         }
 
