@@ -41,11 +41,21 @@ namespace amulware.Graphics.Pipelines
             return new Render<TState>(renderer);
         }
 
+        public static IPipeline<TState> Render(Func<TState, IRenderer> getRenderer)
+        {
+            return new Render<TState>(getRenderer);
+        }
+
         public static IPipeline<TState> WithContext(System.Action<PipelineContextBuilder<TState>> setup, IPipeline<TState> step)
         {
             var builder = new PipelineContextBuilder<TState>();
             setup(builder);
-            return new WithContext<TState>(builder.Build(), step);
+            return WithContext(builder, step);
+        }
+
+        public static IPipeline<TState> WithContext(PipelineContextBuilder<TState> configuredContextBuilder, IPipeline<TState> step)
+        {
+            return new WithContext<TState>(configuredContextBuilder.Build(), step);
         }
 
         public static IPipeline<TState> Resize(Func<TState, Vector2i> getSize, params PipelineTextureBase[] textures)

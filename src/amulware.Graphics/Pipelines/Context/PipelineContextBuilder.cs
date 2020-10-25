@@ -6,7 +6,7 @@ using amulware.Graphics.Textures;
 
 namespace amulware.Graphics.Pipelines.Context
 {
-    public class PipelineContextBuilder<TState>
+    public sealed class PipelineContextBuilder<TState>
     {
         private readonly List<IContextChange<TState>> contextChanges = new List<IContextChange<TState>>();
 
