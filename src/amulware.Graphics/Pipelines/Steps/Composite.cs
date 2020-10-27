@@ -30,7 +30,7 @@ namespace amulware.Graphics.Pipelines.Steps
 
             builder.AddRange(enumerateSteps());
 
-            steps = builder.MoveToImmutable();
+            steps = builder.Count == steps.Length ? builder.MoveToImmutable() : builder.ToImmutable();
             flattened = true;
         }
 
