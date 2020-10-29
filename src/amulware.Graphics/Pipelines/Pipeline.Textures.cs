@@ -41,25 +41,8 @@ namespace amulware.Graphics.Pipelines
 
         public static PipelineTexture Texture(
             PixelInternalFormat pixelFormat,
-            int width = 0, int height = 0,
+            int width = 1, int height = 1,
             Action<Texture.Target>? setup = null)
-        {
-            var texture = makeTextureObject(pixelFormat, width, height, setup);
-
-            return new PipelineTexture(texture);
-        }
-
-        public static PipelineDepthTexture DepthTexture(
-            PixelInternalFormat pixelFormat,
-            int width = 0, int height = 0,
-            Action<Texture.Target>? setup = null)
-        {
-            var texture = makeTextureObject(pixelFormat, width, height, setup);
-
-            return new PipelineDepthTexture(texture);
-        }
-
-        private static Texture makeTextureObject(PixelInternalFormat pixelFormat, int width, int height, Action<Texture.Target>? setup)
         {
             var texture = Textures.Texture.Empty(width, height, pixelFormat);
 
@@ -69,7 +52,23 @@ namespace amulware.Graphics.Pipelines
                 setup(target);
             }
 
-            return texture;
+            return new PipelineTexture(texture);
+        }
+
+        public static PipelineDepthTexture DepthTexture(
+            PixelInternalFormat pixelFormat,
+            int width = 1, int height = 1,
+            Action<Texture.Target>? setup = null)
+        {
+            var texture = Textures.Texture.Empty(width, height, pixelFormat, PixelFormat.DepthComponent, PixelType.Float);
+
+            using (var target = texture.Bind())
+            {
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.DepthTextureMode, (int) All.Intensity);
+                setup?.Invoke(target);
+            }
+
+            return new PipelineDepthTexture(texture);
         }
     }
 }
