@@ -24,11 +24,17 @@ namespace amulware.Graphics.Pipelines
         {
             var renderTarget = new RenderTarget();
 
-            using var target = renderTarget.Bind();
+            using (var target = renderTarget.Bind())
+            {
+                target.SetColorAttachments(textures.Select(t => t.Texture).ToArray());
+                additionalSetup?.Invoke(target);
 
-            target.SetColorAttachments(textures.Select(t => t.Texture).ToArray());
-
-            additionalSetup?.Invoke(target);
+                var status = target.CheckStatus();
+                if (status != FramebufferErrorCode.FramebufferComplete)
+                {
+                    throw new InvalidOperationException($"Framebuffer incomplete: {status}");
+                }
+            }
 
             return new PipelineRenderTarget(renderTarget);
         }
