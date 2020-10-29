@@ -64,6 +64,11 @@ namespace amulware.Graphics.Textures
                 GL.FramebufferTexture2D(target, attachment, textureTarget, texture.Handle, 0);
             }
 
+            public FramebufferErrorCode CheckStatus()
+            {
+                return GL.CheckFramebufferStatus(target);
+            }
+
             public void Dispose()
             {
                 GL.BindFramebuffer(target, 0);
