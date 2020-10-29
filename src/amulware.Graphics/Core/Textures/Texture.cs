@@ -6,6 +6,8 @@ namespace amulware.Graphics.Textures
     public sealed class Texture : IDisposable
     {
         private PixelInternalFormat pixelInternalFormat;
+        private PixelFormat pixelFormat;
+        private PixelType pixelType;
 
         public int Handle { get; }
 
@@ -13,12 +15,15 @@ namespace amulware.Graphics.Textures
 
         public int Width { get; private set; }
 
-        public static Texture Empty(int width, int height, PixelInternalFormat pixelFormat = PixelInternalFormat.Rgba)
+        public static Texture Empty(int width, int height,
+            PixelInternalFormat pixelInternalFormat = PixelInternalFormat.Rgba,
+            PixelFormat pixelFormat = PixelFormat.Rgba,
+            PixelType pixelType = PixelType.UnsignedByte)
         {
             var texture = new Texture();
 
             using var target = texture.Bind();
-            target.Resize(width, height, pixelFormat);
+            target.Resize(width, height, pixelInternalFormat, pixelFormat, pixelType);
             target.SetFilterMode(TextureMinFilter.Linear, TextureMagFilter.Linear);
             target.SetWrapMode(TextureWrapMode.Repeat, TextureWrapMode.Repeat);
 
@@ -55,15 +60,18 @@ namespace amulware.Graphics.Textures
 
             public void Resize(int width, int height)
             {
-                Resize(width, height, texture.pixelInternalFormat);
+                Resize(width, height, texture.pixelInternalFormat, texture.pixelFormat, texture.pixelType);
             }
 
-            public void Resize(int width, int height, PixelInternalFormat pixelInternalFormat)
+            public void Resize(int width, int height,
+                PixelInternalFormat pixelInternalFormat,
+                PixelFormat pixelFormat, PixelType pixelType)
             {
-                UploadData(IntPtr.Zero, PixelFormat.Rgba, PixelType.UnsignedByte, width, height, pixelInternalFormat);
+                UploadData(IntPtr.Zero, pixelFormat, pixelType, width, height, pixelInternalFormat);
             }
 
-            public void UploadData(IntPtr ptr, PixelFormat pixelFormat, PixelType pixelType, int width, int height, PixelInternalFormat pixelInternalFormat)
+            public void UploadData(IntPtr ptr, PixelFormat pixelFormat, PixelType pixelType,
+                int width, int height, PixelInternalFormat pixelInternalFormat)
             {
                 GL.TexImage2D(
                     target, 0,
@@ -73,6 +81,8 @@ namespace amulware.Graphics.Textures
                 texture.Width = width;
                 texture.Height = height;
                 texture.pixelInternalFormat = pixelInternalFormat;
+                texture.pixelFormat = pixelFormat;
+                texture.pixelType = pixelType;
             }
 
             public void SetFilterMode(TextureMinFilter minFilter, TextureMagFilter magFilter)
