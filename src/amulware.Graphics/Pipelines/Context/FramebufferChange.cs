@@ -3,14 +3,14 @@ using amulware.Graphics.Textures;
 
 namespace amulware.Graphics.Pipelines.Context
 {
-    class FramebufferContextChange<TState> : ContextChange<TState, int>
+    class FramebufferChange<TState> : ContextChange<TState, int>
     {
-        public FramebufferContextChange(PipelineRenderTarget target)
+        public FramebufferChange(PipelineRenderTarget target)
             : base(target.Handle)
         {
         }
 
-        public FramebufferContextChange(Func<TState, RenderTarget> getTarget)
+        public FramebufferChange(Func<TState, RenderTarget> getTarget)
             : base(s => getTarget(s).Handle)
         {
         }

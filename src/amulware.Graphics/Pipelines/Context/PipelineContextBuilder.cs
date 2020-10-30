@@ -11,32 +11,26 @@ namespace amulware.Graphics.Pipelines.Context
         private readonly List<IContextChange<TState>> contextChanges = new List<IContextChange<TState>>();
 
         public PipelineContextBuilder<TState> BindRenderTarget(PipelineRenderTarget renderTarget)
-        {
-            contextChanges.Add(new FramebufferContextChange<TState>(renderTarget));
-            return this;
-        }
+            => with(new FramebufferChange<TState>(renderTarget));
 
         public PipelineContextBuilder<TState> BindRenderTarget(Func<TState, RenderTarget> renderTarget)
-        {
-            contextChanges.Add(new FramebufferContextChange<TState>(renderTarget));
-            return this;
-        }
+            => with(new FramebufferChange<TState>(renderTarget));
 
         public PipelineContextBuilder<TState> SetDepthMode(DepthMode depthMode)
-        {
-            contextChanges.Add(new DepthModeChange<TState>(depthMode));
-            return this;
-        }
+            => with(new DepthModeChange<TState>(depthMode));
 
         public PipelineContextBuilder<TState> SetBlendMode(BlendMode blendMode)
-        {
-            contextChanges.Add(new BlendModeChange<TState>(blendMode));
-            return this;
-        }
+            => with(new BlendModeChange<TState>(blendMode));
+
+        public PipelineContextBuilder<TState> SetScissorRegion(Func<TState, ScissorRegion> getScissorRegion)
+            => with(new ScissorRegionChange<TState>(getScissorRegion));
 
         public PipelineContextBuilder<TState> SetViewport(Func<TState, Rectangle> getViewport)
+            => with(new Viewport<TState>(getViewport));
+
+        private PipelineContextBuilder<TState> with(IContextChange<TState> change)
         {
-            contextChanges.Add(new Viewport<TState>(getViewport));
+            contextChanges.Add(change);
             return this;
         }
 

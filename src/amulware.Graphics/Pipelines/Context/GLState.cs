@@ -84,5 +84,23 @@ namespace amulware.Graphics.Pipelines.Context
             Viewport = viewport;
             GL.Viewport(viewport);
         }
+
+        public static ScissorRegion ScissorRegion { get; private set; }
+
+        public static void SetScissorRegion(ScissorRegion region)
+        {
+            ScissorRegion = region;
+
+            switch (region.Rectangle)
+            {
+                case null:
+                    GL.Disable(EnableCap.ScissorTest);
+                    return;
+                case { } r:
+                    GL.Enable(EnableCap.ScissorTest);
+                    GL.Scissor(r.X, r.Y, r.Width, r.Height);
+                    break;
+            }
+        }
     }
 }
