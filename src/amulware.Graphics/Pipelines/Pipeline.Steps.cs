@@ -19,6 +19,11 @@ namespace amulware.Graphics.Pipelines
             return clear(ColorBufferBit, GL.ClearColor, (System.Drawing.Color) color);
         }
 
+        public static IPipeline<TState> ClearColor(float red, float green, float blue, float alpha)
+        {
+            return clear(ColorBufferBit, GL.ClearColor, new Color4(red, green, blue, alpha));
+        }
+
         public static IPipeline<TState> ClearDepth(double depth = 1)
         {
             return clear(DepthBufferBit, GL.ClearDepth, depth);
