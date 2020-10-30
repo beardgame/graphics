@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using amulware.Graphics.Pipelines.Context;
 using amulware.Graphics.Pipelines.Steps;
@@ -49,6 +50,16 @@ namespace amulware.Graphics.Pipelines
         public static IPipeline<TState> Render(Func<TState, IRenderer> getRenderer)
         {
             return new Render<TState>(getRenderer);
+        }
+
+        public static IPipeline<TState> Render(params IRenderer[] renderers)
+        {
+            return new RenderMultiple<TState>(renderers);
+        }
+
+        public static IPipeline<TState> Render(IEnumerable<IRenderer> renderers)
+        {
+            return new RenderMultiple<TState>(renderers);
         }
 
         public static IPipeline<TState> WithContext(System.Action<PipelineContextBuilder<TState>> setup, IPipeline<TState> step)
