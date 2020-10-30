@@ -28,7 +28,7 @@ namespace amulware.Graphics.Pipelines.Context
             GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, framebuffer);
         }
 
-        public static DepthMode DepthMode { get; private set; }
+        public static DepthMode DepthMode { get; private set; } = DepthMode.Disable;
 
         public static void SetDepthMode(DepthMode mode)
         {
