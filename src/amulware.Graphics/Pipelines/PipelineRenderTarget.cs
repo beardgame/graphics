@@ -1,8 +1,9 @@
+using System;
 using amulware.Graphics.Textures;
 
 namespace amulware.Graphics.Pipelines
 {
-    public class PipelineRenderTarget
+    public class PipelineRenderTarget : IDisposable
     {
         public int Handle => renderTarget.Handle;
 
@@ -11,6 +12,11 @@ namespace amulware.Graphics.Pipelines
         public PipelineRenderTarget(RenderTarget renderTarget)
         {
             this.renderTarget = renderTarget;
+        }
+
+        public void Dispose()
+        {
+            renderTarget.Dispose();
         }
     }
 }

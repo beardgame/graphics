@@ -1,15 +1,16 @@
+using System;
 using amulware.Graphics.Textures;
 using OpenToolkit.Mathematics;
 
 namespace amulware.Graphics.Pipelines
 {
-    public abstract class PipelineTextureBase
+    public abstract class PipelineTextureBase : IDisposable
     {
         public Texture Texture { get; }
 
         protected PipelineTextureBase(Texture texture)
         {
-            this.Texture = texture;
+            Texture = texture;
         }
 
         public void EnsureSize(Vector2i size)
@@ -19,6 +20,11 @@ namespace amulware.Graphics.Pipelines
 
             using var target = Texture.Bind();
             target.Resize(size.X, size.Y);
+        }
+
+        public void Dispose()
+        {
+            Texture.Dispose();
         }
     }
 }
