@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using OpenToolkit.Graphics.OpenGL;
+using static amulware.Graphics.Pipelines.Context.CullMode;
 using static OpenToolkit.Graphics.OpenGL.BlendEquationMode;
 using static OpenToolkit.Graphics.OpenGL.BlendingFactor;
 
@@ -75,6 +76,31 @@ namespace amulware.Graphics.Pipelines.Context
 
             GL.BlendFunc(src, dst);
             GL.BlendEquation(equation);
+        }
+
+        public static CullMode CullMode { get; private set; }
+
+        public static void SetCullMode(CullMode cullMode)
+        {
+            CullMode = cullMode;
+
+            if (cullMode == RenderAll)
+            {
+                GL.Disable(EnableCap.CullFace);
+                return;
+            }
+
+            GL.Enable(EnableCap.CullFace);
+            GL.CullFace(
+                cullMode switch
+                {
+                    RenderAll => throw new InvalidOperationException(),
+                    RenderFront => CullFaceMode.Back,
+                    RenderBack => CullFaceMode.Front,
+                    RenderNone => CullFaceMode.FrontAndBack,
+                    _ =>  throw new ArgumentException($"Unsupported or unknown cull mode {cullMode}", nameof(cullMode)),
+                }
+                );
         }
 
         public static Rectangle Viewport { get; private set; }

@@ -16,6 +16,9 @@ namespace amulware.Graphics.Pipelines.Context
         public PipelineContextBuilder<TState> BindRenderTarget(Func<TState, RenderTarget> renderTarget)
             => with(new FramebufferChange<TState>(renderTarget));
 
+        public PipelineContextBuilder<TState> SetCullMode(CullMode cullMode)
+            => with(new Culling<TState>(cullMode));
+
         public PipelineContextBuilder<TState> SetDepthMode(DepthMode depthMode)
             => with(new DepthModeChange<TState>(depthMode));
 
