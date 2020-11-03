@@ -69,7 +69,7 @@ namespace amulware.Graphics
                 BatchDeactivated?.Invoke(batch);
             }
 
-            inactiveBatches.Clear();
+            activeBatches.Clear();
         }
 
         public void Dispose()
