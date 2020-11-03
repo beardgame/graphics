@@ -32,6 +32,8 @@ namespace amulware.Graphics.Text
 
         private sealed class Builder : IDisposable
         {
+            private const char fallbackGlyph = '�';
+
             private readonly System.Drawing.Font font;
             private readonly IEnumerable<char> supportedCharacters;
             private readonly int pixelPadding;
@@ -76,7 +78,7 @@ namespace amulware.Graphics.Text
                 var brush = new SolidBrush(System.Drawing.Color.White);
                 var drawPos = new PointF(font.Height, font.Height);
 
-                foreach (var c in supportedCharacters)
+                foreach (var c in supportedCharacters.Concat(new[] {fallbackGlyph}))
                 {
                     g.Clear(System.Drawing.Color.FromArgb(0, 0, 0, 0));
                     g.DrawString(c.ToString(), font, brush, drawPos);
@@ -175,9 +177,10 @@ namespace amulware.Graphics.Text
             private Font buildFont(int textureWidth, int textureHeight)
             {
                 return new Font(
-                    characterInfos.ToImmutableDictionary(
-                        entry => entry.Key,
-                        entry => toCharacterInfo(entry.Value, textureWidth, textureHeight)));
+                    supportedCharacters.ToImmutableDictionary(
+                        c => c,
+                        c => toCharacterInfo(characterInfos[c], textureWidth, textureHeight)),
+                    toCharacterInfo(characterInfos[fallbackGlyph], textureWidth, textureHeight));
             }
 
             private CharacterInfo toCharacterInfo(MutableCharacterInfo info, int textureWidth, int textureHeight)
