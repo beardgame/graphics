@@ -253,8 +253,8 @@ namespace amulware.Graphics.Shapes
                 baseVertexOffset *= stepRotation;
 
                 indices[i * 3] = (ushort)(indexOffset + edges);
-                indices[i * 3 + 1] = (ushort)(indexOffset + i);
-                indices[i * 3 + 2] = (ushort)(indexOffset + (i + 1) % edges);
+                indices[i * 3 + 1] = (ushort)(indexOffset + (i + 1) % edges);
+                indices[i * 3 + 2] = (ushort)(indexOffset + i);
             }
 
             vertices[edges] = createVertex(baseCenter + baseToApex, parameters);
