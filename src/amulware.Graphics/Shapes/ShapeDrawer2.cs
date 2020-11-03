@@ -50,13 +50,18 @@ namespace amulware.Graphics.Shapes
             var indicesIndex = 0;
             for (var i = 0; i < 4; i++)
             {
-                indices[indicesIndex++] = (ushort) (indexOffset + i);
-                indices[indicesIndex++] = (ushort) (indexOffset + (i + 1) % 4);
-                indices[indicesIndex++] = (ushort) (indexOffset + (i + 1) % 4 + 4);
+                var outer1 = i;
+                var outer2 = (i + 1) % 4;
+                var inner1 = outer1 + 4;
+                var inner2 = outer2 + 4;
 
-                indices[indicesIndex++] = (ushort) (indexOffset + i);
-                indices[indicesIndex++] = (ushort) (indexOffset + (i + 3) % 4 + 4);
-                indices[indicesIndex++] = (ushort) (indexOffset + (i + 3) % 4);
+                indices[indicesIndex++] = (ushort) (indexOffset + outer1);
+                indices[indicesIndex++] = (ushort) (indexOffset + outer2);
+                indices[indicesIndex++] = (ushort) (indexOffset + inner2);
+
+                indices[indicesIndex++] = (ushort) (indexOffset + outer1);
+                indices[indicesIndex++] = (ushort) (indexOffset + inner2);
+                indices[indicesIndex++] = (ushort) (indexOffset + inner1);
             }
         }
 
