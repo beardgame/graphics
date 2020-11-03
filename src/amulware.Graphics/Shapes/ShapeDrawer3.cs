@@ -186,17 +186,17 @@ namespace amulware.Graphics.Shapes
             meshBuilder.Add(12, 60, out var vertices, out var indices, out var indexOffset);
 
             vertices[0] = createVertex(center + new Vector3(a, b, 0), parameters);
-            vertices[0] = createVertex(center + new Vector3(-a, b, 0), parameters);
-            vertices[0] = createVertex(center + new Vector3(a, -b, 0), parameters);
-            vertices[0] = createVertex(center + new Vector3(-a, -b, 0), parameters);
-            vertices[0] = createVertex(center + new Vector3(b, 0, a), parameters);
-            vertices[0] = createVertex(center + new Vector3(b, 0, -a), parameters);
-            vertices[0] = createVertex(center + new Vector3(-b, 0, a), parameters);
-            vertices[0] = createVertex(center + new Vector3(-b, 0, -a), parameters);
-            vertices[0] = createVertex(center + new Vector3(0, a, b), parameters);
-            vertices[0] = createVertex(center + new Vector3(0, -a, b), parameters);
-            vertices[0] = createVertex(center + new Vector3(0, a, -b), parameters);
-            vertices[0] = createVertex(center + new Vector3(0, -a, -b), parameters);
+            vertices[1] = createVertex(center + new Vector3(-a, b, 0), parameters);
+            vertices[2] = createVertex(center + new Vector3(a, -b, 0), parameters);
+            vertices[3] = createVertex(center + new Vector3(-a, -b, 0), parameters);
+            vertices[4] = createVertex(center + new Vector3(b, 0, a), parameters);
+            vertices[5] = createVertex(center + new Vector3(b, 0, -a), parameters);
+            vertices[6] = createVertex(center + new Vector3(-b, 0, a), parameters);
+            vertices[7] = createVertex(center + new Vector3(-b, 0, -a), parameters);
+            vertices[8] = createVertex(center + new Vector3(0, a, b), parameters);
+            vertices[9] = createVertex(center + new Vector3(0, -a, b), parameters);
+            vertices[10] = createVertex(center + new Vector3(0, a, -b), parameters);
+            vertices[11] = createVertex(center + new Vector3(0, -a, -b), parameters);
 
             Span<int> localIndices = stackalloc int[60]
             {
@@ -262,10 +262,10 @@ namespace amulware.Graphics.Shapes
             var o = edges * 3;
             for (var i = 0; i < edges - 2; i++)
             {
-                o += 3;
                 indices[o] = indexOffset;
                 indices[o + 1] = (ushort)(indexOffset + i + 1);
                 indices[o + 2] = (ushort)(indexOffset + i + 2);
+                o += 3;
             }
         }
 
