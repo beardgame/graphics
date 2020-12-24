@@ -1,5 +1,5 @@
 using amulware.Graphics.Shading;
-using OpenToolkit.Graphics.OpenGL;
+using OpenTK.Graphics.OpenGL;
 
 namespace amulware.Graphics.ShaderManagement
 {

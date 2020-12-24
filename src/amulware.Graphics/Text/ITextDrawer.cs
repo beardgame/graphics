@@ -1,4 +1,4 @@
-using Vector3 = OpenToolkit.Mathematics.Vector3;
+using Vector3 = OpenTK.Mathematics.Vector3;
 
 namespace amulware.Graphics.Text
 {

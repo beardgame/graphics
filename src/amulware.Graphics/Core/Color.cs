@@ -1,6 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
-using OpenToolkit.Mathematics;
+using OpenTK.Mathematics;
 
 namespace amulware.Graphics
 {

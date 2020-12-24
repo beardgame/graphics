@@ -10,7 +10,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using amulware.Graphics.Textures;
 using Bearded.Utilities.Algorithms;
-using OpenToolkit.Mathematics;
+using OpenTK.Mathematics;
 
 namespace amulware.Graphics.Text
 {

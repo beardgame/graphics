@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using amulware.Graphics.MeshBuilders;
 using amulware.Graphics.Vertices;
 using Bearded.Utilities;
-using OpenToolkit.Mathematics;
+using OpenTK.Mathematics;
 
 namespace amulware.Graphics.Shapes
 {

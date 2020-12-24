@@ -1,9 +1,9 @@
 using System;
 using System.Drawing;
-using OpenToolkit.Graphics.OpenGL;
+using OpenTK.Graphics.OpenGL;
 using static amulware.Graphics.Pipelines.Context.CullMode;
-using static OpenToolkit.Graphics.OpenGL.BlendEquationMode;
-using static OpenToolkit.Graphics.OpenGL.BlendingFactor;
+using static OpenTK.Graphics.OpenGL.BlendEquationMode;
+using static OpenTK.Graphics.OpenGL.BlendingFactor;
 
 namespace amulware.Graphics.Pipelines.Context
 {

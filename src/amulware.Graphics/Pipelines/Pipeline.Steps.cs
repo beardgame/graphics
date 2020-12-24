@@ -7,9 +7,9 @@ using amulware.Graphics.PostProcessing;
 using amulware.Graphics.Rendering;
 using amulware.Graphics.RenderSettings;
 using amulware.Graphics.ShaderManagement;
-using OpenToolkit.Graphics.OpenGL;
-using OpenToolkit.Mathematics;
-using static OpenToolkit.Graphics.OpenGL.ClearBufferMask;
+using OpenTK.Graphics.OpenGL;
+using OpenTK.Mathematics;
+using static OpenTK.Graphics.OpenGL.ClearBufferMask;
 
 namespace amulware.Graphics.Pipelines
 {

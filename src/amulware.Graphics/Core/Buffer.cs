@@ -1,6 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
-using OpenToolkit.Graphics.OpenGL;
+using OpenTK.Graphics.OpenGL;
 
 namespace amulware.Graphics
 {

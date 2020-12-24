@@ -1,7 +1,7 @@
 using System;
 using amulware.Graphics.Rendering;
 using amulware.Graphics.Vertices;
-using OpenToolkit.Graphics.OpenGL;
+using OpenTK.Graphics.OpenGL;
 
 namespace amulware.Graphics.MeshBuilders
 {

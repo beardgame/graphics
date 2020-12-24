@@ -1,7 +1,7 @@
 ﻿using System;
 using amulware.Graphics.MeshBuilders;
 using amulware.Graphics.Vertices;
-using OpenToolkit.Mathematics;
+using OpenTK.Mathematics;
 
 namespace amulware.Graphics.Shapes
 {

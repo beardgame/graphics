@@ -1,6 +1,6 @@
 using amulware.Graphics.Shading;
 using amulware.Graphics.Vertices;
-using OpenToolkit.Graphics.OpenGL;
+using OpenTK.Graphics.OpenGL;
 
 namespace amulware.Graphics.Rendering
 {
