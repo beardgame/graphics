@@ -1,4 +1,4 @@
-using OpenToolkit.Graphics.OpenGL;
+using OpenTK.Graphics.OpenGL;
 
 namespace amulware.Graphics.Pipelines.Steps
 {

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using OpenToolkit.Graphics.OpenGL;
-using static OpenToolkit.Graphics.OpenGL.ShaderType;
+using OpenTK.Graphics.OpenGL;
+using static OpenTK.Graphics.OpenGL.ShaderType;
 
 namespace amulware.Graphics.ShaderManagement
 {

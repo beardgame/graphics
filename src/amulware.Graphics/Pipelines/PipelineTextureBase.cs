@@ -1,6 +1,6 @@
 using System;
 using amulware.Graphics.Textures;
-using OpenToolkit.Mathematics;
+using OpenTK.Mathematics;
 
 namespace amulware.Graphics.Pipelines
 {

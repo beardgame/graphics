@@ -1,5 +1,5 @@
-﻿using OpenToolkit.Graphics.OpenGL;
-using OpenToolkit.Mathematics;
+﻿using OpenTK.Graphics.OpenGL;
+using OpenTK.Mathematics;
 
 namespace amulware.Graphics.RenderSettings
 {

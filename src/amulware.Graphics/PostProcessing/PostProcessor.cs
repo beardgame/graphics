@@ -3,8 +3,8 @@ using System.Linq;
 using amulware.Graphics.Rendering;
 using amulware.Graphics.RenderSettings;
 using amulware.Graphics.Shading;
-using OpenToolkit.Graphics.OpenGL;
-using OpenToolkit.Mathematics;
+using OpenTK.Graphics.OpenGL;
+using OpenTK.Mathematics;
 
 namespace amulware.Graphics.PostProcessing
 {

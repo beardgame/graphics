@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using OpenToolkit.Graphics.OpenGL;
-using static OpenToolkit.Graphics.OpenGL.ShaderType;
+using OpenTK.Graphics.OpenGL;
+using static OpenTK.Graphics.OpenGL.ShaderType;
 
 namespace amulware.Graphics.ShaderManagement
 {

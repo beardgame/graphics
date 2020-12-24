@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 using amulware.Graphics.Vertices;
-using OpenToolkit.Mathematics;
+using OpenTK.Mathematics;
 using static amulware.Graphics.Vertices.VertexData;
 
 namespace amulware.Graphics.Shapes

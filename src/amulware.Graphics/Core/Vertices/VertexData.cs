@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using amulware.Graphics.Shading;
-using OpenToolkit.Graphics.OpenGL;
-using OpenToolkit.Mathematics;
+using OpenTK.Graphics.OpenGL;
+using OpenTK.Mathematics;
 
 namespace amulware.Graphics.Vertices
 {
@@ -70,7 +70,7 @@ namespace amulware.Graphics.Vertices
                 { typeof(Vector3), (VertexAttribPointerType.Float, 3, false) },
                 { typeof(Vector4), (VertexAttribPointerType.Float, 4, false) },
 
-                { typeof(Half), (VertexAttribPointerType.HalfFloat, 1, false) },
+                { typeof(OpenTK.Mathematics.Half), (VertexAttribPointerType.HalfFloat, 1, false) },
                 { typeof(Vector2h), (VertexAttribPointerType.HalfFloat, 2, false) },
                 { typeof(Vector3h), (VertexAttribPointerType.HalfFloat, 3, false) },
                 { typeof(Vector4h), (VertexAttribPointerType.HalfFloat, 4, false) },
