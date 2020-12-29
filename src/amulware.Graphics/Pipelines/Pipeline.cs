@@ -9,6 +9,11 @@ namespace amulware.Graphics.Pipelines
             return new Action<TState>(action);
         }
 
+        public static IPipeline<TState> Do(System.Action action)
+        {
+            return new Action<TState>(_ => action());
+        }
+
         public static IPipeline<TState> InOrder(params IPipeline<TState>[] steps)
         {
             return new Composite<TState>(steps);
