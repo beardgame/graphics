@@ -17,10 +17,6 @@
     <OutputPath>bin/Release/</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="OpenToolkit.Graphics" Version="4.0.0-pre9.1" />
-    <PackageReference Include="OpenToolkit.Windowing.Desktop" Version="4.0.0-pre9.1" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\src\amulware.Graphics\amulware.Graphics.csproj" />
   </ItemGroup>
   <ItemGroup>

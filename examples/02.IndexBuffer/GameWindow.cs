@@ -4,10 +4,10 @@ using amulware.Graphics.Rendering;
 using amulware.Graphics.Shading;
 using amulware.Graphics.Shapes;
 using amulware.Graphics.Windowing;
-using OpenToolkit.Graphics.OpenGL;
-using OpenToolkit.Mathematics;
-using OpenToolkit.Windowing.Common;
-using OpenToolkit.Windowing.Desktop;
+using OpenTK.Graphics.OpenGL;
+using OpenTK.Mathematics;
+using OpenTK.Windowing.Common;
+using OpenTK.Windowing.Desktop;
 
 namespace amulware.Graphics.Examples.IndexBuffer
 {
