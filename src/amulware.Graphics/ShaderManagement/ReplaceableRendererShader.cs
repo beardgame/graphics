@@ -10,7 +10,7 @@ namespace amulware.Graphics.ShaderManagement
         private ShaderProgram? program;
         private readonly List<IRenderer> renderers = new List<IRenderer>();
 
-        public static ReplaceableRendererShader CreateUninitialised() => new ReplaceableRendererShader(null!);
+        public static ReplaceableRendererShader CreateUninitialized() => new ReplaceableRendererShader(null!);
 
         public ReplaceableRendererShader(ShaderProgram? program)
         {

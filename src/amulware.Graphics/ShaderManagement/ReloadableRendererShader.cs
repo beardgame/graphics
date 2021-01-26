@@ -9,7 +9,7 @@ namespace amulware.Graphics.ShaderManagement
 {
     public sealed class ReloadableRendererShader : IRendererShader, IDisposable
     {
-        private readonly ReplaceableRendererShader program = ReplaceableRendererShader.CreateUninitialised();
+        private readonly ReplaceableRendererShader program = ReplaceableRendererShader.CreateUninitialized();
 
         public ImmutableArray<IShaderProvider> Shaders { get; }
 
