@@ -65,7 +65,8 @@ namespace amulware.Graphics.Examples.PostProcessing
 
             meshBuilder = new IndexedTrianglesMeshBuilder<ColorVertexData>();
 
-            var shapeDrawer = new ColorShapeDrawer3(meshBuilder);
+            var shapeDrawer =
+                new ShapeDrawer3<ColorVertexData, Color>(meshBuilder, (xyz, color) => new ColorVertexData(xyz, color));
             shapeDrawer.DrawCube(Vector3.Zero, 1f, Color.Aqua);
 
             var shapeRenderable = meshBuilder.ToRenderable();

@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel;
 using System.Drawing;
+using amulware.Graphics.MeshBuilders;
 using amulware.Graphics.Rendering;
 using amulware.Graphics.RenderSettings;
 using amulware.Graphics.Shading;
@@ -11,13 +12,14 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
+using Void = Bearded.Utilities.Void;
 
 namespace amulware.Graphics.Examples.Text
 {
     sealed class GameWindow : Window
     {
         private ShaderProgram shaderProgram = null!;
-        private TextDrawer<UVVertexData> textDrawer = null!;
+        private ExpandingIndexedTrianglesMeshBuilder<UVVertexData> meshBuilder = null!;
         private BatchedRenderer renderer = null!;
         private Texture fontTexture = null!;
 
@@ -41,6 +43,8 @@ namespace amulware.Graphics.Examples.Text
 
         protected override void OnLoad()
         {
+            // The font factory allows us to extract the font information and construct a font texture using the
+            // System.Drawing library.
             var systemFont = new System.Drawing.Font(FontFamily.GenericSansSerif, 64, GraphicsUnit.Pixel);
             var (textureData, font) = FontFactory.From(systemFont, 1);
             fontTexture = textureData.ToTexture(t =>
@@ -49,9 +53,11 @@ namespace amulware.Graphics.Examples.Text
                 t.GenerateMipmap();
             });
 
-            textDrawer = new TextDrawer<UVVertexData>(font, (p, uv) => new UVVertexData(p, uv));
+            // We set up a mesh builder, and renderer as usual. We bind the font texture from the font loading into the
+            // shader.
+            meshBuilder = new ExpandingIndexedTrianglesMeshBuilder<UVVertexData>();
 
-            var renderable = textDrawer.ToRenderable();
+            var renderable = meshBuilder.ToRenderable();
 
             shaderProgram = ShaderProgram.FromShaders(
                 ShaderFactory.Vertex.FromFile("text.vs"), ShaderFactory.Fragment.FromFile("text.fs"));
@@ -59,9 +65,16 @@ namespace amulware.Graphics.Examples.Text
             renderer = BatchedRenderer.From(renderable, shaderProgram,
                 new TextureUniform("fontTexture", TextureUnit.Texture0, fontTexture));
 
-            var orientedTextDrawer = textDrawer.WithUnits(Vector3.UnitX * 2 / 1280, -Vector3.UnitY * 2 / 720);
+            // The text drawer is a helper class to help us draw text assuming that it will be rendered with the right
+            // font texture bound.
+            var textDrawer =
+                new TextDrawer<UVVertexData, Void>(font, meshBuilder, (p, uv, _) => new UVVertexData(p, uv));
 
-            orientedTextDrawer.DrawLine(Vector3.Zero, "Hello World!", 64, 0.5f, 0.5f);
+            textDrawer.DrawLine(
+                Vector3.Zero, "Hello World!",
+                64, 0.5f, 0.5f,
+                Vector3.UnitX * 2 / 1280, -Vector3.UnitY * 2 / 720,
+                default);
         }
 
         protected override void OnResize(ResizeEventArgs e)
@@ -91,7 +104,7 @@ namespace amulware.Graphics.Examples.Text
             // Disposing isn't really necessary, but if you stop using an object midway through your application run, it
             // prevents memory leaks.
             renderer.Dispose();
-            textDrawer.Dispose();
+            meshBuilder.Dispose();
             shaderProgram.Dispose();
             fontTexture.Dispose();
 
