@@ -8,10 +8,10 @@ using amulware.Graphics.Shading;
 using amulware.Graphics.Shapes;
 using amulware.Graphics.Textures;
 using amulware.Graphics.Windowing;
-using OpenToolkit.Graphics.OpenGL;
-using OpenToolkit.Mathematics;
-using OpenToolkit.Windowing.Common;
-using OpenToolkit.Windowing.Desktop;
+using OpenTK.Graphics.OpenGL;
+using OpenTK.Mathematics;
+using OpenTK.Windowing.Common;
+using OpenTK.Windowing.Desktop;
 
 namespace amulware.Graphics.Examples.PostProcessing
 {
@@ -65,7 +65,8 @@ namespace amulware.Graphics.Examples.PostProcessing
 
             meshBuilder = new IndexedTrianglesMeshBuilder<ColorVertexData>();
 
-            var shapeDrawer = new ColorShapeDrawer3(meshBuilder);
+            var shapeDrawer =
+                new ShapeDrawer3<ColorVertexData, Color>(meshBuilder, (xyz, color) => new ColorVertexData(xyz, color));
             shapeDrawer.DrawCube(Vector3.Zero, 1f, Color.Aqua);
 
             var shapeRenderable = meshBuilder.ToRenderable();
