@@ -1,4 +1,4 @@
-# awgraphics
+# Bearded.Graphics
 
 This is a C# OpenGL graphics library build on top of [OpenTK](https://github.com/opentk/opentk).
 
@@ -10,13 +10,16 @@ At the same time, performance is very important to us, and we strive to reduce a
 
 Sure is:
 
-- [Roche Fusion](https://rochefusion.com)
 - [Bearded.TD](https://github.com/beardgame/td)
-- [Photones](https://github.com/photones/photones)
 - _your project here (get in touch!)_
+
+Older versions of the library were used in:
+- [Roche Fusion](https://rochefusion.com)
+- [Photones](https://github.com/photones/photones)
+
 
 ## Current state of the library
 
-While the library is very much functional, it's nowhere near as well maintained and feature complete as we'd like.
+We recently (2020) went through a complete rewrite and refactor. This second version of the library has a significantly improved API and some great new features. Our work is far from complete however, and it may never be, as even if we mirrored all of OpenGL, there would be innumerable layers of abstractions we could add to make our lives easier.
 
-Feel free to do with this as you please! Pull requests are also very welcome.
+We'll keep improving and adding to what we have, and we are always happy to accept outside contributions as well!
