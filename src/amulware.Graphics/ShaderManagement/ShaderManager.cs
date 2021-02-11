@@ -1,36 +1,37 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using OpenToolkit.Graphics.OpenGL;
+using OpenTK.Graphics.OpenGL;
+using static OpenTK.Graphics.OpenGL.ShaderType;
 
 namespace amulware.Graphics.ShaderManagement
 {
-    public sealed partial class ShaderManager
+    using ReloadableShaderByName = Dictionary<string, ReloadableShader>;
+
+    public sealed partial class ShaderManager : IDisposable
     {
-        private readonly Dictionary<ReloadableShader, string> shaderNames
-            = new Dictionary<ReloadableShader, string>();
+        private readonly Dictionary<IShaderProvider, string> shaderNames
+            = new Dictionary<IShaderProvider, string>();
 
-        private readonly Dictionary<ShaderType, Dictionary<string, ReloadableShader>> shaders
-            = new Dictionary<ShaderType, Dictionary<string, ReloadableShader>>(3)
-            {
-                { ShaderType.VertexShader, new Dictionary<string, ReloadableShader>() },
-                { ShaderType.GeometryShader, new Dictionary<string, ReloadableShader>() },
-                { ShaderType.FragmentShader, new Dictionary<string, ReloadableShader>() },
-            };
+        private readonly ImmutableDictionary<ShaderType, ReloadableShaderByName> shaders
+            = new[] { ComputeShader, FragmentShader, GeometryShader,
+                    VertexShader, TessControlShader, TessEvaluationShader }
+                .ToImmutableDictionary(k => k, _ => new ReloadableShaderByName());
 
-        private readonly Dictionary<string, ReloadableShaderProgram> programs
-            = new Dictionary<string, ReloadableShaderProgram>();
+        private readonly Dictionary<string, ReloadableRendererShader> programs
+            = new Dictionary<string, ReloadableRendererShader>();
 
-        private readonly Dictionary<ReloadableShader, List<ReloadableShaderProgram>> programsByShader
-            = new Dictionary<ReloadableShader, List<ReloadableShaderProgram>>();
+        private readonly Dictionary<IShaderProvider, List<ReloadableRendererShader>> programsByShader
+            = new Dictionary<IShaderProvider, List<ReloadableRendererShader>>();
 
-        public ISurfaceShader this[string shaderProgramName]
+        public bool TryGetRendererShader(string shaderProgramName,
+            [NotNullWhen(returnValue: true)] out IRendererShader? shaderProgram)
         {
-            get
-            {
-                programs.TryGetValue(shaderProgramName, out var program);
-                return program;
-            }
+            var found = programs.TryGetValue(shaderProgramName, out var program);
+            shaderProgram = program;
+            return found;
         }
 
         public bool Contains(ShaderType type, string name)
@@ -41,64 +42,21 @@ namespace amulware.Graphics.ShaderManagement
             throw new ArgumentException($"ShaderType {type} is not supported.");
         }
 
-        public void Add(ReloadableShaderProgram shaderProgram, string name)
+        private void registerProgramForItsShaders(ReloadableRendererShader rendererShader)
         {
-            if (programs.ContainsKey(name))
-               throw new ArgumentException($"Tried adding shader program with name '{name} which is already taken.");
-
-            // make sure all shaders can be added so in case of error our internal state stays valid
-            var shadersToAdd = getUnknownShadersOfProgramAndFailOnNameCollision(shaderProgram, name);
-
-            // add shaders we don't know yet
-            foreach (var shader in shadersToAdd)
+            foreach (var shader in rendererShader.Shaders)
             {
-                Add(shader, name);
-            }
-
-            programs.Add(name, shaderProgram);
-
-            registerProgramForItsShaders(shaderProgram);
-        }
-
-        private List<ReloadableShader> getUnknownShadersOfProgramAndFailOnNameCollision(
-            ReloadableShaderProgram shaderProgram, string name)
-        {
-            return shaderProgram.Shaders.Where(
-                shader =>
+                if (!programsByShader.TryGetValue(shader, out var programs))
                 {
-                    if (shaderNames.ContainsKey(shader))
-                    {
-                        return false;
-                    }
-
-                    var shadersOfType = shaders[shader.Type];
-                    if (shadersOfType.ContainsKey(name))
-                    {
-                        throw new ArgumentException(
-                            $"Tried adding unknown {shader.Type} under name '{name}', but name is already taken.");
-                    }
-
-                    return true;
-                }
-            ).ToList();
-        }
-
-        private void registerProgramForItsShaders(ReloadableShaderProgram shaderProgram)
-        {
-            foreach (var shader in shaderProgram.Shaders)
-            {
-                programsByShader.TryGetValue(shader, out var programs);
-                if (programs == null)
-                {
-                    programs = new List<ReloadableShaderProgram>();
+                    programs = new List<ReloadableRendererShader>();
                     programsByShader.Add(shader, programs);
                 }
 
-                programs.Add(shaderProgram);
+                programs.Add(rendererShader);
             }
         }
 
-        public void Add(IEnumerable<ShaderFile> shaderFiles)
+        public void AddRange(IEnumerable<ShaderFile> shaderFiles)
         {
             foreach (var file in shaderFiles)
             {
@@ -113,7 +71,7 @@ namespace amulware.Graphics.ShaderManagement
 
         public void Add(IShaderReloader shader, string name)
         {
-            Add(new ReloadableShader(shader), name);
+            Add(ReloadableShader.LoadFrom(shader), name);
         }
 
         public void Add(ReloadableShader shader, string name)
@@ -127,10 +85,17 @@ namespace amulware.Graphics.ShaderManagement
             shaderNames.Add(shader, name);
         }
 
-        private ReloadableShader getShader(ShaderType type, string shaderName)
+        public void Dispose()
         {
-            shaders[type].TryGetValue(shaderName, out var shader);
-            return shader;
+            foreach (var program in programs.Values)
+            {
+                program.Dispose();
+            }
+
+            foreach (var shader in shaders.Values.SelectMany(s => s.Values))
+            {
+                shader.Dispose();
+            }
         }
     }
 }

@@ -1,8 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "amulware.Graphics.Examples.Basics", "examples\Basics\amulware.Graphics.Examples.Basics.csproj", "{0B034B46-4E76-449B-8BB4-6C41614678DA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "amulware.Graphics.Examples.01.Basics", "examples\01.Basics\amulware.Graphics.Examples.01.Basics.csproj", "{0B034B46-4E76-449B-8BB4-6C41614678DA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "amulware.Graphics", "src\amulware.Graphics\amulware.Graphics.csproj", "{5C5A78A0-F12F-431C-9607-67EA4ADF5732}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "amulware.Graphics.Examples.02.IndexBuffer", "examples\02.IndexBuffer\amulware.Graphics.Examples.02.IndexBuffer.csproj", "{BEF46AAE-12A3-43C6-95BF-0F1DB2D3D4D2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "amulware.Graphics.Examples.08.PostProcessing", "examples\08.PostProcessing\amulware.Graphics.Examples.08.PostProcessing.csproj", "{9DE12724-B969-4FD2-AF36-53CF3F0B0002}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "amulware.Graphics.Examples.12.Text", "examples\12.Text\amulware.Graphics.Examples.12.Text.csproj", "{CD216E8B-8D00-4CDA-8325-908906520E0B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "amulware.Graphics.Examples.20.Mandelbrot", "examples\20.Mandelbrot\amulware.Graphics.Examples.20.Mandelbrot.csproj", "{25A39472-3298-4413-9AF3-F5228E62A13A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,5 +26,21 @@ Global
 		{5C5A78A0-F12F-431C-9607-67EA4ADF5732}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C5A78A0-F12F-431C-9607-67EA4ADF5732}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C5A78A0-F12F-431C-9607-67EA4ADF5732}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEF46AAE-12A3-43C6-95BF-0F1DB2D3D4D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEF46AAE-12A3-43C6-95BF-0F1DB2D3D4D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEF46AAE-12A3-43C6-95BF-0F1DB2D3D4D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEF46AAE-12A3-43C6-95BF-0F1DB2D3D4D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DE12724-B969-4FD2-AF36-53CF3F0B0002}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DE12724-B969-4FD2-AF36-53CF3F0B0002}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DE12724-B969-4FD2-AF36-53CF3F0B0002}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DE12724-B969-4FD2-AF36-53CF3F0B0002}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD216E8B-8D00-4CDA-8325-908906520E0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD216E8B-8D00-4CDA-8325-908906520E0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD216E8B-8D00-4CDA-8325-908906520E0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD216E8B-8D00-4CDA-8325-908906520E0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25A39472-3298-4413-9AF3-F5228E62A13A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25A39472-3298-4413-9AF3-F5228E62A13A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25A39472-3298-4413-9AF3-F5228E62A13A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25A39472-3298-4413-9AF3-F5228E62A13A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

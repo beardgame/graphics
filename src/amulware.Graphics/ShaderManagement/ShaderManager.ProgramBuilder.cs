@@ -1,44 +1,59 @@
 using System;
 using System.Collections.Generic;
-using OpenToolkit.Graphics.OpenGL;
+using OpenTK.Graphics.OpenGL;
+using static OpenTK.Graphics.OpenGL.ShaderType;
 
 namespace amulware.Graphics.ShaderManagement
 {
     public sealed partial class ShaderManager
     {
-        public ISurfaceShader MakeShaderProgram(string shaderName, string programName = null)
-            => BuildShaderProgram()
-                .TryAll(shaderName)
-                .As(programName ?? shaderName);
+        public IRendererShader RegisterRendererShaderFromAllShadersWithName(string shaderName, string? name = null)
+            => RegisterRendererShader(b => b.TryAll(shaderName), name ?? shaderName);
 
-        public ProgramBuilder BuildShaderProgram()
-            => new ProgramBuilder(this);
+        public IRendererShader RegisterRendererShader(Action<RendererShaderBuilder> build, string name)
+        {
+            var builder = new RendererShaderBuilder(this);
+            build(builder);
 
-        public sealed class ProgramBuilder
+            throwIfShaderProgramNameAlreadyTaken(name);
+
+            var program = ReloadableRendererShader.LoadFrom(builder.Shaders);
+            programs.Add(name, program);
+            registerProgramForItsShaders(program);
+
+            return program;
+        }
+
+        private void throwIfShaderProgramNameAlreadyTaken(string name)
+        {
+            if (programs.ContainsKey(name))
+                throw new ArgumentException($"Tried adding shader program with name '{name} which is already taken.");
+        }
+
+        public sealed class RendererShaderBuilder
         {
             private readonly ShaderManager manager;
             private readonly List<ReloadableShader> shaders = new List<ReloadableShader>();
 
-            public ProgramBuilder(ShaderManager manager)
+            internal IEnumerable<ReloadableShader> Shaders => shaders;
+
+            internal RendererShaderBuilder(ShaderManager manager)
             {
                 this.manager = manager;
             }
 
-            public ProgramBuilder TryAll(string shaderName)
+            public RendererShaderBuilder TryAll(string shaderName)
             {
-                TryWith(ShaderType.VertexShader, shaderName);
-                TryWith(ShaderType.GeometryShader, shaderName);
-                TryWith(ShaderType.FragmentShader, shaderName);
+                TryWith(ComputeShader, shaderName);
+                TryWith(FragmentShader, shaderName);
+                TryWith(GeometryShader, shaderName);
+                TryWith(TessControlShader, shaderName);
+                TryWith(TessEvaluationShader, shaderName);
+                TryWith(VertexShader, shaderName);
                 return this;
             }
 
-            public ProgramBuilder WithVertexShader(string shaderName) => With(ShaderType.VertexShader, shaderName);
-
-            public ProgramBuilder WithFragmentShader(string shaderName) => With(ShaderType.FragmentShader, shaderName);
-
-            public ProgramBuilder WithGeometryShader(string shaderName) => With(ShaderType.GeometryShader, shaderName);
-
-            public ProgramBuilder With(ShaderType type, string shaderName)
+            public RendererShaderBuilder With(ShaderType type, string shaderName)
             {
                 TryWith(type, shaderName, out var succeeded);
                 if (!succeeded)
@@ -46,9 +61,9 @@ namespace amulware.Graphics.ShaderManagement
                 return this;
             }
 
-            public ProgramBuilder TryWith(ShaderType type, string shaderName) => TryWith(type, shaderName, out _);
+            public RendererShaderBuilder TryWith(ShaderType type, string shaderName) => TryWith(type, shaderName, out _);
 
-            public ProgramBuilder TryWith(ShaderType type, string shaderName, out bool succeeded)
+            public RendererShaderBuilder TryWith(ShaderType type, string shaderName, out bool succeeded)
             {
                 succeeded = false;
                 var shader = manager.getShader(type, shaderName);
@@ -61,18 +76,17 @@ namespace amulware.Graphics.ShaderManagement
                 return this;
             }
 
-            public ProgramBuilder With(ReloadableShader shader)
+            public RendererShaderBuilder With(ReloadableShader shader)
             {
                 shaders.Add(shader);
                 return this;
             }
+        }
 
-            public ISurfaceShader As(string programName)
-            {
-                var program = new ReloadableShaderProgram(shaders);
-                manager.Add(program, programName);
-                return program;
-            }
+        private ReloadableShader? getShader(ShaderType type, string shaderName)
+        {
+            shaders[type].TryGetValue(shaderName, out var shader);
+            return shader;
         }
     }
 }

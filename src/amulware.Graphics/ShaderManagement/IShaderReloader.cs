@@ -1,11 +1,12 @@
-using OpenToolkit.Graphics.OpenGL;
+using amulware.Graphics.Shading;
+using OpenTK.Graphics.OpenGL;
 
 namespace amulware.Graphics.ShaderManagement
 {
     public interface IShaderReloader
     {
-        bool ChangedSinceLastLoad { get; }
         ShaderType Type { get; }
+        bool ChangedSinceLastLoad { get; }
         Shader Load();
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 
 namespace amulware.Graphics.ShaderManagement
@@ -8,12 +9,12 @@ namespace amulware.Graphics.ShaderManagement
     {
         public ShaderReloadReport TryReloadAll()
         {
-            var errors = new List<Exception>();
-            
-            var reloadedShaders = new HashSet<ReloadableShader>(
+            var errors = ImmutableList<Exception>.Empty;
+
+            var reloadedShaders = new HashSet<IShaderProvider>(
                 shaders.Values
                     .SelectMany(shadersForType => shadersForType.Values)
-                    .Where(shader => succeedsWithoutError(shader.TryReload))
+                    .Where(shader => countReloadsAndListExceptions(shader.ReloadIfNeeded))
                 );
 
             if (reloadedShaders.Count == 0)
@@ -21,33 +22,33 @@ namespace amulware.Graphics.ShaderManagement
                 return errors.Count == 0
                     ? ShaderReloadReport.NoChanges
                     : new ShaderReloadReport(0, 0,
-                        errors.AsReadOnly()
+                        errors.ToImmutableArray()
                     );
             }
 
             var reloadedProgramCount = programs.Values.Count(
-                p => succeedsWithoutError(() => p.ReloadIfContainsAny(reloadedShaders))
+                p => countReloadsAndListExceptions(() => p.ReloadIfContainsAny(reloadedShaders))
                 );
 
             var report = new ShaderReloadReport(
                 reloadedShaders.Count,
                 reloadedProgramCount,
-                errors.AsReadOnly()
+                errors.ToImmutableArray()
                 );
-            
+
             reloadedShaders.Clear();
 
             return report;
 
-            bool succeedsWithoutError(Func<bool> action)
+            bool countReloadsAndListExceptions(Func<bool> reloadAction)
             {
                 try
                 {
-                    return action();
+                    return reloadAction();
                 }
                 catch (Exception e)
                 {
-                    errors.Add(e);
+                    errors = errors.Add(e);
                 }
 
                 return false;

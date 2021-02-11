@@ -2,9 +2,9 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading;
-using OpenToolkit.Windowing.Common;
-using OpenToolkit.Windowing.Desktop;
-using OpenToolkit.Windowing.GraphicsLibraryFramework;
+using OpenTK.Windowing.Common;
+using OpenTK.Windowing.Desktop;
+using OpenTK.Windowing.GraphicsLibraryFramework;
 
 namespace amulware.Graphics.Windowing
 {
@@ -44,7 +44,7 @@ namespace amulware.Graphics.Windowing
 
         private readonly NativeWindowWrapper window;
 
-        // TODO: rewrite windowing natively and merge with input, instead of relying on OpenToolkit.Windowing.Desktop
+        // TODO(#26): rewrite windowing natively and merge with input, instead of relying on OpenTK.Windowing.Desktop
         [Obsolete("Legacy implementation. There is no replacement yet.")]
         protected NativeWindow NativeWindow => window;
 
