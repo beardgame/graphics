@@ -1,4 +1,4 @@
-namespace amulware.Graphics.RenderSettings
+namespace Bearded.Graphics.RenderSettings
 {
     public interface IProgramRenderSetting
     {

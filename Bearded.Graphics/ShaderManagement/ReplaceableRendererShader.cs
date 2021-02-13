@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using amulware.Graphics.Rendering;
-using amulware.Graphics.Shading;
+using Bearded.Graphics.Rendering;
+using Bearded.Graphics.Shading;
 
-namespace amulware.Graphics.ShaderManagement
+namespace Bearded.Graphics.ShaderManagement
 {
     public sealed class ReplaceableRendererShader : IRendererShader, IDisposable
     {

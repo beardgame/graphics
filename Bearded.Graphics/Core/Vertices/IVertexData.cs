@@ -1,5 +1,5 @@
 ﻿
-namespace amulware.Graphics.Vertices
+namespace Bearded.Graphics.Vertices
 {
     /// <summary>
     /// This interface must be implemented by any custom vertex data.

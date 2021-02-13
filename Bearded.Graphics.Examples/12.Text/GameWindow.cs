@@ -1,20 +1,20 @@
 using System;
 using System.ComponentModel;
 using System.Drawing;
-using amulware.Graphics.MeshBuilders;
-using amulware.Graphics.Rendering;
-using amulware.Graphics.RenderSettings;
-using amulware.Graphics.Shading;
-using amulware.Graphics.Text;
-using amulware.Graphics.Textures;
-using amulware.Graphics.Windowing;
+using Bearded.Graphics.MeshBuilders;
+using Bearded.Graphics.Rendering;
+using Bearded.Graphics.RenderSettings;
+using Bearded.Graphics.Shading;
+using Bearded.Graphics.Text;
+using Bearded.Graphics.Textures;
+using Bearded.Graphics.Windowing;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using Void = Bearded.Utilities.Void;
 
-namespace amulware.Graphics.Examples.Text
+namespace Bearded.Graphics.Examples.Text
 {
     sealed class GameWindow : Window
     {

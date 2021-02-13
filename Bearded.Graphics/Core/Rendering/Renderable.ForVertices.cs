@@ -1,8 +1,8 @@
-using amulware.Graphics.Shading;
-using amulware.Graphics.Vertices;
+using Bearded.Graphics.Shading;
+using Bearded.Graphics.Vertices;
 using OpenTK.Graphics.OpenGL;
 
-namespace amulware.Graphics.Rendering
+namespace Bearded.Graphics.Rendering
 {
     public static partial class Renderable
     {

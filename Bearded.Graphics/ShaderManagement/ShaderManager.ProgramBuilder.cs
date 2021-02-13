@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using OpenTK.Graphics.OpenGL;
 using static OpenTK.Graphics.OpenGL.ShaderType;
 
-namespace amulware.Graphics.ShaderManagement
+namespace Bearded.Graphics.ShaderManagement
 {
     public sealed partial class ShaderManager
     {

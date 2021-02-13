@@ -1,8 +1,8 @@
 using System;
-using amulware.Graphics.Textures;
+using Bearded.Graphics.Textures;
 using OpenTK.Mathematics;
 
-namespace amulware.Graphics.Pipelines
+namespace Bearded.Graphics.Pipelines
 {
     public abstract class PipelineTextureBase : IDisposable
     {

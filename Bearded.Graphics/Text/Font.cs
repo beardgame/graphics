@@ -1,7 +1,7 @@
 using System.Collections.Immutable;
 using System.Linq;
 
-namespace amulware.Graphics.Text
+namespace Bearded.Graphics.Text
 {
     public sealed class Font
     {

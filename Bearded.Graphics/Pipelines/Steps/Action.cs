@@ -1,5 +1,5 @@
 
-namespace amulware.Graphics.Pipelines.Steps
+namespace Bearded.Graphics.Pipelines.Steps
 {
     sealed class Action<TState> : IPipeline<TState>
     {

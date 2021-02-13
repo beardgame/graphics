@@ -1,7 +1,7 @@
 using System;
 using System.Drawing;
 
-namespace amulware.Graphics.Pipelines.Context
+namespace Bearded.Graphics.Pipelines.Context
 {
     sealed class Viewport<TState> : ContextChange<TState, Rectangle>
     {

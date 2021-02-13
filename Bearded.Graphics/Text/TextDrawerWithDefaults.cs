@@ -1,6 +1,6 @@
 using OpenTK.Mathematics;
 
-namespace amulware.Graphics.Text
+namespace Bearded.Graphics.Text
 {
     // ReSharper disable ParameterHidesMember
     public sealed class TextDrawerWithDefaults<TVertexParameters>

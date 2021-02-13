@@ -1,6 +1,6 @@
 using System;
 
-namespace amulware.Graphics.Rendering
+namespace Bearded.Graphics.Rendering
 {
     public sealed class DrawCall : IDisposable
     {

@@ -1,6 +1,6 @@
 ﻿using OpenTK.Graphics.OpenGL;
 
-namespace amulware.Graphics.RenderSettings
+namespace Bearded.Graphics.RenderSettings
 {
     public sealed class ColorUniform : Uniform<Color>
     {

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace amulware.Graphics
+namespace Bearded.Graphics
 {
     public sealed class Batcher<TBatchData> : IDisposable
     {

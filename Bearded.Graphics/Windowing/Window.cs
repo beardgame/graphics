@@ -6,7 +6,7 @@ using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 
-namespace amulware.Graphics.Windowing
+namespace Bearded.Graphics.Windowing
 {
     public abstract class Window
     {

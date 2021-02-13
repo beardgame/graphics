@@ -1,4 +1,4 @@
-namespace amulware.Graphics.Examples.PostProcessing
+namespace Bearded.Graphics.Examples.PostProcessing
 {
     static class EntryPoint
     {

@@ -1,4 +1,4 @@
-namespace amulware.Graphics.Textures
+namespace Bearded.Graphics.Textures
 {
     public interface ITextureTransformation
     {

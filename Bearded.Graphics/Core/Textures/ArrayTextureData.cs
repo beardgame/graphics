@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using OpenTK.Graphics.OpenGL;
 
-namespace amulware.Graphics.Textures
+namespace Bearded.Graphics.Textures
 {
     public sealed class ArrayTextureData
     {

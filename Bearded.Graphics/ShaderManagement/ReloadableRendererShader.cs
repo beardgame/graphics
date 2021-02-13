@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using amulware.Graphics.Rendering;
-using amulware.Graphics.Shading;
+using Bearded.Graphics.Rendering;
+using Bearded.Graphics.Shading;
 
-namespace amulware.Graphics.ShaderManagement
+namespace Bearded.Graphics.ShaderManagement
 {
     public sealed class ReloadableRendererShader : IRendererShader, IDisposable
     {

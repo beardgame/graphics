@@ -1,11 +1,11 @@
 using System;
 using System.Runtime.CompilerServices;
-using amulware.Graphics.MeshBuilders;
-using amulware.Graphics.Vertices;
+using Bearded.Graphics.MeshBuilders;
+using Bearded.Graphics.Vertices;
 using Bearded.Utilities;
 using OpenTK.Mathematics;
 
-namespace amulware.Graphics.Shapes
+namespace Bearded.Graphics.Shapes
 {
     public sealed class ShapeDrawer3<TVertex, TVertexParameters> : IShapeDrawer3<TVertexParameters> where TVertex : struct, IVertexData
     {

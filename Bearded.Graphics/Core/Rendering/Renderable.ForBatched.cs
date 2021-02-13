@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using amulware.Graphics.Vertices;
+using Bearded.Graphics.Vertices;
 using OpenTK.Graphics.OpenGL;
 
-namespace amulware.Graphics.Rendering
+namespace Bearded.Graphics.Rendering
 {
     public static partial class Renderable
     {

@@ -1,6 +1,6 @@
-using amulware.Graphics.Textures;
+using Bearded.Graphics.Textures;
 
-namespace amulware.Graphics.Pipelines
+namespace Bearded.Graphics.Pipelines
 {
     public class PipelineTexture : PipelineTextureBase
     {

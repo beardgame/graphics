@@ -1,6 +1,6 @@
 using OpenTK.Graphics.OpenGL;
 
-namespace amulware.Graphics.Pipelines.Steps
+namespace Bearded.Graphics.Pipelines.Steps
 {
     sealed class Clear<TState, T> : IPipeline<TState>
     {

@@ -1,7 +1,7 @@
 using System;
-using amulware.Graphics.Pipelines.Steps;
+using Bearded.Graphics.Pipelines.Steps;
 
-namespace amulware.Graphics.Pipelines
+namespace Bearded.Graphics.Pipelines
 {
     public static partial class Pipeline
     {

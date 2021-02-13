@@ -1,4 +1,4 @@
-namespace amulware.Graphics.Shapes
+namespace Bearded.Graphics.Shapes
 {
     public interface IShapeDrawer2<in TVertexParameters>
     {

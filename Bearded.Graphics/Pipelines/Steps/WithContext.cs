@@ -1,7 +1,7 @@
 using System.Collections.Immutable;
-using amulware.Graphics.Pipelines.Context;
+using Bearded.Graphics.Pipelines.Context;
 
-namespace amulware.Graphics.Pipelines.Steps
+namespace Bearded.Graphics.Pipelines.Steps
 {
     sealed class WithContext<TState> : IPipeline<TState>
     {

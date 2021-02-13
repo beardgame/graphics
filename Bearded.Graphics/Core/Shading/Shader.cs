@@ -1,7 +1,7 @@
 using System;
 using OpenTK.Graphics.OpenGL;
 
-namespace amulware.Graphics.Shading
+namespace Bearded.Graphics.Shading
 {
     public sealed class Shader : IDisposable
     {

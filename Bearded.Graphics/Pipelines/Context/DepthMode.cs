@@ -1,7 +1,7 @@
 using System;
 using OpenTK.Graphics.OpenGL;
 
-namespace amulware.Graphics.Pipelines.Context
+namespace Bearded.Graphics.Pipelines.Context
 {
     public readonly struct DepthMode : IEquatable<DepthMode>
     {

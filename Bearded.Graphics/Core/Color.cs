@@ -2,7 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using OpenTK.Mathematics;
 
-namespace amulware.Graphics
+namespace Bearded.Graphics
 {
     /// <summary>
     /// A struct representing a 32bit argb colour.

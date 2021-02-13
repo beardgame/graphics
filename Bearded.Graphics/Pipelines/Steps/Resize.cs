@@ -2,7 +2,7 @@ using System;
 using System.Collections.Immutable;
 using OpenTK.Mathematics;
 
-namespace amulware.Graphics.Pipelines.Steps
+namespace Bearded.Graphics.Pipelines.Steps
 {
     sealed class Resize<TState> : IPipeline<TState>
     {

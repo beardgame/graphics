@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using OpenTK.Graphics.OpenGL;
 
-namespace amulware.Graphics.ShaderManagement
+namespace Bearded.Graphics.ShaderManagement
 {
     // TODO: fix this up
     public sealed class ShaderFileLoader

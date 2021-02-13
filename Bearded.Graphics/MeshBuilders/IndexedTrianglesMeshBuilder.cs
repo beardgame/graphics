@@ -1,9 +1,9 @@
 using System;
-using amulware.Graphics.Rendering;
-using amulware.Graphics.Vertices;
+using Bearded.Graphics.Rendering;
+using Bearded.Graphics.Vertices;
 using OpenTK.Graphics.OpenGL;
 
-namespace amulware.Graphics.MeshBuilders
+namespace Bearded.Graphics.MeshBuilders
 {
     public sealed class IndexedTrianglesMeshBuilder<TVertex> : IIndexedTrianglesMeshBuilder<TVertex, ushort>, IDisposable
         where TVertex : struct, IVertexData

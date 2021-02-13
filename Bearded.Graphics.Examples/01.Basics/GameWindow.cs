@@ -1,16 +1,16 @@
 using System;
 using System.ComponentModel;
-using amulware.Graphics.Rendering;
-using amulware.Graphics.RenderSettings;
-using amulware.Graphics.Shading;
-using amulware.Graphics.Shapes;
-using amulware.Graphics.Windowing;
+using Bearded.Graphics.Rendering;
+using Bearded.Graphics.RenderSettings;
+using Bearded.Graphics.Shading;
+using Bearded.Graphics.Shapes;
+using Bearded.Graphics.Windowing;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 
-namespace amulware.Graphics.Examples.Basics
+namespace Bearded.Graphics.Examples.Basics
 {
     sealed class GameWindow : Window
     {

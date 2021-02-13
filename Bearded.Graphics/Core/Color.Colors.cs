@@ -1,4 +1,4 @@
-namespace amulware.Graphics
+namespace Bearded.Graphics
 {
     public readonly partial struct Color
     {

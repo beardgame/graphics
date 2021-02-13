@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using OpenTK.Graphics.OpenGL;
 
-namespace amulware.Graphics.Vertices
+namespace Bearded.Graphics.Vertices
 {
     public sealed class VertexAttributeTemplate
     {

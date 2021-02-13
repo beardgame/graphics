@@ -1,9 +1,9 @@
 using System.Runtime.CompilerServices;
-using amulware.Graphics.MeshBuilders;
-using amulware.Graphics.Vertices;
+using Bearded.Graphics.MeshBuilders;
+using Bearded.Graphics.Vertices;
 using OpenTK.Mathematics;
 
-namespace amulware.Graphics.Text
+namespace Bearded.Graphics.Text
 {
     public sealed class TextDrawer<TVertex, TVertexParameters> : ITextDrawer<TVertexParameters>
         where TVertex : struct, IVertexData

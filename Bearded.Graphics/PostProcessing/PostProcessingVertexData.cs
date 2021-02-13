@@ -1,9 +1,9 @@
 using System.Runtime.InteropServices;
-using amulware.Graphics.Vertices;
+using Bearded.Graphics.Vertices;
 using OpenTK.Mathematics;
-using static amulware.Graphics.Vertices.VertexData;
+using static Bearded.Graphics.Vertices.VertexData;
 
-namespace amulware.Graphics.PostProcessing
+namespace Bearded.Graphics.PostProcessing
 {
     [StructLayout(LayoutKind.Sequential)]
     public readonly struct PostProcessingVertexData : IVertexData

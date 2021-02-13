@@ -2,7 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using OpenTK.Graphics.OpenGL;
 
-namespace amulware.Graphics
+namespace Bearded.Graphics
 {
     public sealed class Buffer<T> : IDisposable where T : struct
     {

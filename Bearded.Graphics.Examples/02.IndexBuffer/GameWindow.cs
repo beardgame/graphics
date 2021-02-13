@@ -1,15 +1,15 @@
 using System;
 using System.ComponentModel;
-using amulware.Graphics.Rendering;
-using amulware.Graphics.Shading;
-using amulware.Graphics.Shapes;
-using amulware.Graphics.Windowing;
+using Bearded.Graphics.Rendering;
+using Bearded.Graphics.Shading;
+using Bearded.Graphics.Shapes;
+using Bearded.Graphics.Windowing;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 
-namespace amulware.Graphics.Examples.IndexBuffer
+namespace Bearded.Graphics.Examples.IndexBuffer
 {
     sealed class GameWindow : Window
     {

@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using amulware.Graphics.RenderSettings;
-using amulware.Graphics.Shading;
+using Bearded.Graphics.RenderSettings;
+using Bearded.Graphics.Shading;
 
-namespace amulware.Graphics.Rendering
+namespace Bearded.Graphics.Rendering
 {
     public sealed class BatchedRenderer : IRenderer
     {

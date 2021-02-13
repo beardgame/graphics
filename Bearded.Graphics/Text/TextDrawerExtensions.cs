@@ -1,6 +1,6 @@
 using OpenTK.Mathematics;
 
-namespace amulware.Graphics.Text
+namespace Bearded.Graphics.Text
 {
     public static class TextDrawerExtensions
     {

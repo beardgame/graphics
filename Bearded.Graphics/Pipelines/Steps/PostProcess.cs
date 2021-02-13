@@ -1,6 +1,6 @@
-using amulware.Graphics.PostProcessing;
+using Bearded.Graphics.PostProcessing;
 
-namespace amulware.Graphics.Pipelines.Steps
+namespace Bearded.Graphics.Pipelines.Steps
 {
     sealed class PostProcess<TState> : Render<TState>
     {

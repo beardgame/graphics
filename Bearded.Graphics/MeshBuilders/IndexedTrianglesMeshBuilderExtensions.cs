@@ -1,4 +1,4 @@
-namespace amulware.Graphics.MeshBuilders
+namespace Bearded.Graphics.MeshBuilders
 {
     public static class IndexedTrianglesMeshBuilderExtensions
     {

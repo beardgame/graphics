@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using amulware.Graphics.Shading;
+using Bearded.Graphics.Shading;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 
-namespace amulware.Graphics.Vertices
+namespace Bearded.Graphics.Vertices
 {
     /// <summary>
     /// This class contains helper types and methods to easily create vertex attribute layouts.

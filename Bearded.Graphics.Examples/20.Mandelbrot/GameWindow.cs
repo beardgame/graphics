@@ -1,15 +1,15 @@
 using System;
-using amulware.Graphics.PostProcessing;
-using amulware.Graphics.RenderSettings;
-using amulware.Graphics.Shading;
+using Bearded.Graphics.PostProcessing;
+using Bearded.Graphics.RenderSettings;
+using Bearded.Graphics.Shading;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
-using Window = amulware.Graphics.Windowing.Window;
+using Window = Bearded.Graphics.Windowing.Window;
 
-namespace amulware.Graphics.Examples.Mandelbrot
+namespace Bearded.Graphics.Examples.Mandelbrot
 {
     // Move around with arrow keys and zoom with Z/X
     sealed class GameWindow : Window

@@ -1,6 +1,6 @@
-using amulware.Graphics.Rendering;
+using Bearded.Graphics.Rendering;
 
-namespace amulware.Graphics.ShaderManagement
+namespace Bearded.Graphics.ShaderManagement
 {
     public interface IRendererShader
     {

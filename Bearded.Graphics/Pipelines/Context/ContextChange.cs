@@ -1,6 +1,6 @@
 using System;
 
-namespace amulware.Graphics.Pipelines.Context
+namespace Bearded.Graphics.Pipelines.Context
 {
     abstract class ContextChange<TState, T> : IContextChange<TState>
     {

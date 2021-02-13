@@ -1,5 +1,5 @@
 ﻿
-namespace amulware.Graphics.Examples.Mandelbrot
+namespace Bearded.Graphics.Examples.Mandelbrot
 {
     static class EntryPoint
     {

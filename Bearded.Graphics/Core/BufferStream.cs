@@ -1,7 +1,7 @@
 using System;
 using OpenTK.Graphics.OpenGL;
 
-namespace amulware.Graphics
+namespace Bearded.Graphics
 {
     public sealed class BufferStream<T> where T : struct
     {

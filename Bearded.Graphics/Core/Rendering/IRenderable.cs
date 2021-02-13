@@ -1,6 +1,6 @@
-using amulware.Graphics.Shading;
+using Bearded.Graphics.Shading;
 
-namespace amulware.Graphics.Rendering
+namespace Bearded.Graphics.Rendering
 {
     public interface IRenderable
     {

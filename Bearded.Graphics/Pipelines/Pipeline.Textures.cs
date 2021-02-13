@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
-using amulware.Graphics.Textures;
+using Bearded.Graphics.Textures;
 using OpenTK.Graphics.OpenGL;
 
-namespace amulware.Graphics.Pipelines
+namespace Bearded.Graphics.Pipelines
 {
     public static partial class Pipeline
     {

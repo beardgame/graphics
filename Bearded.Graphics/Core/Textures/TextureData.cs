@@ -8,7 +8,7 @@ using OpenTK.Graphics.OpenGL;
 using PixelFormat = OpenTK.Graphics.OpenGL.PixelFormat;
 using SystemPixelFormat = System.Drawing.Imaging.PixelFormat;
 
-namespace amulware.Graphics.Textures
+namespace Bearded.Graphics.Textures
 {
     public abstract class TextureData
     {

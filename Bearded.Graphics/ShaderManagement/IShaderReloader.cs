@@ -1,7 +1,7 @@
-using amulware.Graphics.Shading;
+using Bearded.Graphics.Shading;
 using OpenTK.Graphics.OpenGL;
 
-namespace amulware.Graphics.ShaderManagement
+namespace Bearded.Graphics.ShaderManagement
 {
     public interface IShaderReloader
     {

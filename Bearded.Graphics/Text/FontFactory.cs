@@ -8,11 +8,11 @@ using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.Linq;
 using System.Runtime.InteropServices;
-using amulware.Graphics.Textures;
+using Bearded.Graphics.Textures;
 using Bearded.Utilities.Algorithms;
 using OpenTK.Mathematics;
 
-namespace amulware.Graphics.Text
+namespace Bearded.Graphics.Text
 {
     public static class FontFactory
     {

@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Drawing;
-using amulware.Graphics.Textures;
+using Bearded.Graphics.Textures;
 
-namespace amulware.Graphics.Pipelines.Context
+namespace Bearded.Graphics.Pipelines.Context
 {
     public sealed class PipelineContextBuilder<TState>
     {

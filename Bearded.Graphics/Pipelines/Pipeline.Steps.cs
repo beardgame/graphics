@@ -1,17 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using amulware.Graphics.Pipelines.Context;
-using amulware.Graphics.Pipelines.Steps;
-using amulware.Graphics.PostProcessing;
-using amulware.Graphics.Rendering;
-using amulware.Graphics.RenderSettings;
-using amulware.Graphics.ShaderManagement;
+using Bearded.Graphics.Pipelines.Context;
+using Bearded.Graphics.Pipelines.Steps;
+using Bearded.Graphics.PostProcessing;
+using Bearded.Graphics.Rendering;
+using Bearded.Graphics.RenderSettings;
+using Bearded.Graphics.ShaderManagement;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 using static OpenTK.Graphics.OpenGL.ClearBufferMask;
 
-namespace amulware.Graphics.Pipelines
+namespace Bearded.Graphics.Pipelines
 {
     public static partial class Pipeline<TState>
     {

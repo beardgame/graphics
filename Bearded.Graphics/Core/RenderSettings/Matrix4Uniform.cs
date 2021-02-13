@@ -1,7 +1,7 @@
 ﻿using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 
-namespace amulware.Graphics.RenderSettings
+namespace Bearded.Graphics.RenderSettings
 {
     public sealed class Matrix4Uniform : Uniform<Matrix4>
     {

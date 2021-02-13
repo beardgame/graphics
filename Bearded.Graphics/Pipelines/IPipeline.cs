@@ -1,5 +1,5 @@
 
-namespace amulware.Graphics.Pipelines
+namespace Bearded.Graphics.Pipelines
 {
     public interface IPipeline<in TState>
     {

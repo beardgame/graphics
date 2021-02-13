@@ -1,6 +1,6 @@
 using System;
 
-namespace amulware.Graphics.MeshBuilders
+namespace Bearded.Graphics.MeshBuilders
 {
     public interface IIndexedTrianglesMeshBuilder<TVertex, TIndex>
     {

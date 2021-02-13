@@ -2,7 +2,7 @@ using System;
 using System.Collections.Immutable;
 using System.Linq;
 
-namespace amulware.Graphics.ShaderManagement
+namespace Bearded.Graphics.ShaderManagement
 {
     public sealed class ShaderReloadReport
     {

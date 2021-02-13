@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace amulware.Graphics.ShaderManagement
+namespace Bearded.Graphics.ShaderManagement
 {
     /// <summary>
     /// This class can be used to watch a file for modifications by checking its last write time stamp.

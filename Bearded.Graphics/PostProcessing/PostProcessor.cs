@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
-using amulware.Graphics.Rendering;
-using amulware.Graphics.RenderSettings;
-using amulware.Graphics.Shading;
+using Bearded.Graphics.Rendering;
+using Bearded.Graphics.RenderSettings;
+using Bearded.Graphics.Shading;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 
-namespace amulware.Graphics.PostProcessing
+namespace Bearded.Graphics.PostProcessing
 {
     public sealed class PostProcessor : IRenderer
     {

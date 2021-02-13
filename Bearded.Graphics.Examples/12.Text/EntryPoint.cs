@@ -1,5 +1,5 @@
 ﻿
-namespace amulware.Graphics.Examples.Text
+namespace Bearded.Graphics.Examples.Text
 {
     static class EntryPoint
     {

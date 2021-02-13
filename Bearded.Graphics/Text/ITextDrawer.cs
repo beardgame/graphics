@@ -1,6 +1,6 @@
 using Vector3 = OpenTK.Mathematics.Vector3;
 
-namespace amulware.Graphics.Text
+namespace Bearded.Graphics.Text
 {
     public interface ITextDrawer<in TVertexParameters>
     {

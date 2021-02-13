@@ -1,6 +1,6 @@
 using System;
 
-namespace amulware.Graphics.Pipelines.Steps
+namespace Bearded.Graphics.Pipelines.Steps
 {
     sealed class Elevator<TStateInner, TStateOuter> : IPipeline<TStateOuter>
     {

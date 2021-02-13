@@ -1,8 +1,8 @@
 using System.IO;
-using amulware.Graphics.Shading;
+using Bearded.Graphics.Shading;
 using OpenTK.Graphics.OpenGL;
 
-namespace amulware.Graphics.ShaderManagement
+namespace Bearded.Graphics.ShaderManagement
 {
     public sealed class ShaderFile : IShaderReloader
     {

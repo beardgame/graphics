@@ -1,5 +1,5 @@
 ﻿
-namespace amulware.Graphics.Examples.IndexBuffer
+namespace Bearded.Graphics.Examples.IndexBuffer
 {
     static class EntryPoint
     {

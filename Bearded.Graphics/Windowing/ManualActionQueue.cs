@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Threading;
 
-namespace amulware.Graphics.Utilities
+namespace Bearded.Graphics.Utilities
 {
     /// <summary>
     /// A threadsafe queue to run actions from.

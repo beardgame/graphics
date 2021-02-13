@@ -1,7 +1,7 @@
 using System;
-using amulware.Graphics.Rendering;
+using Bearded.Graphics.Rendering;
 
-namespace amulware.Graphics.Pipelines.Steps
+namespace Bearded.Graphics.Pipelines.Steps
 {
     class Render<TState> : IPipeline<TState>
     {

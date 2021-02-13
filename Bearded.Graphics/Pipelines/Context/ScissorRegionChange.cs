@@ -1,6 +1,6 @@
 using System;
 
-namespace amulware.Graphics.Pipelines.Context
+namespace Bearded.Graphics.Pipelines.Context
 {
     sealed class ScissorRegionChange<TState> : ContextChange<TState, ScissorRegion>
     {

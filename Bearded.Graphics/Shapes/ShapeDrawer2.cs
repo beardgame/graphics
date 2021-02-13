@@ -1,9 +1,9 @@
 ﻿using System;
-using amulware.Graphics.MeshBuilders;
-using amulware.Graphics.Vertices;
+using Bearded.Graphics.MeshBuilders;
+using Bearded.Graphics.Vertices;
 using OpenTK.Mathematics;
 
-namespace amulware.Graphics.Shapes
+namespace Bearded.Graphics.Shapes
 {
     public sealed class ShapeDrawer2<TVertex, TVertexParameters> : IShapeDrawer2<TVertexParameters>
         where TVertex : struct, IVertexData

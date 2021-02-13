@@ -1,7 +1,7 @@
-using amulware.Graphics.Textures;
+using Bearded.Graphics.Textures;
 using OpenTK.Graphics.OpenGL;
 
-namespace amulware.Graphics.RenderSettings
+namespace Bearded.Graphics.RenderSettings
 {
     public sealed class ArrayTextureUniform : Uniform<ArrayTexture>
     {

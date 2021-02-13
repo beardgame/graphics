@@ -1,4 +1,4 @@
-namespace amulware.Graphics.Pipelines.Context
+namespace Bearded.Graphics.Pipelines.Context
 {
     sealed class Culling<TState> : ContextChange<TState, CullMode>
     {

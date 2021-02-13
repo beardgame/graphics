@@ -1,6 +1,6 @@
 using OpenTK.Mathematics;
 
-namespace amulware.Graphics.Shapes
+namespace Bearded.Graphics.Shapes
 {
     public interface IShapeDrawer3<in TVertexParameters>
     {

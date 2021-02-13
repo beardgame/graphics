@@ -6,7 +6,7 @@ using System.Linq;
 using OpenTK.Graphics.OpenGL;
 using static OpenTK.Graphics.OpenGL.ShaderType;
 
-namespace amulware.Graphics.ShaderManagement
+namespace Bearded.Graphics.ShaderManagement
 {
     using ReloadableShaderByName = Dictionary<string, ReloadableShader>;
 

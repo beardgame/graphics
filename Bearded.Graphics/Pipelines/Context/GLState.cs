@@ -1,11 +1,11 @@
 using System;
 using System.Drawing;
 using OpenTK.Graphics.OpenGL;
-using static amulware.Graphics.Pipelines.Context.CullMode;
+using static Bearded.Graphics.Pipelines.Context.CullMode;
 using static OpenTK.Graphics.OpenGL.BlendEquationMode;
 using static OpenTK.Graphics.OpenGL.BlendingFactor;
 
-namespace amulware.Graphics.Pipelines.Context
+namespace Bearded.Graphics.Pipelines.Context
 {
     public enum BlendMode
     {

@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using amulware.Graphics.Rendering;
+using Bearded.Graphics.Rendering;
 
-namespace amulware.Graphics.Pipelines.Steps
+namespace Bearded.Graphics.Pipelines.Steps
 {
     sealed class RenderMultiple<TState> : IPipeline<TState>
     {

@@ -1,4 +1,4 @@
-namespace amulware.Graphics.Shading
+namespace Bearded.Graphics.Shading
 {
     internal static class StatusCode
     {

@@ -1,6 +1,6 @@
 using OpenTK.Mathematics;
 
-namespace amulware.Graphics.Shapes
+namespace Bearded.Graphics.Shapes
 {
     public static class ShapeDrawer2Extensions
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace amulware.Graphics
+namespace Bearded.Graphics
 {
     /// <summary>
     /// This class is a time keeping device used to facilitate properly timed main loop updates.

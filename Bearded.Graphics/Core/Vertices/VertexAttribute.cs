@@ -1,7 +1,7 @@
-﻿using amulware.Graphics.Shading;
+﻿using Bearded.Graphics.Shading;
 using OpenTK.Graphics.OpenGL;
 
-namespace amulware.Graphics.Vertices
+namespace Bearded.Graphics.Vertices
 {
     public sealed class VertexAttribute
     {

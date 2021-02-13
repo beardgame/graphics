@@ -1,7 +1,7 @@
 using System;
-using amulware.Graphics.Textures;
+using Bearded.Graphics.Textures;
 
-namespace amulware.Graphics.Pipelines.Context
+namespace Bearded.Graphics.Pipelines.Context
 {
     class FramebufferChange<TState> : ContextChange<TState, int>
     {

@@ -1,4 +1,4 @@
-namespace amulware.Graphics.Pipelines.Context
+namespace Bearded.Graphics.Pipelines.Context
 {
     public enum CullMode
     {

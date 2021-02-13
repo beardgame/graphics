@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using OpenTK.Graphics.OpenGL;
 
-namespace amulware.Graphics.Shading
+namespace Bearded.Graphics.Shading
 {
     public sealed class ShaderProgram : IDisposable
     {

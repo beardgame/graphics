@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace amulware.Graphics.Rendering
+namespace Bearded.Graphics.Rendering
 {
     public interface IBatchedRenderable
     {
