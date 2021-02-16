@@ -17,7 +17,7 @@
     <OutputPath>bin/Release/</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Bearded.Graphics\Bearded.Graphics.csproj" />
+    <ProjectReference Include="..\..\Bearded.Graphics\Bearded.Graphics.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="geometry.fs">

@@ -1,16 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bearded.Graphics.Examples.01.Basics", "examples\01.Basics\Bearded.Graphics.Examples.01.Basics.csproj", "{0B034B46-4E76-449B-8BB4-6C41614678DA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bearded.Graphics.Examples.01.Basics", "Bearded.Graphics.Examples\01.Basics\Bearded.Graphics.Examples.01.Basics.csproj", "{0B034B46-4E76-449B-8BB4-6C41614678DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bearded.Graphics", "src\Bearded.Graphics\Bearded.Graphics.csproj", "{5C5A78A0-F12F-431C-9607-67EA4ADF5732}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bearded.Graphics", "Bearded.Graphics\Bearded.Graphics.csproj", "{5C5A78A0-F12F-431C-9607-67EA4ADF5732}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bearded.Graphics.Examples.02.IndexBuffer", "examples\02.IndexBuffer\Bearded.Graphics.Examples.02.IndexBuffer.csproj", "{BEF46AAE-12A3-43C6-95BF-0F1DB2D3D4D2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bearded.Graphics.Examples.02.IndexBuffer", "Bearded.Graphics.Examples\02.IndexBuffer\Bearded.Graphics.Examples.02.IndexBuffer.csproj", "{BEF46AAE-12A3-43C6-95BF-0F1DB2D3D4D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bearded.Graphics.Examples.08.PostProcessing", "examples\08.PostProcessing\Bearded.Graphics.Examples.08.PostProcessing.csproj", "{9DE12724-B969-4FD2-AF36-53CF3F0B0002}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bearded.Graphics.Examples.08.PostProcessing", "Bearded.Graphics.Examples\08.PostProcessing\Bearded.Graphics.Examples.08.PostProcessing.csproj", "{9DE12724-B969-4FD2-AF36-53CF3F0B0002}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bearded.Graphics.Examples.12.Text", "examples\12.Text\Bearded.Graphics.Examples.12.Text.csproj", "{CD216E8B-8D00-4CDA-8325-908906520E0B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bearded.Graphics.Examples.12.Text", "Bearded.Graphics.Examples\12.Text\Bearded.Graphics.Examples.12.Text.csproj", "{CD216E8B-8D00-4CDA-8325-908906520E0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bearded.Graphics.Examples.20.Mandelbrot", "examples\20.Mandelbrot\Bearded.Graphics.Examples.20.Mandelbrot.csproj", "{25A39472-3298-4413-9AF3-F5228E62A13A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bearded.Graphics.Examples.20.Mandelbrot", "Bearded.Graphics.Examples\20.Mandelbrot\Bearded.Graphics.Examples.20.Mandelbrot.csproj", "{25A39472-3298-4413-9AF3-F5228E62A13A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
