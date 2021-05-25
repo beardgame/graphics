@@ -88,6 +88,7 @@ namespace Bearded.Graphics.Windowing
             {
                 window.ProcessEvents();
                 OnUpdateUIThread();
+                Thread.Sleep(1);
             }
         }
 
