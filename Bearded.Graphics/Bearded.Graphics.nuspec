@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Bearded.Graphics</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>https://github.com/beardgame/graphics/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/beardgame/graphics</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Object oriented C# OpenGL graphics library built on top of OpenTK.</description>
+    <releaseNotes>Initial release.</releaseNotes>
+    <copyright>Copyright 2021</copyright>
+    <tags>gamedev,opentk,opengl,graphics</tags>
+  </metadata>
+</package>

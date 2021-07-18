@@ -35,18 +35,16 @@ namespace Bearded.Graphics.Examples.PostProcessing
         private int width;
         private int height;
 
-        public GameWindow()
-            : base(
-                new NativeWindowSettings
-                    {
-                        API = ContextAPI.OpenGL,
-                        APIVersion = new Version(3, 2),
-                        Title = "PostProcessing example",
-                        WindowState = WindowState.Normal,
-                        Size = new Vector2i(1280, 720)
-                    }
-                )
+        protected override NativeWindowSettings GetSettings()
         {
+            return new NativeWindowSettings
+            {
+                API = ContextAPI.OpenGL,
+                APIVersion = new Version(3, 2),
+                Title = "PostProcessing example",
+                WindowState = WindowState.Normal,
+                Size = new Vector2i(1280, 720)
+            };
         }
 
         protected override void OnLoad()
