@@ -9,7 +9,7 @@
     <licenseUrl>https://github.com/beardgame/graphics/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/beardgame/graphics</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Object oriented C# OpenGL graphics library build on top of OpenTK.</description>
+    <description>Object oriented C# OpenGL graphics library built on top of OpenTK.</description>
     <releaseNotes>Initial release.</releaseNotes>
     <copyright>Copyright 2021</copyright>
     <tags>gamedev,opentk,opengl,graphics</tags>
