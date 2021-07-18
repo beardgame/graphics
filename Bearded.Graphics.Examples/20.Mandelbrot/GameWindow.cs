@@ -20,18 +20,16 @@ namespace Bearded.Graphics.Examples.Mandelbrot
         private readonly Vector2Uniform offset = new Vector2Uniform("offset");
         private PostProcessor renderer;
 
-        public GameWindow()
-            : base(
-                new NativeWindowSettings
-                    {
-                        API = ContextAPI.OpenGL,
-                        APIVersion = new Version(3, 2),
-                        Title = "Mandelbrot example",
-                        WindowState = WindowState.Normal,
-                        Size = new Vector2i(1280, 720)
-                    }
-                )
+        protected override NativeWindowSettings GetSettings()
         {
+            return new NativeWindowSettings
+            {
+                API = ContextAPI.OpenGL,
+                APIVersion = new Version(3, 2),
+                Title = "Mandelbrot example",
+                WindowState = WindowState.Normal,
+                Size = new Vector2i(1280, 720)
+            };
         }
 
         protected override void OnLoad()

@@ -24,18 +24,16 @@ namespace Bearded.Graphics.Examples.IndexBuffer
         private Vector2 quadPosition = Vector2.Zero;
         private Vector2 quadVelocity = new Vector2(0.8f, 0.7f);
 
-        public GameWindow()
-            : base(
-                new NativeWindowSettings
-                    {
-                        API = ContextAPI.OpenGL,
-                        APIVersion = new Version(3, 2),
-                        Title = "IndexBuffer example",
-                        WindowState = WindowState.Normal,
-                        Size = new Vector2i(1280, 720)
-                    }
-                )
+        protected override NativeWindowSettings GetSettings()
         {
+            return new NativeWindowSettings
+            {
+                API = ContextAPI.OpenGL,
+                APIVersion = new Version(3, 2),
+                Title = "IndexBuffer example",
+                WindowState = WindowState.Normal,
+                Size = new Vector2i(1280, 720)
+            };
         }
 
         protected override void OnLoad()

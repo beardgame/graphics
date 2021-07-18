@@ -24,18 +24,16 @@ namespace Bearded.Graphics.Examples.Basics
         private ShaderProgram shaderProgram = null!;
         private Renderer renderer = null!;
 
-        public GameWindow()
-            : base(
-                new NativeWindowSettings
-                    {
-                        API = ContextAPI.OpenGL,
-                        APIVersion = new Version(3, 2),
-                        Title = "Basic example",
-                        WindowState = WindowState.Normal,
-                        Size = new Vector2i(1280, 720)
-                    }
-                )
+        protected override NativeWindowSettings GetSettings()
         {
+            return new NativeWindowSettings
+            {
+                API = ContextAPI.OpenGL,
+                APIVersion = new Version(3, 2),
+                Title = "Basic example",
+                WindowState = WindowState.Normal,
+                Size = new Vector2i(1280, 720)
+            };
         }
 
         protected override void OnLoad()
