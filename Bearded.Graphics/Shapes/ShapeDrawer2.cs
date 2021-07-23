@@ -160,7 +160,7 @@ namespace Bearded.Graphics.Shapes
         {
             var vx = x2 - x1;
             var vy = y1 - y2; // switch order for correct normal direction
-            var ilxy = lineWidth / (float)Math.Sqrt(vx * vx + vy * vy);
+            var ilxy = 0.5f * lineWidth / (float)Math.Sqrt(vx * vx + vy * vy);
             var nx = vy * ilxy;
             var ny = vx * ilxy;
             meshBuilder.AddQuad(
