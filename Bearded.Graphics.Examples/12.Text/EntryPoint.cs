@@ -8,6 +8,7 @@ namespace Bearded.Graphics.Examples.Text
             // Initialize an instance of the game window. This represents the game or application at the highest
             // level, and will be the entry point for your game loop.
             var gameWindow = new GameWindow();
+            gameWindow.Initialize();
             // Run the game window.
             gameWindow.Run();
         }
