@@ -6,6 +6,7 @@ namespace Bearded.Graphics.Examples.Mandelbrot
         public static void Main()
         {
             var gameWindow = new GameWindow();
+            gameWindow.Initialize();
             gameWindow.Run();
         }
     }
