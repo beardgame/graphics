@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Drawing;
+using Bearded.Graphics.Debugging;
 using Bearded.Graphics.Textures;
 
 namespace Bearded.Graphics.Pipelines.Context

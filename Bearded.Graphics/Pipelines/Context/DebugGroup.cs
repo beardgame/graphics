@@ -1,4 +1,5 @@
 using System;
+using Bearded.Graphics.Debugging;
 using OpenTK.Graphics.OpenGL;
 
 namespace Bearded.Graphics.Pipelines.Context
@@ -20,12 +21,12 @@ namespace Bearded.Graphics.Pipelines.Context
         public void StoreCurrentValueAndApplyChange(TState state)
         {
             var name = getName(state);
-            GL.PushDebugGroup(DebugSourceExternal.DebugSourceThirdParty, 0, name.Length, name);
+            KHRDebugExtension.Instance.PushDebugGroup(DebugSourceExternal.DebugSourceThirdParty, 0, name);
         }
 
         public void RestoreToStoredValue()
         {
-            GL.PopDebugGroup();
+            KHRDebugExtension.Instance.PopDebugGroup();
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Bearded.Graphics.Debugging;
 using Bearded.Graphics.Textures;
 using OpenTK.Graphics.OpenGL;
 
@@ -21,7 +22,7 @@ namespace Bearded.Graphics.Pipelines
 
         private static PipelineRenderTarget withLabel(string label, PipelineRenderTarget target)
         {
-            GL.ObjectLabel(ObjectLabelIdentifier.Framebuffer, target.Handle, label.Length, label);
+            KHRDebugExtension.Instance.SetObjectLabel(ObjectLabelIdentifier.Framebuffer, target.Handle, label);
             return target;
         }
 
@@ -97,7 +98,7 @@ namespace Bearded.Graphics.Pipelines
 
             if (label != null)
             {
-                GL.ObjectLabel(ObjectLabelIdentifier.Texture, texture.Handle, label.Length, label);
+                KHRDebugExtension.Instance.SetObjectLabel(ObjectLabelIdentifier.Texture, texture.Handle, label);
             }
         }
     }
