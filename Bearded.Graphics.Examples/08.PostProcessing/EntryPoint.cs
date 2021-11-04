@@ -5,7 +5,6 @@ namespace Bearded.Graphics.Examples.PostProcessing
         public static void Main()
         {
             var gameWindow = new GameWindow();
-            gameWindow.Initialize();
             gameWindow.Run();
         }
     }

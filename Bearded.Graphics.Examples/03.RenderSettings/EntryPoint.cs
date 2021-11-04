@@ -6,7 +6,6 @@ namespace Bearded.Graphics.Examples.RenderSettings
         public static void Main()
         {
             var gameWindow = new GameWindow();
-            gameWindow.Initialize();
             gameWindow.Run();
         }
     }

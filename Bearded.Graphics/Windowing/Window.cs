@@ -2,11 +2,9 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading;
-using System.Threading.Tasks;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
-using Void = Bearded.Utilities.Void;
 
 namespace Bearded.Graphics.Windowing
 {
@@ -44,62 +42,58 @@ namespace Bearded.Graphics.Windowing
             }
         }
 
-        private TaskCompletionSource<Void>? initialization;
-
-        private NativeWindowWrapper? window;
+        private NativeWindowWrapper window = null!;
 
         // TODO(#26): rewrite windowing natively and merge with input, instead of relying on OpenTK.Windowing.Desktop
         [Obsolete("Legacy implementation. There is no replacement yet.")]
-        protected NativeWindow NativeWindow => window ??
-            throw new InvalidOperationException($"Window must be initialised before accessing {nameof(NativeWindow)}.");
+        protected NativeWindow NativeWindow => window;
 
         private bool vsync = true;
 
         protected abstract NativeWindowSettings GetSettings();
 
-        public async Task Initialize()
-        {
-            initialization = new TaskCompletionSource<Void>();
-
-            var uiThread = new Thread(runUI);
-            uiThread.Start();
-
-            await initialization.Task;
-        }
-
-        private void runUI()
-        {
-            window = new NativeWindowWrapper(GetSettings())
-            {
-                IsVisible = true
-            };
-            window.Resize += OnResize;
-            window.Closing += OnClosing;
-
-            OnLoad();
-
-            TriggerResize();
-
-            window.DetachContextFromCallingThread();
-
-            initialization!.SetResult(default);
-
-            while (window.Exists && !window.IsExiting)
-            {
-                window.ProcessEvents();
-                OnUpdateUIThread();
-                Thread.Sleep(1);
-            }
-        }
 
         public void Run()
         {
-            if (initialization == null)
-                throw new InvalidOperationException("Window must be initialised before running.");
+            createWindowWithDetachedGLContext();
+            startUpdateThread();
+            runMainThreadLoop();
+        }
 
-            initialization.Task.Wait();
+        private void createWindowWithDetachedGLContext()
+        {
+            setupNativeWindow();
+            OnLoad();
+            TriggerResize();
+            window.DetachContextFromCallingThread();
+        }
 
-            runGL();
+        private void setupNativeWindow()
+        {
+            window = new NativeWindowWrapper(GetSettings())
+            {
+                IsVisible = true,
+            };
+            window.Resize += OnResize;
+            window.Closing += OnClosing;
+        }
+
+        private void startUpdateThread()
+        {
+            var updateThread = new Thread(runGL)
+            {
+                Name = "GL Thread",
+            };
+            updateThread.Start();
+        }
+
+        private void runMainThreadLoop()
+        {
+            while (window.Exists && !window.IsExiting)
+            {
+                window.ProcessEvents(TimeSpan.FromSeconds(1d / 200).TotalSeconds);
+                OnUpdateUIThread();
+            }
         }
 
         private void runGL()
