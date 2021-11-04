@@ -31,6 +31,12 @@ namespace Bearded.Graphics.Pipelines.Context
         public PipelineContextBuilder<TState> SetViewport(Func<TState, Rectangle> getViewport)
             => with(new Viewport<TState>(getViewport));
 
+        public PipelineContextBuilder<TState> SetDebugName(string name)
+            => with(new DebugGroup<TState>(name));
+
+        public PipelineContextBuilder<TState> SetDebugName(Func<TState, string> getName)
+            => with(new DebugGroup<TState>(getName));
+
         private PipelineContextBuilder<TState> with(IContextChange<TState> change)
         {
             contextChanges.Add(change);
