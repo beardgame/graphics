@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Drawing;
+using Bearded.Graphics.Debugging;
 using Bearded.Graphics.Textures;
 
 namespace Bearded.Graphics.Pipelines.Context
@@ -30,6 +31,12 @@ namespace Bearded.Graphics.Pipelines.Context
 
         public PipelineContextBuilder<TState> SetViewport(Func<TState, Rectangle> getViewport)
             => with(new Viewport<TState>(getViewport));
+
+        public PipelineContextBuilder<TState> SetDebugName(string name)
+            => with(new DebugGroup<TState>(name));
+
+        public PipelineContextBuilder<TState> SetDebugName(Func<TState, string> getName)
+            => with(new DebugGroup<TState>(getName));
 
         private PipelineContextBuilder<TState> with(IContextChange<TState> change)
         {
