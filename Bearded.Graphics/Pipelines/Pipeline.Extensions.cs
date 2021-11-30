@@ -1,5 +1,6 @@
 using System;
 using Bearded.Graphics.Pipelines.Steps;
+using Void = Bearded.Utilities.Void;
 
 namespace Bearded.Graphics.Pipelines
 {
@@ -14,6 +15,11 @@ namespace Bearded.Graphics.Pipelines
             this IPipeline<TStateInner> innerPipeline, Func<TStateOuter, TStateInner> selector)
         {
             return new Elevator<TStateInner,TStateOuter>(innerPipeline, selector);
+        }
+
+        public static void Execute(this IPipeline<Void> pipeline)
+        {
+            pipeline.Execute(default);
         }
     }
 }
