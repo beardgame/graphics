@@ -20,6 +20,9 @@ namespace Bearded.Graphics.Pipelines.Context
         public PipelineContextBuilder<TState> SetCullMode(CullMode cullMode)
             => with(new Culling<TState>(cullMode));
 
+        public PipelineContextBuilder<TState> SetColorMask(ColorMask mask)
+            => with(new ColorMask<TState>(mask));
+
         public PipelineContextBuilder<TState> SetDepthMode(DepthMode depthMode)
             => with(new DepthModeChange<TState>(depthMode));
 

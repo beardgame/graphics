@@ -7,20 +7,21 @@ using static OpenTK.Graphics.OpenGL.BlendingFactor;
 
 namespace Bearded.Graphics.Pipelines.Context
 {
-    public enum BlendMode
-    {
-        None = 0,
-        Alpha,
-        Add,
-        Subtract,
-        Multiply,
-        Premultiplied,
-        Min,
-        Max,
-    }
-
     public static class GLState
     {
+        public static ColorMask ColorMask { get; private set; } = ColorMask.DrawAll;
+
+        public static void SetColorMask(ColorMask mask)
+        {
+            ColorMask = mask;
+            GL.ColorMask(
+                mask.HasFlag(ColorMask.DrawRed),
+                mask.HasFlag(ColorMask.DrawGreen),
+                mask.HasFlag(ColorMask.DrawBlue),
+                mask.HasFlag(ColorMask.DrawAll)
+                );
+        }
+
         public static int Framebuffer { get; private set; }
 
         public static void BindFramebuffer(int framebuffer)
