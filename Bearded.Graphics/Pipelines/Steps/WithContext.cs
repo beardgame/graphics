@@ -23,8 +23,9 @@ namespace Bearded.Graphics.Pipelines.Steps
 
             inner.Execute(state);
 
-            foreach (var change in changes)
+            for (var i = changes.Length - 1; i >= 0; i--)
             {
+                var change = changes[i];
                 change.RestoreToStoredValue();
             }
         }
