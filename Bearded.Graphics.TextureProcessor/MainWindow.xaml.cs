@@ -2,6 +2,8 @@
 using System.Drawing;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Bearded.Graphics.TextureProcessor
 {
@@ -62,6 +64,13 @@ namespace Bearded.Graphics.TextureProcessor
         private void notify(string message)
         {
             NotificationDisplay.Text = message;
+        }
+
+        private void scrollViewerPreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            var scrollViewer = (ScrollViewer)sender;
+            scrollViewer.ScrollToHorizontalOffset(scrollViewer.HorizontalOffset + e.Delta);
+            e.Handled = true;
         }
     }
 }

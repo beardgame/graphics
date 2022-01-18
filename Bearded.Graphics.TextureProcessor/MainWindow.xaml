@@ -16,15 +16,23 @@
                 <TextBlock Name="NotificationDisplay" />
             </StatusBarItem>
         </StatusBar>
-        <ListView Name="ImageList" HorizontalAlignment="Stretch" VerticalAlignment="Top">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Vertical" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                        <Image Source="{Binding Image}" HorizontalAlignment="Stretch" VerticalAlignment="Top" Stretch="UniformToFill" />
-                        <TextBlock Text="{Binding Caption}" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" />
-                    </StackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+        <ScrollViewer HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Auto"
+                      PreviewMouseWheel="scrollViewerPreviewMouseWheel">
+            <ItemsControl Name="ImageList" HorizontalAlignment="Stretch">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel IsItemsHost="True" Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Vertical" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                            <Image Source="{Binding Image}" HorizontalAlignment="Stretch" VerticalAlignment="Top" Stretch="UniformToFill" />
+                            <TextBlock Text="{Binding Caption}" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
     </DockPanel>
 </Window>
