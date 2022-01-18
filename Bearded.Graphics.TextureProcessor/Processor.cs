@@ -1,27 +1,28 @@
 using System.Collections.Generic;
 using System.Drawing;
 using Bearded.Graphics.Content;
+using OpenTK.Mathematics;
 
 namespace Bearded.Graphics.TextureProcessor
 {
     sealed class Processor
     {
-        private readonly BitmapArgb source;
+        private readonly Bitmap<Color4> source;
 
         public static Processor From(Bitmap bitmap)
         {
-            return new Processor(BitmapArgb.From(bitmap));
+            return new Processor(Bitmap<Color4>.From(bitmap, c => new Color4(c.R, c.G, c.B, c.A)));
         }
 
-        private Processor(BitmapArgb source)
+        private Processor(Bitmap<Color4> source)
         {
             this.source = source;
         }
 
-        public IEnumerable<BitmapArgb> Process()
+        public IEnumerable<Bitmap> Process()
         {
-            yield return source;
-            yield return source;
+            yield return source.ToSystemBitmap(c => new Color((uint)c.ToArgb()));
+            yield return source.ToSystemBitmap(c => new Color((uint)c.ToArgb()));
         }
     }
 }

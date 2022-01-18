@@ -52,7 +52,6 @@ namespace Bearded.Graphics.TextureProcessor
             var bitmaps = Processor
                 .From(bitmap)
                 .Process()
-                .Select(b => b.ToSystemBitmap())
                 .Select(b => new ImageData(b, "The Game"))
                 .ToList();
 
