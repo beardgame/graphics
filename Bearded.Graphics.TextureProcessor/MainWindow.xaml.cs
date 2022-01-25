@@ -30,19 +30,15 @@ namespace Bearded.Graphics.TextureProcessor
         {
             FilenameDisplay.Text = file;
 
-            Bitmap bitmap;
-
             try
             {
-                bitmap = new Bitmap(file);
+                using var bitmap = new Bitmap(file);
+                process(bitmap);
             }
             catch (Exception e)
             {
                 notify($"Loading failed with {e.GetType().Name}: {e.Message}");
-                return;
             }
-
-            process(bitmap);
         }
 
         private void process(Bitmap bitmap)
@@ -52,7 +48,7 @@ namespace Bearded.Graphics.TextureProcessor
             var bitmaps = Processor
                 .From(bitmap)
                 .Process()
-                .Select(b => new ImageData(b, "The Game"))
+                .Select(b => new ImageData(b.Bitmap, b.Name))
                 .ToList();
 
             notify($"Finished processing bitmap: {bitmaps.Count} layers, {bitmap.Width}x{bitmap.Height}");

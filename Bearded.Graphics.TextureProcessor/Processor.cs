@@ -5,6 +5,8 @@ using OpenTK.Mathematics;
 
 namespace Bearded.Graphics.TextureProcessor
 {
+    record struct NamedBitmap(Bitmap Bitmap, string Name);
+
     sealed class Processor
     {
         private readonly Bitmap<Color4> source;
@@ -19,10 +21,10 @@ namespace Bearded.Graphics.TextureProcessor
             this.source = source;
         }
 
-        public IEnumerable<Bitmap> Process()
+        public IEnumerable<NamedBitmap> Process()
         {
-            yield return source.ToSystemBitmap(c => new Color((uint)c.ToArgb()));
-            yield return source.ToSystemBitmap(c => new Color((uint)c.ToArgb()));
+            yield return new (source.ToSystemBitmap(c => new Color((uint)c.ToArgb())), "Input");
+            yield return new (source.ToSystemBitmap(c => new Color((uint)c.ToArgb())), "Output");
         }
     }
 }

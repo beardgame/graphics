@@ -27,8 +27,11 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Vertical" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                            <Image Source="{Binding Image}" HorizontalAlignment="Stretch" VerticalAlignment="Top" Stretch="UniformToFill" />
-                            <TextBlock Text="{Binding Caption}" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" />
+                            <Border BorderBrush="LightGray"
+                                    BorderThickness="1">
+                                <Image Source="{Binding Image}" HorizontalAlignment="Stretch" VerticalAlignment="Top" Stretch="UniformToFill" />
+                            </Border>
+                            <TextBlock Text="{Binding Caption}" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" TextAlignment="Center" />
                         </StackPanel>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
