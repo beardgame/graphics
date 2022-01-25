@@ -1,3 +1,4 @@
+using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -9,6 +10,7 @@ namespace Bearded.Graphics.TextureProcessor
     {
         public BitmapImage Image { get; }
         public string Caption { get; }
+        public TimeSpan Time { get; }
 
         public ImageData(Bitmap bitmap, string caption)
         {

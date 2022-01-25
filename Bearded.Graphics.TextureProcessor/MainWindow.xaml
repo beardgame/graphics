@@ -15,6 +15,9 @@
             <StatusBarItem>
                 <TextBlock Name="NotificationDisplay" />
             </StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Right">
+                <Button Name="RefreshButton" Click="RefreshButton_OnClick">♻ Refresh</Button>
+            </StatusBarItem>
         </StatusBar>
         <ScrollViewer HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Auto"
                       PreviewMouseWheel="scrollViewerPreviewMouseWheel">

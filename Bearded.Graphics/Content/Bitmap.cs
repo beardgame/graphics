@@ -1,13 +1,16 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using OpenTK.Mathematics;
 
 namespace Bearded.Graphics.Content
 {
-    public sealed class Bitmap<TPixel>
+    public sealed class Bitmap<TPixel> : IEnumerable<(TPixel Pixel, Vector2i Xy)>
         where TPixel : struct
     {
-        internal readonly TPixel[] Pixels;
+        private readonly TPixel[] pixels;
         public int Width { get; }
         public int Height { get; }
 
@@ -21,10 +24,25 @@ namespace Bearded.Graphics.Content
             if (pixels.Length != width * height)
                 throw new ArgumentException("Bitmap array must have width * height pixels");
 
-            Pixels = pixels;
+            this.pixels = pixels;
             Width = width;
             Height = height;
         }
+
+        public TPixel this[int x, int y]
+        {
+            get => pixels[index(x, y)];
+            set => pixels[index(x, y)] = value;
+        }
+
+        public TPixel this[Vector2i xy]
+        {
+            get => pixels[index(xy.X, xy.Y)];
+            set => pixels[index(xy.X, xy.Y)] = value;
+        }
+
+        private int index(int x, int y) => y * Width + x;
+        private Vector2i xy(int index) => new Vector2i(index % Width, index / Width);
 
         public Bitmap<TPixelTo> To<TPixelTo>(Func<TPixel, TPixelTo> convertPixel)
             where TPixelTo : struct
@@ -34,7 +52,21 @@ namespace Bearded.Graphics.Content
 
             for (var i = 0; i < pixelCount; i++)
             {
-                newPixels[i] = convertPixel(Pixels[i]);
+                newPixels[i] = convertPixel(pixels[i]);
+            }
+
+            return new Bitmap<TPixelTo>(newPixels, Width, Height);
+        }
+
+        public Bitmap<TPixelTo> To<TPixelTo>(Func<TPixel, Vector2i, TPixelTo> convertPixel)
+            where TPixelTo : struct
+        {
+            var pixelCount = Width * Height;
+            var newPixels = new TPixelTo[pixelCount];
+
+            for (var i = 0; i < pixelCount; i++)
+            {
+                newPixels[i] = convertPixel(pixels[i], xy(i));
             }
 
             return new Bitmap<TPixelTo>(newPixels, Width, Height);
@@ -62,7 +94,7 @@ namespace Bearded.Graphics.Content
         {
             var bitmap = new Bitmap(Width, Height);
 
-            copyBytes(bitmap, Pixels, CopyMode.ArgbToBitmap, (ptr, arrayPixels, count) =>
+            copyBytes(bitmap, pixels, CopyMode.ArgbToBitmap, (ptr, arrayPixels, count) =>
             {
                 unsafe
                 {
@@ -96,5 +128,17 @@ namespace Bearded.Graphics.Content
 
             bitmap.UnlockBits(data);
         }
+
+        public IEnumerator<(TPixel, Vector2i)> GetEnumerator()
+        {
+            var pixelCount = Width * Height;
+
+            for (var i = 0; i < pixelCount; i++)
+            {
+                yield return (pixels[i], xy(i));
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -9,6 +10,8 @@ namespace Bearded.Graphics.TextureProcessor
 {
     public partial class MainWindow
     {
+        private string lastFile;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -29,16 +32,10 @@ namespace Bearded.Graphics.TextureProcessor
         private void open(string file)
         {
             FilenameDisplay.Text = file;
+            lastFile = file;
 
-            try
-            {
-                using var bitmap = new Bitmap(file);
-                process(bitmap);
-            }
-            catch (Exception e)
-            {
-                notify($"Loading failed with {e.GetType().Name}: {e.Message}");
-            }
+            using var bitmap = new Bitmap(file);
+            process(bitmap);
         }
 
         private void process(Bitmap bitmap)
@@ -48,7 +45,7 @@ namespace Bearded.Graphics.TextureProcessor
             var bitmaps = Processor
                 .From(bitmap)
                 .Process()
-                .Select(b => new ImageData(b.Bitmap, b.Name))
+                .Select(b => new ImageData(b.Bitmap, $"{b.Name} ({b.Time.TotalSeconds:0.00}s)"))
                 .ToList();
 
             notify($"Finished processing bitmap: {bitmaps.Count} layers, {bitmap.Width}x{bitmap.Height}");
@@ -66,6 +63,11 @@ namespace Bearded.Graphics.TextureProcessor
             var scrollViewer = (ScrollViewer)sender;
             scrollViewer.ScrollToHorizontalOffset(scrollViewer.HorizontalOffset + e.Delta);
             e.Handled = true;
+        }
+
+        private void RefreshButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            open(lastFile);
         }
     }
 }
