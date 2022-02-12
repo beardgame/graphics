@@ -2,7 +2,7 @@ using System;
 
 namespace Bearded.Graphics.MeshBuilders
 {
-    public interface IIndexedTrianglesMeshBuilder<TVertex, TIndex>
+    public interface IIndexedMeshBuilder<TVertex, TIndex>
     {
         void Add(
             int vertexCount, int indexCount,
