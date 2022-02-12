@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Bearded.Graphics.Debugging;
+using Bearded.Graphics.RenderSettings;
 using Bearded.Graphics.Textures;
 using OpenTK.Graphics.OpenGL;
 
@@ -8,7 +9,6 @@ namespace Bearded.Graphics.Pipelines
 {
     public static partial class Pipeline
     {
-
         public static PipelineRenderTarget RenderTargetWithColors(string label, params PipelineTexture[] textures)
         {
             return withLabel(label, RenderTargetWithColors(textures));
@@ -100,6 +100,15 @@ namespace Bearded.Graphics.Pipelines
             {
                 KHRDebugExtension.Instance.SetObjectLabel(ObjectLabelIdentifier.Texture, texture.Handle, label);
             }
+        }
+
+        public static IRenderSetting TextureUniforms(
+            params (PipelineTextureBase Texture, string UniformName)[] textures)
+        {
+            return new CompositeRenderSetting(
+                textures.Select(
+                    (t, i) => new TextureUniform(t.UniformName, TextureUnit.Texture0 + i, t.Texture.Texture))
+            );
         }
     }
 }
