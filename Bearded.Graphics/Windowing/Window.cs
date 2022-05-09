@@ -50,6 +50,8 @@ namespace Bearded.Graphics.Windowing
 
         private bool vsync = true;
 
+        private bool forceResize = false;
+
         protected abstract NativeWindowSettings GetSettings();
 
 
@@ -91,6 +93,12 @@ namespace Bearded.Graphics.Windowing
         {
             while (window.Exists && !window.IsExiting)
             {
+                if (forceResize)
+                {
+                    OnResize(new ResizeEventArgs(window.Size));
+                    forceResize = false;
+                }
+                
                 window.ProcessEvents(TimeSpan.FromSeconds(1d / 200).TotalSeconds);
                 OnUpdateUIThread();
             }
@@ -162,7 +170,7 @@ namespace Bearded.Graphics.Windowing
 
         protected void TriggerResize()
         {
-            OnResize(new ResizeEventArgs(window.Size));
+            forceResize = true;
         }
 
         protected abstract void OnLoad();
