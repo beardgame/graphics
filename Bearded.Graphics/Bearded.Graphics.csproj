@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <PackageReference Include="Bearded.Utilities" Version="0.2.0.393-dev" />
-    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
     <PackageReference Include="OpenTK.Graphics" Version="4.4.0" />
     <PackageReference Include="OpenTK.Windowing.Common" Version="4.4.0" />
     <PackageReference Include="OpenTK.Windowing.Desktop" Version="4.4.0" />
