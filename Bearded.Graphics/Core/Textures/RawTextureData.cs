@@ -4,14 +4,14 @@ using OpenTK.Graphics.OpenGL;
 
 namespace Bearded.Graphics.Textures;
 
-public sealed class RawTextureData : TextureData
+public sealed class RawTextureData : ITextureData
 {
     private readonly byte[] data;
 
-    public override int Width { get; }
-    public override int Height { get; }
+    public int Width { get; }
+    public int Height { get; }
 
-    public static TextureData From(byte[] data, int width, int height)
+    public static ITextureData From(byte[] data, int width, int height)
     {
         ValidateExpectedLength(data, width, height);
         return new RawTextureData(data, width, height);
@@ -24,7 +24,7 @@ public sealed class RawTextureData : TextureData
         Height = height;
     }
 
-    protected override void Upload(ITextureUploadContext context)
+    public void Upload(ITextureData.IUploadContext context)
     {
         var pinnedArray = GCHandle.Alloc(data, GCHandleType.Pinned);
         var ptr = pinnedArray.AddrOfPinnedObject();

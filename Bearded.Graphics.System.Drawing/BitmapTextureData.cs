@@ -7,32 +7,32 @@ using SystemPixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace Bearded.Graphics.System.Drawing;
 
-public sealed class BitmapTextureData : TextureData
+public sealed class BitmapTextureData : ITextureData
 {
     private readonly Bitmap bitmap;
 
-    public override int Width { get; }
-    public override int Height { get; }
+    public int Width { get; }
+    public int Height { get; }
 
-    public static TextureData From(string path) => From(new Bitmap(path));
+    public static ITextureData From(string path) => From(new Bitmap(path));
 
-    public static TextureData From(Stream stream) => From(new Bitmap(stream));
+    public static ITextureData From(Stream stream) => From(new Bitmap(stream));
 
-    public static TextureData From(Bitmap bitmap) => new BitmapTextureData(bitmap);
+    public static ITextureData From(Bitmap bitmap) => new BitmapTextureData(bitmap);
 
-    public static TextureData From(string path, IEnumerable<ITextureTransformation> transformations)
+    public static ITextureData From(string path, IEnumerable<ITextureTransformation> transformations)
     {
         using var bitmap = new Bitmap(path);
         return From(bitmap, transformations);
     }
 
-    public static TextureData From(Stream stream, IEnumerable<ITextureTransformation> transformations)
+    public static ITextureData From(Stream stream, IEnumerable<ITextureTransformation> transformations)
     {
         using var bitmap = new Bitmap(stream);
         return From(bitmap, transformations);
     }
 
-    public static TextureData From(Bitmap bitmap, IEnumerable<ITextureTransformation> transformations)
+    public static ITextureData From(Bitmap bitmap, IEnumerable<ITextureTransformation> transformations)
     {
         var data = bitmap.LockBits(
             new Rectangle(0, 0, bitmap.Width, bitmap.Height),
@@ -64,7 +64,7 @@ public sealed class BitmapTextureData : TextureData
         Height = bitmap.Height;
     }
 
-    protected override void Upload(ITextureUploadContext context)
+    public void Upload(ITextureData.IUploadContext context)
     {
         var lockedData = bitmap.LockBits(
             new Rectangle(0, 0, bitmap.Width, bitmap.Height),

@@ -17,13 +17,13 @@ namespace Bearded.Graphics.Text
 {
     public static class FontFactory
     {
-        public static (TextureData, Font) From(System.Drawing.Font font, int paddingPixels = 0)
+        public static (ITextureData, Font) From(System.Drawing.Font font, int paddingPixels = 0)
         {
             var printableAscii = Enumerable.Range(' ', '~' - ' ').Select(i => (char)i);
             return From(font, printableAscii, paddingPixels);
         }
 
-        public static (TextureData, Font) From(
+        public static (ITextureData, Font) From(
             System.Drawing.Font font, IEnumerable<char> supportedCharacters, int paddingPixels = 0)
         {
             using var builder = new Builder(font, supportedCharacters, paddingPixels);
@@ -61,7 +61,7 @@ namespace Bearded.Graphics.Text
                     PixelFormat.Format32bppArgb, measureBitmapDataHandle.AddrOfPinnedObject());
             }
 
-            public (TextureData, Font) Build()
+            public (ITextureData, Font) Build()
             {
                 calculateAllCharacterSizes();
                 var (packedWidth, packedHeight) = positionCharacters();
@@ -154,7 +154,7 @@ namespace Bearded.Graphics.Text
                 return (result.Width, result.Height);
             }
 
-            private TextureData buildTextureData(int width, int height)
+            private ITextureData buildTextureData(int width, int height)
             {
                 var textureBitmap = new Bitmap(width, height);
                 using var g = System.Drawing.Graphics.FromImage(textureBitmap);
@@ -175,7 +175,7 @@ namespace Bearded.Graphics.Text
                 return textureDataFrom(textureBitmap);
             }
 
-            private TextureData textureDataFrom(Bitmap bitmap)
+            private ITextureData textureDataFrom(Bitmap bitmap)
             {
                 var data = bitmap.LockBits(
                     new Rectangle(0, 0, bitmap.Width, bitmap.Height),

@@ -3,7 +3,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace Bearded.Graphics.Textures
 {
-    public sealed class ArrayTexture : IDisposable
+    public sealed partial class ArrayTexture : IDisposable
     {
         private PixelInternalFormat pixelInternalFormat;
 
