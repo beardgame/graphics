@@ -5,7 +5,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace Bearded.Graphics.MeshBuilders
 {
-    public class IndexedMeshBuilder<TVertex> : IIndexedMeshBuilder<TVertex, ushort>
+    public class IndexedMeshBuilder<TVertex>
         where TVertex : struct, IVertexData
     {
         private readonly PrimitiveType primitiveType;
