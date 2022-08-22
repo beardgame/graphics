@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
-using System.Drawing;
-using System.IO;
 using System.Linq;
 using OpenTK.Graphics.OpenGL;
 
@@ -12,30 +10,6 @@ namespace Bearded.Graphics.Textures
     public sealed class ArrayTextureData
     {
         public static ArrayTextureData Empty { get; } = new ArrayTextureData(0, 0, ImmutableArray<TextureData>.Empty);
-
-        public static ArrayTextureData From(IEnumerable<string> paths) => From(paths.Select(TextureData.From));
-
-        public static ArrayTextureData From(IEnumerable<Stream> streams) => From(streams.Select(TextureData.From));
-
-        public static ArrayTextureData From(IEnumerable<Bitmap> bitmaps) => From(bitmaps.Select(TextureData.From));
-
-        public static ArrayTextureData From(
-            IEnumerable<string> paths, IEnumerable<ITextureTransformation> transformations)
-        {
-            return From(paths.Select(stream => TextureData.From(stream, transformations)));
-        }
-
-        public static ArrayTextureData From(
-            IEnumerable<Stream> streams, IEnumerable<ITextureTransformation> transformations)
-        {
-            return From(streams.Select(stream => TextureData.From(stream, transformations)));
-        }
-
-        public static ArrayTextureData From(
-            IEnumerable<Bitmap> bitmaps, IEnumerable<ITextureTransformation> transformations)
-        {
-            return From(bitmaps.Select(bitmap => TextureData.From(bitmap, transformations)));
-        }
 
         public static ArrayTextureData From(params TextureData[] textureData) =>
             From((IEnumerable<TextureData>) textureData);

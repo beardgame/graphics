@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 using Bearded.Graphics.Textures;
 using Bearded.Utilities.Algorithms;
 using OpenTK.Mathematics;
+using SystemPixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace Bearded.Graphics.Text
 {
@@ -171,7 +172,23 @@ namespace Bearded.Graphics.Text
                         info.TopLeft.X - info.Offset.X, info.TopLeft.Y - info.Offset.Y);
                 }
 
-                return TextureData.From(textureBitmap);
+                return textureDataFrom(textureBitmap);
+            }
+
+            private TextureData textureDataFrom(Bitmap bitmap)
+            {
+                var data = bitmap.LockBits(
+                    new Rectangle(0, 0, bitmap.Width, bitmap.Height),
+                    ImageLockMode.ReadOnly,
+                    SystemPixelFormat.Format32bppArgb
+                );
+                var size = data.Width * data.Height * 4;
+                var array = new byte[size];
+                Marshal.Copy(data.Scan0, array, 0, size);
+                bitmap.UnlockBits(data);
+
+                return RawTextureData.From(array, bitmap.Width, bitmap.Height);
+
             }
 
             private Font buildFont(int textureWidth, int textureHeight)
