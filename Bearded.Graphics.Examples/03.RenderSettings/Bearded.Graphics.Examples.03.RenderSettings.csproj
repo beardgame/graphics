@@ -5,6 +5,7 @@
         <TargetFramework>net5.0</TargetFramework>
         <RootNamespace>Bearded.Graphics.Examples.RenderSettings</RootNamespace>
         <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
     </PropertyGroup>
 
     <ItemGroup>
