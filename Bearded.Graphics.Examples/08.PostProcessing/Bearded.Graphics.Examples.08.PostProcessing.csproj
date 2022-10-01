@@ -4,8 +4,8 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>Bearded.Graphics.Examples.PostProcessing</RootNamespace>
     <AssemblyName>Bearded.Graphics.Examples.PostProcessing</AssemblyName>
-    <TargetFramework>net5.0</TargetFramework>
-    <LangVersion>8</LangVersion>
+    <TargetFramework>net6.0</TargetFramework>
+    <LangVersion>9</LangVersion>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <Nullable>annotations</Nullable>
     <IsPackable>false</IsPackable>
