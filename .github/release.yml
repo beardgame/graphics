@@ -1,0 +1,23 @@
+changelog:
+  exclude:
+    labels:
+      - dependencies
+      - ignore-for-release
+    authors:
+      - dependabot
+      - octocat
+  categories:
+    - title: 💥 Breaking changes
+      labels:
+        - breaking-change
+    - title: ✨ New features
+      labels:
+        - enhancement
+        - feature
+    - title: 🐛 Bugfixes
+      labels:
+        - bug
+        - fix
+    - title: 📝 Other changes
+      labels:
+        - "*"
