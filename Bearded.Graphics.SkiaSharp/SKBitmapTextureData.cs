@@ -35,8 +35,7 @@ public sealed class SKBitmapTextureData : ITextureData
 
     public static ITextureData From(SKBitmap image, IEnumerable<ITextureTransformation> transformations)
     {
-        if (image.ColorType != SKColorType.Bgra8888)
-            throw new ArgumentException("Image must be in BGRA format");
+        var bgraImage = image.ColorType == SKColorType.Bgra8888 ? image : image.Copy(SKColorType.Bgra8888);
 
         var width = image.Width;
         var height = image.Height;
@@ -46,6 +45,8 @@ public sealed class SKBitmapTextureData : ITextureData
         var ptr = image.GetPixels();
 
         Marshal.Copy(ptr, array, 0, size);
+        if (image != bgraImage)
+            bgraImage.Dispose();
 
         foreach (var t in transformations)
         {
