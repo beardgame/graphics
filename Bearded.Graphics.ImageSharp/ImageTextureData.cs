@@ -63,6 +63,9 @@ public sealed class ImageTextureData : ITextureData
 
     private ImageTextureData(Image<Bgra32> image)
     {
+        if (!image.DangerousTryGetSinglePixelMemory(out _))
+            throw new InvalidOperationException("Image is not a single-array image");
+
         this.image = image;
         Width = image.Width;
         Height = image.Height;
