@@ -1,4 +1,4 @@
-# Contributing to Bearded.Utilities
+# Contributing to Bearded.Graphics
 
 You want to help us improve our little library? ~~That's awesome!~~ You're awesome!
 
