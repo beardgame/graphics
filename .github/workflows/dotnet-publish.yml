@@ -13,11 +13,13 @@ jobs:
 
     steps:
       # Build library and run tests
-      - uses: actions/checkout@v2
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3.0.0
         with:
-          dotnet-version: 5.0.x
+          dotnet-version: |
+            3.1.x
+            6.0.x
       - name: Install dependencies
         run: dotnet restore
       - name: Build
@@ -39,15 +41,15 @@ jobs:
 
       # Create a GitHub release
       - name: Create a Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ env.RELEASE_VERSION }}
-          release_name: Release ${{ env.RELEASE_VERSION }}
+          name: Release ${{ env.RELEASE_VERSION }}
           draft: false
           prerelease: ${{ contains(env.RELEASE_VERSION, '-') }}
+          generate_release_notes: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          files: "**/*.nupkg"
 
       # Push the NuGet package to the package providers
       - name: Push release to NuGet
