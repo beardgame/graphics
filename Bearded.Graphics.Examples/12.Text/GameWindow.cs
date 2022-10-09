@@ -45,7 +45,7 @@ namespace Bearded.Graphics.Examples.Text
             // System.Drawing library.
             var systemFont = new System.Drawing.Font(FontFamily.GenericSansSerif, 64, GraphicsUnit.Pixel);
             var (textureData, font) = FontFactory.From(systemFont, 1);
-            fontTexture = textureData.ToTexture(t =>
+            fontTexture = Texture.From(textureData, t =>
             {
                 t.SetFilterMode(TextureMinFilter.LinearMipmapLinear, TextureMagFilter.Nearest);
                 t.GenerateMipmap();
