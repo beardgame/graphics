@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Bearded.Graphics.System.Drawing</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="OpenTK.Core" Version="4.7.4" />
+        <PackageReference Include="OpenTK.Mathematics" Version="4.7.4" />
+        <PackageReference Include="System.Drawing.Common" Version="5.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="OpenTK.Graphics" Version="4.7.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Bearded.Graphics\Bearded.Graphics.csproj" />
+    </ItemGroup>
+
+</Project>
