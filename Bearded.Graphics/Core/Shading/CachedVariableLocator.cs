@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace Bearded.Graphics.Shading
 {
-    internal class CachedVariableLocator
+    internal sealed class CachedVariableLocator
     {
         private readonly Func<string, int> locateVariable;
-        private readonly Dictionary<string, int> variableLocations = new Dictionary<string, int>();
+        private readonly Dictionary<string, int> variableLocations = new();
 
         public CachedVariableLocator(Func<string, int> locateVariable)
         {

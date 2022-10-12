@@ -7,9 +7,9 @@ namespace Bearded.Graphics.Pipelines.Context
     {
         public Rectangle? Rectangle { get; }
 
-        public static ScissorRegion FullTarget => new ScissorRegion();
-        public static ScissorRegion Single(Rectangle rectangle) => new ScissorRegion(rectangle);
-        public static ScissorRegion SingleOrFullTarget(Rectangle? rectangle) => new ScissorRegion(rectangle);
+        public static ScissorRegion FullTarget => new();
+        public static ScissorRegion Single(Rectangle rectangle) => new(rectangle);
+        public static ScissorRegion SingleOrFullTarget(Rectangle? rectangle) => new(rectangle);
 
         private ScissorRegion(Rectangle? rectangle)
         {

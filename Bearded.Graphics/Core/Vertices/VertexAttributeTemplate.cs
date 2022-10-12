@@ -40,7 +40,6 @@ namespace Bearded.Graphics.Vertices
             this.normalize = normalize;
         }
 
-        public VertexAttribute ToAttribute(int offset, int stride) =>
-            new VertexAttribute(name, size, type, stride, offset, normalize);
+        public VertexAttribute ToAttribute(int offset, int stride) => new(name, size, type, stride, offset, normalize);
     }
 }

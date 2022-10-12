@@ -18,8 +18,8 @@ namespace Bearded.Graphics
             }
         }
 
-        private readonly List<Batch> activeBatches = new List<Batch>();
-        private readonly Stack<Batch> inactiveBatches = new Stack<Batch>();
+        private readonly List<Batch> activeBatches = new();
+        private readonly Stack<Batch> inactiveBatches = new();
 
         public event Action<Batch>? BatchActivated;
         public event Action<Batch>? BatchDeactivated;

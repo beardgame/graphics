@@ -12,7 +12,7 @@ namespace Bearded.Graphics.ShaderManagement
 
         public Shader Shader { get; private set; }
 
-        public static ReloadableShader LoadFrom(IShaderReloader reloader) => new ReloadableShader(reloader);
+        public static ReloadableShader LoadFrom(IShaderReloader reloader) => new(reloader);
 
         private ReloadableShader(IShaderReloader reloader)
         {
@@ -22,14 +22,13 @@ namespace Bearded.Graphics.ShaderManagement
 
         public bool ReloadIfNeeded()
         {
-            if (reloader.ChangedSinceLastLoad)
-            {
-                Shader?.Dispose();
-                Shader = reloader.Load();
-                return true;
-            }
+            if (!reloader.ChangedSinceLastLoad)
+                return false;
 
-            return false;
+            Shader.Dispose();
+            Shader = reloader.Load();
+            return true;
+
         }
 
         public void Reload()

@@ -12,19 +12,16 @@ namespace Bearded.Graphics.ShaderManagement
 
     public sealed partial class ShaderManager : IDisposable
     {
-        private readonly Dictionary<IShaderProvider, string> shaderNames
-            = new Dictionary<IShaderProvider, string>();
+        private readonly Dictionary<IShaderProvider, string> shaderNames = new();
 
         private readonly ImmutableDictionary<ShaderType, ReloadableShaderByName> shaders
             = new[] { ComputeShader, FragmentShader, GeometryShader,
                     VertexShader, TessControlShader, TessEvaluationShader }
                 .ToImmutableDictionary(k => k, _ => new ReloadableShaderByName());
 
-        private readonly Dictionary<string, ReloadableRendererShader> programs
-            = new Dictionary<string, ReloadableRendererShader>();
+        private readonly Dictionary<string, ReloadableRendererShader> programs = new();
 
-        private readonly Dictionary<IShaderProvider, List<ReloadableRendererShader>> programsByShader
-            = new Dictionary<IShaderProvider, List<ReloadableRendererShader>>();
+        private readonly Dictionary<IShaderProvider, List<ReloadableRendererShader>> programsByShader = new();
 
         public bool TryGetRendererShader(string shaderProgramName,
             [NotNullWhen(returnValue: true)] out IRendererShader? shaderProgram)

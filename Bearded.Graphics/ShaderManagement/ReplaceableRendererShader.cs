@@ -8,9 +8,9 @@ namespace Bearded.Graphics.ShaderManagement
     public sealed class ReplaceableRendererShader : IRendererShader, IDisposable
     {
         private ShaderProgram? program;
-        private readonly List<IRenderer> renderers = new List<IRenderer>();
+        private readonly List<IRenderer> renderers = new();
 
-        public static ReplaceableRendererShader CreateUninitialized() => new ReplaceableRendererShader(null!);
+        public static ReplaceableRendererShader CreateUninitialized() => new(null!);
 
         public ReplaceableRendererShader(ShaderProgram? program)
         {

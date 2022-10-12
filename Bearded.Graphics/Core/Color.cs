@@ -60,7 +60,7 @@ namespace Bearded.Graphics
                 3 => (0, x, chroma),
                 4 => (x, 0, chroma),
                 5 => (chroma, 0, x),
-                _ => (0f, 0f, 0f)
+                _ => (0f, 0f, 0f),
             };
 
             return new Color((byte) ((r + m) * 255), (byte) ((g + m) * 255), (byte) ((b + m) * 255), alpha);
@@ -239,7 +239,7 @@ namespace Bearded.Graphics
         /// Converts the colour to a float vector with components RGBA in that order.
         /// The range of each component is 0 to 1.
         /// </summary>
-        public Vector4 AsRGBAVector => new Vector4(r / 255f, g / 255f, b / 255f, a / 255f);
+        public Vector4 AsRGBAVector => new(r / 255f, g / 255f, b / 255f, a / 255f);
 
         /// <summary>
         /// The colour, pre-multiplied with its alpha value.
@@ -260,7 +260,7 @@ namespace Bearded.Graphics
         /// <summary>
         /// Returns a new colour with the same RGB values, but a different alpha value.
         /// </summary>
-        public Color WithAlpha(byte alpha = 0) => new Color(r, g, b, alpha);
+        public Color WithAlpha(byte alpha = 0) => new(r, g, b, alpha);
 
         /// <summary>
         /// Returns a new colour with the same RGB values, but a different alpha value.
@@ -305,8 +305,7 @@ namespace Bearded.Graphics
         /// Note that scalar values outside the range of 0 to 1 may result in overflow and cause unexpected results.
         /// </summary>
         public static Color operator *(Color color, float scalar) =>
-            new Color(
-                (byte) (color.r * scalar),
+            new((byte) (color.r * scalar),
                 (byte) (color.g * scalar),
                 (byte) (color.b * scalar),
                 (byte) (color.a * scalar));
