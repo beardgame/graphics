@@ -3,7 +3,7 @@ using Bearded.Graphics.Textures;
 
 namespace Bearded.Graphics.Pipelines.Context
 {
-    class FramebufferChange<TState> : ContextChange<TState, int>
+    sealed class FramebufferChange<TState> : ContextChange<TState, int>
     {
         public FramebufferChange(PipelineRenderTarget target)
             : base(target.Handle)
