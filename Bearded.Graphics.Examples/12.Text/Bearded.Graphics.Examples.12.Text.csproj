@@ -18,6 +18,7 @@
     <OutputPath>bin/Release/</OutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Bearded.Graphics.System.Drawing\Bearded.Graphics.System.Drawing.csproj" />
     <ProjectReference Include="..\..\Bearded.Graphics\Bearded.Graphics.csproj" />
   </ItemGroup>
   <ItemGroup>
