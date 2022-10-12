@@ -14,6 +14,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bearded.Graphics.Examples.2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bearded.Graphics.Examples.03.RenderSettings", "Bearded.Graphics.Examples\03.RenderSettings\Bearded.Graphics.Examples.03.RenderSettings.csproj", "{63136298-DDA9-430D-BCB3-B7043BA39157}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bearded.Graphics.System.Drawing", "Bearded.Graphics.System.Drawing\Bearded.Graphics.System.Drawing.csproj", "{E19E9423-1FF0-42AD-AE29-F31B1D09F4A2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bearded.Graphics.SkiaSharp", "Bearded.Graphics.SkiaSharp\Bearded.Graphics.SkiaSharp.csproj", "{AEC25237-3BA0-4E63-AFCE-7DB9A986D55E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bearded.Graphics.ImageSharp", "Bearded.Graphics.ImageSharp\Bearded.Graphics.ImageSharp.csproj", "{D3F4A684-5FDF-48CF-8ED9-4A209D29453A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,5 +54,17 @@ Global
 		{63136298-DDA9-430D-BCB3-B7043BA39157}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63136298-DDA9-430D-BCB3-B7043BA39157}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63136298-DDA9-430D-BCB3-B7043BA39157}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E19E9423-1FF0-42AD-AE29-F31B1D09F4A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E19E9423-1FF0-42AD-AE29-F31B1D09F4A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E19E9423-1FF0-42AD-AE29-F31B1D09F4A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E19E9423-1FF0-42AD-AE29-F31B1D09F4A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEC25237-3BA0-4E63-AFCE-7DB9A986D55E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEC25237-3BA0-4E63-AFCE-7DB9A986D55E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEC25237-3BA0-4E63-AFCE-7DB9A986D55E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEC25237-3BA0-4E63-AFCE-7DB9A986D55E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3F4A684-5FDF-48CF-8ED9-4A209D29453A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3F4A684-5FDF-48CF-8ED9-4A209D29453A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3F4A684-5FDF-48CF-8ED9-4A209D29453A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3F4A684-5FDF-48CF-8ED9-4A209D29453A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
