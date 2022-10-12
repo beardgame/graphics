@@ -1,5 +1,6 @@
 using System.IO;
 using Bearded.Graphics.Shading;
+using Bearded.Utilities.IO;
 using OpenTK.Graphics.OpenGL;
 
 namespace Bearded.Graphics.ShaderManagement
@@ -19,7 +20,7 @@ namespace Bearded.Graphics.ShaderManagement
             Type = type;
             this.filename = filename;
             FriendlyName = friendlyName;
-            fileWatcher = FileModifiedWatcher.FromPath(filename);
+            fileWatcher = new FileModifiedWatcher(filename);
         }
 
         public Shader Load()
