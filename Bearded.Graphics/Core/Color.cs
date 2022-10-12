@@ -274,7 +274,7 @@ namespace Bearded.Graphics
 
         public bool Equals(Color other) => r == other.r && g == other.g && b == other.b && a == other.a;
 
-        public override bool Equals(object obj) => obj is Color color && Equals(color);
+        public override bool Equals(object? obj) => obj is Color color && Equals(color);
 
         public override int GetHashCode()
         {
