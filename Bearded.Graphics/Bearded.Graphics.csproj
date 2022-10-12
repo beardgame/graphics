@@ -10,12 +10,11 @@
 
   <ItemGroup>
     <PackageReference Include="Bearded.Utilities" Version="0.2.0.393-dev" />
-    <PackageReference Include="OpenTK.Graphics" Version="4.4.0" />
-    <PackageReference Include="OpenTK.Windowing.Common" Version="4.4.0" />
-    <PackageReference Include="OpenTK.Windowing.Desktop" Version="4.4.0" />
-    <PackageReference Include="OpenTK.Windowing.GraphicsLibraryFramework" Version="4.4.0" />
+    <PackageReference Include="OpenTK.Graphics" Version="4.7.4" />
+    <PackageReference Include="OpenTK.Windowing.Common" Version="4.7.4" />
+    <PackageReference Include="OpenTK.Windowing.Desktop" Version="4.7.4" />
+    <PackageReference Include="OpenTK.Windowing.GraphicsLibraryFramework" Version="4.7.4" />
     <PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
-    <PackageReference Include="System.Drawing.Common" Version="5.0.0" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
 

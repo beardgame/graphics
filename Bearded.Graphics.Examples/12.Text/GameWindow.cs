@@ -5,6 +5,7 @@ using Bearded.Graphics.MeshBuilders;
 using Bearded.Graphics.Rendering;
 using Bearded.Graphics.RenderSettings;
 using Bearded.Graphics.Shading;
+using Bearded.Graphics.System.Drawing;
 using Bearded.Graphics.Text;
 using Bearded.Graphics.Textures;
 using Bearded.Graphics.Windowing;
@@ -13,6 +14,7 @@ using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using Void = Bearded.Utilities.Void;
+using SystemFont = System.Drawing.Font;
 
 namespace Bearded.Graphics.Examples.Text
 {
@@ -43,7 +45,7 @@ namespace Bearded.Graphics.Examples.Text
         {
             // The font factory allows us to extract the font information and construct a font texture using the
             // System.Drawing library.
-            var systemFont = new System.Drawing.Font(FontFamily.GenericSansSerif, 64, GraphicsUnit.Pixel);
+            var systemFont = new SystemFont(FontFamily.GenericSansSerif, 64, GraphicsUnit.Pixel);
             var (textureData, font) = FontFactory.From(systemFont, 1);
             fontTexture = Texture.From(textureData, t =>
             {
