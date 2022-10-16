@@ -142,6 +142,6 @@ namespace Bearded.Graphics.Vertices
         /// <param name="normalize">Whether to normalize the attribute.</param>
         public static VertexAttributeTemplate MakeAttributeTemplate(
                 string name, VertexAttribPointerType type, int numberOfType, bool normalize = false) =>
-            new VertexAttributeTemplate(name, numberOfType, type, normalize);
+            new(name, numberOfType, type, normalize);
     }
 }

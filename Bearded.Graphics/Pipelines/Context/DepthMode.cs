@@ -8,11 +8,11 @@ namespace Bearded.Graphics.Pipelines.Context
         public bool Write { get; }
         public DepthFunction TestFunction { get; }
 
-        public static DepthMode Disable => new DepthMode(false, DepthFunction.Always);
-        public static DepthMode Default => new DepthMode(true, DepthFunction.Less);
-        public static DepthMode WriteOnly => new DepthMode(true, DepthFunction.Always);
-        public static DepthMode WriteWithTest(DepthFunction test) => new DepthMode(true, test);
-        public static DepthMode TestOnly(DepthFunction test) => new DepthMode(false, test);
+        public static DepthMode Disable => new(false, DepthFunction.Always);
+        public static DepthMode Default => new(true, DepthFunction.Less);
+        public static DepthMode WriteOnly => new(true, DepthFunction.Always);
+        public static DepthMode WriteWithTest(DepthFunction test) => new(true, test);
+        public static DepthMode TestOnly(DepthFunction test) => new(false, test);
 
         private DepthMode(bool write, DepthFunction testFunction)
         {

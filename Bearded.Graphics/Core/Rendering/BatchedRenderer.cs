@@ -12,10 +12,10 @@ namespace Bearded.Graphics.Rendering
         private readonly IBatchedRenderable renderable;
         private readonly ImmutableArray<IRenderSetting> settings;
 
-        private readonly LinkedList<DrawCall> activeDrawCallsInOrder = new LinkedList<DrawCall>();
-        private readonly Dictionary<IRenderable, LinkedListNode<DrawCall>> activeDrawCalls = new Dictionary<IRenderable, LinkedListNode<DrawCall>>();
-        private readonly Dictionary<IRenderable, LinkedListNode<DrawCall>> inactiveDrawCalls = new Dictionary<IRenderable, LinkedListNode<DrawCall>>();
-        private readonly List<IRenderable> batchesWaitingForActivation = new List<IRenderable>();
+        private readonly LinkedList<DrawCall> activeDrawCallsInOrder = new();
+        private readonly Dictionary<IRenderable, LinkedListNode<DrawCall>> activeDrawCalls = new();
+        private readonly Dictionary<IRenderable, LinkedListNode<DrawCall>> inactiveDrawCalls = new();
+        private readonly List<IRenderable> batchesWaitingForActivation = new();
 
         private ShaderProgram? shaderProgram;
         private ImmutableArray<IProgramRenderSetting> settingsForProgram;

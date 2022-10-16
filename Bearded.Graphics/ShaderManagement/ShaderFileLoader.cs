@@ -26,7 +26,7 @@ namespace Bearded.Graphics.ShaderManagement
         {
             var path = new StringBuilder(pathPrefix, pathPrefix.Length + 1);
             path.Replace('\\', '/');
-            if (path[path.Length - 1] != '/')
+            if (path[^1] != '/')
                 path.Append('/');
 
             this.pathPrefix = path.ToString();
@@ -57,7 +57,7 @@ namespace Bearded.Graphics.ShaderManagement
                 return Enumerable.Empty<ShaderFile>();
 
             var searchPath = Path.Combine(pathPrefix, path).Replace(@"\", "/");
-            if (searchPath[searchPath.Length - 1] != '/')
+            if (searchPath[^1] != '/')
                 searchPath += "/";
 
             var shaders = new List<ShaderFile>();
@@ -94,7 +94,7 @@ namespace Bearded.Graphics.ShaderManagement
 
         private string getFriendlyName(string prefix, string fullPath)
         {
-            return Path.ChangeExtension(fullPath.Replace(@"\", "/").Substring(prefix.Length), null);
+            return Path.ChangeExtension(fullPath.Replace(@"\", "/")[prefix.Length..], null);
         }
 
         private string appendExtension(string path, ShaderType shaderType)
@@ -114,15 +114,15 @@ namespace Bearded.Graphics.ShaderManagement
 
         public static ShaderFileLoader CreateDefault(string pathPrefix = "")
         {
-            return new ShaderFileLoader(pathPrefix ?? "", ".vs", ".fs", ".gs", true);
+            return new ShaderFileLoader(pathPrefix, ".vs", ".fs", ".gs", true);
         }
 
         public class Builder
         {
-            public string PathPrefix { get; set; }
-            public string VertexShaderFileExtension { get; set; }
-            public string FragmentShaderFileExtension { get; set; }
-            public string GeometryShaderFileExtension { get; set; }
+            public string? PathPrefix { get; set; }
+            public string? VertexShaderFileExtension { get; set; }
+            public string? FragmentShaderFileExtension { get; set; }
+            public string? GeometryShaderFileExtension { get; set; }
 
             public bool AppendExtensionForSingleFiles { get; set; }
 
@@ -141,8 +141,8 @@ namespace Bearded.Graphics.ShaderManagement
                 return this;
             }
 
-            public Builder WithExtensions(string vertexShaderFileExtension = null,
-                string fragmentShaderFileExtension = null, string geometryShaderFileExtension = null)
+            public Builder WithExtensions(string? vertexShaderFileExtension = null,
+                string? fragmentShaderFileExtension = null, string? geometryShaderFileExtension = null)
             {
                 VertexShaderFileExtension = vertexShaderFileExtension ?? VertexShaderFileExtension;
                 FragmentShaderFileExtension = fragmentShaderFileExtension ?? FragmentShaderFileExtension;

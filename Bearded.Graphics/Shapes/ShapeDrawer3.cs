@@ -38,7 +38,7 @@ namespace Bearded.Graphics.Shapes
                 0, 1, 2,
                 0, 2, 3,
                 0, 3, 1,
-                1, 3, 2
+                1, 3, 2,
             };
 
             copyIndices(localIndices, indices, indexOffset);
@@ -64,7 +64,7 @@ namespace Bearded.Graphics.Shapes
                 5, 2, 0,
                 5, 1, 2,
                 5, 3, 1,
-                5, 0, 3
+                5, 0, 3,
             };
 
             copyIndices(localIndices, indices, indexOffset);
@@ -97,7 +97,7 @@ namespace Bearded.Graphics.Shapes
                 6, 2, 3,
                 6, 3, 7,
                 6, 7, 4,
-                6, 4, 5
+                6, 4, 5,
             };
 
             copyIndices(localIndices, indices, indexOffset);
@@ -169,7 +169,7 @@ namespace Bearded.Graphics.Shapes
                 7, 14, 15,
                 7, 19, 3,
                 7, 3, 10,
-                7, 10, 11
+                7, 10, 11,
             };
 
             copyIndices(localIndices, indices, indexOffset);
@@ -219,7 +219,7 @@ namespace Bearded.Graphics.Shapes
                 8, 6, 4,
                 9, 4, 6,
                 10, 5, 7,
-                11, 7, 5
+                11, 7, 5,
             };
 
             copyIndices(localIndices, indices, indexOffset);

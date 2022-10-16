@@ -5,12 +5,12 @@ namespace Bearded.Graphics.Shading
 {
     public sealed class ShaderFactory
     {
-        public static ShaderFactory Compute { get; } = new ShaderFactory(ShaderType.ComputeShader);
-        public static ShaderFactory Fragment { get; } = new ShaderFactory(ShaderType.FragmentShader);
-        public static ShaderFactory Geometry { get; } = new ShaderFactory(ShaderType.GeometryShader);
-        public static ShaderFactory TessellationControl { get; } = new ShaderFactory(ShaderType.TessControlShader);
-        public static ShaderFactory TessellationEvaluation { get; } = new ShaderFactory(ShaderType.TessEvaluationShader);
-        public static ShaderFactory Vertex { get; } = new ShaderFactory(ShaderType.VertexShader);
+        public static ShaderFactory Compute { get; } = new(ShaderType.ComputeShader);
+        public static ShaderFactory Fragment { get; } = new(ShaderType.FragmentShader);
+        public static ShaderFactory Geometry { get; } = new(ShaderType.GeometryShader);
+        public static ShaderFactory TessellationControl { get; } = new(ShaderType.TessControlShader);
+        public static ShaderFactory TessellationEvaluation { get; } = new(ShaderType.TessEvaluationShader);
+        public static ShaderFactory Vertex { get; } = new(ShaderType.VertexShader);
 
         private readonly ShaderType type;
 

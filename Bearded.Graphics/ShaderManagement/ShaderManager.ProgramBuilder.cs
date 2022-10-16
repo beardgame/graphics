@@ -33,7 +33,7 @@ namespace Bearded.Graphics.ShaderManagement
         public sealed class RendererShaderBuilder
         {
             private readonly ShaderManager manager;
-            private readonly List<ReloadableShader> shaders = new List<ReloadableShader>();
+            private readonly List<ReloadableShader> shaders = new();
 
             internal IEnumerable<ReloadableShader> Shaders => shaders;
 

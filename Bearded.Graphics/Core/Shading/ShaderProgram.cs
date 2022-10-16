@@ -12,9 +12,9 @@ namespace Bearded.Graphics.Shading
         private readonly CachedVariableLocator attributeLocations;
         private readonly CachedVariableLocator uniformLocations;
 
-        public static ShaderProgram FromShaders(params Shader[] shaders) => new ShaderProgram(shaders);
+        public static ShaderProgram FromShaders(params Shader[] shaders) => new(shaders);
 
-        public static ShaderProgram FromShaders(IEnumerable<Shader> shaders) => new ShaderProgram(shaders);
+        public static ShaderProgram FromShaders(IEnumerable<Shader> shaders) => new(shaders);
 
         private ShaderProgram(IEnumerable<Shader> shaders)
         {
