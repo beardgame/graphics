@@ -28,7 +28,6 @@ namespace Bearded.Graphics.ShaderManagement
             Shader.Dispose();
             Shader = reloader.Load();
             return true;
-
         }
 
         public void Reload()
