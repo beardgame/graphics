@@ -9,13 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="OpenTK.Core" Version="4.7.4" />
-        <PackageReference Include="OpenTK.Mathematics" Version="4.7.4" />
         <PackageReference Include="SkiaSharp" Version="2.88.6" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="OpenTK.Graphics" Version="4.7.4" />
     </ItemGroup>
 
     <ItemGroup>
