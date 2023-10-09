@@ -48,7 +48,7 @@ namespace Bearded.Graphics.Windowing
         [Obsolete("Legacy implementation. There is no replacement yet.")]
         protected NativeWindow NativeWindow => window;
 
-        private bool vsync = true;
+        private bool vsync = false;
 
         private bool forceResize = false;
 
@@ -108,14 +108,12 @@ namespace Bearded.Graphics.Windowing
         {
             window.AttachContextToCallingThread();
 
-            var targetUpdatesPerSecond = 60;
-            var targetDrawsPerSecond = 60;
+            var targetUpdatesPerSecond = 144;
+            var targetDrawsPerSecond = 144;
             var maximumFrameTimeFactor = 3;
 
-            var targetUpdateInterval = targetUpdatesPerSecond <= 0 ? 0 : 1 / targetUpdatesPerSecond;
-
-            targetUpdateInterval = targetUpdatesPerSecond <= 0 ? 0 : 1 / targetUpdatesPerSecond;
-            double targetRenderInterval = targetDrawsPerSecond <= 0 ? 0 : 1 / targetDrawsPerSecond;
+            var targetUpdateInterval = targetUpdatesPerSecond <= 0 ? 0 : 1.0 / targetUpdatesPerSecond;
+            var targetRenderInterval = targetDrawsPerSecond <= 0 ? 0 : 1.0 / targetDrawsPerSecond;
 
             var maximumUpdateInterval = targetUpdateInterval == 0
                 ? double.PositiveInfinity
