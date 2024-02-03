@@ -10,6 +10,9 @@ public sealed class TextureUniform(string name, TextureUnit unit, Texture value)
 public sealed class ArrayTextureUniform(string name, TextureUnit unit, ArrayTexture value)
     : Uniform<ArrayTexture, ArrayTexture.Target>(name, unit, value);
 
+public sealed class BufferTextureUniform(string name, TextureUnit unit, BufferTexture value)
+    : Uniform<BufferTexture, BufferTexture.Target>(name, unit, value);
+
 public abstract class Uniform<TTexture, TTarget> : Uniform<TTexture>
     where TTexture : IBindableTexture<TTarget>
     where TTarget : struct, IDisposable

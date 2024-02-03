@@ -8,13 +8,13 @@ namespace Bearded.Graphics
     {
         private static readonly int itemSize = Marshal.SizeOf(typeof(T));
 
-        private int handle { get; }
+        public int Handle { get; }
 
         public int Count { get; private set; }
 
         public Buffer()
         {
-            handle = GL.GenBuffer();
+            Handle = GL.GenBuffer();
         }
 
         public Target Bind(BufferTarget target = BufferTarget.ArrayBuffer)
@@ -34,7 +34,7 @@ namespace Bearded.Graphics
                 this.buffer = buffer;
                 this.target = target;
 
-                GL.BindBuffer(target, buffer.handle);
+                GL.BindBuffer(target, buffer.Handle);
             }
 
             public void Reserve(int count, BufferUsageHint usageHint = defaultUsageHint)
@@ -72,7 +72,7 @@ namespace Bearded.Graphics
 
         public void Dispose()
         {
-            GL.DeleteBuffer(handle);
+            GL.DeleteBuffer(Handle);
         }
     }
 }
