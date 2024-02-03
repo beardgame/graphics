@@ -3,7 +3,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace Bearded.Graphics.Textures
 {
-    public sealed partial class Texture : IDisposable
+    public sealed partial class Texture : IBindableTexture<Texture.Target>, IDisposable
     {
         private PixelInternalFormat pixelInternalFormat;
         private PixelFormat pixelFormat;
@@ -36,7 +36,14 @@ namespace Bearded.Graphics.Textures
             Handle = handle;
         }
 
-        public Target Bind(TextureTarget target = TextureTarget.Texture2D)
+        public Target Bind()
+        {
+            return Bind(TextureTarget.Texture2D);
+        }
+
+        // TODO: the target should be a readonly field set in the constructor
+        [Obsolete("Use overload without target instead.")]
+        public Target Bind(TextureTarget target)
         {
             return new Target(this, target);
         }
