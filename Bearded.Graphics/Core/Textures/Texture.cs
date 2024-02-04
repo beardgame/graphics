@@ -3,24 +3,24 @@ using OpenTK.Graphics.OpenGL;
 
 namespace Bearded.Graphics.Textures
 {
-    public sealed partial class Texture : IDisposable
+    public sealed partial class Texture : IBindableTexture<Texture.Target>, IDisposable
     {
+        private readonly TextureTarget target;
         private PixelInternalFormat pixelInternalFormat;
         private PixelFormat pixelFormat;
         private PixelType pixelType;
 
         public int Handle { get; }
-
         public int Height { get; private set; }
-
         public int Width { get; private set; }
 
         public static Texture Empty(int width, int height,
             PixelInternalFormat pixelInternalFormat = PixelInternalFormat.Rgba,
             PixelFormat pixelFormat = PixelFormat.Rgba,
-            PixelType pixelType = PixelType.UnsignedByte)
+            PixelType pixelType = PixelType.UnsignedByte,
+            TextureTarget textureTarget = TextureTarget.Texture2D)
         {
-            var texture = new Texture();
+            var texture = new Texture(textureTarget);
 
             using var target = texture.Bind();
             target.Resize(width, height, pixelInternalFormat, pixelFormat, pixelType);
@@ -30,26 +30,25 @@ namespace Bearded.Graphics.Textures
             return texture;
         }
 
-        public Texture()
+        public Texture(TextureTarget target = TextureTarget.Texture2D)
         {
-            GL.GenTextures(1, out int handle);
-            Handle = handle;
+            this.target = target;
+            Handle = GL.GenTexture();
         }
 
-        public Target Bind(TextureTarget target = TextureTarget.Texture2D)
+        public Target Bind()
         {
-            return new Target(this, target);
+            return new Target(this);
         }
 
         public readonly struct Target : IDisposable
         {
             private readonly Texture texture;
-            private readonly TextureTarget target;
+            private TextureTarget target => texture.target;
 
-            internal Target(Texture texture, TextureTarget target)
+            internal Target(Texture texture)
             {
                 this.texture = texture;
-                this.target = target;
                 GL.BindTexture(target, texture.Handle);
             }
 

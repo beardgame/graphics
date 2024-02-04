@@ -3,22 +3,22 @@ using OpenTK.Graphics.OpenGL;
 
 namespace Bearded.Graphics.Textures
 {
-    public sealed partial class ArrayTexture : IDisposable
+    public sealed partial class ArrayTexture : IBindableTexture<ArrayTexture.Target>, IDisposable
     {
+        private readonly TextureTarget target;
         private PixelInternalFormat pixelInternalFormat;
 
         public int Handle { get; }
-
         public int Width { get; private set; }
-
         public int Height { get; private set; }
-
         public int LayerCount { get; private set; }
 
         public static ArrayTexture Empty(
-            int width, int height, int layerCount, PixelInternalFormat pixelFormat = PixelInternalFormat.Rgba)
+            int width, int height, int layerCount,
+            PixelInternalFormat pixelFormat = PixelInternalFormat.Rgba,
+            TextureTarget textureTarget = TextureTarget.Texture2DArray)
         {
-            var arrayTexture = new ArrayTexture();
+            var arrayTexture = new ArrayTexture(textureTarget);
 
             using var target = arrayTexture.Bind();
             target.Resize(width, height, layerCount, pixelFormat);
@@ -28,26 +28,25 @@ namespace Bearded.Graphics.Textures
             return arrayTexture;
         }
 
-        public ArrayTexture()
+        public ArrayTexture(TextureTarget target = TextureTarget.Texture2DArray)
         {
-            GL.GenTextures(1, out int handle);
-            Handle = handle;
+            this.target = target;
+            Handle = GL.GenTexture();
         }
 
-        public Target Bind(TextureTarget target = TextureTarget.Texture2DArray)
+        public Target Bind()
         {
-            return new Target(this, target);
+            return new Target(this);
         }
 
         public readonly struct Target : IDisposable
         {
             private readonly ArrayTexture arrayTexture;
-            private readonly TextureTarget target;
+            private TextureTarget target => arrayTexture.target;
 
-            internal Target(ArrayTexture arrayTexture, TextureTarget target)
+            internal Target(ArrayTexture arrayTexture)
             {
                 this.arrayTexture = arrayTexture;
-                this.target = target;
                 GL.BindTexture(target, arrayTexture.Handle);
             }
 
