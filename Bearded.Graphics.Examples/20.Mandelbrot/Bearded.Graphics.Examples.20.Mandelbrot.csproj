@@ -5,7 +5,7 @@
     <RootNamespace>Bearded.Graphics.Examples.Mandelbrot</RootNamespace>
     <AssemblyName>Bearded.Graphics.Examples.Mandelbrot</AssemblyName>
     <TargetFramework>net8.0</TargetFramework>
-    <LangVersion>9</LangVersion>
+    <LangVersion>default</LangVersion>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <Nullable>annotations</Nullable>
     <IsPackable>false</IsPackable>
