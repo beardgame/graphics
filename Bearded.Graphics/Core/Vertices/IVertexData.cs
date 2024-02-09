@@ -1,15 +1,8 @@
-﻿
-namespace Bearded.Graphics.Vertices
+﻿using System.Collections.Immutable;
+
+namespace Bearded.Graphics.Vertices;
+
+public interface IVertexData
 {
-    /// <summary>
-    /// This interface must be implemented by any custom vertex data.
-    /// </summary>
-    public interface IVertexData
-    {
-        /// <summary>
-        /// Returns the vertex' <see cref="VertexAttributes"/>
-        /// </summary>
-        /// <returns>Array of <see cref="VertexAttribute"/></returns>
-        VertexAttribute[] VertexAttributes { get; }
-    }
+    static abstract ImmutableArray<VertexAttribute> VertexAttributes { get; }
 }
