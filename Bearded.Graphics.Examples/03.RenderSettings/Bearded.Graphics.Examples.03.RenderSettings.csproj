@@ -4,7 +4,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>Bearded.Graphics.Examples.RenderSettings</RootNamespace>
     <AssemblyName>Bearded.Graphics.Examples.RenderSettings</AssemblyName>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <LangVersion>9</LangVersion>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <Nullable>annotations</Nullable>
