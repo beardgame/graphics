@@ -4,8 +4,8 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>Bearded.Graphics.Examples.IndexBuffer</RootNamespace>
     <AssemblyName>Bearded.Graphics.Examples.IndexBuffer</AssemblyName>
-    <TargetFramework>net6.0</TargetFramework>
-    <LangVersion>9</LangVersion>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>default</LangVersion>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <Nullable>annotations</Nullable>
     <IsPackable>false</IsPackable>
