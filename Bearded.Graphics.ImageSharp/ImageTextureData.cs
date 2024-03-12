@@ -1,18 +1,23 @@
 ﻿using Bearded.Graphics.Textures;
 using OpenTK.Graphics.OpenGL;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace Bearded.Graphics.ImageSharp;
 
 public sealed class ImageTextureData : ITextureData
 {
-    private static readonly Configuration configuration;
+    private static readonly DecoderOptions decoderOptions;
 
     static ImageTextureData()
     {
-        configuration = Configuration.Default.Clone();
+        var configuration = Configuration.Default.Clone();
         configuration.PreferContiguousImageBuffers = true;
+        decoderOptions = new DecoderOptions
+        {
+            Configuration = configuration
+        };
     }
 
     private readonly Image<Bgra32> image;
@@ -21,21 +26,22 @@ public sealed class ImageTextureData : ITextureData
 
     public int Height { get; }
 
-    public static ITextureData From(string path) => new ImageTextureData(Image.Load<Bgra32>(configuration, path));
+    public static ITextureData From(string path) => new ImageTextureData(Image.Load<Bgra32>(decoderOptions, path));
 
-    public static ITextureData From(Stream stream) => new ImageTextureData(Image.Load<Bgra32>(configuration, stream));
+    public static ITextureData From(Stream stream) => new ImageTextureData(Image.Load<Bgra32>(decoderOptions, stream));
 
-    public static ITextureData From(Image bitmap) => new ImageTextureData(bitmap.CloneAs<Bgra32>(configuration));
+    public static ITextureData From(Image bitmap) => new ImageTextureData(bitmap.CloneAs<Bgra32>(
+        decoderOptions.Configuration));
 
     public static ITextureData From(string path, IEnumerable<ITextureTransformation> transformations)
     {
-        using var image = Image.Load<Bgra32>(configuration, path);
+        using var image = Image.Load<Bgra32>(decoderOptions, path);
         return From(image, transformations);
     }
 
     public static ITextureData From(Stream stream, IEnumerable<ITextureTransformation> transformations)
     {
-        using var image = Image.Load<Bgra32>(configuration, stream);
+        using var image = Image.Load<Bgra32>(decoderOptions, stream);
         return From(image, transformations);
     }
 
