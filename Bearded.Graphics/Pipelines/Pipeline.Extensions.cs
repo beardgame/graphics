@@ -8,7 +8,7 @@ namespace Bearded.Graphics.Pipelines
     {
         public static IPipeline<TState> Then<TState>(this IPipeline<TState> basePipeline, IPipeline<TState> continuation)
         {
-            return new Composite<TState>(basePipeline, continuation);
+            return new Composite<TState>([basePipeline, continuation]);
         }
 
         public static IPipeline<TStateOuter> Elevate<TStateInner, TStateOuter>(

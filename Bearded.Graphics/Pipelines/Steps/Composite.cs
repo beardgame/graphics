@@ -3,15 +3,10 @@ using System.Collections.Immutable;
 
 namespace Bearded.Graphics.Pipelines.Steps
 {
-    sealed class Composite<TState> : IPipeline<TState>
+    sealed class Composite<TState>(IEnumerable<IPipeline<TState>> steps) : IPipeline<TState>
     {
         private bool flattened;
-        private ImmutableArray<IPipeline<TState>> steps;
-
-        public Composite(params IPipeline<TState>[] steps)
-        {
-            this.steps = steps.ToImmutableArray();
-        }
+        private ImmutableArray<IPipeline<TState>> steps = steps.ToImmutableArray();
 
         public void Execute(TState state)
         {

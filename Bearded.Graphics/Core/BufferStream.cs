@@ -77,11 +77,11 @@ namespace Bearded.Graphics
             IsDirty = true;
         }
 
-        public void Add(T[] items)
+        public void Add(ReadOnlySpan<T> items)
         {
             var newCount = Count + items.Length;
             ensureCapacity(newCount);
-            Array.Copy(items, 0, data, Count, items.Length);
+            items.CopyTo(data.AsSpan(Count));
             Count = newCount;
             IsDirty = true;
         }

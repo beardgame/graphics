@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Bearded.Graphics.Pipelines.Steps;
 
 namespace Bearded.Graphics.Pipelines
@@ -15,6 +16,11 @@ namespace Bearded.Graphics.Pipelines
         }
 
         public static IPipeline<TState> InOrder(params IPipeline<TState>[] steps)
+        {
+            return new Composite<TState>(steps);
+        }
+
+        public static IPipeline<TState> InOrder(IEnumerable<IPipeline<TState>> steps)
         {
             return new Composite<TState>(steps);
         }
