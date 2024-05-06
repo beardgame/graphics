@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="Bearded.Utilities" Version="0.2.0.393-dev" />
+    <PackageReference Include="Evergine.Bindings.RenderDoc" Version="2024.4.29.15" PrivateAssets="compile" />
     <PackageReference Include="OpenTK.Core" Version="4.8.0" />
     <PackageReference Include="OpenTK.Graphics" Version="4.8.0" />
     <PackageReference Include="OpenTK.Mathematics" Version="4.8.0" />
