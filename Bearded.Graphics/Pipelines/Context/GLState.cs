@@ -2,8 +2,6 @@ using System;
 using System.Drawing;
 using OpenTK.Graphics.OpenGL;
 using static Bearded.Graphics.Pipelines.Context.CullMode;
-using static OpenTK.Graphics.OpenGL.BlendEquationMode;
-using static OpenTK.Graphics.OpenGL.BlendingFactor;
 
 namespace Bearded.Graphics.Pipelines.Context
 {
@@ -53,7 +51,7 @@ namespace Bearded.Graphics.Pipelines.Context
         {
             BlendMode = mode;
 
-            if (mode == BlendMode.None)
+            if (mode == BlendMode.Disable)
             {
                 GL.Disable(EnableCap.Blend);
                 return;
@@ -61,19 +59,7 @@ namespace Bearded.Graphics.Pipelines.Context
 
             GL.Enable(EnableCap.Blend);
 
-            // TODO: refactor to work similarly to depth mode to make more flexible
-            var (src, dst, equation) = mode switch
-            {
-                BlendMode.Alpha => (SrcAlpha, OneMinusSrcAlpha, FuncAdd),
-                BlendMode.Add => (SrcAlpha, One, FuncAdd),
-                BlendMode.Subtract => (SrcAlpha, One, FuncReverseSubtract),
-                BlendMode.Multiply => (Zero, SrcColor, FuncAdd),
-                BlendMode.Premultiplied => (One, OneMinusSrcAlpha, FuncAdd),
-                BlendMode.Min => (One, One, Min),
-                BlendMode.Max => (One, One, Max),
-                BlendMode.None => throw new InvalidOperationException(),
-                _ => throw new ArgumentOutOfRangeException(nameof(mode), mode, null)
-            };
+            var (src, dst, equation) = mode;
 
             GL.BlendFunc(src, dst);
             GL.BlendEquation(equation);
