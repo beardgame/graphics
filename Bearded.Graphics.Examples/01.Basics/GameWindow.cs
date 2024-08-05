@@ -43,7 +43,10 @@ namespace Bearded.Graphics.Examples.Basics
             addTriangle(buffer);
 
             // Create a renderable wrapper for our buffer, interpreting it as a triangle list of vertices.
-            var renderable = Renderable.ForVertices(buffer, PrimitiveType.Triangles);
+            var renderable = Renderable.Build(
+                PrimitiveType.Triangles,
+                b => b.With(buffer.AsVertexBuffer())
+            );
 
             // The shader program contains the vertex and fragment shaders. It is assigned to a renderer.
             shaderProgram = ShaderProgram.FromShaders(
