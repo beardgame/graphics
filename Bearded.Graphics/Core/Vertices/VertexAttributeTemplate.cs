@@ -7,8 +7,9 @@ public readonly struct VertexAttributeTemplate(
     int size,
     int bytes,
     VertexAttribPointerType type,
-    VertexAttributeFormat format)
+    VertexAttributeFormat format,
+    int divisor)
 {
     public int Bytes => bytes;
-    public VertexAttribute ToAttribute(int offset, int stride) => new(name, size, type, stride, offset, format);
+    public VertexAttribute ToAttribute(int offset, int stride) => new(name, size, type, stride, offset, format, divisor);
 }
