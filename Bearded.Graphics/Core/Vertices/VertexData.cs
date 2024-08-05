@@ -30,15 +30,19 @@ public static class VertexData
     }
 
     public static ImmutableArray<VertexAttribute> MakeAttributeArray(IEnumerable<VertexAttributeTemplate> attributes)
-        => MakeAttributeArray(attributes.ToList());
+        => MakeAttributeArray(attributes.ToArray());
 
     public static ImmutableArray<VertexAttribute> MakeAttributeArray(params VertexAttributeTemplate[] attributes)
-        => MakeAttributeArray((ICollection<VertexAttributeTemplate>)attributes);
+        => MakeAttributeArray((ReadOnlySpan<VertexAttributeTemplate>)attributes);
 
-    public static ImmutableArray<VertexAttribute> MakeAttributeArray(ICollection<VertexAttributeTemplate> attributes)
+    public static ImmutableArray<VertexAttribute> MakeAttributeArray(ReadOnlySpan<VertexAttributeTemplate> attributes)
     {
-        var stride = attributes.Sum(a => a.Bytes);
-        var array = ImmutableArray.CreateBuilder<VertexAttribute>(attributes.Count);
+        var stride = 0;
+        foreach (var template in attributes)
+        {
+            stride += template.Bytes;
+        }
+        var array = ImmutableArray.CreateBuilder<VertexAttribute>(attributes.Length);
         var offset = 0;
         foreach (var template in attributes)
         {
@@ -49,28 +53,31 @@ public static class VertexData
         return array.MoveToImmutable();
     }
 
-    public static VertexAttributeTemplate MakeAttributeTemplate<T>(string name, Format? format = null)
-        => MakeAttributeTemplate(name, typeof(T), format);
+    public static VertexAttributeTemplate MakeAttributeTemplate<T>(
+        string name, Format? format = null, bool instanced = false)
+        => MakeAttributeTemplate(name, typeof(T), format, instanced);
 
-    public static VertexAttributeTemplate MakeAttributeTemplate(string name, Type type, Format? format = null)
+    public static VertexAttributeTemplate MakeAttributeTemplate(
+        string name, Type type, Format? format = null, bool instanced = false)
     {
         if (!defaultsForType.TryGetValue(type, out var info))
             throw new ArgumentException($"Unknown type: {type.Name}");
 
         var bytes = size(info.Type);
 
-        return MakeAttributeTemplate(name, info.Type, info.Count, info.Count * bytes, format ?? info.DefaultFormat);
+        return MakeAttributeTemplate(
+            name, info.Type, info.Count, info.Count * bytes, format ?? info.DefaultFormat, instanced);
     }
 
     public static VertexAttributeTemplate MakeAttributeTemplate(
-        string name, PointerType type, int numberOfType, int sizeInBytes, Format format)
+        string name, PointerType type, int numberOfType, int sizeInBytes, Format format, bool instanced)
     {
         if (format == Format.Integer && !isValidIntegerType(type))
             throw new ArgumentException("Invalid type for integer vertex attribute. Must be an integer.");
         if (format == Format.Double && type != PointerType.Double)
             throw new ArgumentException("Invalid type for 64-bit vertex attribute. Must be Double.");
 
-        return new VertexAttributeTemplate(name, numberOfType, sizeInBytes, type, format);
+        return new VertexAttributeTemplate(name, numberOfType, sizeInBytes, type, format, instanced ? 1 : 0);
     }
 
     private static bool isValidIntegerType(PointerType type)

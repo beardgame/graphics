@@ -11,21 +11,24 @@ namespace Bearded.Graphics.Rendering
         public static IBatchedRenderable ForBatchedVertices<TV>(Batcher<Buffer<TV>> batcher, PrimitiveType primitiveType)
             where TV : struct, IVertexData
         {
-            return new WithBatched<Buffer<TV>>(batcher, primitiveType, ForVertices);
+            return new WithBatched<Buffer<TV>>(batcher, buffer => Build(primitiveType, b => b.With(buffer.AsVertexBuffer())));
         }
 
         public static IBatchedRenderable ForBatchedVertices<TV>(Batcher<BufferStream<TV>> batcher, PrimitiveType primitiveType)
             where TV : struct, IVertexData
         {
-            return new WithBatched<BufferStream<TV>>(batcher, primitiveType, ForVertices);
+            return new WithBatched<BufferStream<TV>>(batcher, stream => Build(primitiveType, b => b.With(stream.AsVertexBuffer())));
         }
 
         public static IBatchedRenderable ForBatchedVerticesAndIndices<TV>(
             Batcher<(Buffer<TV>, Buffer<ushort>)> batcher, PrimitiveType primitiveType)
             where TV : struct, IVertexData
         {
-            return new WithBatched<(Buffer<TV>, Buffer<ushort>)>(batcher, primitiveType,
-                (buffers, pt) => ForVerticesAndIndices(buffers.Item1, buffers.Item2, pt));
+            return new WithBatched<(Buffer<TV> Vertices, Buffer<ushort> Indices)>(batcher,
+                buffers => Build(primitiveType, b => b
+                    .With(buffers.Vertices.AsVertexBuffer())
+                    .With(buffers.Indices.AsIndexBuffer())
+                ));
         }
 
         public static IBatchedRenderable ForBatchedVerticesAndIndices<TV, TBatchData>(
@@ -33,11 +36,13 @@ namespace Bearded.Graphics.Rendering
             PrimitiveType primitiveType)
             where TV : struct, IVertexData
         {
-            return new WithBatched<TBatchData>(batcher, primitiveType,
-                (batch, pt) =>
+            return new WithBatched<TBatchData>(batcher,
+                batch =>
                 {
                     var (vb, ib) = bufferSelector(batch);
-                    return ForVerticesAndIndices(vb, ib, pt);
+                    return Build(primitiveType, b => b
+                        .With(vb.AsVertexBuffer())
+                        .With(ib.AsIndexBuffer()));
                 });
         }
 
@@ -45,8 +50,11 @@ namespace Bearded.Graphics.Rendering
             Batcher<(BufferStream<TV>, BufferStream<ushort>)> batcher, PrimitiveType primitiveType)
             where TV : struct, IVertexData
         {
-            return new WithBatched<(BufferStream<TV>, BufferStream<ushort>)>(batcher, primitiveType,
-                (buffers, pt) => ForVerticesAndIndices(buffers.Item1, buffers.Item2, pt));
+            return new WithBatched<(BufferStream<TV>, BufferStream<ushort>)>(batcher,
+                buffers => Build(primitiveType, b => b
+                    .With(buffers.Item1.AsVertexBuffer())
+                    .With(buffers.Item2.AsIndexBuffer())
+                ));
         }
 
         public static IBatchedRenderable ForBatchedVerticesAndIndices<TV, TBatchData>(
@@ -54,33 +62,32 @@ namespace Bearded.Graphics.Rendering
             PrimitiveType primitiveType)
             where TV : struct, IVertexData
         {
-            return new WithBatched<TBatchData>(batcher, primitiveType,
-                (batch, pt) =>
+            return new WithBatched<TBatchData>(batcher,
+                batch =>
                 {
                     var (vb, ib) = bufferSelector(batch);
-                    return ForVerticesAndIndices(vb, ib, pt);
+                    return Build(primitiveType, b => b
+                        .With(vb.AsVertexBuffer())
+                        .With(ib.AsIndexBuffer())
+                    );
                 });
         }
 
         private sealed class WithBatched<TBatchData> : IBatchedRenderable
         {
             private readonly Batcher<TBatchData> batcher;
-            private readonly PrimitiveType primitiveType;
-            private readonly Func<TBatchData, PrimitiveType, IRenderable> createRenderable;
+            private readonly Func<TBatchData, IRenderable> createRenderable;
 
-            private readonly Dictionary<Batcher<TBatchData>.Batch, IRenderable> renderables
-                = new Dictionary<Batcher<TBatchData>.Batch, IRenderable>();
+            private readonly Dictionary<Batcher<TBatchData>.Batch, IRenderable> renderables = new();
 
             public event Action<IRenderable>? BatchActivated;
             public event Action<IRenderable>? BatchDeactivated;
 
             public WithBatched(
                 Batcher<TBatchData> batcher,
-                PrimitiveType primitiveType,
-                Func<TBatchData, PrimitiveType, IRenderable> createRenderable)
+                Func<TBatchData, IRenderable> createRenderable)
             {
                 this.batcher = batcher;
-                this.primitiveType = primitiveType;
                 this.createRenderable = createRenderable;
 
                 batcher.BatchActivated += onBatchActivated;
@@ -103,7 +110,7 @@ namespace Bearded.Graphics.Rendering
             {
                 if (!renderables.TryGetValue(batch, out var renderable))
                 {
-                    renderable = createRenderable(batch.Data, primitiveType);
+                    renderable = createRenderable(batch.Data);
                     renderables.Add(batch, renderable);
                 }
 

@@ -47,7 +47,12 @@ namespace Bearded.Graphics.Examples.IndexBuffer
 
             // When creating our renderable, the PrimitiveType defines how the indices are interpreted and translated
             // into geometry.
-            var renderable = Renderable.ForVerticesAndIndices(vertexBuffer, indexBuffer, PrimitiveType.Triangles);
+            var renderable = Renderable.Build(
+                PrimitiveType.Triangles,
+                b => b
+                    .With(vertexBuffer.AsVertexBuffer())
+                    .With(indexBuffer.AsIndexBuffer())
+            );
 
             shaderProgram = ShaderProgram.FromShaders(
                 ShaderFactory.Vertex.FromFile("geometry.vs"), ShaderFactory.Fragment.FromFile("geometry.fs"));

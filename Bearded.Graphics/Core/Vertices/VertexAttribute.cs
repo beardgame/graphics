@@ -10,7 +10,8 @@ public readonly struct VertexAttribute(
     VertexAttribPointerType type,
     int stride,
     int offset,
-    VertexAttributeFormat format)
+    VertexAttributeFormat format,
+    int divisor)
 {
     public void SetAttribute(ShaderProgram program)
     {
@@ -37,6 +38,8 @@ public readonly struct VertexAttribute(
             default:
                 throw new ArgumentOutOfRangeException();
         }
+
+        GL.VertexAttribDivisor(index, divisor);
     }
 
     public override string ToString() =>

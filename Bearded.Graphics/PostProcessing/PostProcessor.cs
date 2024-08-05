@@ -53,7 +53,7 @@ namespace Bearded.Graphics.PostProcessing
                     });
             }
 
-            var renderable = Renderable.ForVertices(vertices, PrimitiveType.TriangleStrip);
+            var renderable = Renderable.Build(PrimitiveType.TriangleStrip, b => b.With(vertices.AsVertexBuffer()));
 
             return (renderable, vertices);
         }
