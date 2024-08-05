@@ -21,7 +21,10 @@ namespace Bearded.Graphics.MeshBuilders
 
         public IRenderable ToRenderable()
         {
-            return Renderable.ForVerticesAndIndices(Vertices, Indices, primitiveType);
+            return Renderable.Build(primitiveType, b => b
+                .With(Vertices.AsVertexBuffer())
+                .With(Indices.AsIndexBuffer())
+            );
         }
 
         public void Add(
