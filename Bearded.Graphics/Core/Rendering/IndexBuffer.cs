@@ -12,17 +12,13 @@ public interface IIndexBuffer
 
 public static class IndexBuffer
 {
-    public static IIndexBuffer From<TIndex>(Buffer<TIndex> buffer)
-        where TIndex : struct
-    {
-        return new Static<TIndex>(buffer);
-    }
+    public static IIndexBuffer From(Buffer<byte> buffer) => new Static<byte>(buffer);
+    public static IIndexBuffer From(Buffer<ushort> buffer) => new Static<ushort>(buffer);
+    public static IIndexBuffer From(Buffer<uint> buffer) => new Static<uint>(buffer);
 
-    public static IIndexBuffer From<TIndex>(BufferStream<TIndex> stream)
-        where TIndex : struct
-    {
-        return new Streaming<TIndex>(stream);
-    }
+    public static IIndexBuffer From(BufferStream<byte> stream) => new Streaming<byte>(stream);
+    public static IIndexBuffer From(BufferStream<ushort> stream) => new Streaming<ushort>(stream);
+    public static IIndexBuffer From(BufferStream<uint> stream) => new Streaming<uint>(stream);
 
     private sealed class Static<TIndex>(Buffer<TIndex> buffer) : IIndexBuffer
         where TIndex : struct

@@ -16,15 +16,10 @@ public static class BufferExtensions
         return VertexBuffer.From(buffer);
     }
 
-    public static IIndexBuffer AsIndexBuffer<TIndex>(this Buffer<TIndex> buffer)
-        where TIndex : struct
-    {
-        return IndexBuffer.From(buffer);
-    }
-
-    public static IIndexBuffer AsIndexBuffer<TIndex>(this BufferStream<TIndex> buffer)
-        where TIndex : struct
-    {
-        return IndexBuffer.From(buffer);
-    }
+    public static IIndexBuffer AsIndexBuffer(this Buffer<byte> buffer) => IndexBuffer.From(buffer);
+    public static IIndexBuffer AsIndexBuffer(this Buffer<ushort> buffer) => IndexBuffer.From(buffer);
+    public static IIndexBuffer AsIndexBuffer(this Buffer<uint> buffer) => IndexBuffer.From(buffer);
+    public static IIndexBuffer AsIndexBuffer(this BufferStream<byte> buffer) => IndexBuffer.From(buffer);
+    public static IIndexBuffer AsIndexBuffer(this BufferStream<ushort> buffer) => IndexBuffer.From(buffer);
+    public static IIndexBuffer AsIndexBuffer(this BufferStream<uint> buffer) => IndexBuffer.From(buffer);
 }
