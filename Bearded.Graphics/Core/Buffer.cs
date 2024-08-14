@@ -64,6 +64,12 @@ namespace Bearded.Graphics
                 GL.BufferData(target, itemSize * count, data, usageHint);
             }
 
+            public void Upload(Span<T> data, BufferUsageHint usageHint = defaultUsageHint)
+            {
+                buffer.Count = data.Length;
+                GL.BufferData(target, itemSize * data.Length, ref data[0], usageHint);
+            }
+
             public void Dispose()
             {
                 GL.BindBuffer(target, 0);
